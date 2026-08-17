@@ -15,11 +15,12 @@ import Shopify from '../assets/shopify.webp'
 import Code from '../assets/code.png'
 
 
-const ProjectsSection = () => {
- 
+import usePublishedProjects from '../hooks/usePublishedProjects'
 
 
-const projects = [
+// Offline safety net only — rendered if the projects API cannot be reached.
+// The live portfolio comes from the database (see usePublishedProjects).
+const FALLBACK_PROJECTS = [
   {
     name: "Meera Basu",
     image: meerabasu,
@@ -78,11 +79,14 @@ const projects = [
 ];
 
 
+const ProjectsSection = () => {
+
+  const { projects } = usePublishedProjects(FALLBACK_PROJECTS);
 
   return (
     <>
-     
- 
+
+
 
      <section className="bg-white py-8 md:py-12" id='projects'>
       <div className="max-w-7xl mx-auto px-2">
@@ -96,15 +100,15 @@ const projects = [
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
 
           {projects.map((project, index) => (
-            <div key={index} className="text-center group">
+            <div key={project.id ?? index} className="text-center group">
 
              
               <div className="bg-orange-400   rounded-3xl p-0 md:p-0.5  mb-8 transition-transform duration-300 group-hover:scale-105">
-                <div className="overflow-hidden rounded-2xl">
+                <div className="overflow-hidden rounded-2xl aspect-[11/5]">
                   <img
                     src={project.image}
                     alt={project.name}
-                    className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110 boder-2 border-orange-500"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 boder-2 border-orange-500"
                   />
                 </div>
               </div>
@@ -125,7 +129,7 @@ const projects = [
                 hover:bg-orange-400
                 hover:text-black
                 transition-all duration-300
-              " onClick={()=> window.open(project.url, "_blank")}>
+              " onClick={()=> project.url && window.open(project.url, "_blank")}>
                 VIEW PROJECT
               </button>
 

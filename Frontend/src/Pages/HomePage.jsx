@@ -19,8 +19,50 @@ import Shopify from "../assets/shopify.webp";
 import Code from "../assets/code.png";
 import Nuconaerospace from '../assets/nuconaerospace.png'
 import Synergene from '../assets/synergeneapi.png'
+import usePublishedProjects from "../hooks/usePublishedProjects";
+
+// Offline safety net only — rendered if the projects API cannot be reached.
+// The live portfolio comes from the database (see usePublishedProjects).
+const FALLBACK_PROJECTS = [
+  {
+    name: "Meera Basu",
+    image: meerabasu,
+    url: "https://meerabasu.co.in/",
+  },
+  {
+    name: "Avantta Gems",
+    image: AvanttaGems,
+    url: "https://8z2bgt-68.myshopify.com/",
+  },
+  {
+    name: "KNS Metal Solutions",
+    image: KNS,
+    url: "https://knsmetalsolutions.com.au/",
+  },
+  {
+    name: "Laserfold",
+    image: laserFold,
+    url: "https://laserfold.com.au/",
+  },
+  {
+    name: "Nucon Aerospace - by Snapbrio",
+    image: Nuconaerospace,
+    url: "https://www.nuconaerospace.com/",
+  },
+  {
+    name: "Synergene - by Snapbrio",
+    image: Synergene,
+    url: "https://synergeneapi.com/",
+  },
+];
+
+// The home page shows a preview of the portfolio — "View More Projects"
+// links to /projects where the full list is rendered.
+const HOME_PROJECTS_LIMIT = 6;
+
 const HomePage = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -53,38 +95,10 @@ const HomePage = () => {
     },
   ];
 
-  const projects = [
-    {
-      name: "Meera Basu",
-      image: meerabasu,
-      url: "https://meerabasu.co.in/",
-    },
-    {
-      name: "Avantta Gems",
-      image: AvanttaGems,
-      url: "https://8z2bgt-68.myshopify.com/",
-    },
-    {
-      name: "KNS Metal Solutions",
-      image: KNS,
-      url: "https://knsmetalsolutions.com.au/",
-    },
-    {
-      name: "Laserfold",
-      image: laserFold,
-      url: "https://laserfold.com.au/",
-    },
-   {
-       name: "Nucon Aerospace - by Snapbrio",
-       image: Nuconaerospace,
-       url:"https://www.nuconaerospace.com/"
-     },
-     {
-       name: "Synergene - by Snapbrio",
-       image: Synergene,
-       url:"https://synergeneapi.com/"
-     },
-  ];
+  // Published projects come from the database — admins manage them in
+  // Admin Panel → Projects. No code change is needed to add a new one.
+  const { projects: allProjects } = usePublishedProjects(FALLBACK_PROJECTS);
+  const projects = allProjects.slice(0, HOME_PROJECTS_LIMIT);
 
   return (
     <>
@@ -209,8 +223,8 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="relative bg-[#f9fafc] overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 py-10 md:py-14 text-center">
+      <section className={`relative bg-[#f9fafc] overflow-hidden ${videoError ? 'py-8 md:py-10' : 'py-10 md:py-14'}`}>
+        <div className="max-w-6xl mx-auto px-6 text-center">
           <p
             className="
             text-sm tracking-widest text-orange-600 font-semibold mb-6
@@ -233,31 +247,28 @@ const HomePage = () => {
           </h1>
 
           <p
-            className="
+            className={`
             max-w-3xl mx-auto text-lg text-gray-600
-            leading-relaxed mb-12
+            leading-relaxed ${videoError ? 'mb-0' : 'mb-12'}
             animate-fadeUp animation-delay-400
-          "
+          `}
           >
            We craft best digital marketing near me journeys that feel natural, human, and memorable. 
            From strategy to design and content, we help your brand rise above the noise, stay true to its voice, 
            and build trust across every platform.
-
           </p>
 
-          <div
-            className="
-            flex flex-col sm:flex-row items-center justify-center gap-4
-            animate-fadeUp animation-delay-600
-          "
-          ></div>
-          <video
-            src="https://karthik.kkdigitalgrowth.com/wp-content/uploads/2026/04/Websites_video.mp4"
-            muted
-            autoPlay
-            loop
-            className="w-full h-auto rounded-xl"
-          ></video>
+          {!videoError && (
+            <video
+              src="https://karthik.kkdigitalgrowth.com/wp-content/uploads/2026/04/Websites_video.mp4"
+              muted
+              autoPlay
+              loop
+              playsInline
+              onError={() => setVideoError(true)}
+              className="w-full h-auto rounded-xl mt-8"
+            ></video>
+          )}
         </div>
       </section>
 
@@ -331,14 +342,14 @@ const HomePage = () => {
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
             {projects.map((project, index) => (
-              <div key={index} className="text-center group">
+              <div key={project.id ?? index} className="text-center group">
                 <div className="bg-orange-400   rounded-3xl p-0 md:p-0.5  mb-8 transition-transform duration-300 group-hover:scale-105">
-                  <div className="overflow-hidden rounded-2xl">
+                  <div className="overflow-hidden rounded-2xl aspect-[11/5]">
                     <img
                       src={project.image}
                       alt={project.name}
                       loading="lazy"
-                      className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110 boder-2 border-orange-500"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 boder-2 border-orange-500"
                     />
                   </div>
                 </div>
@@ -358,7 +369,7 @@ const HomePage = () => {
                 hover:text-black
                 transition-all duration-300
               "
-                  onClick={() => window.open(project.url, "_blank")}
+                  onClick={() => project.url && window.open(project.url, "_blank")}
                 >
                   VIEW PROJECT
                 </button>

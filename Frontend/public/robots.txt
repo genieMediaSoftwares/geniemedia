@@ -1,0 +1,9 @@
+User-agent: *
+Allow: / 
+
+Sitemap: https://geniemedia.in/sitemap.xml
+
+
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /.git/
