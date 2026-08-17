@@ -5,9 +5,10 @@ import {
 } from "lucide-react";
 import DOMPurify from "dompurify";
 import BASE_URL from "../Api";
+// Self-hosted rather than fetched from images.unsplash.com — see the note in Blogs.jsx.
+import BlogFallback from "../assets/blog/blog-hero.webp";
 
-const FALLBACK =
-    "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&q=80";
+const FALLBACK = BlogFallback;
 
 const cleanSlug = (raw) =>
     raw ? raw.replace(/^\/+/, "").replace(/^blog\//, "") : raw;
@@ -157,7 +158,7 @@ export default function BlogDetail() {
     /* ─────────────────────── Loading ─────────────────────── */
     if (loading) {
         return (
-            <main className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-4 px-4">
+            <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-4 px-4">
                 <div className="animate-spin">
                     <svg className="w-12 h-12 text-[#6B4A2D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <circle cx="12" cy="12" r="10" strokeWidth="2" opacity="0.25" />
@@ -165,14 +166,14 @@ export default function BlogDetail() {
                     </svg>
                 </div>
                 <p className="text-slate-500 text-sm font-medium">Loading blog…</p>
-            </main>
+            </div>
         );
     }
 
     /* ─────────────────────── Not Found ─────────────────────── */
     if (!blog) {
         return (
-            <main className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-4 px-4">
+            <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-4 px-4">
                 <svg className="w-14 h-14 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                         d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -187,14 +188,14 @@ export default function BlogDetail() {
                 >
                     Back to Blogs
                 </button>
-            </main>
+            </div>
         );
     }
 
     const heroSrc = !imgError && blog.image ? blog.image : FALLBACK;
 
     return (
-        <main className="w-full overflow-x-hidden bg-white">
+        <div className="w-full overflow-x-hidden bg-white">
 
             {/* ══════════════════════════════════════════════
                 HERO IMAGE
@@ -532,6 +533,6 @@ export default function BlogDetail() {
                 </div>
             </section>
 
-        </main>
+        </div>
     );
 }

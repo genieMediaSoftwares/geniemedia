@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Calendar, Tag } from "lucide-react";
 import BASE_URL from "../Api";
+// Self-hosted copies of the images this page used to pull from
+// images.unsplash.com. Same pictures, but they no longer cost a public page an
+// extra DNS lookup + TLS handshake to a third-party origin, and they inherit the
+// long immutable cache header configured in .htaccess.
+import BlogHero from "../assets/blog/blog-hero.webp";
+import BlogFallback from "../assets/blog/blog-fallback.webp";
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);
@@ -75,19 +81,15 @@ export default function Blogs() {
     setLightbox({ src, alt });
   };
 
-  const FALLBACK =
-    "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80";
+  const FALLBACK = BlogFallback;
 
   return (
-    <main className="w-full overflow-x-hidden">
+    <div className="w-full overflow-x-hidden">
 
       <section className="relative min-h-[45vh] sm:min-h-[50vh] md:min-h-[60vh] lg:min-h-[55vh] flex items-center text-white overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=600&fit=crop&auto=format&ixlib=rb-4.1.0')",
-          }}
+          style={{ backgroundImage: `url(${BlogHero})` }}
         />
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-12 sm:py-16">
@@ -171,6 +173,8 @@ export default function Blogs() {
                       <img
                         src={imgSrc}
                         alt={blog.title || "Blog cover"}
+                        width="800"
+                        height="600"
                         className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                         decoding="async"
@@ -294,6 +298,9 @@ export default function Blogs() {
             <img
               src={lightbox.src}
               alt={lightbox.alt || "Full image"}
+              width="1600"
+              height="1200"
+              decoding="async"
               className="w-full h-auto max-h-[80vh] sm:max-h-[85vh] object-contain rounded-xl sm:rounded-2xl shadow-2xl select-none"
               draggable={false}
             />
@@ -306,6 +313,6 @@ export default function Blogs() {
         </div>
       )}
 
-    </main>
+    </div>
   );
 }

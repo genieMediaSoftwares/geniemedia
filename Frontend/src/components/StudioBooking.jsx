@@ -221,9 +221,9 @@ export default function PodcastStudioBooking() {
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center pt-12">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center pt-12">
           PODCAST STUDIO RENTAL PACKAGES 
-        </h1>
+        </h2>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Sidebar - Steps */}
@@ -303,7 +303,7 @@ export default function PodcastStudioBooking() {
                         }}
                       >
                         {selectedService?.id === service.id && (
-                          <div className="absolute top-3 right-3 w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white">
+                          <div className="absolute top-3 right-3 w-8 h-8 bg-amber-700 rounded-full flex items-center justify-center text-white">
                             ✓
                           </div>
                         )}
@@ -583,7 +583,7 @@ export default function PodcastStudioBooking() {
               {currentStep < 4 ? (
                 <button
                   onClick={handleNextStep}
-                  className="ml-auto px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-700 transition-all"
+                  className="ml-auto px-6 py-3 bg-amber-700 text-white rounded-lg font-semibold hover:bg-amber-800 transition-all"
                 >
                   Next →
                 </button>

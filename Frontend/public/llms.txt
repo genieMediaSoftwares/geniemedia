@@ -1,0 +1,35 @@
+# Genie Media & Studio
+
+> Digital marketing agency and creative production studio based in
+> Visakhapatnam (Vizag), India. We provide SEO, Google and Facebook Ads, social
+> media marketing, website and e-commerce development, video production, and
+> podcast studio rentals.
+
+Genie Media & Studio combines strategy, design, content and technology. The
+team works with startups and established businesses across India, Australia and
+the United States.
+
+- Location: 5A2, 4th Floor, KP Icon, KP Infra, Yendada, Visakhapatnam - 530045
+- Phone: +91 9032845433
+- Email: admin@geniemedia.in
+- Hours: Monday-Friday 10:00-19:00 IST, Saturday 10:00-16:00 IST
+
+## Pages
+
+- [Home](https://geniemedia.in/): Overview of services, portfolio and client testimonials.
+- [About](https://geniemedia.in/about): Who we are, our mission and vision.
+- [Services](https://geniemedia.in/services): All four service lines side by side.
+- [Digital Marketing](https://geniemedia.in/digital_marketing): SEO, paid ads, social media, content strategy and personal branding.
+- [Web Development](https://geniemedia.in/web_development): Custom websites, e-commerce, web applications and ongoing maintenance.
+- [Production House](https://geniemedia.in/production_house): Video production, event and wedding coverage, photography, post-production and live streaming.
+- [Podcast Studio](https://geniemedia.in/podcast_studio): Fully equipped podcast studio rental in Visakhapatnam.
+- [Projects](https://geniemedia.in/projects): Portfolio of delivered client websites.
+- [Reviews](https://geniemedia.in/reviews): Video testimonials from clients.
+- [Blog](https://geniemedia.in/blogs): Articles on digital marketing and web development.
+- [Contact](https://geniemedia.in/contact): Enquiry form, office address and map.
+
+## Optional
+
+- [Sitemap index](https://geniemedia.in/sitemap.xml)
+- [Page sitemap](https://geniemedia.in/pages.xml)
+- [Service sitemap](https://geniemedia.in/services.xml)

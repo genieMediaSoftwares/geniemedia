@@ -26,13 +26,20 @@ export default function ProductionHouse() {
             </div>
 
             <div className="flex justify-center lg:justify-end">
-              <div className="relative">
+              {/* The wrapper carries the max-width, not just the <img>. Without it
+                  the wrapper had no resolvable width until the image had loaded,
+                  so the width/height attributes could not reserve any height and
+                  the hero collapsed-then-expanded — a ~0.35 layout shift. */}
+              <div className="relative w-full max-w-lg lg:max-w-2xl">
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
                   src= {StudioNightView}
-                  alt="studio" 
+                  alt="Genie Studio at night" 
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
                   loading='lazy'
+                  width="1400"
+                  height="933"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -47,7 +54,7 @@ export default function ProductionHouse() {
             
                    <p
                      className="
-                       text-lg tracking-widest text-orange-600 font-semibold mb-6
+                       text-lg tracking-widest text-orange-700 font-semibold mb-6
                        animate-fadeUp
                      "
                    >
@@ -55,7 +62,7 @@ export default function ProductionHouse() {
                    </p>
             
                  
-                   <h1
+                   <h2
                      className="
                        text-2xl md:text-5xl lg:text-5xl 
                        font-extrabold leading-tight text-gray-900
@@ -65,7 +72,7 @@ export default function ProductionHouse() {
                  {/* Marketing That Connects, Engages & Converts */}
                     Production Services
                        
-                   </h1>
+                   </h2>
             
                  
                    <p
@@ -91,7 +98,7 @@ export default function ProductionHouse() {
                    >
                     
                    </div>
-                   <img src={ProdHouseCams} loading='lazy' className='w-full h-auto rounded-xl'/>
+                   <img src={ProdHouseCams} alt="Production house camera equipment" width="1358" height="503" loading='lazy' decoding="async" className='w-full h-auto rounded-xl'/>
             
                  </div>
                </section>

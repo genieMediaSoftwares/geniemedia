@@ -66,7 +66,7 @@ export default function ServicesSection2() {
         {/* Header */}
         <div className="text-center mb-16 relative">
           <div className="inline-block">
-            <span className="text-orange-500 font-semibold text-sm uppercase tracking-wider mb-2 block">What We Offer</span>
+            <span className="text-orange-700 font-semibold text-sm uppercase tracking-wider mb-2 block">What We Offer</span>
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 relative">
               Our web Services
               <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full"></div>
@@ -116,14 +116,14 @@ export default function ServicesSection2() {
                 </p>
 
                 {/* Learn More Link */}
-                <div className="flex items-center gap-2 text-orange-500 group-hover:text-white font-semibold transition-colors duration-300">
+                <div className="flex items-center gap-2 text-orange-700 group-hover:text-white font-semibold transition-colors duration-300">
                  <a href="/projects"> <span>Learn more</span></a> 
                   <ArrowRight className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
               </div>
 
               {/* Number Badge */}
-              <div className="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-gray-100 group-hover:bg-white/20 flex items-center justify-center font-bold text-gray-400 group-hover:text-white text-lg transition-all duration-300">
+              <div className="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-gray-100 group-hover:bg-white/20 flex items-center justify-center font-bold text-gray-600 group-hover:text-white text-lg transition-all duration-300">
                 {String(index + 1).padStart(2, '0')}
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function ServicesSection2() {
               Let's collaborate to create something extraordinary that drives real results for your business
             </p>
             <button 
-              className="bg-white text-orange-500 px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-100 transform hover:scale-110 transition-all duration-300 shadow-2xl hover:shadow-white/50 inline-flex items-center gap-3 group"
+              className="bg-white text-orange-700 px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-100 transform hover:scale-110 transition-all duration-300 shadow-2xl hover:shadow-white/50 inline-flex items-center gap-3 group"
               onClick={() => window.location.href="/contact"}
             >
               <span>Start Your Project</span>

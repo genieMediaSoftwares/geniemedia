@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from '../assets/GenieMedia-Logo.png'
-import { Mail, Phone, MapPin, Facebook, Linkedin, Instagram, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Instagram, Youtube } from 'lucide-react';
 
 export default function Footer() {
   const services = [
@@ -28,30 +28,60 @@ const company = [
           {/* Company Info */}
           <div className="space-y-6">
             <div>
-              <img src={Logo} alt="Logo" className='h-32 mb-6 -mt-8' />
+              <img
+                src={Logo}
+                alt="Genie Media & Studio"
+                width="283"
+                height="420"
+                loading="lazy"
+                decoding="async"
+                className='h-32 w-auto mb-6 -mt-8'
+              />
               <p className="text-gray-300 leading-relaxed">
                Providing cutting-edge digital transformation solutions through a trusted top digital marketing companies in Vizag, helping businesses grow with strategy and innovation.
               </p>
             </div>
             
-            {/* Social Media Icons */}
+            {/* Social Media Icons.
+                Icon-only links need an accessible name — without one they were
+                announced as just "link" and failed the "Links do not have
+                discernible names" audit. The <a> is also bumped from 40px to
+                44px so it clears the minimum touch-target size on mobile. */}
             <div className="flex space-x-4">
-              <a href="https://m.facebook.com/826093997257312/" className="w-10 h-10 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300">
-                <Facebook className="w-5 h-5" />
+              <a
+                href="https://m.facebook.com/826093997257312/"
+                aria-label="Genie Media on Facebook"
+                rel="noopener noreferrer"
+                target="_blank"
+                className="w-11 h-11 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300"
+              >
+                <Facebook className="w-5 h-5" aria-hidden="true" />
               </a>
-              
-              <a href="https://www.instagram.com/itsgeniemedia_official/" className="w-10 h-10 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300">
-                <Instagram className="w-5 h-5" />
+
+              <a
+                href="https://www.instagram.com/itsgeniemedia_official/"
+                aria-label="Genie Media on Instagram"
+                rel="noopener noreferrer"
+                target="_blank"
+                className="w-11 h-11 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300"
+              >
+                <Instagram className="w-5 h-5" aria-hidden="true" />
               </a>
-              <a href="https://www.youtube.com/@itsgeniemedia_official" className="w-10 h-10 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300">
-                <Youtube className="w-5 h-5" />
+              <a
+                href="https://www.youtube.com/@itsgeniemedia_official"
+                aria-label="Genie Media on YouTube"
+                rel="noopener noreferrer"
+                target="_blank"
+                className="w-11 h-11 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300"
+              >
+                <Youtube className="w-5 h-5" aria-hidden="true" />
               </a>
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h4 className="text-lg font-bold mb-6 text-orange-500">Services</h4>
+            <h2 className="text-lg font-bold mb-6 text-orange-500">Services</h2>
             <ul className="space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
@@ -65,7 +95,7 @@ const company = [
 
           {/* Company */}
           <div>
-            <h4 className="text-lg font-bold mb-6 text-orange-500">Company</h4>
+            <h2 className="text-lg font-bold mb-6 text-orange-500">Company</h2>
             <ul className="space-y-3">
               {company.map((item, index) => (
                 <li key={index}>
@@ -79,7 +109,7 @@ const company = [
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-lg font-bold mb-6 text-orange-500">Contact Us</h4>
+            <h2 className="text-lg font-bold mb-6 text-orange-500">Contact Us</h2>
             <ul className="space-y-4">
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-orange-500 flex-shrink-0 mt-1" />

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import './Podcast.css'
 import PodcastStudioBooking from "../components/StudioBooking";
+import { PODCAST_CLIP_URL } from "../config/media";
 import cameras from '../assets/podcast/podcast-cameras.JPG';
 import chairs from '../assets/podcast/podcast-chair.JPG';
 import mics from '../assets/podcast/podcast-mic.JPG';
@@ -10,19 +11,42 @@ import set2 from '../assets/podcast/studio-set2-min.JPG';
 import nytview from '../assets/podcast/StudioNightView-min.JPG';
 import set from '../assets/podcast/studioSet-min.JPG';
 
+// Intrinsic sizes of the optimised assets, so every <img> can declare
+// width/height and reserve its space before the bytes arrive.
+const LANDSCAPE = { width: 1400, height: 933 };
+const PORTRAIT = { width: 933, height: 1400 };
+const IMG_SIZE = {
+  [cameras]: { width: 1400, height: 939 },
+  [chairs]: { width: 1400, height: 938 },
+  [mics]: LANDSCAPE,
+  [output]: { width: 1400, height: 931 },
+  [light]: PORTRAIT,
+  [set2]: LANDSCAPE,
+  [nytview]: LANDSCAPE,
+  [set]: LANDSCAPE,
+};
 
-
+/** <img> with explicit dimensions, lazy loading and async decoding. */
+const StudioImg = ({ src, alt, className }) => (
+  <img
+    src={src}
+    alt={alt}
+    width={IMG_SIZE[src].width}
+    height={IMG_SIZE[src].height}
+    loading="lazy"
+    decoding="async"
+    className={className}
+  />
+);
 
 
 
 export default function PodcastStudio() {
   
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  // `scrollToTop` and `openWhatsApp` helpers used to be declared here; neither
+  // was ever wired to anything in the markup.
 
-  const openWhatsApp = () =>
-    window.open("https://wa.me/919032845433", "_blank");
-  
 
   
   useEffect(() => {
@@ -53,8 +77,12 @@ export default function PodcastStudio() {
 const videoRef = React.useRef(null);
 
 useEffect(() => {
+  if (!PODCAST_CLIP_URL) return;
+
   const t = setTimeout(() => {
-    videoRef.current?.play();
+    // play() returns a promise that rejects if autoplay is blocked or the
+    // source failed to load. Unhandled, that surfaced as a console error.
+    videoRef.current?.play?.().catch(() => {});
   }, 1200); // play AFTER page settles
 
   return () => clearTimeout(t);
@@ -64,21 +92,19 @@ useEffect(() => {
 
   return (
     <div>
-     
-
       {/* HERO SECTION */}
       <section className="hero">
-       <video src="https://karthik.kkdigitalgrowth.com/wp-content/uploads/2026/03/podcast_clip.mp4"
-         muted
-         loop
-         playsInline
-         preload="none"
-         className="hero-bg-video"
-         ref={videoRef}
-       >
-        
-       </video>
-
+       {PODCAST_CLIP_URL && (
+         <video
+           src={PODCAST_CLIP_URL}
+           muted
+           loop
+           playsInline
+           preload="none"
+           className="hero-bg-video"
+           ref={videoRef}
+         />
+       )}
 
         <div className="bg-gradient bg-gradient-1"></div>
         <div className="bg-gradient bg-gradient-2"></div>
@@ -105,7 +131,7 @@ useEffect(() => {
       {/* NETWORK SECTION */}
       <section className="network-section" id="network">
         <div className="network-content">
-          <h4 className="network-subtitle">OUR SPACE</h4>
+          <p className="network-subtitle">OUR SPACE</p>
           <h2 className="network-title">
             Where voices grow louder, stories find rhythm, <br />
             and sound becomes legacy.
@@ -114,15 +140,17 @@ useEffect(() => {
 
         <div className="marquee-container">
           <div className="marquee-track">
-            <img src= {mics} alt="Podcast 1" loading='lazy' decoding="async"/>
-            <img src= {nytview} alt="Podcast 2" loading='lazy' decoding="async"/>
-            <img src=  {set} alt="Podcast 3" loading='lazy' decoding="async" />
-            <img src=  {light} alt="Podcast 4" loading='lazy' decoding="async" />
-            <img src= {cameras} alt="Podcast 5" loading='lazy' decoding="async" />
+            <StudioImg src={mics} alt="Studio microphones" />
+            <StudioImg src={nytview} alt="The studio at night" />
+            <StudioImg src={set} alt="Podcast set" />
+            <StudioImg src={light} alt="Studio lighting" />
+            <StudioImg src={cameras} alt="Studio cameras" />
 
-            <img src= {chairs} alt="Podcast 1" loading='lazy' decoding="async" />
-            <img src= {mics} alt="Podcast 3" loading='lazy' decoding="async" />
-            <img src= {set2} alt="Podcast 4" loading='lazy' decoding="async" />
+            {/* The strip repeats itself to loop seamlessly; the duplicates are
+                decorative, so they carry an empty alt. */}
+            <StudioImg src={chairs} alt="Studio seating" />
+            <StudioImg src={mics} alt="" />
+            <StudioImg src={set2} alt="" />
           </div>
         </div>
       </section>
@@ -182,29 +210,17 @@ useEffect(() => {
             </div>
 
             <div className="studio-image large">
-              <img
-                src= {set2}
-                alt="Red Studio Setup"
-                loading='lazy'
-              />
+              <StudioImg src={set2} alt="Red studio setup" />
             </div>
           </div>
 
           <div className="right-column">
             <div className="studio-image small">
-              <img
-                src= {nytview}
-                alt="Studio Setup"
-                loading='lazy'
-              />
+              <StudioImg src={nytview} alt="Studio setup at night" />
             </div>
 
             <div className="studio-image small">
-              <img
-                src= {light}
-                alt="Studio Setup"
-                loading='lazy'
-              />
+              <StudioImg src={light} alt="Studio lighting setup" />
             </div>
           </div>
         </div>
@@ -219,12 +235,12 @@ useEffect(() => {
 
         <div className="furniture-container">
           <div className="furniture-item">
-            <img src= {set2}  alt="Studio Set" loading='lazy' />
+            <StudioImg src={set2} alt="Complete podcast setup" />
             <p className="item-text">1 x complete podcast setup</p>
           </div>
 
           <div className="furniture-item">
-            <img src= {mics} alt="Mics" loading='lazy' />
+            <StudioImg src={mics} alt="High-quality microphones" />
             <p className="item-text">2 x high-quality mic</p>
           </div>
         </div>
@@ -234,17 +250,17 @@ useEffect(() => {
       <section className="sbf-section">
         <div className="sbf-grid">
           <figure className="sbf-card sbf-left">
-            <img src= {cameras} loading='lazy' alt="Camera" />
+            <StudioImg src={cameras} alt="High-quality cameras" />
             <figcaption>3 x high-quality camera</figcaption>
           </figure>
 
           <figure className="sbf-card sbf-right">
-            <img src= {output} loading='lazy' alt="Output" />
+            <StudioImg src={output} alt="Recording output" />
             <figcaption>4 x excellent output</figcaption>
           </figure>
 
           <figure className="sbf-card sbf-bottom">
-            <img src= {nytview} loading='lazy' alt="Premium" />
+            <StudioImg src={nytview} alt="Premium studio set" />
             <figcaption>5 x premium look set</figcaption>
           </figure>
         </div>
@@ -284,7 +300,7 @@ useEffect(() => {
               <div className="author-info">
                 <div className="author-avatar">SP</div>
                 <div className="author-details">
-                  <h4>Sasidhar Pydiraju</h4>
+                  <h3>Sasidhar Pydiraju</h3>
                 </div>
               </div>
             </div>
@@ -305,7 +321,7 @@ useEffect(() => {
               <div className="author-info">
                 <div className="author-avatar">AS</div>
                 <div className="author-details">
-                  <h4>Aruna Sai Kumar</h4>
+                  <h3>Aruna Sai Kumar</h3>
                 </div>
               </div>
             </div>
@@ -326,7 +342,7 @@ useEffect(() => {
               <div className="author-info">
                 <div className="author-avatar">S</div>
                 <div className="author-details">
-                  <h4>Shanmuk</h4>
+                  <h3>Shanmuk</h3>
                 </div>
               </div>
             </div>

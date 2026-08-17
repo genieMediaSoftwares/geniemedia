@@ -46,7 +46,7 @@ export default function ServicesSection() {
       <div className="max-w-7xl mx-auto">
       
         <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-orange-500 mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-orange-600 mb-4">
             Our Services
           </h2>
           <p className="text-gray-700 text-xl max-w-2xl mx-auto">
@@ -95,7 +95,7 @@ export default function ServicesSection() {
 
         
         <div className="text-center mt-10">
-          <button className="bg-orange-400 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-black-500/50 transform hover:scale-105 transition-all duration-300" onClick={() => window.location.href="https://wa.me/919032845433"}>
+          <button className="bg-orange-400 text-black px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-black-500/50 transform hover:scale-105 transition-all duration-300" onClick={() => window.location.href="https://wa.me/919032845433"}>
             Start Your Project
           </button>
         </div>

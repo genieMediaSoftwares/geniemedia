@@ -66,7 +66,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-white overflow-x-hidden">
+    <div className="w-full min-h-screen bg-white overflow-x-hidden">
 
       {/* ── Hero Banner ── */}
       <section className="relative min-h-[50vh] md:min-h-[60vh] lg:min-h-[55vh] xl:min-h-[50vh] text-white overflow-hidden flex items-center">
@@ -240,6 +240,6 @@ export default function AdminLogin() {
         </div>
       </section>
 
-    </main>
+    </div>
   );
 }

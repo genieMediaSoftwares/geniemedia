@@ -4,7 +4,6 @@ const AboutSection1 = () => {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [counters, setCounters] = useState([0, 0, 0, 0, 0]);
-  const [barHeights, setBarHeights] = useState([0, 0, 0, 0, 0]);
 
   const stats = [
     { 
@@ -60,77 +59,69 @@ const AboutSection1 = () => {
   ];
 
   useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !isVisible) {
-            setIsVisible(true);
-            setTimeout(() => animateAll(), 300);
-          }
-        });
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setIsVisible(true);
+          observer.disconnect(); // one-shot — the reveal never replays
+        }
       },
       { threshold: 0.2 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
+    observer.observe(node);
     return () => observer.disconnect();
+  }, []);
+
+  /**
+   * Counter roll-up.
+   *
+   * This used to start ten concurrent setIntervals (one counter + one bar per
+   * stat) firing every 25 ms, each committing its own setState — roughly 800
+   * React renders in two seconds. Combined with the bars animating `height` in
+   * pixels, it forced a full layout on every tick and was the single largest
+   * source of long main-thread tasks on the page.
+   *
+   * Now: one requestAnimationFrame loop drives all five counters with a single
+   * state commit per frame, and it naturally pauses when the tab is hidden.
+   * The bars are handled entirely by CSS (see the `transform: scaleY` note in
+   * the markup below), so no JavaScript touches layout at all.
+   */
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const DURATION = 2000;
+    const START_DELAY = 300;
+    const targets = stats.map((s) => s.value);
+    let frame;
+    let startTime;
+
+    const tick = (now) => {
+      if (startTime === undefined) startTime = now;
+      const elapsed = now - startTime;
+      // easeOutQuad — matches the "fast then settle" feel of the old version
+      const t = Math.min(elapsed / DURATION, 1);
+      const eased = 1 - (1 - t) * (1 - t);
+
+      setCounters(targets.map((target) => Math.round(target * eased)));
+
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+
+    const timeout = setTimeout(() => {
+      frame = requestAnimationFrame(tick);
+    }, START_DELAY);
+
+    return () => {
+      clearTimeout(timeout);
+      if (frame) cancelAnimationFrame(frame);
+    };
+    // `stats` is a module-invariant literal; only the reveal flag matters here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible]);
-
-  const animateAll = () => {
-    stats.forEach((stat, index) => {
-      setTimeout(() => {
-        animateCounter(index, stat.value);
-        animateBar(index, stat.maxHeight);
-      }, stat.delay);
-    });
-  };
-
-  const animateCounter = (index, targetValue) => {
-    const duration = 2000;
-    const steps = 80;
-    const increment = targetValue / steps;
-    let currentStep = 0;
-
-    const timer = setInterval(() => {
-      currentStep++;
-      const newValue = Math.min(Math.floor(increment * currentStep), targetValue);
-      
-      setCounters(prev => {
-        const newCounters = [...prev];
-        newCounters[index] = newValue;
-        return newCounters;
-      });
-
-      if (currentStep >= steps) {
-        clearInterval(timer);
-      }
-    }, duration / steps);
-  };
-
-  const animateBar = (index, maxHeight) => {
-    const duration = 2000;
-    const steps = 80;
-    const increment = maxHeight / steps;
-    let currentStep = 0;
-
-    const timer = setInterval(() => {
-      currentStep++;
-      const newHeight = Math.min(increment * currentStep, maxHeight);
-      
-      setBarHeights(prev => {
-        const newHeights = [...prev];
-        newHeights[index] = newHeight;
-        return newHeights;
-      });
-
-      if (currentStep >= steps) {
-        clearInterval(timer);
-      }
-    }, duration / steps);
-  };
 
   const MAX_MOBILE_VALUE = Math.max(...stats.map(s => s.value));
 
@@ -213,27 +204,58 @@ const AboutSection1 = () => {
           animation: bounceIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
+        /* The bars animate with transform, not width/height.
+           Transform and opacity are the only two properties the browser can
+           animate on the compositor without re-running layout; the previous
+           per-pixel height/width animation forced a reflow on every frame and
+           showed up in Lighthouse as "non-composited animation". The rendered
+           result — a bar growing from its base to full size — is identical.
+           An outer wrapper holds the final size so no space is reserved late
+           and nothing shifts (CLS stays at zero). */
         .stat-bar {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transform: scaleY(0);
           transform-origin: bottom;
+          transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                      filter 0.3s ease;
+          will-change: transform;
         }
 
-        .stat-bar:hover {
-          transform: scale(1.05);
+        .stat-bar.is-revealed {
+          transform: scaleY(1);
+        }
+
+        .stat-bar.is-revealed:hover {
+          transform: scaleY(1) scaleX(1.05);
           filter: brightness(1.15);
-          animation: glow 2s infinite;
         }
 
         .stat-bar-horizontal {
-  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: left;
-}
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      filter 0.3s ease;
+          will-change: transform;
+        }
 
+        .stat-bar-horizontal.is-revealed {
+          transform: scaleX(1);
+        }
 
-        .stat-bar-horizontal:hover {
-          transform: scaleX(1.05);
+        .stat-bar-horizontal.is-revealed:hover {
           filter: brightness(1.15);
-          animation: glow 2s infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .stat-bar,
+          .stat-bar-horizontal {
+            transition: none;
+          }
+          .animate-fadeInUp,
+          .animate-slideInLeft,
+          .animate-slideInRight,
+          .animate-bounceIn {
+            animation: none !important;
+          }
         }
 
         .counter-number {
@@ -269,7 +291,7 @@ const AboutSection1 = () => {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className={`mb-8 text-center ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-            <h2 className="text-4xl lg:text-6xl font-bold text-orange-500 mb-3">
+            <h2 className="text-4xl lg:text-6xl font-bold text-orange-600 mb-3">
               About Us
             </h2>
             <p className="text-lg lg:text-xl text-gray-800">
@@ -324,14 +346,17 @@ const AboutSection1 = () => {
                   </div>
                 </div>
 
-               
-                <div 
-                  className={`stat-bar w-full ${stat.color} rounded-t-2xl transition-all duration-100 ease-out`}
-                  style={{ 
-                    height: `${barHeights[index]}px`,
-                    maxHeight: `${stat.maxHeight}px`
-                  }}
-                />
+                {/* The wrapper owns the final height so the layout is settled
+                    from the first paint; only the inner bar is transformed. */}
+                <div
+                  className="w-full flex items-end"
+                  style={{ height: `${stat.maxHeight}px` }}
+                >
+                  <div
+                    className={`stat-bar w-full h-full ${stat.color} rounded-t-2xl ${isVisible ? 'is-revealed' : ''}`}
+                    style={{ transitionDelay: `${stat.delay}ms` }}
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -354,17 +379,15 @@ const AboutSection1 = () => {
                   </div>
                 </div>
 
-              
-                 <div 
-                  className={`stat-bar-horizontal h-8 ${stat.color} rounded-r-2xl`}
-                  style={{ 
-                    width: isVisible
-                      ? `${(stats[index].value / MAX_MOBILE_VALUE) * 90}%`
-                      : '0%'
+                {/* Same idea as the desktop bars: the final width is set once,
+                    and the reveal is a composited scaleX. */}
+                <div
+                  className={`stat-bar-horizontal h-8 ${stat.color} rounded-r-2xl ${isVisible ? 'is-revealed' : ''}`}
+                  style={{
+                    width: `${(stat.value / MAX_MOBILE_VALUE) * 90}%`,
+                    transitionDelay: `${stat.delay}ms`,
                   }}
                 />
-
-              
               </div>
             ))}
           </div>

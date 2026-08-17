@@ -1,11 +1,11 @@
-
-import Rect,{useState} from 'react'
-import { ChevronLeft, ChevronUp, ChevronRight, ArrowUpRight } from 'lucide-react';
+import { useState } from 'react'
+import { ChevronUp } from 'lucide-react';
 
 import ServicesSection2 from '../components/ServicesWebsites';
 import ProjectsSection from '../components/ProjectsSection';
 import VideoTestimonials from '../components/testimonials';
 import web_services_hero from '../assets/web_services_hero.JPG'
+import { WEBSITES_VIDEO_URL } from '../config/media';
 
 
 
@@ -45,66 +45,9 @@ export default function WebDevPg() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const industries = [
-  {
-    icon: "🛒",
-    title: "Ecommerce",
-    description:
-      "We build high-converting eCommerce websites with seamless user experiences, optimized product pages, and secure checkout flows that drive sales and customer retention."
-  },
-  {
-    icon: "🏋️‍♂️",
-    title: "Fitness",
-    description:
-      "From gym websites to fitness apps, we create digital platforms that motivate users, boost memberships, and strengthen engagement through compelling design and clear user journeys."
-  },
-  {
-    icon: "🏭",
-    title: "Industrial / Manufacturing",
-    description:
-      "We design modern, reliable websites for industrial and manufacturing companies, showcasing capabilities, improving lead generation, and building credibility with clear, technical messaging."
-  },
-  {
-    icon: "🎓",
-    title: "Education",
-    description:
-      "We create engaging, user-friendly websites for schools and educational institutions that enhance enrollment, improve learning accessibility, and deliver clear information to students and parents."
-  },
-  {
-    icon: "🏠",
-    title: "Real Estate",
-    description:
-      "We design visually compelling real estate websites that highlight property listings, attract qualified leads, and establish trust with intuitive browsing and optimized search experiences."
-  }
-];
-
-
-  const nextSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev + 1) % industries.length);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
-
-  const prevSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev - 1 + industries.length) % industries.length);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
-
-  const getVisibleCards = () => {
-    const cards = [];
-    for (let i = 0; i < 3; i++) {
-      const index = (currentIndex + i) % industries.length;
-      cards.push(industries[index]);
-    }
-    return cards;
-  };
-
+  // An "industries we serve" carousel (state, data and next/prev handlers) used
+  // to be declared here but was never rendered — roughly 60 lines of unused
+  // JavaScript shipped in this route chunk. Removed; nothing referenced it.
 
   return (
     <>
@@ -125,13 +68,20 @@ export default function WebDevPg() {
             </div>
 
             <div className="flex justify-center lg:justify-end">
-              <div className="relative">
+              {/* The wrapper carries the max-width, not just the <img>. Without it
+                  the wrapper had no resolvable width until the image had loaded,
+                  so the width/height attributes could not reserve any height and
+                  the hero collapsed-then-expanded — a ~0.35 layout shift. */}
+              <div className="relative w-full max-w-lg lg:max-w-2xl">
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
                   src= {web_services_hero}
-                  alt="webdev" 
+                  alt="Web development services" 
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
                   loading='lazy'
+                  width="848"
+                  height="477"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -145,7 +95,7 @@ export default function WebDevPg() {
          
                  <p
                    className="
-                     text-sm tracking-widest text-orange-600 font-semibold mb-6
+                     text-sm tracking-widest text-orange-700 font-semibold mb-6
                      animate-fadeUp
                    "
                  >
@@ -153,7 +103,7 @@ export default function WebDevPg() {
                  </p>
          
                
-                 <h1
+                 <h2
                    className="
                      text-2xl md:text-5xl lg:text-6xl 
                      font-extrabold leading-tight text-gray-900
@@ -163,7 +113,7 @@ export default function WebDevPg() {
                 We Build Websites That <br />
                  Connect, Engage & Convert
                      
-                 </h1>
+                 </h2>
          
                
                  <p
@@ -188,7 +138,17 @@ export default function WebDevPg() {
                  >
                   
                  </div>
-                 <video src="https://karthik.kkdigitalgrowth.com/wp-content/uploads/2026/04/Websites_video.mp4" muted autoPlay loop className='w-full h-auto rounded-xl'></video> 
+                 {WEBSITES_VIDEO_URL && (
+                   <video
+                     src={WEBSITES_VIDEO_URL}
+                     muted
+                     autoPlay
+                     loop
+                     playsInline
+                     preload="none"
+                     className='w-full h-auto rounded-xl'
+                   />
+                 )}
          
                </div>
              </section>
@@ -209,13 +169,13 @@ export default function WebDevPg() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Left Column - Content */}
           <div className="lg:sticky lg:top-24">
-            <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h2 className="text-2xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Why Choose Genie Media as Your Marketing Agency?
-            </h1>
+            </h2>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
               With a proven track record of delivering high-impact marketing solutions for businesses from startups to established enterprises, we have earned a reputation as a trusted partner for all your marketing needs. Here are some reasons why our top clients have chosen us as their marketing agency:
             </p>
-            <button className="bg-orange-500 hover:bg-black  text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl" onClick={() => window.location.href="https://wa.me/919032845433"}>
+            <button className="bg-orange-500 hover:bg-black text-black hover:text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl" onClick={() => window.location.href="https://wa.me/919032845433"}>
               Let's Discuss Your Project
             </button>
           </div>

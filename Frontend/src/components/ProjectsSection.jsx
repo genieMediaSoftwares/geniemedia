@@ -1,15 +1,15 @@
 
-import meerabasu from '../assets/meerabasuWebsite.png'
-import AvanttaGems from '../assets/AvanttaGems.png'
-import KNS from '../assets/knsMetals.png'
-import Buildzon from '../assets/buildzon.png'
-import laserFold from '../assets/LaserFold.png'
-import GenieStudio from '../assets/GenieStudio.png'
-import Nuconaerospace from '../assets/nuconaerospace.png'
-import Synergene from '../assets/synergeneapi.png'
-import Vivodyne from '../assets/vivodyne.png'
-import Decagon from '../assets/decagon.png'
-import Freenome from '../assets/freenome.png'
+import meerabasu from '../assets/meerabasuWebsite.webp'
+import AvanttaGems from '../assets/AvanttaGems.webp'
+import KNS from '../assets/knsMetals.webp'
+import Buildzon from '../assets/buildzon.webp'
+import laserFold from '../assets/LaserFold.webp'
+import GenieStudio from '../assets/GenieStudio.webp'
+import Nuconaerospace from '../assets/nuconaerospace.webp'
+import Synergene from '../assets/synergeneapi.webp'
+import Vivodyne from '../assets/vivodyne.webp'
+import Decagon from '../assets/decagon.webp'
+import Freenome from '../assets/freenome.webp'
 import Wordpress from '../assets/wordpress.png'
 import Shopify from '../assets/shopify.webp'
 import Code from '../assets/code.png'
@@ -107,7 +107,11 @@ const ProjectsSection = () => {
                 <div className="overflow-hidden rounded-2xl aspect-[11/5]">
                   <img
                     src={project.image}
-                    alt={project.name}
+                    alt={`${project.name} website`}
+                    width="1280"
+                    height="582"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 boder-2 border-orange-500"
                   />
                 </div>

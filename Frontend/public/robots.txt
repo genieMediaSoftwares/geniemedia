@@ -1,9 +1,8 @@
 User-agent: *
-Allow: / 
+Allow: /
+
+# The admin panel is behind a login and has no public value in the index.
+Disallow: /admin
+Disallow: /admin/
 
 Sitemap: https://geniemedia.in/sitemap.xml
-
-
-Disallow: /node_modules/
-Disallow: /dist/
-Disallow: /.git/

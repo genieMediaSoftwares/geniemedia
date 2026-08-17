@@ -6,8 +6,16 @@ import lamp from '../assets/lamp.JPG'
 import productionHouse from '../assets/Production_house.JPG'
 
 
-export default function TabbedServices() {
+/**
+ * @param {'h1'|'h2'} headingLevel  This component is both a standalone page
+ *   (/services, where its title is the page's h1) and a section embedded in the
+ *   home page (where the page already has an h1, so it must be an h2). The
+ *   Tailwind classes carry the size, so the rendered design is identical either
+ *   way — only the document outline changes.
+ */
+export default function TabbedServices({ headingLevel = 'h2' }) {
   const [activeTab, setActiveTab] = useState('dm');
+  const Heading = headingLevel === 'h1' ? 'h1' : 'h2';
 
   const tabs = [
     { id: 'dm', label: 'Digital Marketing' },
@@ -22,6 +30,8 @@ export default function TabbedServices() {
       mainTitle: 'Digital Marketing Services',
       mainDescription: 'We craft digital marketing strategies in Vizag that are data-driven, targeted, and designed for growth. From brand strategy to content, SEO, social media, and paid campaigns, we build powerful digital experiences that elevate your brand, attract the right audience, and turn prospects into loyal customers.',
       mainImage: Dm_services,
+      mainImageWidth: 600,
+      mainImageHeight: 700,
       services: [
         {
           title: 'Personal Branding',
@@ -54,6 +64,8 @@ export default function TabbedServices() {
       mainTitle: 'Web Design & Development',
       mainDescription: 'Transforming Ideas into Powerful Web Experiences. We build user-friendly and interactive websites using WordPress, Coding, and Shopify that match your brand’s style and goals.',
       mainImage: WebDev_services,
+      mainImageWidth: 600,
+      mainImageHeight: 700,
       services : [
                {
                  title: 'Website Design & Development',
@@ -86,6 +98,8 @@ export default function TabbedServices() {
       mainTitle: 'Production House',
       mainDescription: 'Transforming Concepts into Captivating Productions. We handle all kinds of shoots, events, corporate videos, model shoots, & product photography & make sure every moment is captured neatly & on time.',
       mainImage: lamp,
+      mainImageWidth: 678,
+      mainImageHeight: 800,
       
          services : [
                   {
@@ -119,6 +133,8 @@ export default function TabbedServices() {
       mainTitle: 'Podcast Studio Rentals',
       mainDescription: 'Where Great Conversations Come to Life Record your podcast in our studio, which is ready for use. Everything you need is already set up, so you can walk in & start recording right away.',
       mainImage: productionHouse,
+      mainImageWidth: 690,
+      mainImageHeight: 800,
      services : [
                   {
                     title: 'High-Quality Cameras',
@@ -141,37 +157,17 @@ export default function TabbedServices() {
                     description: 'Enhance your podcast with professional video and photo editing services available at an additional charge, perfect for marketing or social media content.'
                   }
                 ]
-    },
-    'digital': {
-      mainTitle: 'Digital Marketing & Transformation',
-      mainDescription: 'Drive digital growth with comprehensive marketing strategies, analytics, and transformation services that connect you with your audience.',
-      mainImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=700&fit=crop',
-      services: [
-        {
-          title: 'SEO & SEM',
-          description: 'Increase your online visibility with search engine optimization and marketing strategies that drive organic and paid traffic.'
-        },
-        {
-          title: 'Social Media Marketing',
-          description: 'Build and engage your audience across social platforms with strategic content and targeted advertising campaigns.'
-        },
-        {
-          title: 'Content Marketing',
-          description: 'Create compelling content that tells your brand story and converts visitors into loyal customers.'
-        },
-        {
-          title: 'Analytics & Insights',
-          description: 'Measure and optimize your digital performance with advanced analytics and data-driven insights.'
-        }
-      ]
     }
+    // A fifth 'digital' entry used to live here. No tab in `tabs` has that id,
+    // so it was unreachable, and its mainImage pointed at an unsplash.com URL —
+    // a third-party origin referenced from a component on the home page.
   };
 
   const currentContent = tabContent[activeTab];
 
   return (
     <div className="bg-gray-100 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 mt-14">
-      <h1 className='text-4xl sm:text-6xl text-center text-orange-600 mb-10 font-bold' > Services We Offer</h1>
+      <Heading className='text-4xl sm:text-6xl text-center text-orange-600 mb-10 font-bold'> Services We Offer</Heading>
       <div className="max-w-7xl mx-auto">
         
         {/* Tabs Navigation */}
@@ -182,7 +178,7 @@ export default function TabbedServices() {
               onClick={() => setActiveTab(tab.id)}
               className={`px-6 py-3 rounded-full font-semibold text-xs border-[1px] border-gray-800 sm:text-base transition-all duration-300 ${
                 activeTab === tab.id
-                  ? 'bg-orange-500 text-white shadow-lg scale-105'
+                  ? 'bg-orange-500 text-black shadow-lg scale-105'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -234,6 +230,10 @@ export default function TabbedServices() {
                     <img 
                       src={currentContent.mainImage}
                       alt={currentContent.mainTitle}
+                      width={currentContent.mainImageWidth}
+                      height={currentContent.mainImageHeight}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-auto rounded-2xl object-cover"
                     />
                     

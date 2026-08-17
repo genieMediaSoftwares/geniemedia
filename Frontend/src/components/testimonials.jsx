@@ -1,66 +1,112 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Star, Play, Pause, Volume2, VolumeX, Maximize2, Quote } from 'lucide-react';
+import { Star, Quote } from 'lucide-react';
+
+// Each testimonial is a YouTube video. Only the video ID is stored — the embed
+// and thumbnail URLs are derived from it, so they can never end up malformed.
+const testimonials = [
+  {
+    id: 1,
+    name: "Dr.Sailaja",
+    company: "Lawer",
+    rating: 5,
+    videoId: "gMpv78iIFz0",
+    quote: "Wonderful design and implemenation of my website with thoroughly giving suggestions and clarifying doubts."
+  },
+  {
+    id: 2,
+    name: "Suraj",
+    company: "Communication Coach",
+    rating: 5,
+    videoId: "4xgHJgz_8uY",
+    quote: "Outstanding results! Excellent colors representation and Design i loved the website."
+  },
+  {
+    id: 3,
+    name: "Deepak kumar sharma",
+    company: "Neutritionist",
+    rating: 5,
+    videoId: "mUpfyEFMpeY",
+    quote: "The creativity and professionalism exceeded all our expectations!"
+  },
+  {
+    id: 4,
+    name: "Heena M shrivastava",
+    company: "Book Author & Coach",
+    rating: 5,
+    videoId: "poK_yAMsmUQ",
+    quote: "I'm  worried about my website design & getting no traffic Then karthik came and delivered such a beautiful website for me."
+  },
+  {
+    id: 5,
+    name: "kedhar panda",
+    company: "Book Author & Coach",
+    rating: 5,
+    videoId: "oGxKBpu7x1I",
+    quote: "They truly understood our brand and delivered beyond expectations!"
+  }
+];
+
+/**
+ * Click-to-play YouTube facade.
+ *
+ * Mounting five real <iframe> embeds shipped ~5 MB and several seconds of
+ * third-party JavaScript on page load, even for the cards CSS was hiding —
+ * `display: none` does not stop an iframe from loading. Instead we render the
+ * video's own thumbnail plus a play button, and only swap in the real player
+ * once the visitor actually asks for it. The player, its controls and
+ * fullscreen all behave exactly as before from that point on.
+ *
+ * youtube-nocookie.com is used so no tracking cookie is set unless the visitor
+ * chooses to play a video.
+ */
+const LiteYouTube = ({ videoId, title }) => {
+  const [activated, setActivated] = useState(false);
+
+  if (activated) {
+    return (
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
+        title={title}
+        className="w-full h-full rounded-xl"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => setActivated(true)}
+      aria-label={`Play video testimonial from ${title}`}
+      className="lite-yt group/yt w-full h-full rounded-xl overflow-hidden relative block"
+    >
+      <img
+        src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
+        alt=""
+        width="480"
+        height="360"
+        loading="lazy"
+        decoding="async"
+        className="w-full h-full object-cover"
+      />
+      <span className="lite-yt-play" aria-hidden="true">
+        <svg viewBox="0 0 68 48" width="68" height="48" focusable="false">
+          <path
+            className="lite-yt-play-bg"
+            d="M66.52 7.74a8 8 0 0 0-5.65-5.67C55.79 1 34 1 34 1S12.21 1 7.13 2.07a8 8 0 0 0-5.65 5.67A83.7 83.7 0 0 0 0 24a83.7 83.7 0 0 0 1.48 16.26 8 8 0 0 0 5.65 5.67C12.21 47 34 47 34 47s21.79 0 26.87-1.07a8 8 0 0 0 5.65-5.67A83.7 83.7 0 0 0 68 24a83.7 83.7 0 0 0-1.48-16.26z"
+          />
+          <path d="M45 24 27 14v20z" fill="#fff" />
+        </svg>
+      </span>
+    </button>
+  );
+};
 
 const VideoTestimonials = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState({});
-  const [isMuted, setIsMuted] = useState({});
   const sectionRef = useRef(null);
-  const videoRefs = useRef([]);
-
-  const testimonials = [
-    {
-      id: 1,
-      name: "Dr.Sailaja",
-      // role: "CEO, TechStartup Inc",
-      company: "Lawer",
-      rating: 5,
-      // thumbnail: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=400&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/gMpv78iIFz0?si=Llj0RhUJEwZ7aF4E",
-      quote: "Wonderful design and implemenation of my website with thoroughly giving suggestions and clarifying doubts."
-    },
-    {
-      id: 2,
-      name: "Suraj",
-      // role: "Marketing Director",
-      company: "Communication Coach",
-      rating: 5,
-      // thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/4xgHJgz_8uY?si=7ASuer9xK5DC9cNI",
-      quote: "Outstanding results! Excellent colors representation and Design i loved the website."
-    },
-    {
-      id: 3,
-      name: "Deepak kumar sharma",
-      // role: "Founder",
-      company: "Neutritionist",
-      rating: 5,
-      // thumbnail: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=400&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/mUpfyEFMpeY?si=61W5yvmrPCF3c7pt",
-      quote: "The creativity and professionalism exceeded all our expectations!"
-    },
-    {
-      id: 4,
-      name: "Heena M shrivastava",
-      // role: "CTO",
-      company: "Book Author & Coach",
-      rating: 5,
-      // thumbnail: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=400&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/poK_yAMsmUQ?si=xVO0u7tIfFjciOCH",
-      quote: "I'm  worried about my website design & getting no traffic Then karthik came and delivered such a beautiful website for me."
-    },
-    {
-      id: 5,
-      name: "kedhar panda",
-      // role: "Brand Manager",
-      company: "Book Author & Coach",
-      rating: 5,
-      // thumbnail: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=400&fit=crop",
-      videoUrl: "https://www.youtube.com/embed/oGxKBpu7x1I?si=lz8JXzvyiUnF6T9C",
-      quote: "They truly understood our brand and delivered beyond expectations!"
-    }
-  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -91,39 +137,6 @@ const VideoTestimonials = () => {
 
   const goToSlide = (index) => {
     setCurrentIndex(index);
-  };
-
-  const togglePlay = (index) => {
-    const video = videoRefs.current[index];
-    if (video) {
-      if (isPlaying[index]) {
-        video.pause();
-      } else {
-        video.play();
-      }
-      setIsPlaying(prev => ({ ...prev, [index]: !prev[index] }));
-    }
-  };
-
-  const toggleMute = (index) => {
-    const video = videoRefs.current[index];
-    if (video) {
-      video.muted = !video.muted;
-      setIsMuted(prev => ({ ...prev, [index]: !prev[index] }));
-    }
-  };
-
-  const toggleFullscreen = (index) => {
-    const video = videoRefs.current[index];
-    if (video) {
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
-      }
-    }
   };
 
   return (
@@ -340,6 +353,69 @@ const VideoTestimonials = () => {
           object-fit: cover;
         }
 
+        /* Click-to-play YouTube facade — mirrors the player's own poster frame */
+        .lite-yt {
+          background: #000;
+          border: 0;
+          padding: 0;
+          cursor: pointer;
+        }
+
+        .lite-yt-play {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+        }
+
+        .lite-yt-play-bg {
+          fill: #212121;
+          fill-opacity: 0.8;
+          transition: fill 0.2s ease, fill-opacity 0.2s ease;
+        }
+
+        .lite-yt:hover .lite-yt-play-bg,
+        .lite-yt:focus-visible .lite-yt-play-bg {
+          fill: #f00;
+          fill-opacity: 1;
+        }
+
+        .lite-yt:focus-visible {
+          outline: 3px solid #ff6b00;
+          outline-offset: 2px;
+        }
+
+        /* Keeps the visible dot small while giving it a 24px+ tap target */
+        .carousel-dot {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+          background: none;
+          border: 0;
+          padding: 0;
+          cursor: pointer;
+        }
+
+        .carousel-dot > span {
+          display: block;
+          border-radius: 9999px;
+          transition: all 0.3s ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .animate-fadeInUp,
+          .animate-scaleIn,
+          .quote-icon {
+            animation: none !important;
+          }
+          .carousel-item {
+            transition: none;
+          }
+        }
+
         @media (max-width: 768px) {
           .carousel-container {
             gap: 1rem;
@@ -429,14 +505,10 @@ const VideoTestimonials = () => {
                       <div className="video-card bg-white rounded-2xl overflow-hidden shadow-lg">
                        
                         <div className="video-container aspect-video bg-gray-900 relative">
-                          <iframe
-                              src={`${testimonial.videoUrl}?rel=0&showinfo=0&modestbranding=1`}
-                              title={testimonial.name}
-                              className="w-full h-full rounded-xl"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen  >
-                          </iframe>
-
+                          <LiteYouTube
+                            videoId={testimonial.videoId}
+                            title={testimonial.name}
+                          />
                         </div>
 
                        
@@ -465,13 +537,10 @@ const VideoTestimonials = () => {
 
                          
                           <div className="pt-2 border-t border-gray-100">
-                            <h4 className="text-lg font-bold text-gray-900">
+                            <h3 className="text-lg font-bold text-gray-900">
                               {testimonial.name}
-                            </h4>
-                            <p className="text-sm text-gray-600">
-                              {testimonial.role}
-                            </p>
-                            <p className="text-sm text-orange-600 font-semibold">
+                            </h3>
+                            <p className="text-sm text-orange-700 font-semibold">
                               {testimonial.company}
                             </p>
                           </div>
@@ -499,14 +568,20 @@ const VideoTestimonials = () => {
               {testimonials.map((_, index) => (
                 <button
                   key={index}
+                  type="button"
                   onClick={() => goToSlide(index)}
-                  className={`transition-all duration-300 rounded-full ${
-                    index === currentIndex 
-                      ? 'w-10 h-3 bg-gradient-to-r from-orange-500 to-orange-600' 
-                      : 'w-3 h-3 bg-gray-300 hover:bg-orange-300'
-                  }`}
+                  className="carousel-dot"
                   aria-label={`Go to testimonial ${index + 1}`}
-                />
+                  aria-current={index === currentIndex}
+                >
+                  <span
+                    className={
+                      index === currentIndex
+                        ? 'w-10 h-3 bg-gradient-to-r from-orange-500 to-orange-600'
+                        : 'w-3 h-3 bg-gray-300 hover:bg-orange-300'
+                    }
+                  />
+                </button>
               ))}
             </div>
           </div>

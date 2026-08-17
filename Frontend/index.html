@@ -1,30 +1,62 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-H5GFQ5HH50"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-H5GFQ5HH50');
-</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GenieMedia & Studio</title>
 
     <meta name="title" content="Digital Marketing Agency in Visakhapatnam | SEO, Ads & Social Media - Genie Media">
     <meta name="description" content="Genie Media is a leading digital marketing agency in Visakhapatnam offering SEO, Google Ads, social media marketing, and website development services to grow your business online.">
     <meta name="keywords" content="digital marketing agency in visakhapatnam, digital marketing services near me, affordable seo services in vizag, social media marketing vizag, google ads agency in vizag, website development company in visakhapatnam, best digital marketing agency for small business in vizag, local seo services in visakhapatnam, google my business optimization services india, lead generation services for small business india, ">
     <meta name="robots" content="index, follow">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="language" content="English">
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/GenieMedia-Logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GenieMedia & Studio</title>
-    
+
+    <link rel="canonical" href="https://geniemedia.in/" />
+    <link rel="icon" type="image/png" href="/GenieMedia-Logo.png" />
+    <link rel="apple-touch-icon" href="/GenieMedia-Logo.png" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!--
+      Google Analytics (G-H5GFQ5HH50).
+
+      Loaded after the `load` event instead of in <head>. gtag.js pulls ~90 kB
+      of third-party JavaScript and executes it on the main thread; running it
+      before first paint delayed LCP and inflated Total Blocking Time for no
+      benefit, because nothing on the page depends on it.
+
+      Page views are still recorded exactly as before — the queued gtag() calls
+      below run the moment the library arrives. requestIdleCallback yields to
+      any pending work first, with a setTimeout fallback for Safari.
+    -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-H5GFQ5HH50');
+
+      (function loadAnalytics() {
+        var loaded = false;
+        function inject() {
+          if (loaded) return;
+          loaded = true;
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-H5GFQ5HH50';
+          document.head.appendChild(s);
+        }
+        function schedule() {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(inject, { timeout: 3000 });
+          } else {
+            setTimeout(inject, 1500);
+          }
+        }
+        if (document.readyState === 'complete') schedule();
+        else window.addEventListener('load', schedule, { once: true });
+      })();
+    </script>
   </body>
 </html>

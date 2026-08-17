@@ -10,6 +10,7 @@ const path = require("path");
 const fs = require("fs");
 const axios = require("axios");
 const FormData = require("form-data");
+const sharp = require("sharp");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -120,12 +121,67 @@ const upload = multer({
   },
 });
 
+// ================= HELPER: Optimise an uploaded image =================
+// Admin-uploaded artwork arrives straight from a design tool — typically a
+// ~1 MB, 1900px-wide PNG. The site never displays those wider than about 640
+// CSS px, so six of them on the home page accounted for several megabytes of
+// page weight on their own.
+//
+// Before upload, each image is therefore capped at MAX_UPLOAD_WIDTH and
+// re-encoded as WebP, which is roughly 15-25x smaller for this kind of
+// screenshot while staying visually identical at display size. Transparency is
+// preserved. The public URL keeps a normal image extension, so nothing on the
+// frontend needs to know this happened.
+//
+// If optimisation fails for any reason the original file is uploaded unchanged —
+// a publish must never fail because an image could not be re-encoded.
+const MAX_UPLOAD_WIDTH = 1280;
+
+const optimiseImage = async (tempFilePath) => {
+  try {
+    const meta = await sharp(tempFilePath).metadata();
+
+    const optimisedPath = `${tempFilePath}.opt.webp`;
+    let pipeline = sharp(tempFilePath, { failOn: "none" }).rotate(); // honour EXIF orientation
+
+    if (meta.width > MAX_UPLOAD_WIDTH) {
+      pipeline = pipeline.resize({ width: MAX_UPLOAD_WIDTH, withoutEnlargement: true });
+    }
+
+    await pipeline.webp({ quality: 82, effort: 5 }).toFile(optimisedPath);
+
+    const before = fs.statSync(tempFilePath).size;
+    const after = fs.statSync(optimisedPath).size;
+
+    if (after >= before) {
+      // Already well optimised — keep whatever the admin uploaded.
+      fs.unlinkSync(optimisedPath);
+      return { path: tempFilePath, extra: null };
+    }
+
+    console.log(
+      `🖼️  Optimised upload: ${Math.round(before / 1024)} KB -> ${Math.round(after / 1024)} KB ` +
+        `(${meta.width}x${meta.height}${meta.width > MAX_UPLOAD_WIDTH ? ` -> ${MAX_UPLOAD_WIDTH}px wide` : ""})`
+    );
+    return { path: optimisedPath, extra: tempFilePath };
+  } catch (err) {
+    console.error("Image optimisation skipped:", err.message);
+    return { path: tempFilePath, extra: null };
+  }
+};
+
 // ================= HELPER: Upload file to Hostinger =================
-// Uploads temp file to upload.php, returns full HTTPS URL, cleans up temp file
+// Uploads temp file to upload.php, returns full HTTPS URL, cleans up temp files
 const uploadToHostinger = async (tempFilePath) => {
+  const { path: fileToSend, extra } = await optimiseImage(tempFilePath);
+
   try {
     const formData = new FormData();
-    formData.append("file", fs.createReadStream(tempFilePath));
+    // The remote endpoint names the stored file from the upload's filename, so
+    // send the optimised basename to keep the extension truthful.
+    formData.append("file", fs.createReadStream(fileToSend), {
+      filename: path.basename(fileToSend).replace(/\.opt\.webp$/, ".webp"),
+    });
 
     const response = await axios.post(
       "https://geniemedia.in/upload.php",
@@ -135,10 +191,13 @@ const uploadToHostinger = async (tempFilePath) => {
 
     return response.data.url; // full HTTPS URL from Hostinger
   } finally {
-    // Always clean up the temp file, whether upload succeeded or failed
-    try {
-      if (fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
-    } catch (_) {}
+    // Always clean up temp files, whether upload succeeded or failed
+    for (const p of [fileToSend, extra]) {
+      if (!p) continue;
+      try {
+        if (fs.existsSync(p)) fs.unlinkSync(p);
+      } catch (_) {}
+    }
   }
 };
 

@@ -83,13 +83,20 @@ export default function AboutPage() {
             </div>
 
             <div className="flex justify-center lg:justify-end">
-              <div className="relative">
+              {/* The wrapper carries the max-width, not just the <img>. Without it
+                  the wrapper had no resolvable width until the image had loaded,
+                  so the width/height attributes could not reserve any height and
+                  the hero collapsed-then-expanded — a ~0.35 layout shift. */}
+              <div className="relative w-full max-w-lg lg:max-w-2xl">
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
                   src={AboutHero}
-                  alt="About Genie services" 
+                  alt="The Genie Media team at work" 
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
                   loading='lazy'
+                  width="520"
+                  height="433"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -152,10 +159,13 @@ export default function AboutPage() {
       >
         <img
           src={OurVission}
-          alt=" services diagram"
+          alt="Our vision"
           className="w-{350px} h-auto rounded-2xl"
           loading='lazy'
-        />
+                  width="556"
+                  height="360"
+                  decoding="async"
+                />
       </div>
 
      
@@ -163,7 +173,7 @@ export default function AboutPage() {
         className={`text-center mt-8 lg:-mt-4 w-full md:w-[70%] transition-all duration-[800ms] delay-100 ease-out sm:mr-14 sm:ml-14 
        `}
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-orange-600 mb-6">
+        <h2 className="text-4xl md:text-5xl font-bold text-orange-700 mb-6">
         Our Vision
         </h2>
 
@@ -175,7 +185,7 @@ We blend design, storytelling, and technology to build meaningful brand experien
         </p>
 
         <p className="text-gray-700 text-lg leading-relaxed">
-         Our vision is to become a trusted growth partner for businesses by delivering impactful <span className="text-orange-600 font-medium">digital marketing solutions</span>{" "} that drive measurable results. 
+         Our vision is to become a trusted growth partner for businesses by delivering impactful <span className="text-orange-800 font-medium">digital marketing solutions</span>{" "} that drive measurable results. 
           
         </p>
       </div>
@@ -197,10 +207,13 @@ We blend design, storytelling, and technology to build meaningful brand experien
       >
         <img
           src={OurMission}
-          alt="services diagram"
+          alt="Our mission"
           className="w-{350px} h-auto rounded-2xl "
           loading='lazy'
-        />
+                  width="905"
+                  height="615"
+                  decoding="async"
+                />
       </div>
 
      
@@ -208,7 +221,7 @@ We blend design, storytelling, and technology to build meaningful brand experien
         className={`text-center w-full md:w-1/2 transition-all duration-[800ms] delay-100 ease-out ml-0 md:ml-20
         ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
       >
-        <h2 className="-mt-10 text-4xl md:text-5xl font-bold text-orange-600 mb-6">
+        <h2 className="-mt-10 text-4xl md:text-5xl font-bold text-orange-700 mb-6">
           Our Mission
         </h2>
 
@@ -218,9 +231,9 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
         </p>
 
         <p className="text-gray-700 text-lg leading-relaxed">
-          Through  <span className="text-orange-600 font-medium">innovation</span>,{" "}
-         <span className="text-orange-600 font-medium">collaboration</span>,{" "} and
-         <span className="text-orange-600 font-medium">continuous optimization</span>{" "}we turn ideas into powerful digital experiences that fuel long-term growth.
+          Through  <span className="text-orange-800 font-medium">innovation</span>,{" "}
+         <span className="text-orange-800 font-medium">collaboration</span>,{" "} and
+         <span className="text-orange-800 font-medium">continuous optimization</span>{" "}we turn ideas into powerful digital experiences that fuel long-term growth.
         </p>
       </div>
     </section>
@@ -245,7 +258,7 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
 
             {/* GENIE Large Text */}
             <div className="mt-12 lg:mt-20">
-              <h3 className=" text-orange-600 text-6xl t sm:text-7xl lg:text-8xl  font-bold tracking-widest">
+              <h3 className=" text-orange-700 text-6xl t sm:text-7xl lg:text-8xl  font-bold tracking-widest">
                 GENIE
               </h3>
             </div>
@@ -266,7 +279,7 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
                 {/* Letter Circle */}
                 <div className="flex-shrink-0 relative mt-4 z-10">
                   <div className="w-12 h-24 sm:w-14 sm:h-14 rounded-full bg-orange-400 flex items-center justify-center shadow-lg">
-                    <span className="text-2xl sm:text-3xl font-bold text-white">
+                    <span className="text-2xl sm:text-3xl font-bold text-black">
                       {value.letter}
                     </span>
                   </div>

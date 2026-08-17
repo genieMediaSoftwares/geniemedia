@@ -162,13 +162,20 @@ export default function DigitalMarketting() {
             </div>
 
             <div className="flex justify-center lg:justify-end">
-              <div className="relative">
+              {/* The wrapper carries the max-width, not just the <img>. Without it
+                  the wrapper had no resolvable width until the image had loaded,
+                  so the width/height attributes could not reserve any height and
+                  the hero collapsed-then-expanded — a ~0.35 layout shift. */}
+              <div className="relative w-full max-w-lg lg:max-w-2xl">
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
                   src= {DigitalMarketting1}
                   loading='lazy'
-                  alt="Robot hand" 
+                  alt="Digital marketing services" 
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
+                  width="1000"
+                  height="666"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -183,7 +190,7 @@ export default function DigitalMarketting() {
       
              <p
                className="
-                 text-lg tracking-widest text-orange-600 font-semibold mb-6
+                 text-lg tracking-widest text-orange-700 font-semibold mb-6
                  animate-fadeUp
                "
              >
@@ -191,7 +198,7 @@ export default function DigitalMarketting() {
              </p>
       
            
-             <h1
+             <h2
                className="
                  text-2xl md:text-5xl lg:text-5xl 
                  font-extrabold leading-tight text-gray-900
@@ -201,7 +208,7 @@ export default function DigitalMarketting() {
            {/* Marketing That Connects, Engages & Converts */}
            Our Marketing Services
                  
-             </h1>
+             </h2>
       
            
              <p
@@ -226,7 +233,7 @@ export default function DigitalMarketting() {
              >
               
              </div>
-             <img src= {DigitalMarketing2} loading='lazy' className='w-full h-auto rounded-xl'/>
+             <img src={DigitalMarketing2} alt="Digital marketing campaign results" width="1400" height="788" loading='lazy' decoding="async" className='w-full h-auto rounded-xl'/>
       
            </div>
          </section>
@@ -265,7 +272,10 @@ export default function DigitalMarketting() {
               alt="Digital Marketing Analytics"
               className="w-full h-auto rounded-2xl object-cover"
               loading='lazy'
-            />
+                  width="600"
+                  height="700"
+                  decoding="async"
+                />
           </div>
         </div>
       </div>
@@ -293,7 +303,7 @@ export default function DigitalMarketting() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 mb-16">
           <div className="flex-1">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-orange-500 mb-6 leading-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-orange-600 mb-6 leading-tight">
               Our Marketing Expertise Across Industries
             </h2>
             <p className="text-lg md:text-xl text-gray-800 leading-relaxed max-w-3xl">
@@ -399,13 +409,13 @@ export default function DigitalMarketting() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Left Column - Content */}
           <div className="lg:sticky lg:top-24">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Why Choose Genie Media as Your Marketing Agency?
-            </h1>
+            </h2>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
               With a proven track record of delivering high-impact marketing solutions for businesses from startups to established enterprises, we have earned a reputation as a trusted partner for all your marketing needs. Here are some reasons why our top clients have chosen us as their marketing agency:
             </p>
-            <button className="bg-orange-500 hover:bg-black  text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl" onClick={() => window.location.href="/contact"}>
+            <button className="bg-orange-500 hover:bg-black text-black hover:text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl" onClick={() => window.location.href="/contact"}>
               Let's Discuss Your Project
             </button>
           </div>

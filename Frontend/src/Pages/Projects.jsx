@@ -44,19 +44,28 @@ export default function Projects() {
                 alt="WordPress"
                 className="w-28 md:w-32 hover:scale-110 transition-transform duration-300 -mb-8"
                 loading='lazy'
-              />
+                  width="225"
+                  height="225"
+                  decoding="async"
+                />
               <img
                 src={Shopify}
                 alt="Shopify"
                 className="w-36 md:w-42 hover:scale-110 transition-transform duration-300 -mb-8"
                 loading='lazy'
-              />
+                  width="1302"
+                  height="1400"
+                  decoding="async"
+                />
               <img
                 src={Code}
-                alt="code"
+                alt="Custom code development"
                 className="w-36 md:w-48 hover:scale-110 transition-transform duration-300"
                 loading='lazy'
-              />
+                  width="259"
+                  height="194"
+                  decoding="async"
+                />
             </div>
       
             

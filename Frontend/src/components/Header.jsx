@@ -1,68 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown, Phone, Mail } from 'lucide-react';
 import "./Header.css"
 import logo from "../assets/GenieMedia-Logo.png"
 import { TrendingUp, Code, Video, Mic } from 'lucide-react';
 
+// Hoisted so the nav (and the JSX icon elements inside it) is built once rather
+// than on every Header render.
+const MENU_ITEMS = [
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
+  {
+    name: 'Services',
+    href: '/services',
+    dropdown: [
+      { name: 'Digital Marketing', href: '/digital_marketing', icon: <TrendingUp /> },
+      { name: 'Website Development', href: '/web_development', icon: <Code /> },
+      { name: 'Production House', href: '/production_house', icon: <Video /> },
+      { name: 'Podcast Studio Rentals', href: '/podcast_studio', icon: <Mic /> }
+    ]
+  },
+  { name: 'Projects', href: '/projects' },
+  { name: 'Blog', href: '/blogs' },
+  { name: 'Reviews', href: '/reviews' },
+];
+
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
-  
-  useEffect(() => {
-  document.body.classList.add("header-loaded");
-}, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // A scroll listener used to live here setting an `isScrolled` flag, but the
+  // header's background is a constant (`bg-black/95`) and the flag was never
+  // read. It re-rendered the entire header on every scroll frame for nothing.
 
-  const menuItems = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    {
-      name: 'Services',
-      href: '/services',
-    dropdown: [
-    { name: 'Digital Marketing', href: '/digital_marketing', icon: <TrendingUp/> },
-    { name: 'Website Development', href: '/web_development', icon: <Code/> },
-    { name: 'Production House', href: '/production_house', icon: <Video/> },
-    { name: 'Podcast Studio Rentals', href: '/podcast_studio', icon: <Mic/> }
-  ]
-    },
-    { name: 'Projects', href: '/projects' },
-    { name: 'Blog', href: '/blogs' },
-    {
-      name: 'Reviews',
-      href: '/reviews',
-    }
-     
-  ];
+  const menuItems = MENU_ITEMS;
 
   return (
     <>
-    
-
-      <header 
-        className={`header-container fixed top-0 left-0 right-0 z-50  transition-all duration-300 ${
-          'bg-black/95'
-        }`}
+      <header
+        className="header-container fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-black/95"
       >
         <div className="max-w-8xl mx-auto px-0 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 ">
             
-            <div className="logo-container flex items-center cursor-pointer">
-              <img 
-                src={logo} 
-                alt="Logo" 
+            <a href="/" className="logo-container flex items-center cursor-pointer" aria-label="Genie Media & Studio — home">
+              <img
+                src={logo}
+                alt="Genie Media & Studio"
+                width="283"
+                height="420"
                 className="logo-img w-36 sm:w-32 md:w-36 object-contain logo-icon"
               />
-            </div>
+            </a>
 
 
             {/* Desktop Navigation */}
@@ -130,12 +119,12 @@ const Header = () => {
 
             {/* CTA Buttons - Desktop */}
             <div className="hidden lg:flex items-center gap-3 cta-buttons">
-              <a href='tel:+919032845433' className="btn-secondary relative px-5 py-2.5 text-orange-600 font-semibold rounded-full text-sm flex items-center gap-2 z-10" onClick={() => window.location.href="https://wa.me/919032845433"}>
+              <a href='tel:+919032845433' className="btn-secondary relative px-5 py-2.5 text-orange-700 font-semibold rounded-full text-sm flex items-center gap-2 z-10" onClick={() => window.location.href="https://wa.me/919032845433"}>
                 <Phone size={16} />
                 Book a Call
               </a>
               <a href="/contact">
-              <button className="btn-primary px-6 py-2.5 text-white font-semibold rounded-full text-sm flex items-center gap-2 shadow-lg relative z-10" >
+              <button className="btn-primary px-6 py-2.5 text-black font-semibold rounded-full text-sm flex items-center gap-2 shadow-lg relative z-10" >
                 <Mail size={16} />
                 Contact Us
               </button>  </a>
@@ -162,7 +151,7 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="lg:hidden mobile-menu bg-white border-t border-gray-100 shadow-2xl max-h-[calc(100vh-80px)] overflow-y-auto">
             <nav className="px-4 py-6 flex flex-col gap-1">
-              {menuItems.map((item, index) => (
+              {menuItems.map((item) => (
                 <div key={item.name} className="mobile-menu-item">
                   {item.dropdown ? (
                     <div>
@@ -209,15 +198,26 @@ const Header = () => {
               ))}
 
               {/* Mobile CTA Buttons */}
+              {/* These were <button> elements with no handler — visible, but
+                  inert. They now go to the same destinations as their desktop
+                  counterparts above. */}
               <div className="mobile-menu-item mt-4 space-y-3">
-                <button className="w-80% btn-secondary relative px-5 py-3 text-orange-600 font-semibold rounded-full flex items-center justify-center gap-2 z-10">
+                <a
+                  href="https://wa.me/919032845433"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-80% btn-secondary relative px-5 py-3 text-orange-600 font-semibold rounded-full flex items-center justify-center gap-2 z-10"
+                >
                   <Phone size={18} />
                   Book a Call
-                </button>
-                <button className="w-80% btn-primary px-6 py-3 text-white font-semibold rounded-full flex items-center justify-center gap-2 shadow-lg relative z-10">
+                </a>
+                <a
+                  href="/contact"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-80% btn-primary px-6 py-3 text-black font-semibold rounded-full flex items-center justify-center gap-2 shadow-lg relative z-10"
+                >
                   <Mail size={18} />
                   Contact Us
-                </button>
+                </a>
               </div>
             </nav>
           </div>

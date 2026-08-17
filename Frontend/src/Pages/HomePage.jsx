@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ArrowRight, Sparkles, TrendingUp, Users, Award } from "lucide-react";
 import "./HomePage.css";
+import { WEBSITES_VIDEO_URL } from "../config/media";
 
 import AboutUs from "../components/AboutSection";
 import Contact from "../components/contactSection";
 import VideoTestimonials2 from "../components/testimonials";
 import TabbedServices from "../components/AllServices";
-import GenieImg from "../assets/genieHeroImg.png";
+import GenieImg from "../assets/genieHeroImg.webp";
 
-import meerabasu from "../assets/meerabasuWebsite.png";
-import AvanttaGems from "../assets/AvanttaGems.png";
-import KNS from "../assets/knsMetals.png";
-import Buildzon from "../assets/buildzon.png";
-import laserFold from "../assets/LaserFold.png";
-import GenieStudio from "../assets/GenieStudio.png";
+import meerabasu from "../assets/meerabasuWebsite.webp";
+import AvanttaGems from "../assets/AvanttaGems.webp";
+import KNS from "../assets/knsMetals.webp";
+import laserFold from "../assets/LaserFold.webp";
 import Wordpress from "../assets/wordpress.png";
 import Shopify from "../assets/shopify.webp";
 import Code from "../assets/code.png";
-import Nuconaerospace from '../assets/nuconaerospace.png'
-import Synergene from '../assets/synergeneapi.png'
+import Nuconaerospace from '../assets/nuconaerospace.webp'
+import Synergene from '../assets/synergeneapi.webp'
 import usePublishedProjects from "../hooks/usePublishedProjects";
 
 // Offline safety net only — rendered if the projects API cannot be reached.
@@ -60,19 +59,19 @@ const FALLBACK_PROJECTS = [
 // links to /projects where the full list is rendered.
 const HOME_PROJECTS_LIMIT = 6;
 
+// Static presentation data — hoisted out of the component so the arrays are not
+// re-allocated on every render.
+const STATS = [
+  { icon: Users, value: "150+", label: "Growth Campaigns" },
+  { icon: Award, value: "98%", label: "Success Rate" },
+  { icon: TrendingUp, value: "250%", label: "ROI Average" },
+];
+
 const HomePage = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const showVideo = Boolean(WEBSITES_VIDEO_URL) && !videoError;
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  const stats = [
-    { icon: Users, value: "150+", label: "Growth Campaigns" },
-    { icon: Award, value: "98%", label: "Success Rate" },
-    { icon: TrendingUp, value: "250%", label: "ROI Average" },
-  ];
+  const stats = STATS;
 
   const steps = [
     {
@@ -158,7 +157,7 @@ const HomePage = () => {
               <div className="hero-buttons flex flex-row sm:flex-row gap-4 w-80% justify-center lg:justify-start ">
                 <a
                   href="/contact"
-                  className="w-42 sm:w-56 btn-primary group relative px-5 py-4 text-white font-bold rounded-full text-base shadow-xl flex items-center justify-center gap-2 z-10"
+                  className="w-42 sm:w-56 btn-primary group relative px-5 py-4 text-black font-bold rounded-full text-base shadow-xl flex items-center justify-center gap-2 z-10"
                   onClick={() =>
                     (window.location.href = "https://wa.me/919032845433")
                   }
@@ -170,7 +169,7 @@ const HomePage = () => {
                   />
                 </a>
                 <button
-                  className="w-42 sm:w-50 btn-secondary relative px-6 py-4 text-orange-600 font-bold rounded-full text-base flex items-center justify-center gap-2 z-10"
+                  className="w-42 sm:w-50 btn-secondary relative px-6 py-4 text-orange-700 font-bold rounded-full text-base flex items-center justify-center gap-2 z-10"
                   onClick={() => (window.location.href = "/projects")}
                 >
                   See Portfolio
@@ -203,11 +202,21 @@ const HomePage = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full blur-3xl opacity-20 scale-110"></div>
 
                 <div className="genie-image ">
+                  {/* This is the Largest Contentful Paint element on desktop.
+                      It must stay eager and high-priority: marking it lazy hid
+                      it from the preload scanner and pushed LCP out by seconds.
+                      It is `hidden` below lg, so a <link rel=preload> is
+                      deliberately NOT used — that would download it on mobile
+                      where it is never shown. */}
                   <img
                     src={GenieImg}
                     alt="Digital Marketing Genie"
                     className="hidden lg:block w-full h-[600px] rounded-3xl mt-8"
-                    loading="lazy"
+                    width="1000"
+                    height="1000"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
                   />
                 </div>
               </div>
@@ -223,48 +232,51 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className={`relative bg-[#f9fafc] overflow-hidden ${videoError ? 'py-8 md:py-10' : 'py-10 md:py-14'}`}>
+      <section className={`relative bg-[#f9fafc] overflow-hidden ${showVideo ? 'py-10 md:py-14' : 'py-8 md:py-10'}`}>
         <div className="max-w-6xl mx-auto px-6 text-center">
           <p
             className="
-            text-sm tracking-widest text-orange-600 font-semibold mb-6
+            text-sm tracking-widest text-orange-700 font-semibold mb-6
             animate-fadeUp
           "
           >
             CREATIVE & STRATEGIC DIGITAL MARKETING COMPANY
           </p>
 
-          <h1
+          {/* h2, not h1 — the page already has its h1 in the hero above. The
+              Tailwind classes keep the rendered size identical. */}
+          <h2
             className="
-            text-2xl md:text-5xl lg:text-5xl 
+            text-2xl md:text-5xl lg:text-5xl
             font-extrabold leading-tight text-gray-900
             mb-8 animate-fadeUp animation-delay-200
           "
           >
-           We Build SERPs in Digital Marketing 
+           We Build SERPs in Digital Marketing
             <br />
            That Connect & Grow Brands
-          </h1>
+          </h2>
 
           <p
             className={`
             max-w-3xl mx-auto text-lg text-gray-600
-            leading-relaxed ${videoError ? 'mb-0' : 'mb-12'}
+            leading-relaxed ${showVideo ? 'mb-12' : 'mb-0'}
             animate-fadeUp animation-delay-400
           `}
           >
-           We craft best digital marketing near me journeys that feel natural, human, and memorable. 
-           From strategy to design and content, we help your brand rise above the noise, stay true to its voice, 
+           We craft best digital marketing near me journeys that feel natural, human, and memorable.
+           From strategy to design and content, we help your brand rise above the noise, stay true to its voice,
            and build trust across every platform.
           </p>
 
-          {!videoError && (
+          {showVideo && (
             <video
-              src="https://karthik.kkdigitalgrowth.com/wp-content/uploads/2026/04/Websites_video.mp4"
+              src={WEBSITES_VIDEO_URL}
               muted
               autoPlay
               loop
               playsInline
+              preload="none"
               onError={() => setVideoError(true)}
               className="w-full h-auto rounded-xl mt-8"
             ></video>
@@ -347,8 +359,11 @@ const HomePage = () => {
                   <div className="overflow-hidden rounded-2xl aspect-[11/5]">
                     <img
                       src={project.image}
-                      alt={project.name}
+                      alt={`${project.name} website`}
+                      width="1280"
+                      height="582"
                       loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 boder-2 border-orange-500"
                     />
                   </div>
@@ -406,20 +421,29 @@ const HomePage = () => {
           <img
             src={Wordpress}
             alt="WordPress"
+            width="225"
+            height="225"
             className="w-28 md:w-32 hover:scale-110 transition-transform duration-300 -mb-8"
             loading="lazy"
+            decoding="async"
           />
           <img
             src={Shopify}
             alt="Shopify"
+            width="1302"
+            height="1400"
             className="w-40 md:w-42 hover:scale-110 transition-transform duration-300 -mb-8"
             loading="lazy"
+            decoding="async"
           />
           <img
             src={Code}
-            alt="code"
+            alt="Custom code development"
+            width="259"
+            height="194"
             className="w-36 md:w-48 hover:scale-110 transition-transform duration-300"
             loading="lazy"
+            decoding="async"
           />
         </div>
 

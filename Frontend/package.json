@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "images:inspect": "node scripts/inspect-images.mjs",
+    "images:optimize": "node scripts/optimize-images.mjs",
+    "verify:routes": "node scripts/verify-routes.mjs http://localhost:5173",
+    "verify:functionality": "node scripts/verify-functionality.mjs http://localhost:5173",
+    "audit:contrast": "node scripts/audit-contrast.mjs http://localhost:5173 / /about /services /contact /reviews /projects /digital_marketing /web_development /production_house /podcast_studio /blogs",
+    "audit:headings": "node scripts/audit-headings.mjs http://localhost:5173 / /about /services /contact /reviews /projects /digital_marketing /web_development /production_house /podcast_studio /blogs"
   },
   "dependencies": {
     "@tiptap/extension-link": "^3.22.5",
@@ -17,11 +23,9 @@
     "@tiptap/react": "^3.22.5",
     "@tiptap/starter-kit": "^3.22.5",
     "dompurify": "^3.4.1",
-    "git-filter-repo": "^0.0.30",
     "lucide-react": "^0.555.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-icon": "^1.0.0",
     "react-router-dom": "^7.10.1"
   },
   "devDependencies": {
@@ -35,6 +39,8 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "postcss": "^8.5.6",
+    "puppeteer-core": "^25.7.0",
+    "sharp": "^0.35.3",
     "tailwindcss": "^3.4.18",
     "vite": "^7.2.4"
   }

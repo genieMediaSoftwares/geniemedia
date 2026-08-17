@@ -2,7 +2,22 @@ import React, { useState, useEffect, useRef } from "react";
 import { Mail, Phone, MapPin, Send, Clock, Globe, CheckCircle } from "lucide-react";
 // import emailjs from "@emailjs/browser";
 
-const ContactSec = () => {
+/**
+ * @param {boolean} isPage  True when this component *is* the page (the /contact
+ *   route) rather than a section near the bottom of another page.
+ *
+ *   It matters for performance: the scroll reveal renders everything at
+ *   `opacity-0` until an IntersectionObserver fires, and Chrome refuses to
+ *   accept a fully transparent element as a Largest Contentful Paint candidate.
+ *   As a standalone page that meant /contact reported no LCP at all. When it is
+ *   the page, the heading block is therefore shown immediately and animated with
+ *   transform only. Embedded in another page it is below the fold and keeps the
+ *   original scroll-triggered fade, unchanged.
+ */
+const ContactSec = ({ isPage = false }) => {
+  // Keeps the outline sequential in both contexts: as a page the title is an h1
+  // and the sub-sections are h2s; embedded, the title is an h2 and they are h3s.
+  const SubHeading = isPage ? 'h2' : 'h3';
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -190,6 +205,14 @@ const ContactSec = () => {
           100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
+        /* Moves without ever being transparent, so it is an eligible LCP
+           candidate from the first painted frame. */
+        @keyframes riseInPlace {
+          from { transform: translateY(24px); }
+          to   { transform: translateY(0); }
+        }
+        .animate-riseIn { animation: riseInPlace 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
         .animate-fadeInUp { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
         .animate-slideInLeft { animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
         .animate-slideInRight { animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
@@ -265,16 +288,31 @@ const ContactSec = () => {
 
           {/* Header */}
           <div
-            className={`text-center mb-10 ${isVisible ? "animate-fadeInUp" : "opacity-0"}`}
+            className={`text-center mb-10 ${
+              isPage
+                ? "animate-riseIn"
+                : isVisible
+                  ? "animate-fadeInUp"
+                  : "opacity-0"
+            }`}
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 border border-orange-700 rounded-full mb-4">
               <Globe className="text-orange-500" size={16} />
               <span className="text-sm font-semibold text-black">Get In Touch</span>
             </div>
-            <h2 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-4">
-              Let's Start a{" "}
-              <span className="text-orange-600">Conversation</span>
-            </h2>
+            {/* On the /contact route this is the page's top-level heading; as a
+                section inside another page it must not be a second h1. */}
+            {isPage ? (
+              <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-4">
+                Let's Start a{" "}
+                <span className="text-orange-600">Conversation</span>
+              </h1>
+            ) : (
+              <h2 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-4">
+                Let's Start a{" "}
+                <span className="text-orange-600">Conversation</span>
+              </h2>
+            )}
             <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
               We'd love to hear from you. Send us a message and we'll respond as soon as possible
             </p>
@@ -290,7 +328,7 @@ const ContactSec = () => {
                 <div className={`icon-float w-14 h-14 bg-gradient-to-br ${info.color} rounded-xl flex items-center justify-center mb-4 shadow-lg`}>
                   <info.icon className="text-white" size={28} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-3">{info.title}</h3>
+                <SubHeading className="text-lg font-bold text-gray-900 mb-3">{info.title}</SubHeading>
                 {info.details.map((detail, idx) => (
                   <p key={idx} className="text-gray-600 text-sm mb-1">{detail}</p>
                 ))}
@@ -307,9 +345,9 @@ const ContactSec = () => {
               style={{ animationDelay: "0.4s" }}
             >
               <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-10">
-                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
+                <SubHeading className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
                   Send us a Message
-                </h3>
+                </SubHeading>
 
                 {/* ✅ Success Banner */}
                 {isSuccess && (
@@ -336,15 +374,23 @@ const ContactSec = () => {
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
 
+                  {/* Every control is bound to its <label> with htmlFor/id.
+                      The labels were previously visual-only, so screen readers
+                      announced the <select> as an unlabelled combobox — the
+                      "Select elements do not have associated label elements"
+                      finding. Markup and styling are otherwise unchanged. */}
+
                   {/* Name + Email */}
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Full Name <span className="text-red-400">*</span>
+                      <label htmlFor="contact-name" className="block text-sm font-semibold text-gray-700 mb-2">
+                        Full Name <span className="text-red-600">*</span>
                       </label>
                       <input
+                        id="contact-name"
                         type="text"
                         name="name"
+                        autoComplete="name"
                         required
                         value={formData.name}
                         onChange={handleChange}
@@ -353,12 +399,14 @@ const ContactSec = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Email Address <span className="text-red-400">*</span>
+                      <label htmlFor="contact-email" className="block text-sm font-semibold text-gray-700 mb-2">
+                        Email Address <span className="text-red-600">*</span>
                       </label>
                       <input
+                        id="contact-email"
                         type="email"
                         name="email"
+                        autoComplete="email"
                         required
                         value={formData.email}
                         onChange={handleChange}
@@ -371,12 +419,14 @@ const ContactSec = () => {
                   {/* Phone + Service Dropdown */}
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Phone Number <span className="text-red-400">*</span>
+                      <label htmlFor="contact-phone" className="block text-sm font-semibold text-gray-700 mb-2">
+                        Phone Number <span className="text-red-600">*</span>
                       </label>
                       <input
+                        id="contact-phone"
                         type="tel"
                         name="phone"
+                        autoComplete="tel"
                         required
                         value={formData.phone}
                         onChange={handleChange}
@@ -385,10 +435,11 @@ const ContactSec = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Service Required <span className="text-red-400">*</span>
+                      <label htmlFor="contact-service" className="block text-sm font-semibold text-gray-700 mb-2">
+                        Service Required <span className="text-red-600">*</span>
                       </label>
                       <select
+                        id="contact-service"
                         name="service"
                         required
                         value={formData.service}
@@ -405,10 +456,11 @@ const ContactSec = () => {
 
                   {/* Message */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Your Message <span className="text-red-400">*</span>
+                    <label htmlFor="contact-message" className="block text-sm font-semibold text-gray-700 mb-2">
+                      Your Message <span className="text-red-600">*</span>
                     </label>
                     <textarea
+                      id="contact-message"
                       name="message"
                       rows="6"
                       required
@@ -422,11 +474,11 @@ const ContactSec = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="submit-btn w-full py-4 text-white font-bold rounded-xl text-lg flex items-center justify-center gap-2 relative z-10"
+                    className="submit-btn w-full py-4 text-black font-bold rounded-xl text-lg flex items-center justify-center gap-2 relative z-10"
                   >
                     {isSubmitting ? (
                       <>
-                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                         </svg>
@@ -463,14 +515,14 @@ const ContactSec = () => {
                 </div>
 
                 <div className="p-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Visit Our Office</h3>
+                  <SubHeading className="text-2xl font-bold text-gray-900 mb-6">Visit Our Office</SubHeading>
                   <div className="space-y-4">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
                         <MapPin className="text-[#9463EE]" size={24} />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900 mb-1">Address</h4>
+                        <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
                         <p className="text-gray-600 text-sm">5A2 4th Floor KP Icon KP Infra</p>
                         <p className="text-gray-600 text-sm">Yendada, Vishakhapatnam - 530045</p>
                       </div>
@@ -481,7 +533,7 @@ const ContactSec = () => {
                         <Clock className="text-blue-600" size={24} />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900 mb-1">Business Hours</h4>
+                        <h3 className="font-semibold text-gray-900 mb-1">Business Hours</h3>
                         <p className="text-gray-600 text-sm">Monday - Friday: 10:00 AM - 7:00 PM</p>
                         <p className="text-gray-600 text-sm">Saturday: 10:00 AM - 4:00 PM</p>
                       </div>

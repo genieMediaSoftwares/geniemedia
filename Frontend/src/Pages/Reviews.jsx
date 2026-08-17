@@ -76,7 +76,7 @@ export default function Reviews() {
               <div className="author-info">
                 <div className="author-avatar">SP</div>
                 <div className="author-details">
-                  <h4>Sasidhar Pydiraju</h4>
+                  <h3>Sasidhar Pydiraju</h3>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@ export default function Reviews() {
               <div className="author-info">
                 <div className="author-avatar">AS</div>
                 <div className="author-details">
-                  <h4>Aruna Sai Kumar</h4>
+                  <h3>Aruna Sai Kumar</h3>
                 </div>
               </div>
             </div>
@@ -118,7 +118,7 @@ export default function Reviews() {
               <div className="author-info">
                 <div className="author-avatar">S</div>
                 <div className="author-details">
-                  <h4>Shanmuk</h4>
+                  <h3>Shanmuk</h3>
                 </div>
               </div>
             </div>

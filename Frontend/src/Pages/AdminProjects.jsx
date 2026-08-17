@@ -557,7 +557,7 @@ export default function AdminProjects() {
   /* ── Render ── */
 
   return (
-    <main className="w-full min-h-screen bg-[#F7F6F3] overflow-x-hidden font-sans">
+    <div className="w-full min-h-screen bg-[#F7F6F3] overflow-x-hidden font-sans">
       <style>{`
         @keyframes slideUp  { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
         @keyframes scaleIn  { from { opacity:0; transform:scale(.92); }       to { opacity:1; transform:scale(1); } }
@@ -937,6 +937,6 @@ export default function AdminProjects() {
           </div>
         </section>
       )}
-    </main>
+    </div>
   );
 }
