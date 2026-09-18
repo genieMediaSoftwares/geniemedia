@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "seed:projects": "node scripts/seedProjects.js"
+    "seed:projects": "node scripts/seedProjects.js",
+    "seo:schema": "node scripts/validateStructuredData.js",
+    "seo:verify": "node scripts/verifySeoLive.js",
+    "seo:migrate": "node scripts/runSeoMigration.js"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +27,8 @@
     "mysql2": "^3.21.1",
     "sharp": "^0.35.3"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }

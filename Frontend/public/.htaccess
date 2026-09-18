@@ -1,20 +1,84 @@
 # ============================================================================
 #  Genie Media — Apache configuration for the Hostinger static deployment
 #
-#  Deploy this file to public_html/ alongside the contents of dist/.
+#  Deploy this file to public_html/ alongside the contents of dist/. It lives in
+#  Frontend/public/ so Vite copies it into dist/ on every build; editing the
+#  copy on the server is a change the next deploy silently reverts.
+#
 #  Every directive is wrapped in <IfModule> so an unavailable module degrades
 #  silently rather than returning a 500.
+#
+#  ORDER MATTERS in the rewrite section: the SPA fallback matches nearly every
+#  request, so anything that needs to run must sit above it.
 # ============================================================================
 
 
 # ---------------------------------------------------------------------------
-#  SPA routing — unchanged behaviour: anything that is not a real file or
-#  directory is served index.html so React Router can handle the URL.
+#  Redirects and SPA routing
 # ---------------------------------------------------------------------------
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
+  # -- Force HTTPS ----------------------------------------------------------
+  # Both conditions are required. Behind Hostinger's proxy the connection to
+  # Apache is plain HTTP, so %{HTTPS} is always off and the forwarded header is
+  # what carries the truth. Testing %{HTTPS} alone gives an infinite loop.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # -- Canonical host: non-www ----------------------------------------------
+  # The canonical tags, the sitemaps and every JSON-LD @id use the bare domain.
+  # Answering on both hosts splits the ranking signals across two URLs that
+  # search engines treat as separate pages.
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  # -- Retired blog slugs ---------------------------------------------------
+  # BEGIN GENIE SLUG REDIRECTS
+  # Generated from the blogs.slug_history column. Regenerate with:
+  #   curl https://geniemedia.onrender.com/seo/redirects.htaccess
+  # and replace everything between these two markers with the output.
+  #
+  # Apache cannot query MySQL, so these cannot be driven from the database at
+  # request time. Where Node serves the site instead of Apache, the Express
+  # route in Backend/routes/seoRoutes.js performs the same 301s live from
+  # slug_history and this block is unnecessary.
+  # END GENIE SLUG REDIRECTS
+
+  # -- Generated SEO files --------------------------------------------------
+  # sitemap.xml, blogs.xml, llms.txt and robots.txt are generated from the
+  # database on the API host. seo-proxy.php fetches and caches them so they are
+  # reachable under this domain, which is the only one crawlers ever visit.
+  # A stale or static copy is served if the API is down — never a 500.
+  RewriteRule ^(sitemap\.xml|pages\.xml|blogs\.xml|llms\.txt|robots\.txt)$ /seo-proxy.php [L]
+
+  # -- Pre-rendered blog HTML for crawlers ----------------------------------
+  # Bots only. They receive the document with the <head> and article text
+  # already injected by the API, because most AI crawlers never execute the
+  # JavaScript that would otherwise build the page. Humans fall through to the
+  # SPA below and are not slowed down by the proxy hop.
+  RewriteCond %{HTTP_USER_AGENT} (Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-Web|anthropic-ai) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (PerplexityBot|Perplexity-User|Google-Extended|CCBot|Applebot|Amazonbot) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (cohere-ai|YouBot|DuckAssistBot|Meta-ExternalAgent|Bytespider) [NC,OR]
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Discordbot|Slackbot|Pinterest|embedly) [NC]
+  RewriteRule ^blog/(.+)$ /seo-proxy.php [L]
+
+  # -- Serve WebP where the browser accepts it ------------------------------
+  # Uploads are already converted to WebP on the way in. This upgrades any
+  # legacy .jpg/.png that happens to have a .webp sibling on disk. Vary: Accept
+  # is set below so a cache cannot hand a WebP body to a client that asked for
+  # JPEG.
+  RewriteCond %{HTTP_ACCEPT} image/webp
+  RewriteCond %{REQUEST_FILENAME} \.(jpe?g|png)$
+  RewriteCond %{REQUEST_FILENAME}\.webp -f
+  RewriteRule ^(.+)\.(jpe?g|png)$ $1.$2.webp [T=image/webp,E=WEBP_SERVED:1,L]
+
+  # -- SPA routing ----------------------------------------------------------
+  # Unchanged behaviour: anything that is not a real file or directory is served
+  # index.html so React Router can handle the URL. This MUST stay last.
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
@@ -34,6 +98,7 @@
   AddOutputFilterByType BROTLI_COMPRESS application/javascript application/x-javascript
   AddOutputFilterByType BROTLI_COMPRESS application/json application/xml
   AddOutputFilterByType BROTLI_COMPRESS image/svg+xml application/manifest+json
+  AddOutputFilterByType BROTLI_COMPRESS application/ld+json
 </IfModule>
 
 <IfModule mod_deflate.c>
@@ -41,6 +106,7 @@
   AddOutputFilterByType DEFLATE application/javascript application/x-javascript
   AddOutputFilterByType DEFLATE application/json application/xml
   AddOutputFilterByType DEFLATE image/svg+xml application/manifest+json
+  AddOutputFilterByType DEFLATE application/ld+json
 </IfModule>
 
 
@@ -75,7 +141,9 @@
     Header set Cache-Control "public, max-age=0, must-revalidate"
   </FilesMatch>
 
-  # Crawler files change rarely but must not go stale for a year.
+  # Crawler files change rarely but must not go stale for a year. The sitemaps
+  # are regenerated on every publish, so an hour is the longest they should be
+  # allowed to lag.
   <FilesMatch "(robots\.txt|llms\.txt|.*\.xml)$">
     Header set Cache-Control "public, max-age=3600"
   </FilesMatch>
@@ -85,6 +153,9 @@
     Header set Cache-Control "no-cache"
     Header set X-Robots-Tag "noindex"
   </FilesMatch>
+
+  # A WebP substitution above makes the response depend on the Accept header.
+  Header append Vary Accept env=WEBP_SERVED
 
   # Baseline security headers. These have no effect on layout or behaviour but
   # are part of the Best Practices audit.
@@ -114,6 +185,8 @@
   ExpiresByType image/svg+xml           "access plus 1 year"
   ExpiresByType font/woff2              "access plus 1 year"
   ExpiresByType text/html               "access plus 0 seconds"
+  ExpiresByType application/xml         "access plus 1 hour"
+  ExpiresByType text/plain              "access plus 1 hour"
 </IfModule>
 
 
@@ -127,4 +200,19 @@
   AddType image/avif                      .avif
   AddType font/woff2                      .woff2
   AddType application/manifest+json       .webmanifest
+  AddType application/ld+json             .jsonld
 </IfModule>
+
+
+# ---------------------------------------------------------------------------
+#  Crawler access
+#
+#  robots.txt is what grants or denies the AI crawlers, and it is served from
+#  this directory as an ordinary static file. No user-agent blocking rule
+#  belongs in here: a mod_rewrite block on GPTBot or ClaudeBot would remove the
+#  site from AI answers entirely while robots.txt still claimed to welcome
+#  them, and that contradiction takes months to notice.
+# ---------------------------------------------------------------------------
+
+# Directory listings expose the shape of the build for no benefit.
+Options -Indexes

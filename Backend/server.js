@@ -12,6 +12,16 @@ const axios = require("axios");
 const FormData = require("form-data");
 const sharp = require("sharp");
 
+// ---- SEO / AEO / GEO layer ------------------------------------------------
+const { migrateBlogSeo, loadBlogColumns, filterToExistingColumns } = require("./db/migrateBlogSeo");
+const seoRoutes = require("./routes/seoRoutes");
+const { buildSeoColumns, hydrateSeoRow, clampMetaDescription } = require("./services/blogSeoFields");
+const { validateForPublish, describeBlockers } = require("./services/seoValidation");
+const { invalidateSitemapCache } = require("./services/sitemapService");
+const { createOgVariant, validateFeaturedImage, safeUnlink } = require("./services/imageVariants");
+const htmlInjector = require("./services/htmlInjector");
+const { SITE } = require("./config/site");
+
 const PORT = process.env.PORT || 5000;
 const app = express();
 
@@ -95,6 +105,13 @@ db.query(PROJECTS_TABLE_SQL, (err) => {
   if (err) console.log("❌ PROJECTS TABLE ERROR:", err);
   else console.log("✅ projects table ready");
 });
+
+// ================= BLOG SEO SCHEMA (auto-provision) =================
+// Adds the SEO / AEO / GEO columns to `blogs` if they are not there yet, then
+// caches the resulting column list. Every blog write filters its payload
+// through that cache, so a column that failed to be added degrades one field
+// instead of breaking every save. See db/migrateBlogSeo.js.
+migrateBlogSeo(db).then(() => loadBlogColumns(db));
 
 // ================= MULTER =================
 // Multer is only used as a temp buffer before uploading to Hostinger
@@ -201,6 +218,52 @@ const uploadToHostinger = async (tempFilePath) => {
   }
 };
 
+// ================= HELPER: Raw upload (no optimisation) =================
+// Used for files that have already been processed — notably the Open Graph
+// variant, which is generated at an exact 1200x630 and must not be resized
+// again on the way out.
+const uploadProcessedFile = async (filePath, filename) => {
+  const formData = new FormData();
+  formData.append("file", fs.createReadStream(filePath), { filename });
+  const response = await axios.post("https://geniemedia.in/upload.php", formData, {
+    headers: formData.getHeaders(),
+  });
+  return response.data.url;
+};
+
+// ================= HELPER: Featured image + OG variant =================
+// A blog hero has to exist at two ratios: 16:9 for the article layout and
+// 1.91:1 for every social and chat preview card. Generating the second one here
+// is what stops WhatsApp and LinkedIn centre-cropping the 16:9 file and cutting
+// heads off. See services/imageVariants.js for the reasoning.
+//
+// Returns { imageUrl, ogImageUrl, warnings, errors }. An OG failure is never
+// fatal — the 16:9 original is a usable fallback, and a publish must not fail
+// because a derived image could not be encoded.
+const uploadFeaturedImage = async (tempFilePath) => {
+  const check = await validateFeaturedImage(tempFilePath);
+
+  let ogImageUrl = null;
+  let ogPath = null;
+
+  try {
+    ogPath = await createOgVariant(tempFilePath);
+    if (ogPath) {
+      const ogName = path.basename(tempFilePath).replace(/\.[^.]+$/, "") + "-og.webp";
+      ogImageUrl = await uploadProcessedFile(ogPath, ogName);
+    }
+  } catch (err) {
+    console.error("OG variant upload skipped:", err.message);
+  } finally {
+    safeUnlink(ogPath);
+  }
+
+  // uploadToHostinger consumes and deletes the temp file, so it runs last.
+  const imageUrl = await uploadToHostinger(tempFilePath);
+
+  return { imageUrl, ogImageUrl, warnings: check.warnings, errors: check.errors, meta: check.meta };
+};
+
 // ================= HELPER: Normalize image URL =================
 const getImageUrl = (imagePath) => {
   if (!imagePath) return null;
@@ -273,43 +336,103 @@ app.post("/api/login", (req, res) => {
 // ================= CREATE BLOG =================
 app.post("/api/blogs", verifyToken, upload.single("image"), async (req, res) => {
   try {
-    let imageUrl = null;
+    const isPublishing = String(req.body.status || "").trim() === "published";
 
-    if (req.file) {
-      // Upload temp file to Hostinger, get back full HTTPS URL
-      imageUrl = await uploadToHostinger(req.file.path);
+    // ---- Publish gate -----------------------------------------------------
+    // Runs BEFORE the image upload so a rejected publish does not leave an
+    // orphaned file on the upload host. Drafts skip the gate entirely: half
+    // finished work has to be saveable.
+    if (isPublishing) {
+      const verdict = validateForPublish({
+        ...req.body,
+        image: req.file ? "pending-upload" : req.body.existingImage,
+      });
+
+      if (!verdict.ok) {
+        if (req.file) safeUnlink(req.file.path);
+        return res.status(422).json({
+          success: false,
+          message: "This post is not ready to publish yet.",
+          detail: describeBlockers(verdict),
+          validation: verdict,
+        });
+      }
     }
 
-    const sql = `
-      INSERT INTO blogs 
-      (title, permalink, metaDescription, description, category, image, keywords, status, createdAt, updatedAt)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+    let imageUrl = null;
+    let ogImageUrl = null;
+    let imageWarnings = [];
 
-    db.query(
-      sql,
-      [
-        req.body.title,
-        req.body.permalink,
-        req.body.metaDescription,
-        req.body.description,
-        req.body.category,
-        imageUrl,
-        req.body.keywords,
-        req.body.status,
-        Date.now(),
-        Date.now(),
-      ],
-      (err) => {
-        if (err) {
-          console.error("DB error creating blog:", err);
-          return res.status(500).json({ success: false, message: "Failed to create blog" });
-        }
-        res.json({ success: true, message: "Blog created" });
+    if (req.file) {
+      // Dimensions are checked against the temp file BEFORE the upload. A wrong
+      // aspect ratio breaks the article layout, so it blocks a publish — and
+      // rejecting after the upload would leave an orphaned file on the upload
+      // host that nothing ever references or cleans up.
+      //
+      // On a draft it is only a warning: an editor should be able to save work
+      // in progress and fix the image later.
+      const check = await validateFeaturedImage(req.file.path);
+
+      if (isPublishing && check.errors.length) {
+        safeUnlink(req.file.path);
+        return res.status(422).json({
+          success: false,
+          message: check.errors.join(" "),
+          detail: check.errors.join(" "),
+          validation: { ok: false, blockers: check.errors.map((m) => ({ id: "image-ratio", message: m })) },
+        });
       }
-    );
+
+      const uploaded = await uploadFeaturedImage(req.file.path);
+      imageUrl = uploaded.imageUrl;
+      ogImageUrl = uploaded.ogImageUrl;
+      imageWarnings = uploaded.warnings;
+    }
+
+    const seo = filterToExistingColumns(buildSeoColumns(req.body, { ogImageUrl }));
+    const now = Date.now();
+
+    const base = {
+      title: req.body.title,
+      permalink: req.body.permalink,
+      metaDescription: clampMetaDescription(req.body.metaDescription),
+      description: req.body.description,
+      category: req.body.category,
+      image: imageUrl,
+      keywords: req.body.keywords,
+      status: req.body.status,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    // last_modified_at is kept as a real TIMESTAMP alongside the legacy
+    // epoch-millisecond updatedAt, because schema.org dateModified and the
+    // sitemap <lastmod> both want a date, not a number.
+    base.last_modified_at = new Date();
+
+    const values = filterToExistingColumns({ ...base, ...seo });
+    const columns = Object.keys(values);
+
+    const sql = `INSERT INTO blogs (${columns.map((c) => `\`${c}\``).join(", ")}) VALUES (${columns
+      .map(() => "?")
+      .join(", ")})`;
+
+    db.query(sql, Object.values(values), (err, result) => {
+      if (err) {
+        console.error("DB error creating blog:", err);
+        return res.status(500).json({ success: false, message: "Failed to create blog" });
+      }
+      invalidateSitemapCache();
+      res.json({
+        success: true,
+        message: "Blog created",
+        id: result.insertId,
+        warnings: imageWarnings,
+      });
+    });
   } catch (err) {
     console.error("Error creating blog:", err);
+    if (req.file) safeUnlink(req.file.path);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
@@ -320,7 +443,7 @@ app.get("/api/blogs", (req, res) => {
     if (err) return res.status(500).json({ success: false, message: "Failed to fetch blogs" });
 
     const blogs = results.map((blog) => ({
-      ...blog,
+      ...hydrateSeoRow(blog),
       image: getImageUrl(blog.image),
     }));
 
@@ -334,7 +457,7 @@ app.get("/api/admin/blogs", verifyToken, (req, res) => {
     if (err) return res.status(500).json({ success: false, message: "Failed to fetch blogs" });
 
     const blogs = results.map((blog) => ({
-      ...blog,
+      ...hydrateSeoRow(blog),
       image: getImageUrl(blog.image),
     }));
 
@@ -353,7 +476,7 @@ app.use("/api/blog", (req, res) => {
     if (result.length === 0)
       return res.status(404).json({ success: false, message: "Blog not found" });
 
-    const blog = { ...result[0], image: getImageUrl(result[0].image) };
+    const blog = { ...hydrateSeoRow(result[0]), image: getImageUrl(result[0].image) };
     res.json(blog);
   });
 });
@@ -361,67 +484,128 @@ app.use("/api/blog", (req, res) => {
 // ================= UPDATE BLOG =================
 app.put("/api/blogs/:id", verifyToken, upload.single("image"), async (req, res) => {
   const { id } = req.params;
-  const {
-    title,
-    permalink,
-    metaDescription,
-    description,
-    category,
-    keywords,
-    status,
-    existingImage, // ✅ sent by frontend when no new file is chosen — preserve current image
-  } = req.body;
+  const { existingImage } = req.body; // sent when no new file is chosen — preserve current image
 
   try {
-    let imageUrl;
+    // The previous row is needed for two things: appending to slug_history when
+    // the permalink changed, and merging SEO fields that this particular request
+    // did not send (the quick publish/unpublish buttons post a partial form).
+    const previousRow = await new Promise((resolve, reject) => {
+      db.query("SELECT * FROM blogs WHERE id = ? LIMIT 1", [id], (err, rows) =>
+        err ? reject(err) : resolve(rows[0] ? hydrateSeoRow(rows[0]) : null)
+      );
+    });
 
-    if (req.file) {
-      // New file uploaded → send it to Hostinger upload.php, get full HTTPS URL
-      imageUrl = await uploadToHostinger(req.file.path);
-    } else if (existingImage && existingImage.trim() !== "") {
-      // No new file, but frontend passed the current image URL → keep it
-      imageUrl = existingImage.trim();
-    } else {
-      // No file, no existingImage → user intentionally removed the image
-      imageUrl = null;
+    if (!previousRow) {
+      if (req.file) safeUnlink(req.file.path);
+      return res.status(404).json({ success: false, message: "Blog not found" });
     }
 
-    const sql = `
-      UPDATE blogs SET
-        title = ?,
-        permalink = ?,
-        metaDescription = ?,
-        description = ?,
-        category = ?,
-        keywords = ?,
-        status = ?,
-        image = ?,
-        updatedAt = ?
-      WHERE id = ?
-    `;
+    const isPublishing = String(req.body.status || "").trim() === "published";
 
-    const values = [
-      title,
-      permalink,
-      metaDescription,
-      description,
-      category,
-      keywords,
-      status,
-      imageUrl,
-      Date.now(),
-      id,
-    ];
+    // Partial submissions (the publish / unpublish toggles) carry only the core
+    // fields. Validating those against an empty SEO payload would reject a post
+    // that is actually complete, so the stored values are merged in first.
+    //
+    // A field that was SENT but is empty is an explicit clear and must win over
+    // the stored value — otherwise deleting a canonical URL or an FAQ entry
+    // silently does nothing. A field that was not sent at all is simply absent
+    // from req.body and keeps its stored value. Multipart bodies only ever
+    // contain the keys the client actually appended, so the distinction is
+    // exactly "present" versus "absent", which is what this relies on.
+    const merged = {
+      ...previousRow,
+      ...Object.fromEntries(Object.entries(req.body).filter(([, v]) => v !== undefined)),
+      image: req.file ? "pending-upload" : existingImage || previousRow.image,
+    };
 
-    db.query(sql, values, (err) => {
+    if (isPublishing) {
+      const verdict = validateForPublish(merged);
+      if (!verdict.ok) {
+        if (req.file) safeUnlink(req.file.path);
+        return res.status(422).json({
+          success: false,
+          message: "This post is not ready to publish yet.",
+          detail: describeBlockers(verdict),
+          validation: verdict,
+        });
+      }
+    }
+
+    let imageUrl;
+    let ogImageUrl = null;
+    let imageWarnings = [];
+
+    if (req.file) {
+      // Checked before the upload for the same reason as the create route: a
+      // rejection after uploading orphans the file on the upload host.
+      const check = await validateFeaturedImage(req.file.path);
+
+      if (isPublishing && check.errors.length) {
+        safeUnlink(req.file.path);
+        return res.status(422).json({
+          success: false,
+          message: check.errors.join(" "),
+          detail: check.errors.join(" "),
+          validation: { ok: false, blockers: check.errors.map((m) => ({ id: "image-ratio", message: m })) },
+        });
+      }
+
+      const uploaded = await uploadFeaturedImage(req.file.path);
+      imageUrl = uploaded.imageUrl;
+      ogImageUrl = uploaded.ogImageUrl;
+      imageWarnings = uploaded.warnings;
+    } else if (existingImage && existingImage.trim() !== "") {
+      imageUrl = existingImage.trim();
+    } else {
+      // No file and no existingImage → the editor deliberately removed it. The
+      // OG variant is dropped with it, since it was derived from that image.
+      imageUrl = null;
+      ogImageUrl = null;
+    }
+
+    const seo = filterToExistingColumns(
+      buildSeoColumns(merged, { previousRow, ogImageUrl, content: merged.description })
+    );
+
+    // Removing the image must actually clear the stored OG URL, which
+    // buildSeoColumns would otherwise carry over from the previous row.
+    if (!req.file && !(existingImage && existingImage.trim()) && "og_image_url" in seo) {
+      seo.og_image_url = null;
+    }
+
+    const base = {
+      title: merged.title,
+      permalink: merged.permalink,
+      metaDescription: clampMetaDescription(merged.metaDescription),
+      description: merged.description,
+      category: merged.category,
+      keywords: merged.keywords,
+      status: merged.status,
+      image: imageUrl,
+      updatedAt: Date.now(),
+      last_modified_at: new Date(),
+    };
+
+    const values = filterToExistingColumns({ ...base, ...seo });
+    const columns = Object.keys(values);
+
+    const sql = `UPDATE blogs SET ${columns.map((c) => `\`${c}\` = ?`).join(", ")} WHERE id = ?`;
+
+    db.query(sql, [...Object.values(values), id], (err, result) => {
       if (err) {
         console.error("DB error updating blog:", err);
         return res.status(500).json({ success: false, message: "Failed to update blog" });
       }
-      res.json({ success: true, message: "Blog updated" });
+      if (result.affectedRows === 0)
+        return res.status(404).json({ success: false, message: "Blog not found" });
+
+      invalidateSitemapCache();
+      res.json({ success: true, message: "Blog updated", warnings: imageWarnings });
     });
   } catch (err) {
     console.error("Error updating blog:", err);
+    if (req.file) safeUnlink(req.file.path);
     res.status(500).json({ success: false, message: "Server error uploading image" });
   }
 });
@@ -434,6 +618,8 @@ app.delete("/api/blogs/:id", verifyToken, (req, res) => {
 
     db.query("DELETE FROM blogs WHERE id = ?", [req.params.id], (err2) => {
       if (err2) return res.status(500).json({ success: false, message: "Failed to delete blog" });
+      // The sitemap must stop advertising a URL that now 404s.
+      invalidateSitemapCache();
       res.json({ success: true, message: "Blog deleted" });
     });
   });
@@ -791,47 +977,58 @@ app.use("/share/", (req, res) => {
   );
 });
 
-// ================= DYNAMIC BLOG SITEMAP =================
-app.get("/blogs.xml", (req, res) => {
-  const sql = `
-    SELECT permalink, updatedAt 
-    FROM blogs 
-    WHERE status = 'published'
-    ORDER BY updatedAt DESC
-  `;
+// =========================================================================
+// ================= SEO / AEO / GEO ROUTES ================================
+// Sitemaps, robots.txt, llms.txt, the admin analysis endpoints, the
+// slug-history 301s and the server-rendered blog <head> (Part 4 Option A).
+//
+// Mounted here, near the end, so it can never shadow an /api route above it,
+// but BEFORE the SPA fallback below so /blog/<slug> is answered with an
+// injected document rather than the untouched index.html.
+//
+// The old hand-rolled /blogs.xml handler lived here and has been replaced by
+// services/sitemapService.js, which serves the same URL with correct lastmod
+// values, image entries and cache invalidation on publish.
+// =========================================================================
+app.use("/", seoRoutes(db, verifyToken));
 
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("Sitemap DB Error:", err);
-      return res.status(500).send("Error generating sitemap");
-    }
+// ================= SPA FALLBACK (single-origin deployments) ==============
+// Only active when the Vite build is reachable from this process — that is the
+// case on a VPS where Node serves the site, and not on the current split
+// deployment where Hostinger serves the static build and this API runs
+// elsewhere. When it is not available every route below simply does not exist,
+// which is why it is guarded rather than assumed.
+const spaDist = htmlInjector.DIST_DIR;
 
-    const baseUrl = "https://geniemedia.in";
+if (spaDist) {
+  // Hashed build assets are immutable by construction, so they get a one-year
+  // cache. index.html explicitly does not — it has to be revalidated or a
+  // deploy would not reach anyone still holding the old one.
+  app.use(
+    express.static(spaDist, {
+      index: false,
+      maxAge: "1y",
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith("index.html")) {
+          res.setHeader("Cache-Control", "no-cache");
+        }
+      },
+    })
+  );
 
-    const urls = results.map((blog) => {
-      // Convert timestamp → YYYY-MM-DD
-      const lastmod = blog.updatedAt
-        ? new Date(Number(blog.updatedAt)).toISOString().split("T")[0]
-        : new Date().toISOString().split("T")[0];
-
-      return `
-      <url>
-        <loc>${baseUrl}/blog/${blog.permalink}</loc>
-        <lastmod>${lastmod}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-      </url>`;
-    }).join("");
-
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls}
-</urlset>`;
-
-    res.header("Content-Type", "application/xml");
-    res.send(xml);
+  app.get(/^\/(?!api\/|uploads\/|share\/).*/, (req, res, next) => {
+    const html = htmlInjector.renderSiteHtml({
+      url: `${SITE.url}${req.path === "/" ? "/" : req.path}`,
+    });
+    if (!html) return next();
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.send(html);
   });
-});
+
+  console.log(`🧭 Serving SPA from ${spaDist}`);
+} else {
+  console.log("🧭 SPA build not found next to the API — head injection is idle (split deployment).");
+}
 
 // ================= START =================
 app.listen(PORT, () => {

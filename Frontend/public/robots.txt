@@ -1,8 +1,133 @@
+# robots.txt — Genie Media & Studio
+#
+# This is the static fallback served directly by Hostinger. The backend
+# generates an identical file at /robots.txt (Backend/services/sitemapService.js)
+# for deployments where Node serves the site; keep the two in step.
+#
+# READ THIS BEFORE ADDING A Disallow:
+# The AI crawler blocks below are allowed on purpose. They are what make this
+# site eligible to be cited in Google AI Overviews, ChatGPT search, Perplexity
+# and Claude. Sites routinely lose every AI answer surface by adding a broad
+# "block the scrapers" rule that catches these by accident. Each one is named
+# and allowed explicitly so a future change to the wildcard rule cannot remove
+# them silently.
+
 User-agent: *
 Allow: /
-
-# The admin panel is behind a login and has no public value in the index.
 Disallow: /admin
 Disallow: /admin/
+Disallow: /api/
+Disallow: /share/
 
+# ---------------------------------------------------------------------------
+# AI / answer-engine crawlers — allowed deliberately
+# ---------------------------------------------------------------------------
+
+# OpenAI: training, search index, and on-demand browsing
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Google Gemini / AI Overviews. Blocking this does NOT remove the site from
+# normal Google Search, but it does remove it from AI Overviews.
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Common Crawl — the corpus many downstream models retrieve from
+User-agent: CCBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Apple Intelligence
+User-agent: Applebot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Amazon, Cohere, You.com, DuckDuckGo assistant
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: YouBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# ---------------------------------------------------------------------------
+# Image search
+# ---------------------------------------------------------------------------
+User-agent: Googlebot-Image
+Allow: /
+
+# ---------------------------------------------------------------------------
+# Sitemaps
+# ---------------------------------------------------------------------------
+Host: geniemedia.in
 Sitemap: https://geniemedia.in/sitemap.xml
+Sitemap: https://geniemedia.in/pages.xml
+Sitemap: https://geniemedia.in/services.xml
+Sitemap: https://geniemedia.in/blogs.xml

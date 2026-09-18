@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
     ArrowLeft, Calendar, Tag, Share2, Copy, Check, ArrowRight, Hash, X,
+    Sparkles, Clock, User, Quote, HelpCircle, ExternalLink,
 } from "lucide-react";
 import DOMPurify from "dompurify";
 import BASE_URL from "../Api";
+import useBlogSeo from "../hooks/useBlogSeo";
 // Self-hosted rather than fetched from images.unsplash.com — see the note in Blogs.jsx.
 import BlogFallback from "../assets/blog/blog-hero.webp";
 
@@ -72,16 +74,11 @@ export default function BlogDetail() {
         fetchBlog();
     }, [slug]);
 
-    useEffect(() => {
-        if (!blog?.keywords) return;
-        const kw = blog.keywords.split(",").map((k) => k.trim()).filter(Boolean);
-        document.head.querySelector('meta[name="keywords"]')?.remove();
-        const m = document.createElement("meta");
-        m.name = "keywords";
-        m.content = kw.join(", ");
-        document.head.appendChild(m);
-        return () => m.remove();
-    }, [blog]);
+    // Keeps <title>, the meta tags, the canonical link and the JSON-LD graph in
+    // step with the post on screen. The server already injects all of this on the
+    // first request; this covers client-side navigation, where no new request is
+    // made and the head would otherwise still describe the previous page.
+    useBlogSeo(blog);
 
     const formatDate = (ts) =>
         ts
@@ -204,10 +201,18 @@ export default function BlogDetail() {
                 <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[2/1] lg:aspect-[21/9]">
                     <img
                         src={heroSrc}
-                        alt={blog.title}
+                        /* The stored alt text describes the image; the title
+                           describes the article. Falling back to the title is
+                           better than an empty alt, but it is a fallback. */
+                        alt={blog.alt_text || blog.title}
                         onError={() => setImgError(true)}
                         loading="eager"
+                        /* This is the Largest Contentful Paint element on the
+                           page, and the server also emits a preload hint for it. */
+                        fetchpriority="high"
                         decoding="async"
+                        width="1200"
+                        height="675"
                         className="absolute inset-0 w-full h-full object-cover"
                     />
                     <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-stone-900/30 to-transparent pointer-events-none" />
@@ -237,6 +242,29 @@ export default function BlogDetail() {
                             <time dateTime={String(blog.createdAt)}>
                                 {formatDate(blog.createdAt)}
                             </time>
+
+                            {/* Author and reading time sit next to the date as
+                                visible experience signals. The same values go
+                                into the Person schema and timeRequired. */}
+                            {blog.author_name && (
+                                <>
+                                    <span className="text-slate-300">/</span>
+                                    <span className="flex items-center gap-1.5">
+                                        <User className="w-4 h-4 text-[#6B4A2D]" strokeWidth={2} />
+                                        {blog.author_name}
+                                    </span>
+                                </>
+                            )}
+
+                            {blog.reading_time_minutes > 0 && (
+                                <>
+                                    <span className="text-slate-300">/</span>
+                                    <span className="flex items-center gap-1.5">
+                                        <Clock className="w-4 h-4 text-[#6B4A2D]" strokeWidth={2} />
+                                        {blog.reading_time_minutes} min read
+                                    </span>
+                                </>
+                            )}
                         </div>
                         <button
                             onClick={copyLink}
@@ -283,11 +311,33 @@ export default function BlogDetail() {
                         {blog.title}
                     </h1>
 
-                    {/* ── Meta description ── */}
-                    {blog.metaDescription && (
-                        <p className="text-base sm:text-lg text-slate-600 leading-relaxed italic pl-4 sm:pl-5 py-3 sm:py-4 mb-8 sm:mb-10 bg-amber-50 border-l-4 border-[#6B4A2D] rounded-r-xl">
-                            "{blog.metaDescription}"
-                        </p>
+                    {/* ══════════════════════════════════════════════
+                        DIRECT ANSWER (AEO)
+
+                        The first thing after the H1, deliberately. Answer
+                        engines lift the first concise, self-contained answer
+                        block on a page, and the class names here are the exact
+                        CSS selectors named in the Speakable schema — if this
+                        markup changes, Backend/services/structuredData.js has
+                        to change with it or the page advertises a selector that
+                        does not exist.
+                    ══════════════════════════════════════════════ */}
+                    {blog.direct_answer ? (
+                        <div className="geo-direct-answer mb-8 sm:mb-10 rounded-2xl border-l-4 border-[#6B4A2D] bg-amber-50 px-5 sm:px-6 py-4 sm:py-5">
+                            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-[#6B4A2D] mb-2">
+                                <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
+                                The short answer
+                            </p>
+                            <p className="aeo-answer-text text-base sm:text-lg leading-relaxed text-slate-800 font-medium">
+                                {blog.direct_answer}
+                            </p>
+                        </div>
+                    ) : (
+                        blog.metaDescription && (
+                            <p className="text-base sm:text-lg text-slate-600 leading-relaxed italic pl-4 sm:pl-5 py-3 sm:py-4 mb-8 sm:mb-10 bg-amber-50 border-l-4 border-[#6B4A2D] rounded-r-xl">
+                                "{blog.metaDescription}"
+                            </p>
+                        )
                     )}
 
                     {/* ── Blog body ── */}
@@ -353,6 +403,91 @@ export default function BlogDetail() {
                             __html: DOMPurify.sanitize(blog.description),
                         }}
                     />
+
+                    {/* KEY FACTS (GEO)
+
+                        Attributed, extractable claims. A retrieval engine will
+                        repeat a number it can attribute long before it repeats
+                        the same number asserted mid-paragraph, so they are
+                        pulled out of the prose and given their source. */}
+                    {Array.isArray(blog.key_facts) && blog.key_facts.length > 0 && (
+                        <section className="geo-key-facts mt-10 sm:mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
+                            <h2 className="flex items-center gap-2 text-lg sm:text-xl font-bold text-slate-900 mb-4">
+                                <Quote className="w-5 h-5 text-[#6B4A2D]" strokeWidth={2} />
+                                Key facts
+                            </h2>
+                            <ul className="space-y-3">
+                                {blog.key_facts.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-2.5">
+                                        <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#6B4A2D] shrink-0" />
+                                        <p className="text-[15px] sm:text-base leading-relaxed text-slate-700">
+                                            {item.fact}
+                                            {item.source && (
+                                                <a
+                                                    href={item.source}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer nofollow"
+                                                    className="ml-2 inline-flex items-center gap-1 text-xs font-semibold text-[#6B4A2D] hover:underline"
+                                                >
+                                                    Source
+                                                    <ExternalLink className="w-3 h-3" strokeWidth={2.5} />
+                                                </a>
+                                            )}
+                                        </p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+
+                    {/* FAQ (AEO)
+
+                        Rendered as real text, not an accordion that hides its
+                        answers behind JavaScript. The answer has to be present
+                        in the HTML for it to be quotable. FAQPage JSON-LD is
+                        emitted alongside from the same data. */}
+                    {Array.isArray(blog.faq_schema) && blog.faq_schema.length > 0 && (
+                        <section className="mt-10 sm:mt-12">
+                            <h2 className="flex items-center gap-2 text-xl sm:text-2xl font-bold text-slate-900 mb-5 pb-2 border-b border-slate-100">
+                                <HelpCircle className="w-5 h-5 text-[#6B4A2D]" strokeWidth={2} />
+                                Frequently asked questions
+                            </h2>
+                            <div className="space-y-5">
+                                {blog.faq_schema
+                                    .filter((f) => f && f.question && f.answer)
+                                    .map((faq, i) => (
+                                        <div key={i} className="rounded-xl border border-slate-200 p-4 sm:p-5">
+                                            <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2">
+                                                {faq.question}
+                                            </h3>
+                                            <p className="text-[15px] sm:text-base leading-relaxed text-slate-700">
+                                                {faq.answer}
+                                            </p>
+                                        </div>
+                                    ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Author bio: an experience and expertise signal, and the
+                        visible counterpart to the Person schema. */}
+                    {blog.author_bio && (
+                        <section className="mt-10 sm:mt-12 rounded-2xl bg-stone-50 border border-stone-200 p-5 sm:p-6">
+                            <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 rounded-full bg-[#6B4A2D] flex items-center justify-center shrink-0">
+                                    <User className="w-5 h-5 text-white" strokeWidth={2} />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-bold text-slate-900">
+                                        {blog.author_name || "Genie Media Editorial Team"}
+                                    </p>
+                                    <p className="text-sm leading-relaxed text-slate-600 mt-1">
+                                        {blog.author_bio}
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    )}
 
                     {/* ══════════════════════════════════════════════
                         KEYWORDS SECTION

@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import BlogEditor from "../components/BlogEditor";
+import SeoPanel from "../components/SeoPanel";
+import TagInput from "../components/TagInput";
+import { validateForPublish } from "../utils/seoAnalysis";
 import BASE_URL from "../Api";
 import {
   Menu, X, LogOut, BookOpen, Edit2, Trash2, Plus,
@@ -291,47 +294,21 @@ function Field({ label, required, hint, icon: IconComp, children }) {
 const inputCls =
   "w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:border-[#6B4A2D] focus:ring-4 focus:ring-[#6B4A2D]/10 outline-none transition font-medium";
 
+/**
+ * Thin adapter over the shared TagInput.
+ *
+ * The `keywords` column has always stored a comma-separated string, while
+ * TagInput works in arrays — so the conversion lives here, at the one place
+ * that still needs the string form, instead of inside the shared component.
+ */
 function KeywordsInput({ value, onChange }) {
-  const [inputVal, setInputVal] = useState("");
-  const inputRef = useRef();
   const tags = value ? value.split(",").map((t) => t.trim()).filter(Boolean) : [];
-  const addTag = (raw) => {
-    const newTags = raw.split(",").map((t) => t.trim()).filter(Boolean);
-    onChange([...new Set([...tags, ...newTags])].join(", "));
-  };
-  const removeTag = (idx) => onChange(tags.filter((_, i) => i !== idx).join(", "));
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      if (inputVal.trim()) { addTag(inputVal); setInputVal(""); }
-    } else if (e.key === "Backspace" && !inputVal && tags.length) {
-      removeTag(tags.length - 1);
-    }
-  };
   return (
-    <div
-      className="flex flex-wrap gap-2 items-center px-3 py-2.5 bg-white border-2 border-gray-200 rounded-xl focus-within:border-[#6B4A2D] focus-within:ring-4 focus-within:ring-[#6B4A2D]/10 transition cursor-text min-h-[48px]"
-      onClick={() => inputRef.current?.focus()}
-    >
-      {tags.map((tag, idx) => (
-        <span key={idx} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#F3EBE3", color: "#6B4A2D", border: "1px solid #D4B49A" }}>
-          {tag}
-          <button type="button" onClick={(e) => { e.stopPropagation(); removeTag(idx); }} className="ml-0.5 rounded-full hover:bg-[#6B4A2D]/20 p-0.5 transition flex items-center justify-center" style={{ color: "#6B4A2D" }}>
-            <X size={10} strokeWidth={2.5} />
-          </button>
-        </span>
-      ))}
-      <input
-        ref={inputRef}
-        type="text"
-        value={inputVal}
-        onChange={(e) => setInputVal(e.target.value)}
-        onKeyDown={handleKeyDown}
-        onBlur={() => { if (inputVal.trim()) { addTag(inputVal); setInputVal(""); } }}
-        placeholder={tags.length === 0 ? "Type a keyword and press Enter or comma…" : "Add more…"}
-        className="flex-1 min-w-[120px] text-sm text-gray-900 placeholder-gray-400 outline-none bg-transparent font-medium py-0.5"
-      />
-    </div>
+    <TagInput
+      tags={tags}
+      onChange={(next) => onChange(next.join(", "))}
+      placeholder="Type a keyword and press Enter or comma…"
+    />
   );
 }
 
@@ -361,7 +338,46 @@ const emptyForm = {
   image: null,          // new File object (only when user picks a new file)
   imagePreview: "",     // blob URL or existing hosted URL — drives the preview
   existingImageUrl: "", // ✅ FIX: stores the current saved URL when editing
+
+  // ── SEO / AEO / GEO ──────────────────────────────────────────────────
+  // Everything below is edited in the SeoPanel under the content editor and
+  // is enforced server-side before a post is allowed to publish.
+  meta_title: "",
+  focus_keyword: "",
+  secondary_keywords: [],
+  canonical_url: "",
+  robots_directive: "index,follow",
+  schema_type: "BlogPosting",
+  direct_answer: "",          // the block answer engines quote
+  faq_schema: [],             // [{ question, answer }] -> FAQPage JSON-LD
+  key_facts: [],              // [{ fact, source }]     -> Claim JSON-LD
+  definitions: [],            // [{ term, definition }] -> DefinedTerm JSON-LD
+  alt_text: "",
+  og_image_url: "",
+  author_name: "",
+  author_bio: "",
+
+  // Areas this post is written for, e.g. ["Visakhapatnam", "Vizianagaram"].
+  // Emitted as areaServed so a "near me" search in one of them can match.
+  areas_covered: [],
+
+  // A named reviewer is a separate trust signal from a named author, and is
+  // modelled separately in the page markup too.
+  reviewer_name: "",
+  reviewer_role: "",
+  reviewed_at: "",
 };
+
+// The SEO fields that travel as JSON rather than as plain strings.
+const JSON_SEO_FIELDS = ["secondary_keywords", "faq_schema", "key_facts", "definitions", "areas_covered"];
+
+// Plain-text SEO fields, listed once so the submit and edit paths cannot drift.
+const TEXT_SEO_FIELDS = [
+  "meta_title", "focus_keyword", "canonical_url", "robots_directive",
+  "schema_type", "direct_answer", "alt_text", "og_image_url",
+  "author_name", "author_bio",
+  "reviewer_name", "reviewer_role", "reviewed_at",
+];
 
 const toSlug = (str) =>
   str.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim().replace(/\s+/g, "-");
@@ -393,6 +409,9 @@ export default function AdminBlogs() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [saveAsDraft, setSaveAsDraft] = useState(false);
   const [permalinkManual, setPermalinkManual] = useState(false);
+  // Opened automatically whenever a publish is rejected, so the editor lands on
+  // the checklist that explains why rather than hunting for it.
+  const [seoOpen, setSeoOpen] = useState(false);
 
   const fetchBlogs = async () => {
     setDbLoading(true);
@@ -460,6 +479,9 @@ export default function AdminBlogs() {
     });
   };
 
+  // Single setter for every SEO panel field, including the array-valued ones.
+  const handleSeoField = (name, value) => setForm((prev) => ({ ...prev, [name]: value }));
+
   const handleCategorySelect = (cat) => {
     setForm((prev) => ({
       ...prev,
@@ -505,6 +527,24 @@ export default function AdminBlogs() {
       return;
     }
 
+    // Publish gate. Drafts are never blocked — unfinished work has to be
+    // saveable. The server runs this exact same check again and is what
+    // actually decides; this copy exists so the editor finds out before the
+    // upload rather than after it.
+    if (!asDraft) {
+      const verdict = validateForPublish(form);
+      if (!verdict.ok) {
+        setSeoOpen(true);
+        showToast(
+          `Cannot publish yet — ${verdict.blockers.length} required item${verdict.blockers.length > 1 ? "s" : ""} in the SEO panel: ${verdict.blockers
+            .map((b) => b.label)
+            .join("; ")}`,
+          "error"
+        );
+        return;
+      }
+    }
+
     setSaveAsDraft(asDraft);
     setLoading(true);
 
@@ -517,6 +557,13 @@ export default function AdminBlogs() {
       formData.append("category",        form.category);
       formData.append("keywords",        form.keywords);
       formData.append("status",          asDraft ? "draft" : "published");
+
+      // SEO / AEO / GEO fields. Arrays are JSON-encoded because the request is
+      // multipart/form-data, which has no concept of a structured value.
+      TEXT_SEO_FIELDS.forEach((field) => formData.append(field, form[field] ?? ""));
+      JSON_SEO_FIELDS.forEach((field) =>
+        formData.append(field, JSON.stringify(form[field] ?? []))
+      );
 
       if (form.image) {
         // ✅ User picked a brand-new image file — upload it
@@ -545,7 +592,18 @@ export default function AdminBlogs() {
 
       const data = await res.json();
 
+      // 422 is the server's publish gate. Its checklist is authoritative, so it
+      // is shown verbatim rather than paraphrased.
+      if (res.status === 422) {
+        setSeoOpen(true);
+        showToast(data.detail || data.message || "This post is not ready to publish yet.", "error");
+        return;
+      }
+
       if (data.success) {
+        if (data.warnings && data.warnings.length) {
+          console.warn("Image warnings:", data.warnings);
+        }
         if (asDraft) {
           showToast(editingId ? "✏️ Changes saved as draft!" : "📝 Blog saved as draft — hidden from users!");
         } else {
@@ -632,6 +690,12 @@ export default function AdminBlogs() {
 
   const handleEdit = (blog) => {
     setPermalinkManual(true);
+
+    // The API returns the JSON columns already parsed into arrays, but a row
+    // saved before the SEO migration has nulls throughout — every field is
+    // defaulted so the panel never receives undefined.
+    const asArray = (value) => (Array.isArray(value) ? value : []);
+
     setForm({
       title:            blog.title || "",
       permalink:        blog.permalink || "",
@@ -642,6 +706,28 @@ export default function AdminBlogs() {
       image:            null,            // no new file yet
       imagePreview:     blog.image || "", // ✅ show existing image in preview
       existingImageUrl: blog.image || "", // ✅ FIX: remember the current image URL
+
+      meta_title:         blog.meta_title || "",
+      focus_keyword:      blog.focus_keyword || "",
+      secondary_keywords: asArray(blog.secondary_keywords),
+      canonical_url:      blog.canonical_url || "",
+      robots_directive:   blog.robots_directive || "index,follow",
+      schema_type:        blog.schema_type || "BlogPosting",
+      direct_answer:      blog.direct_answer || "",
+      faq_schema:         asArray(blog.faq_schema),
+      key_facts:          asArray(blog.key_facts),
+      definitions:        asArray(blog.definitions),
+      alt_text:           blog.alt_text || "",
+      og_image_url:       blog.og_image_url || "",
+      author_name:        blog.author_name || "",
+      author_bio:         blog.author_bio || "",
+
+      areas_covered:      asArray(blog.areas_covered),
+      reviewer_name:      blog.reviewer_name || "",
+      reviewer_role:      blog.reviewer_role || "",
+      // Stored as a TIMESTAMP and sent back as an ISO string, so it round-trips
+      // through the form untouched rather than being reformatted on the way in.
+      reviewed_at:        blog.reviewed_at ? new Date(blog.reviewed_at).toISOString() : "",
     });
     setEditingId(blog.id);
     setActiveTab("create");
@@ -1021,6 +1107,15 @@ export default function AdminBlogs() {
                   <BlogEditor value={form.description} onChange={(val) => setForm((p) => ({ ...p, description: val }))} />
                 </div>
               </Field>
+
+              {/* ══════════════════════════════════════════════════════════
+                  SEO / AEO / GEO
+                  Sits directly below the content editor because almost every
+                  check in it reads the content — keyword placement, heading
+                  structure, internal links and word count are all derived
+                  from what was just typed above.
+              ══════════════════════════════════════════════════════════ */}
+              <SeoPanel form={form} onField={handleSeoField} open={seoOpen} onOpenChange={setSeoOpen} />
 
               <div className="rounded-xl border-2 border-dashed border-gray-200 p-4 bg-gray-50 space-y-3">
                 <p className="text-xs sm:text-sm font-bold text-gray-700">What happens when I click…</p>
