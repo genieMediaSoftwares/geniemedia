@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-    ArrowLeft, Calendar, Tag, Share2, Copy, Check, ArrowRight, Hash, X,
-    Sparkles, Clock, User, Quote, HelpCircle, ExternalLink,
+    ArrowLeft, Calendar, Tag, Share2, Copy, Check, ArrowRight,
+    Clock, User, Quote, HelpCircle, ExternalLink, MapPin,
 } from "lucide-react";
 import DOMPurify from "dompurify";
 import BASE_URL from "../Api";
@@ -25,8 +25,6 @@ export default function BlogDetail() {
     const [copied, setCopied] = useState(false);
     const [relatedBlogs, setRelated] = useState([]);
     const [imgError, setImgError] = useState(false);
-    const [activeKeyword, setActiveKeyword] = useState(null);
-    const [kwLoading, setKwLoading] = useState(null);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -34,7 +32,6 @@ export default function BlogDetail() {
             setImgError(false);
             setBlog(null);
             setRelated([]);
-            setActiveKeyword(null);
 
             const safeSlug = cleanSlug(slug);
             if (!safeSlug) { setLoading(false); return; }
@@ -100,57 +97,11 @@ export default function BlogDetail() {
         window.scrollTo(0, 0);
     };
 
-    /* ── Keyword click:
-         1. Show keyword as active tag below the date row
-         2. Navigate to matching blog by title/keywords      ── */
-    const handleKeywordClick = async (keyword) => {
-        // Set active tag immediately — stays visible on new page load
-        setActiveKeyword(keyword);
-        setKwLoading(keyword);
-
-        try {
-            const res = await fetch(`${BASE_URL}/api/blogs`);
-            const allBlogs = await res.json();
-
-            if (Array.isArray(allBlogs)) {
-                const published = allBlogs.filter((b) => b.status === "published");
-
-                // 1️⃣ Exact title match
-                let matched = published.find(
-                    (b) => b.title?.trim().toLowerCase() === keyword.toLowerCase()
-                );
-
-                // 2️⃣ Title contains keyword
-                if (!matched) {
-                    matched = published.find((b) =>
-                        b.title?.toLowerCase().includes(keyword.toLowerCase())
-                    );
-                }
-
-                // 3️⃣ Keyword present in that blog's keywords field
-                if (!matched) {
-                    matched = published.find(
-                        (b) =>
-                            b.keywords &&
-                            b.keywords
-                                .split(",")
-                                .map((k) => k.trim().toLowerCase())
-                                .includes(keyword.toLowerCase())
-                    );
-                }
-
-                if (matched && cleanSlug(matched.permalink)) {
-                    navigate(`/blog/${cleanSlug(matched.permalink)}`);
-                    window.scrollTo(0, 0);
-                }
-                // If no match — tag still shows, user can dismiss with ×
-            }
-        } catch (err) {
-            console.error("Keyword click error:", err);
-        } finally {
-            setKwLoading(null);
-        }
-    };
+    /* Keywords are not shown to readers.
+       They are a search signal only: the admin enters them for Google and AI
+       tools, and they are emitted in the page metadata by the server. The
+       clickable keyword pills and their lookup that used to live here have been
+       removed along with the visible section. */
 
     /* ─────────────────────── Loading ─────────────────────── */
     if (loading) {
@@ -198,7 +149,7 @@ export default function BlogDetail() {
                 HERO IMAGE
             ══════════════════════════════════════════════ */}
             <section className="w-full bg-stone-100 overflow-hidden">
-                <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[2/1] lg:aspect-[21/9]">
+                <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] md:aspect-[2/1] lg:aspect-[21/9]">
                     <img
                         src={heroSrc}
                         /* The stored alt text describes the image; the title
@@ -219,10 +170,10 @@ export default function BlogDetail() {
 
                     {/* Category badge overlaid bottom-left */}
                     {blog.category && (
-                        <div className="absolute bottom-4 left-4 z-10">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#6B4A2D] text-white text-xs font-semibold rounded-full shadow-lg backdrop-blur-sm">
-                                <Tag className="w-3.5 h-3.5" strokeWidth={2} />
-                                {blog.category}
+                        <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10 max-w-[calc(100%-1.5rem)]">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-[#6B4A2D] text-white text-[11px] sm:text-xs font-semibold rounded-full shadow-lg backdrop-blur-sm max-w-full">
+                                <Tag className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" strokeWidth={2} />
+                                <span className="truncate">{blog.category}</span>
                             </span>
                         </div>
                     )}
@@ -236,8 +187,8 @@ export default function BlogDetail() {
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* ── Date + Share row ── */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 pb-5 border-b-2 border-slate-100">
-                        <div className="flex items-center gap-2 text-sm text-slate-500 font-medium">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 pb-4 sm:pb-5 border-b-2 border-slate-100">
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[13px] sm:text-sm text-slate-500 font-medium">
                             <Calendar className="w-4 h-4 text-[#6B4A2D] flex-shrink-0" strokeWidth={2} />
                             <time dateTime={String(blog.createdAt)}>
                                 {formatDate(blog.createdAt)}
@@ -269,7 +220,7 @@ export default function BlogDetail() {
                         <button
                             onClick={copyLink}
                             title="Copy link"
-                            className="flex items-center gap-2 px-4 py-2 bg-[#6B4A2D] hover:bg-[#5a3f25] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors w-fit"
+                            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 bg-[#6B4A2D] hover:bg-[#5a3f25] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors w-fit"
                         >
                             {copied ? (
                                 <>
@@ -285,75 +236,48 @@ export default function BlogDetail() {
                         </button>
                     </div>
 
-                    {/* ── Active keyword tag — shown directly below date row ──
-                         Appears when user clicks a keyword pill below              */}
-                    {activeKeyword && (
-                        <div className="flex items-center gap-2.5 mb-6">
-                            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest flex-shrink-0">
-                                Keyword
-                            </span>
-                            <span className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1.5 bg-[#6B4A2D] text-white text-xs font-bold rounded-full shadow-sm">
-                                <Hash className="w-3 h-3 opacity-60 flex-shrink-0" strokeWidth={2.5} />
-                                <span className="leading-none">{activeKeyword}</span>
-                                <button
-                                    onClick={() => setActiveKeyword(null)}
-                                    className="ml-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-white/20 hover:bg-white/40 transition-colors flex-shrink-0"
-                                    aria-label="Clear keyword"
-                                >
-                                    <X className="w-2.5 h-2.5" strokeWidth={3} />
-                                </button>
-                            </span>
-                        </div>
-                    )}
-
                     {/* ── Title ── */}
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4 sm:mb-5 leading-tight tracking-tight">
+                    <h1 className="text-[26px] leading-[1.2] sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-3 sm:mb-5 sm:leading-tight tracking-tight break-words">
                         {blog.title}
                     </h1>
 
-                    {/* ══════════════════════════════════════════════
-                        DIRECT ANSWER (AEO)
-
-                        The first thing after the H1, deliberately. Answer
-                        engines lift the first concise, self-contained answer
-                        block on a page, and the class names here are the exact
-                        CSS selectors named in the Speakable schema — if this
-                        markup changes, Backend/services/structuredData.js has
-                        to change with it or the page advertises a selector that
-                        does not exist.
-                    ══════════════════════════════════════════════ */}
-                    {blog.direct_answer ? (
-                        <div className="geo-direct-answer mb-8 sm:mb-10 rounded-2xl border-l-4 border-[#6B4A2D] bg-amber-50 px-5 sm:px-6 py-4 sm:py-5">
-                            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-[#6B4A2D] mb-2">
-                                <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
-                                The short answer
-                            </p>
-                            <p className="aeo-answer-text text-base sm:text-lg leading-relaxed text-slate-800 font-medium">
-                                {blog.direct_answer}
-                            </p>
-                        </div>
-                    ) : (
-                        blog.metaDescription && (
-                            <p className="text-base sm:text-lg text-slate-600 leading-relaxed italic pl-4 sm:pl-5 py-3 sm:py-4 mb-8 sm:mb-10 bg-amber-50 border-l-4 border-[#6B4A2D] rounded-r-xl">
-                                "{blog.metaDescription}"
-                            </p>
-                        )
+                    {/* ── Areas this post covers ──
+                         A plain, readable line for humans. The same list is sent
+                         to search engines as the places this post serves, which
+                         is what lets a "near me" search in one of them match. */}
+                    {Array.isArray(blog.areas_covered) && blog.areas_covered.length > 0 && (
+                        <p className="flex items-start gap-2 text-sm text-slate-500 mb-4 sm:mb-5">
+                            <MapPin className="w-4 h-4 text-[#6B4A2D] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                            <span className="break-words">
+                                <span className="font-semibold text-slate-600">Serving:</span>{" "}
+                                {blog.areas_covered.join(", ")}
+                            </span>
+                        </p>
                     )}
+
+                    {/* The short answer is deliberately NOT rendered here.
+                        It is written in the admin panel purely as a summary for
+                        Google and AI answer engines, and the server sends it in
+                        the page metadata. Printing it on the page as well would
+                        show the reader the same thing twice. */}
 
                     {/* ── Blog body ── */}
                     <div
                         className="
-              text-[17px] leading-[1.85] text-slate-800
+              text-[16px] leading-[1.8] text-slate-800
               sm:text-[18px] sm:leading-[1.9]
-              break-words [&_*]:box-border
-              [&_p]:my-5 [&_p]:leading-[1.85] [&_p]:text-slate-700 [&_p]:text-[17px]
-              sm:[&_p]:text-[18px]
-              [&_h1]:text-3xl [&_h1]:sm:text-4xl [&_h1]:font-extrabold [&_h1]:text-slate-900
+              break-words [overflow-wrap:anywhere] [&_*]:box-border
+              [&_pre]:overflow-x-auto [&_pre]:text-sm
+              [&_table]:block [&_table]:overflow-x-auto [&_table]:max-w-full
+              sm:[&_table]:table
+              [&_p]:my-4 [&_p]:leading-[1.8] [&_p]:text-slate-700 [&_p]:text-[16px]
+              sm:[&_p]:my-5 sm:[&_p]:text-[18px] sm:[&_p]:leading-[1.85]
+              [&_h1]:text-2xl [&_h1]:sm:text-4xl [&_h1]:font-extrabold [&_h1]:text-slate-900
               [&_h1]:tracking-tight [&_h1]:leading-tight [&_h1]:mt-10 [&_h1]:mb-4
-              [&_h2]:text-2xl [&_h2]:sm:text-3xl [&_h2]:font-bold [&_h2]:text-slate-900
+              [&_h2]:text-xl [&_h2]:sm:text-3xl [&_h2]:font-bold [&_h2]:text-slate-900
               [&_h2]:tracking-tight [&_h2]:leading-snug [&_h2]:mt-10 [&_h2]:mb-4
               [&_h2]:pb-2 [&_h2]:border-b [&_h2]:border-slate-100
-              [&_h3]:text-xl [&_h3]:sm:text-2xl [&_h3]:font-bold [&_h3]:text-slate-800
+              [&_h3]:text-lg [&_h3]:sm:text-2xl [&_h3]:font-bold [&_h3]:text-slate-800
               [&_h3]:leading-snug [&_h3]:mt-8 [&_h3]:mb-3
               [&_h4]:text-lg [&_h4]:sm:text-xl [&_h4]:font-semibold [&_h4]:text-slate-800
               [&_h4]:leading-snug [&_h4]:mt-6 [&_h4]:mb-2
@@ -489,66 +413,6 @@ export default function BlogDetail() {
                         </section>
                     )}
 
-                    {/* ══════════════════════════════════════════════
-                        KEYWORDS SECTION
-                        — always horizontal single-row scroll, no wrap
-                    ══════════════════════════════════════════════ */}
-                    {blog.keywords && (
-                        <div className="mt-10 mb-8">
-                            {/* Header */}
-                            <div className="flex items-center gap-2.5 mb-4">
-                                <div className="flex items-center justify-center w-7 h-7 rounded-md bg-[#6B4A2D] flex-shrink-0">
-                                    <Hash size={14} className="text-white" strokeWidth={2.5} />
-                                </div>
-                                <span className="text-xs font-bold text-slate-500 tracking-widest uppercase">
-                                    Keywords
-                                </span>
-                                <div className="flex-1 h-px bg-slate-100" />
-                            </div>
-
-                            <div className="flex flex-wrap gap-1.5">
-                                {blog.keywords
-                                    .split(",")
-                                    .map((kw) => kw.trim())
-                                    .filter(Boolean)
-                                    .map((kw, index) => {
-                                        const isActive = activeKeyword === kw;
-                                        const isLoading = kwLoading === kw;
-                                        return (
-                                            <button
-                                                key={index}
-                                                onClick={() => handleKeywordClick(kw)}
-                                                disabled={!!kwLoading}
-                                                className={`
-                                                    inline-flex items-center gap-1
-                                                    px-2.5 py-1
-                                                    text-[11px] font-medium rounded-md
-                                                    border transition-all duration-200
-                                                    active:scale-95 select-none cursor-pointer
-                                                    ${isLoading
-                                                        ? "bg-[#6B4A2D] text-white border-[#6B4A2D] cursor-wait opacity-80"
-                                                        : isActive
-                                                            ? "bg-[#6B4A2D] text-white border-[#6B4A2D]"
-                                                            : "bg-slate-50 text-slate-500 border-slate-200 hover:border-[#6B4A2D] hover:text-[#6B4A2D] hover:bg-amber-50"
-                                                    }
-                                                `}
-                                            >
-                                                {isLoading ? (
-                                                    <svg className="w-2.5 h-2.5 animate-spin flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <circle cx="12" cy="12" r="10" strokeWidth="2" opacity="0.25" />
-                                                        <path d="M12 2a10 10 0 0 1 10 10" strokeWidth="2" />
-                                                    </svg>
-                                                ) : (
-                                                    <span className={`leading-none ${isActive ? "text-white/50" : "text-slate-400"}`}>#</span>
-                                                )}
-                                                <span className="leading-none">{kw}</span>
-                                            </button>
-                                        );
-                                    })}
-                            </div>
-                        </div>
-                    )}
-
                     <div className="my-10 sm:my-12 border-t-2 border-slate-100" />
 
                     {/* ── CTA share card ── */}
@@ -561,7 +425,7 @@ export default function BlogDetail() {
                         </p>
                         <button
                             onClick={copyLink}
-                            className="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-[#6B4A2D] hover:bg-[#5a3f25] text-white font-semibold text-sm sm:text-base rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-6 sm:px-8 py-3 bg-[#6B4A2D] hover:bg-[#5a3f25] text-white font-semibold text-sm sm:text-base rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
                         >
                             <Share2 className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2} />
                             {copied ? "Copied to Clipboard!" : "Copy Article Link"}
@@ -652,14 +516,14 @@ export default function BlogDetail() {
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                         <button
                             onClick={() => navigate("/blogs")}
-                            className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm sm:text-base rounded-lg transition-colors border border-slate-200"
+                            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-6 sm:px-8 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm sm:text-base rounded-lg transition-colors border border-slate-200"
                         >
                             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2} />
                             Back to Blogs
                         </button>
                         <button
                             onClick={() => navigate("/contact")}
-                            className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-[#6B4A2D] hover:bg-[#5a3f25] text-white font-semibold text-sm sm:text-base rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 group"
+                            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-6 sm:px-8 py-3 bg-[#6B4A2D] hover:bg-[#5a3f25] text-white font-semibold text-sm sm:text-base rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 group"
                         >
                             Get in Touch
                             <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={2} />

@@ -85,7 +85,7 @@ const company = [
             <ul className="space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
-                  <a href={service.link} className="text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-block">
+                  <a href={service.link} className="text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] lg:min-h-0 py-1 lg:py-0">
                     {service.title}
                   </a>
                 </li>
@@ -99,7 +99,7 @@ const company = [
             <ul className="space-y-3">
               {company.map((item, index) => (
                 <li key={index}>
-                  <a href={item.link} className="text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-block">
+                  <a href={item.link} className="text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] lg:min-h-0 py-1 lg:py-0">
                     {item.title}
                   </a>
                 </li>
@@ -120,13 +120,13 @@ const company = [
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <a href="tel:+91 9032845433" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">
+                <a href="tel:+91 9032845433" className="text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] lg:min-h-0">
                   +91 9032845433
                 </a>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=admin@geniemedia.in" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=admin@geniemedia.in" className="text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] lg:min-h-0">
                  admin@geniemedia.in
                 </a>
               </li>

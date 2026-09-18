@@ -133,7 +133,7 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`lg:hidden p-2 mr-8 rounded-lg   hover:bg-gray-100 transition-colors ${
+              className={`lg:hidden flex items-center justify-center min-w-[44px] min-h-[44px] p-2 mr-8 rounded-lg hover:bg-gray-100 transition-colors ${
                 isMobileMenuOpen ? 'hamburger-open' : ''
               }`}
               aria-label="Toggle menu"

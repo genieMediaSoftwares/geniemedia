@@ -53,12 +53,40 @@ const corsOptions = {
   credentials: true,
 };
 
-app.use(cors(corsOptions));
+// Per-request CORS options, so same-origin traffic can be waved through.
+//
+// The browser attaches an Origin header to module scripts, stylesheets and
+// fetches even when they are served by this very process. That was harmless
+// while this server only answered /api — but now that it also hosts the built
+// SPA, every /assets/*.js and /assets/*.css request arrives with an Origin of
+// the host it was just loaded from. That host is not in `allowedOrigins`
+// (which lists the public site, not whatever host:port the server happens to
+// run on), so the whitelist rejected them and Express turned the rejection
+// into a 500. The page loaded, no JavaScript ran, and nothing rendered.
+//
+// Genuine cross-origin API calls still go through the whitelist unchanged.
+const corsOptionsDelegate = (req, callback) => {
+  const origin = req.headers.origin;
+
+  let sameOrigin = false;
+  if (origin) {
+    try {
+      sameOrigin = new URL(origin).host === req.headers.host;
+    } catch (_) {
+      sameOrigin = false;
+    }
+  }
+
+  if (!origin || sameOrigin) return callback(null, { ...corsOptions, origin: true });
+  return callback(null, corsOptions);
+};
+
+app.use(cors(corsOptionsDelegate));
 
 // ✅ FIX 2: Respond to ALL preflight OPTIONS requests immediately.
 // Express v5 dropped support for "*" and "(.*)" string wildcards in path-to-regexp v8,
 // so we pass a RegExp directly to bypass that parser entirely.
-app.options(/.*/, cors(corsOptions));
+app.options(/.*/, cors(corsOptionsDelegate));
 
 app.use(express.json());
 

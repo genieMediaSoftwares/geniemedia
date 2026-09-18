@@ -107,14 +107,24 @@ export default function Blogs() {
 
           {categories.length > 1 && (
             <div className="mb-10 sm:mb-12 md:mb-14 lg:mb-16">
-              <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+              <div
+                className="
+                  flex gap-2 sm:gap-3
+                  overflow-x-auto sm:overflow-visible
+                  sm:flex-wrap sm:justify-center
+                  -mx-4 px-4 sm:mx-0 sm:px-0
+                  pb-2 sm:pb-0
+                  snap-x snap-mandatory sm:snap-none
+                  [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+                "
+              >
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-lg font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 ${
+                    className={`shrink-0 snap-start whitespace-nowrap inline-flex items-center min-h-[44px] lg:min-h-0 px-4 sm:px-5 md:px-6 py-2.5 rounded-lg font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 ${
                       selectedCategory === cat
-                        ? "bg-[#6B4A2D] text-white shadow-lg scale-105"
+                        ? "bg-[#6B4A2D] text-white shadow-lg sm:scale-105"
                         : "bg-[#F7F6F3] text-slate-700 hover:bg-slate-200"
                     }`}
                   >
@@ -187,7 +197,7 @@ export default function Blogs() {
                         type="button"
                         aria-label="View full image"
                         onClick={(e) => openLightbox(e, imgSrc, blog.title)}
-                        className="absolute bottom-3 right-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/90 backdrop-blur-sm text-[#6B4A2D] text-[11px] sm:text-xs font-semibold shadow-md opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300 hover:bg-white"
+                        className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 flex items-center justify-center gap-1.5 min-h-[44px] lg:min-h-0 px-3 py-2.5 lg:px-2.5 lg:py-1.5 rounded-lg bg-white/90 backdrop-blur-sm text-[#6B4A2D] text-[11px] sm:text-xs font-semibold shadow-md opacity-100 translate-y-0 sm:opacity-0 sm:translate-y-1 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-300 hover:bg-white"
                       >
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
                           <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
@@ -223,7 +233,7 @@ export default function Blogs() {
 
                       <button
                         onClick={(e) => { e.stopPropagation(); handleReadMore(blog); }}
-                        className="self-start flex items-center gap-1.5 text-[#6B4A2D] font-semibold text-xs sm:text-sm group-hover:gap-2.5 transition-all duration-300 hover:text-slate-900"
+                        className="self-start inline-flex items-center gap-1.5 min-h-[44px] lg:min-h-0 py-2 lg:py-0 text-[#6B4A2D] font-semibold text-xs sm:text-sm group-hover:gap-2.5 transition-all duration-300 hover:text-slate-900"
                       >
                         <span>Read More</span>
                         <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform duration-300" strokeWidth={2.5} />

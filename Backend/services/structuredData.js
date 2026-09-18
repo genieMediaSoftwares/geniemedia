@@ -273,37 +273,19 @@ const faqSchema = (blog) => {
 };
 
 /**
- * The direct answer, expressed three ways at once.
+ * Speakable and the standalone Question node used to be emitted here, built
+ * from `direct_answer`.
  *
- * - `speakable` tells voice surfaces which CSS selector holds the spoken answer.
- * - The same text becomes a Question/Answer pair so it is eligible as a
- *   featured snippet and as an AI Overview citation.
- * - `description` on the article repeats it for engines that read only that.
+ * They were removed when the short answer stopped being rendered on the page.
+ * Both of those markup types are only valid when the text they point at is
+ * visible to a reader: Speakable names a CSS selector that has to exist, and a
+ * Question/Answer pair shown only to crawlers is cloaking, which risks a manual
+ * penalty rather than earning a citation.
  *
- * The selectors must match what Blogdetail.jsx actually renders, or the markup
- * is a lie and the page fails validation.
+ * `direct_answer` still reaches search and AI engines — as the page
+ * description, the Open Graph description and the article `abstract`. All three
+ * are metadata by definition, so none of them require on-page text.
  */
-const speakableSchema = () => ({
-  "@type": "SpeakableSpecification",
-  cssSelector: [".geo-direct-answer", ".aeo-answer-text", "h1"],
-});
-
-const directAnswerQuestion = (blog) => {
-  const answer = String(blog.direct_answer || "").trim();
-  if (!answer) return null;
-
-  const url = blogUrl(blog.permalink);
-  const title = String(blog.meta_title || blog.title || "").trim();
-  // Phrase the title as a question if the editor did not already do so.
-  const question = /\?$/.test(title) ? title : `${title}?`;
-
-  return {
-    "@type": "Question",
-    "@id": `${url}#direct-answer`,
-    name: question,
-    acceptedAnswer: { "@type": "Answer", text: answer, url: `${url}#answer` },
-  };
-};
 
 /**
  * Attributed facts become `Claim` nodes with a citation back to the source.
@@ -431,6 +413,10 @@ const articleSchema = (blog) => {
     headline: String(blog.meta_title || blog.title || "").slice(0, 110),
     name: blog.title,
     description,
+    // `abstract` is schema.org's own term for a summary of the work. It is the
+    // correct home for a short answer that is deliberately not printed on the
+    // page, and engines read it when deciding how to describe the article.
+    abstract: String(blog.direct_answer || "").trim() || undefined,
     articleSection: blog.category || undefined,
     articleBody: stripHtml(blog.description).slice(0, 5000) || undefined,
     image: imageSchema(blog).map((img) => ({ "@id": img["@id"] })),
@@ -472,6 +458,8 @@ const webPageSchema = (blog) => {
 
   return compact({
     "@type": "WebPage",
+    // `description` falls back to the short answer, which is metadata and so is
+    // allowed to describe the page without appearing on it.
     "@id": `${url}#webpage`,
     url,
     name: blog.meta_title || blog.title,
@@ -483,8 +471,6 @@ const webPageSchema = (blog) => {
     breadcrumb: { "@id": `${url}#breadcrumb` },
     inLanguage: SITE.language,
     potentialAction: [{ "@type": "ReadAction", target: [url] }],
-    speakable: answer ? speakableSchema() : undefined,
-    mainEntity: answer ? { "@id": `${url}#direct-answer` } : undefined,
   });
 };
 
@@ -512,9 +498,6 @@ const generateStructuredData = (blogPost) => {
 
   const faq = faqSchema(blogPost);
   if (faq) graph.push(faq);
-
-  const direct = directAnswerQuestion(blogPost);
-  if (direct) graph.push(direct);
 
   graph.push(...claimsSchema(blogPost));
   graph.push(...definedTermsSchema(blogPost));
@@ -558,7 +541,6 @@ module.exports = {
   organizationSchema,
   breadcrumbSchema,
   faqSchema,
-  speakableSchema,
   parseJsonColumn,
   asArray,
   toIso,

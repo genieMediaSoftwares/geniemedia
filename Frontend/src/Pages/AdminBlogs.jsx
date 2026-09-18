@@ -1014,8 +1014,8 @@ export default function AdminBlogs() {
                 </div>
               </Field>
 
-              <Field label="Permalink" icon={Link2}
-                hint={permalinkManual ? "Manually edited — auto-generate disabled" : "Auto-generated from category + title · click to edit manually"}>
+              <Field label="Page Address" icon={Link2}
+                hint={permalinkManual ? "You edited this yourself — it will no longer update on its own" : "Made for you from the category and title · click to change it"}>
                 <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden focus-within:border-[#6B4A2D] transition">
                   <span className="px-3 py-3 bg-gray-50 text-gray-400 text-xs sm:text-sm border-r-2 border-gray-200 font-mono whitespace-nowrap shrink-0">/blog/</span>
                   <input type="text" name="permalink" value={form.permalink} onChange={handleChange}
@@ -1031,14 +1031,14 @@ export default function AdminBlogs() {
                 </div>
                 {form.permalink && (
                   <p className="text-[11px] text-gray-400 font-mono mt-1.5 pl-1">
-                    Preview: <span className="text-[#6B4A2D]">yourdomain.com/blog/{form.permalink}</span>
+                    Your post will live at: <span className="text-[#6B4A2D]">geniemedia.in/blog/{form.permalink}</span>
                   </p>
                 )}
               </Field>
 
-              <Field label="Meta Description" icon={AlignLeft}
-                hint={`${form.metaDescription.length}/160 characters — shown in Google search results`}>
-                <textarea name="metaDescription" placeholder="Brief summary for SEO…"
+              <Field label="Description for Google" icon={AlignLeft}
+                hint={`${form.metaDescription.length}/160 characters — this is the text shown under your title in Google`}>
+                <textarea name="metaDescription" placeholder="One or two sentences that make someone want to click…"
                   value={form.metaDescription} onChange={handleChange} rows={3} maxLength={160}
                   className={inputCls + " resize-none"} />
               </Field>
@@ -1174,13 +1174,14 @@ export default function AdminBlogs() {
           <div className="mt-5 sm:mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5">
             <h4 className="text-xs sm:text-sm font-bold text-amber-800 mb-3">💡 Quick Tips</h4>
             <ul className="text-[11px] sm:text-xs text-amber-700 space-y-1.5">
-              <li className="flex items-start gap-2"><span>→</span> Permalink auto-generates as <strong>category/blog-title</strong> — select category first for best results</li>
-              <li className="flex items-start gap-2"><span>→</span> You can manually edit the permalink — click Reset to regenerate</li>
-              <li className="flex items-start gap-2"><span>→</span> Keep meta description under 160 chars for best SEO</li>
+              <li className="flex items-start gap-2"><span>→</span> The page address is built from <strong>category + title</strong> — pick the category first for the best result</li>
+              <li className="flex items-start gap-2"><span>→</span> You can type your own page address — click Reset to go back to the automatic one</li>
+              <li className="flex items-start gap-2"><span>→</span> Keep the Google description under 160 characters so it is not cut off</li>
               <li className="flex items-start gap-2"><span>→</span> Press <kbd className="bg-amber-100 px-1 rounded font-mono">Enter</kbd> or <kbd className="bg-amber-100 px-1 rounded font-mono">,</kbd> to add keyword tags</li>
               <li className="flex items-start gap-2"><span>→</span> Best image: <strong>1200×675px · JPG/WebP · 16:9 · max 500KB</strong></li>
               <li className="flex items-start gap-2"><span>→</span> When editing, existing image is <strong>preserved automatically</strong> — upload a new file only if you want to change it</li>
               <li className="flex items-start gap-2"><span>→</span> Drafts are 100% hidden — users only see blogs you explicitly Publish</li>
+              <li className="flex items-start gap-2"><span>→</span> Everything in <strong>Help People Find This Post</strong> below the editor is optional — but the score in the corner goes up for each part you fill in</li>
               <li className="flex items-start gap-2"><span>→</span> Use the <strong>purple Copy button</strong> on any published blog card to get a share link — when pasted on WhatsApp / Twitter / LinkedIn, it shows the blog image + title as a preview card</li>
             </ul>
           </div>

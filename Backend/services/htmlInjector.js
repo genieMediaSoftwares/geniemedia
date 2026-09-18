@@ -272,6 +272,10 @@ const buildBlogHead = (blog) => {
  *
  * It is inside the React root, so React discards it on the first client render.
  * Humans never see it; it exists purely for the no-JS fetch.
+ *
+ * It deliberately mirrors what the live page renders, and nothing more. The
+ * short answer is NOT included: it is metadata now, shown to no reader, and
+ * putting it in the crawler-only payload would be cloaking.
  */
 const buildNoscriptBody = (blog) => {
   const facts = asArray(blog.key_facts).filter((f) => String(f.fact || "").trim());
@@ -286,12 +290,6 @@ const buildNoscriptBody = (blog) => {
     `<article class="seo-prerender">`,
     `<h1>${escapeAttr(blog.title)}</h1>`,
   ];
-
-  if (blog.direct_answer) {
-    parts.push(
-      `<div class="geo-direct-answer"><p class="aeo-answer-text">${escapeAttr(blog.direct_answer)}</p></div>`
-    );
-  }
 
   if (blog.image) {
     parts.push(

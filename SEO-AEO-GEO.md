@@ -27,7 +27,7 @@ before the HTML is sent.
 
 ### Database
 
-Twenty columns were added to `blogs`. The migration runs automatically on server
+Twenty-four columns were added to `blogs`. The migration runs automatically on server
 boot and is idempotent, so a deploy needs no manual step.
 
 | Group | Columns |
@@ -37,7 +37,8 @@ boot and is idempotent, so a deploy needs no manual step.
 | AEO | `direct_answer` |
 | GEO | `key_facts`, `definitions` |
 | Imagery | `og_image_url`, `alt_text` |
-| E-E-A-T | `author_id`, `author_name`, `author_bio` |
+| E-E-A-T | `author_id`, `author_name`, `author_bio`, `reviewer_name`, `reviewer_role`, `reviewed_at` |
+| Local relevance | `areas_covered` |
 | Derived | `reading_time_minutes`, `word_count`, `last_modified_at` |
 | Link graph | `internal_links`, `slug_history` |
 
@@ -64,8 +65,8 @@ article inside `#root`, which React discards on first render.
 
 The pre-rendered body goes beyond the spec deliberately. Correct meta tags tell a
 crawler what the page is about; they do not give it a sentence it can quote. The
-headline, direct answer, body text, key facts and FAQ are all present as real
-text in the first response.
+headline, body text, key facts and FAQ are all present as real text in the first
+response.
 
 ### Structured data — Part 3
 
@@ -74,27 +75,75 @@ which returns one `@graph` containing:
 
 `Organization` + `ProfessionalService`, `WebSite`, `WebPage`, `BreadcrumbList`,
 `Person`, `ImageObject`, `BlogPosting`/`Article`/`NewsArticle`/`HowTo`,
-`FAQPage`, the direct-answer `Question`, `Claim` nodes per attributed fact, and
-`DefinedTerm` nodes per definition.
+`FAQPage`, `Claim` nodes per attributed fact, and `DefinedTerm` nodes per
+definition.
 
 It is one graph with stable `@id` values rather than several separate blocks, so
 the publisher of the article, the breadcrumb's home entity and the site-wide
 Organization all resolve to the same node instead of three look-alikes.
 
-`Speakable` points at `.geo-direct-answer` and `.aeo-answer-text`. Those classes
-are really rendered by `Blogdetail.jsx`. **If that markup is renamed, the schema
-has to be renamed with it** or the page advertises a selector that does not
-exist.
+A named reviewer adds a second `Person` node, referenced from the article as
+both `editor` and `reviewedBy`, with `dateReviewed`. Listed areas become
+`areaServed` and `spatialCoverage` `Place` nodes.
 
 ### Admin panel — Part 2
 
-A collapsible **SEO / AEO / GEO** panel sits below the content editor, with a
-live Google snippet preview, the focus-keyword checklist, the direct-answer
-builder, an FAQ builder, key facts, definitions, heading-hierarchy validation,
-required alt text, and the publish checklist.
+A collapsible **Help People Find This Post** panel sits below the content
+editor, written for a non-technical admin. Eleven numbered sections, each
+separately collapsible, in walkthrough order:
 
-The header badge shows either "Ready to publish" or the number of blocking items,
-so the state is visible without opening the panel.
+1. Get Found on Google (SEO)
+2. Answer Questions Directly (AEO)
+3. Help AI Tools Understand This Post
+4. Tell People Which Areas This Covers
+5. Who Wrote & Checked This
+6. Describe Your Photo
+7. Link to Other Pages
+8. Extra Info for Google (Automatic)
+9. How It Looks When Shared
+10. Preview Before You Publish
+11. Your Score & Tips
+
+A 0-100 score sits pinned in the corner while the editor scrolls, colour-banded
+red under 40, amber to 74, green at 75 and above, with the count of must-fix and
+nice-to-have items. Clicking it jumps to the section that needs attention. It
+stays hidden until there is a title or some content, because showing a hard zero
+to someone who has typed nothing is discouraging and says nothing useful.
+
+The score is a weighting of checks that already existed, not a second opinion:
+60% for the six publish-blockers, 25% for keyword placement, 15% for the
+optional extras. The must-fix count comes from the real publish gate, so it can
+never promise a publish the server would refuse.
+
+**Copy rule.** The words "meta", "schema", "canonical", "structured data",
+"permalink" and the rest appear only in code and comments, never on screen. An
+editor who has to look a word up before filling in a field will skip the field.
+`scripts/` has no automated guard for this, so check new copy by hand.
+
+### What readers see, and what only engines see
+
+Two fields are deliberately invisible on the published page.
+
+**The short answer** (`direct_answer`) is written in the admin panel purely as a
+summary for Google and AI answer engines. It reaches them as the page
+description, the Open Graph description and the article `abstract` — all three
+are metadata, which by definition describes a page without appearing on it.
+
+This had a consequence worth knowing about. `Speakable` markup and a
+`Question`/`Answer` node were both being emitted from that same field, and both
+were removed. Neither is valid unless the text it points at is visible: Speakable
+names a CSS selector that has to exist, and a question-and-answer pair shown only
+to crawlers is cloaking, which risks a manual penalty instead of earning a
+citation. The pre-rendered crawler payload no longer contains it either, for the
+same reason.
+
+**Keywords** (`focus_keyword`, `secondary_keywords`, the legacy `keywords`
+column) are search signals only. They go into the `keywords` meta tag and the
+article's `keywords` property. The clickable keyword pills that used to sit at
+the bottom of each post have been removed.
+
+What readers *do* see from the panel: the FAQ, the key facts with their sources,
+the author and bio, and the "Serving: …" line when areas are listed.
 
 ### Publish gate — Part 2.6
 
@@ -247,7 +296,22 @@ Then submit `https://geniemedia.in/sitemap.xml` under **Sitemaps**. It is a
 sitemap index; `pages.xml`, `services.xml` and `blogs.xml` are discovered from
 it.
 
-### 4. Social previews
+### 4. Mobile layout
+
+```bash
+cd Frontend
+node scripts/audit-mobile.mjs http://localhost:5000 /blogs /blog/<slug>
+```
+
+Loads each page at 320, 390 and 768 pixels wide and reports horizontal overflow,
+tap targets under 44x44, and how far down the first heading sits. Both blog pages
+currently pass with no horizontal scroll at any width.
+
+Elements inside a deliberately scrollable strip are ignored — the category filter
+on `/blogs` is a swipeable row on phones by design, and the page itself does not
+move.
+
+### 5. Social previews
 
 Paste a post URL into the
 [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) and
@@ -292,12 +356,14 @@ Backend/
     verifySeoLive.js               npm run seo:verify
 
 Frontend/
-  src/components/SeoPanel.jsx      The SEO / AEO / GEO admin panel
+  src/components/SeoPanel.jsx      The plain-language admin panel
+  src/components/TagInput.jsx      Shared chip input (keywords + areas)
   src/utils/seoAnalysis.js         Browser-side mirror of the server rules
   src/hooks/useBlogSeo.js          Head sync for client-side navigation
   public/.htaccess                 HTTPS, redirects, compression, caching
   public/robots.txt                Static fallback, AI crawlers allowed
   public/seo-proxy.php             Split-deployment bridge
+  scripts/audit-mobile.mjs         Phone-width layout audit
 ```
 
 `Frontend/src/utils/seoAnalysis.js` duplicates the server's rules on purpose, so
