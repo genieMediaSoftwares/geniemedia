@@ -296,16 +296,32 @@ Then submit `https://geniemedia.in/sitemap.xml` under **Sitemaps**. It is a
 sitemap index; `pages.xml`, `services.xml` and `blogs.xml` are discovered from
 it.
 
-### 4. Mobile layout
+### 4. Responsive layout and image cropping
 
 ```bash
 cd Frontend
-node scripts/audit-mobile.mjs http://localhost:5000 /blogs /blog/<slug>
+node scripts/audit-responsive.mjs http://localhost:5000 /blogs /blog/<slug>
 ```
 
-Loads each page at 320, 390 and 768 pixels wide and reports horizontal overflow,
-tap targets under 44x44, and how far down the first heading sits. Both blog pages
-currently pass with no horizontal scroll at any width.
+Loads each page at 1920, 1600, 1440, 1366, 1280, 1024, 768, 480, 375 and 320
+pixels wide and reports four things:
+
+- horizontal overflow, which makes the whole page scroll sideways
+- **how much of each image is actually being shown**, by comparing the rendered
+  box against the file's natural dimensions
+- content hidden behind the fixed navbar
+- tap targets under 44x44
+
+Both blog pages currently pass at every width with the whole of every cover
+image visible.
+
+That second check exists because of a real bug. The article hero widened to 2:1
+and then 21:9 on large screens while the covers are 16:9, so `object-cover`
+scaled each image up and sliced the top and bottom off — about a quarter of the
+picture at 1920, including the caption row these covers carry along the bottom.
+The container is now 16:9 at every width, capped at the 1200px the upload
+pipeline produces, with `object-contain` so an off-ratio cover letterboxes
+against the stone background rather than losing an edge.
 
 Elements inside a deliberately scrollable strip are ignored — the category filter
 on `/blogs` is a swipeable row on phones by design, and the page itself does not
@@ -363,7 +379,7 @@ Frontend/
   public/.htaccess                 HTTPS, redirects, compression, caching
   public/robots.txt                Static fallback, AI crawlers allowed
   public/seo-proxy.php             Split-deployment bridge
-  scripts/audit-mobile.mjs         Phone-width layout audit
+  scripts/audit-responsive.mjs     Layout + image-cropping audit, 320-1920px
 ```
 
 `Frontend/src/utils/seoAnalysis.js` duplicates the server's rules on purpose, so

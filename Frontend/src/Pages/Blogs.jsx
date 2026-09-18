@@ -173,18 +173,18 @@ export default function Blogs() {
                     data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                     data-aos-delay={index * 100}
                     onClick={() => handleReadMore(blog)}
-                    className="group relative flex flex-col overflow-hidden rounded-xl sm:rounded-2xl bg-white shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer"
+                    className="group relative flex flex-col h-full overflow-hidden rounded-xl sm:rounded-2xl bg-white shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer"
                   >
 
                     <div
                       className="relative w-full overflow-hidden bg-[#f5f0eb]"
-                      style={{ aspectRatio: "4/3" }}
+                      style={{ aspectRatio: "16/9" }}
                     >
                       <img
                         src={imgSrc}
                         alt={blog.title || "Blog cover"}
                         width="800"
-                        height="600"
+                        height="450"
                         className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                         decoding="async"
@@ -223,11 +223,11 @@ export default function Blogs() {
                         </div>
                       )}
 
-                      <h2 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 group-hover:text-[#6B4A2D] mb-2 sm:mb-3 line-clamp-3 transition-colors duration-300 leading-snug">
+                      <h2 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 group-hover:text-[#6B4A2D] mb-2 sm:mb-3 line-clamp-3 transition-colors duration-300 leading-snug break-words [overflow-wrap:anywhere]">
                         {blog.title}
                       </h2>
 
-                      <p className="text-[11px] sm:text-xs md:text-sm text-slate-600 line-clamp-3 leading-relaxed mb-4 flex-1">
+                      <p className="text-[11px] sm:text-xs md:text-sm text-slate-600 line-clamp-3 leading-relaxed mb-4 flex-1 break-words">
                         {blog.metaDescription || blog.description}
                       </p>
 

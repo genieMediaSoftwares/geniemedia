@@ -106,7 +106,7 @@ export default function BlogDetail() {
     /* ─────────────────────── Loading ─────────────────────── */
     if (loading) {
         return (
-            <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-4 px-4">
+            <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-4 px-4 pt-20">
                 <div className="animate-spin">
                     <svg className="w-12 h-12 text-[#6B4A2D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <circle cx="12" cy="12" r="10" strokeWidth="2" opacity="0.25" />
@@ -121,7 +121,7 @@ export default function BlogDetail() {
     /* ─────────────────────── Not Found ─────────────────────── */
     if (!blog) {
         return (
-            <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-4 px-4">
+            <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-4 px-4 pt-20">
                 <svg className="w-14 h-14 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                         d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -148,8 +148,32 @@ export default function BlogDetail() {
             {/* ══════════════════════════════════════════════
                 HERO IMAGE
             ══════════════════════════════════════════════ */}
-            <section className="w-full bg-stone-100 overflow-hidden">
-                <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] md:aspect-[2/1] lg:aspect-[21/9]">
+            {/* `pt-20` clears the fixed 80px navbar.
+                 Every other page opens with a dark hero that the navbar is meant
+                 to float over, so the offset belongs here rather than on <main>
+                 where it would push every page down. Without it the navbar sat
+                 on top of the first 80px of the featured image. */}
+            <section className="w-full bg-stone-100 pt-20">
+                {/*
+                  THE IMAGE IS NO LONGER CROPPED.
+
+                  The container used to widen to 2:1 and then 21:9 on large
+                  screens while the images themselves are 16:9. `object-cover`
+                  filled that wider box by scaling the image up and slicing the
+                  top and bottom off — which on these covers meant cutting
+                  through the caption row along the bottom.
+
+                  The box is now 16:9 at every width, matching the source, and
+                  capped at the 1200px the upload pipeline produces. At 1920 that
+                  is a 1200x675 image centred on the page rather than a
+                  1920x823 crop of it.
+
+                  `object-contain` is the safety net: a cover that is not quite
+                  16:9 letterboxes against the stone background instead of losing
+                  an edge. These are text-heavy designed graphics, so a visible
+                  band beats a cut word.
+                */}
+                <div className="relative mx-auto w-full max-w-[1200px] aspect-[16/9] bg-stone-100">
                     <img
                         src={heroSrc}
                         /* The stored alt text describes the image; the title
@@ -164,19 +188,8 @@ export default function BlogDetail() {
                         decoding="async"
                         width="1200"
                         height="675"
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-contain"
                     />
-                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-stone-900/30 to-transparent pointer-events-none" />
-
-                    {/* Category badge overlaid bottom-left */}
-                    {blog.category && (
-                        <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10 max-w-[calc(100%-1.5rem)]">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-[#6B4A2D] text-white text-[11px] sm:text-xs font-semibold rounded-full shadow-lg backdrop-blur-sm max-w-full">
-                                <Tag className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" strokeWidth={2} />
-                                <span className="truncate">{blog.category}</span>
-                            </span>
-                        </div>
-                    )}
                 </div>
             </section>
 
@@ -235,6 +248,16 @@ export default function BlogDetail() {
                             )}
                         </button>
                     </div>
+
+                    {/* ── Category ── */}
+                    {blog.category && (
+                        <div className="mb-3">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#6B4A2D] text-white text-[11px] sm:text-xs font-semibold rounded-full shadow-sm max-w-full">
+                                <Tag className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" strokeWidth={2} />
+                                <span className="truncate">{blog.category}</span>
+                            </span>
+                        </div>
+                    )}
 
                     {/* ── Title ── */}
                     <h1 className="text-[26px] leading-[1.2] sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-3 sm:mb-5 sm:leading-tight tracking-tight break-words">
@@ -457,14 +480,16 @@ export default function BlogDetail() {
                                     onClick={() => goRelated(rb)}
                                     className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 cursor-pointer border border-slate-100 hover:border-stone-200"
                                 >
-                                    <div className="relative w-full overflow-hidden aspect-[4/3]">
+                                    <div className="relative w-full overflow-hidden aspect-[16/9] bg-[#f5f0eb]">
                                         <img
                                             src={rb.image || FALLBACK}
                                             alt={rb.title || "Related blog"}
+                                            width="800"
+                                            height="450"
                                             loading="lazy"
                                             decoding="async"
                                             onError={(e) => { e.currentTarget.src = FALLBACK; }}
-                                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                         {rb.category && (
