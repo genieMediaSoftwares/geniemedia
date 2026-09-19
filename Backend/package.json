@@ -10,7 +10,8 @@
     "seed:projects": "node scripts/seedProjects.js",
     "seo:schema": "node scripts/validateStructuredData.js",
     "seo:verify": "node scripts/verifySeoLive.js",
-    "seo:migrate": "node scripts/runSeoMigration.js"
+    "seo:migrate": "node scripts/runSeoMigration.js",
+    "seo:routes": "node scripts/checkRouteMeta.js"
   },
   "keywords": [],
   "author": "",

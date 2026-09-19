@@ -21,6 +21,7 @@ const { invalidateSitemapCache } = require("./services/sitemapService");
 const { createOgVariant, validateFeaturedImage, safeUnlink } = require("./services/imageVariants");
 const htmlInjector = require("./services/htmlInjector");
 const { SITE } = require("./config/site");
+const { metaForRoute } = require("./config/routeMeta");
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -328,7 +329,14 @@ app.use((req, res, next) => {
 });
 
 // ================= ROOT =================
-app.get("/", (req, res) => {
+// A health banner for the API-only deployment, where nothing else answers "/".
+//
+// It must NOT answer when this process is also serving the built SPA: it is
+// registered long before the SPA fallback, so it would intercept the home page
+// and hand every visitor the words "Backend is Working" instead of the site.
+// `next()` lets the request fall through to the SPA handler further down.
+app.get("/", (req, res, next) => {
+  if (htmlInjector.DIST_DIR) return next();
   res.send("🚀 geniemedia Backend is Working!");
 });
 
@@ -1045,9 +1053,17 @@ if (spaDist) {
   );
 
   app.get(/^\/(?!api\/|uploads\/|share\/).*/, (req, res, next) => {
+    // Per-route title, description and canonical, so a crawler that never runs
+    // the React bundle still gets the right metadata for /about, /services and
+    // the rest instead of the generic site defaults on every URL.
+    const meta = metaForRoute(req.path);
+
     const html = htmlInjector.renderSiteHtml({
-      url: `${SITE.url}${req.path === "/" ? "/" : req.path}`,
+      title: meta.title,
+      description: meta.description,
+      url: meta.canonical,
     });
+
     if (!html) return next();
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.send(html);

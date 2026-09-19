@@ -7,6 +7,8 @@ import {
 import DOMPurify from "dompurify";
 import BASE_URL from "../Api";
 import useBlogSeo from "../hooks/useBlogSeo";
+import SEO from "../components/SEO";
+import { SITE_ORIGIN } from "../seo/routeMeta";
 // Self-hosted rather than fetched from images.unsplash.com — see the note in Blogs.jsx.
 import BlogFallback from "../assets/blog/blog-hero.webp";
 
@@ -142,8 +144,28 @@ export default function BlogDetail() {
 
     const heroSrc = !imgError && blog.image ? blog.image : FALLBACK;
 
+    const seoTitle = blog.meta_title || blog.title;
+    const seoDescription =
+        blog.metaDescription ||
+        blog.direct_answer ||
+        String(blog.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160);
+    const seoCanonical =
+        blog.canonical_url || `${SITE_ORIGIN}/blog/${cleanSlug(blog.permalink)}`;
+
     return (
         <div className="w-full overflow-x-hidden bg-white">
+
+            {/* Title, description and canonical for this post. The remaining
+                tags — keywords, author, the article timestamps and the JSON-LD
+                graph — are handled by useBlogSeo above, which deliberately does
+                not touch anything listed here. */}
+            <SEO
+                title={seoTitle}
+                description={seoDescription}
+                canonical={seoCanonical}
+                image={blog.og_image_url || blog.image || undefined}
+                type="article"
+            />
 
             {/* ══════════════════════════════════════════════
                 HERO IMAGE

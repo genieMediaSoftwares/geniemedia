@@ -62,18 +62,18 @@ const inspect = async (url, agentName) => {
   const title = pick(html, /<title>([\s\S]*?)<\/title>/i);
   passed &= check("Title in raw HTML", title, title);
 
-  const description = pick(html, /<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i);
+  const description = pick(html, /<meta[^>]*\sname=["']description["'][^>]*\scontent=["']([^"']*)["']/i);
   passed &= check("Meta description", description, description ? `${description.length} chars` : "");
 
-  const canonical = pick(html, /<link\s+rel=["']canonical["']\s+href=["']([^"']*)["']/i);
+  const canonical = pick(html, /<link[^>]*\srel=["']canonical["'][^>]*\shref=["']([^"']*)["']/i);
   passed &= check("Canonical", canonical, canonical);
 
-  const ogTitle = pick(html, /<meta\s+property=["']og:title["']\s+content=["']([^"']*)["']/i);
-  const ogImage = pick(html, /<meta\s+property=["']og:image["']\s+content=["']([^"']*)["']/i);
+  const ogTitle = pick(html, /<meta[^>]*\sproperty=["']og:title["'][^>]*\scontent=["']([^"']*)["']/i);
+  const ogImage = pick(html, /<meta[^>]*\sproperty=["']og:image["'][^>]*\scontent=["']([^"']*)["']/i);
   passed &= check("Open Graph title", ogTitle);
   passed &= check("Open Graph image", ogImage, ogImage);
 
-  const robots = pick(html, /<meta\s+name=["']robots["']\s+content=["']([^"']*)["']/i);
+  const robots = pick(html, /<meta[^>]*\sname=["']robots["'][^>]*\scontent=["']([^"']*)["']/i);
   check("Robots directive", robots, robots || "not set (defaults to index,follow)");
 
   // JSON-LD
@@ -104,8 +104,11 @@ const inspect = async (url, agentName) => {
     check("Article schema", types.some((t) => /BlogPosting|Article|NewsArticle/.test(t)));
     check("Organization schema", types.some((t) => /Organization/.test(t)));
     check("BreadcrumbList schema", types.some((t) => /BreadcrumbList/.test(t)));
-    check("FAQPage schema", types.some((t) => /FAQPage/.test(t)));
-    check("Speakable markup", html.includes("SpeakableSpecification"));
+    // Only present when the editor added question/answer pairs, so its absence
+    // is information rather than a fault.
+    console.log(
+      `     FAQPage schema: ${types.some((t) => /FAQPage/.test(t)) ? "yes" : "no (no FAQ pairs on this post)"}`
+    );
   }
 
   // The decisive test: is the article readable without running JavaScript?
@@ -134,8 +137,11 @@ const inspect = async (url, agentName) => {
     `${textLength} characters inside #root`
   );
 
-  const answer = html.match(/class="[^"]*geo-direct-answer[^"]*"/i);
-  check("Direct answer block", Boolean(answer));
+  // The short answer is metadata only — it reaches engines as the description
+  // and the article abstract and is deliberately not rendered for readers, so
+  // finding it in the body would be the bug, not missing it.
+  const abstractPresent = /"abstract"\s*:/.test(html);
+  console.log(`  ℹ️  Short answer as abstract: ${abstractPresent ? "yes" : "not set on this post"}`);
 
   return Boolean(passed);
 };

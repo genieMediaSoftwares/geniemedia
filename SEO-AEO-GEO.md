@@ -145,6 +145,49 @@ the bottom of each post have been removed.
 What readers *do* see from the panel: the FAQ, the key facts with their sources,
 the author and bio, and the "Serving: …" line when areas are listed.
 
+### Per-route metadata for the marketing pages
+
+The six public routes each declare their own title, description and canonical:
+`/`, `/services`, `/about`, `/projects`, `/contact` and `/blogs`.
+
+| Where | File |
+|---|---|
+| React | `Frontend/src/seo/routeMeta.js` and `Frontend/src/components/SEO.jsx` |
+| Server | `Backend/config/routeMeta.js`, used by the SPA fallback |
+
+The two tables hold the same values and `npm run seo:routes` fails if they
+drift. The duplication is unavoidable — one is an ES module bundled for the
+browser, the other CommonJS in Node, with no shared build step — but a
+disagreement between them means a crawler that renders JavaScript reads one
+title and a crawler that does not reads another.
+
+`<SEO>` is applied at the route level in `App.jsx`, not inside the page
+components. Two of those "pages" are also sections of other pages:
+`contactSection` renders at `/contact` and inside home, projects and reviews;
+`AllServices` renders at `/services` and inside home. A `<SEO>` tag placed
+inside either would retitle whichever page embedded it.
+
+**The React 19 gotcha.** `react-helmet-async` v3 delegates to React's own
+metadata hoisting on React 19 rather than running its own DOM reconciler. The
+tags React emits carry no marker attribute, and React appends them rather than
+replacing look-alike tags already in the HTML. Since both `index.html` and the
+server put a description and a canonical in the document before React runs, the
+naive setup produces two of each. So both sources label their copies
+`data-seo-ssr="1"` and `SEO.jsx` removes them on mount. Crawlers that never run
+JavaScript keep the server's tags; browsers end up with exactly one of each.
+
+Verify with:
+
+```bash
+cd Frontend
+node scripts/verify-route-seo.mjs http://localhost:5000
+```
+
+It checks each route twice — the raw first response with no JavaScript, and the
+DOM after React mounts — counts canonical and description tags in both, and then
+walks the routes client-side to confirm the metadata follows a single-page
+navigation.
+
 ### Publish gate — Part 2.6
 
 Enforced in `Backend/services/seoValidation.js`, not only in the browser. A
@@ -356,6 +399,7 @@ gate is what will walk an editor through completing it.
 ```
 Backend/
   config/site.js                   Brand, address, socials, crawler lists
+  config/routeMeta.js              Server copy of the route metadata
   db/migrateBlogSeo.js             Idempotent schema migration
   routes/seoRoutes.js              Sitemaps, robots, analysis API, blog renderer
   services/
@@ -370,8 +414,11 @@ Backend/
     runSeoMigration.js             npm run seo:migrate
     validateStructuredData.js      npm run seo:schema
     verifySeoLive.js               npm run seo:verify
+    checkRouteMeta.js              npm run seo:routes (drift check)
 
 Frontend/
+  src/components/SEO.jsx           Reusable per-route title/description/canonical
+  src/seo/routeMeta.js             The six public routes' metadata
   src/components/SeoPanel.jsx      The plain-language admin panel
   src/components/TagInput.jsx      Shared chip input (keywords + areas)
   src/utils/seoAnalysis.js         Browser-side mirror of the server rules
@@ -380,6 +427,7 @@ Frontend/
   public/robots.txt                Static fallback, AI crawlers allowed
   public/seo-proxy.php             Split-deployment bridge
   scripts/audit-responsive.mjs     Layout + image-cropping audit, 320-1920px
+  scripts/verify-route-seo.mjs     Per-route title/description/canonical check
 ```
 
 `Frontend/src/utils/seoAnalysis.js` duplicates the server's rules on purpose, so

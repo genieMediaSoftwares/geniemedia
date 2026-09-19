@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { lazy, Suspense, useEffect } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoutes';
+import SEO from './components/SEO';
+import { metaForRoute } from './seo/routeMeta';
 
 // Every route is code-split. The admin panel in particular drags in the TipTap
 // rich-text editor (~450 kB of ProseMirror) which no public visitor ever needs,
@@ -25,6 +28,30 @@ const AdminLogin = lazy(() => import('./Pages/AdminLogin'));
 const AdminBlogs = lazy(() => import('./Pages/AdminBlogs'));
 const AdminProjects = lazy(() => import('./Pages/AdminProjects'));
 
+/**
+ * Pairs a route element with its metadata.
+ *
+ * The <SEO> tag lives here rather than inside each page because two of these
+ * "pages" are not only pages: `contactSection` renders as /contact AND as a
+ * block inside the home, projects and reviews pages, and `AllServices` renders
+ * as /services AND as a block on the home page. A <SEO> tag inside either of
+ * them would retitle whichever page had embedded it. Declaring the metadata
+ * beside the route makes that mistake impossible, and keeps all six routes
+ * visible in one screenful.
+ *
+ * A path with no entry in the table renders exactly as before, with no <SEO>
+ * tag at all, so the routes not in scope here are untouched.
+ */
+function Seo({ path, children }) {
+  const meta = metaForRoute(path);
+  return (
+    <>
+      {meta && <SEO title={meta.title} description={meta.description} canonical={meta.canonical} />}
+      {children}
+    </>
+  );
+}
+
 // 🔥 Force scroll to top component
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -45,7 +72,8 @@ function ScrollToTop() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
 
       <ScrollToTop />
 
@@ -68,16 +96,16 @@ function App() {
           }
         >
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
+            <Route path="/" element={<Seo path="/"><HomePage /></Seo>} />
+            <Route path="/about" element={<Seo path="/about"><AboutPage /></Seo>} />
             <Route path="/digital_marketing" element={<DM />} />
             <Route path="/web_development" element={<Web_dev />} />
             <Route path="/production_house" element={<ProductionHouse />} />
             <Route path="/podcast_studio" element={<PodcastStudio />} />
-            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects" element={<Seo path="/projects"><Projects /></Seo>} />
             <Route path="/reviews" element={<Reviews />} />
-            <Route path="/contact" element={<ContactSec isPage />} />
-            <Route path="/services" element={<TabbedServices headingLevel="h1" />} />
+            <Route path="/contact" element={<Seo path="/contact"><ContactSec isPage /></Seo>} />
+            <Route path="/services" element={<Seo path="/services"><TabbedServices headingLevel="h1" /></Seo>} />
             <Route path="/admin" element={<AdminLogin />} />
 
             <Route
@@ -98,7 +126,7 @@ function App() {
               }
             />
 
-            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blogs" element={<Seo path="/blogs"><Blogs /></Seo>} />
             <Route path="/blog/*" element={<BlogDetail />} />
 
           </Routes>
@@ -106,7 +134,8 @@ function App() {
       </main>
 
       <Footer />
-    </BrowserRouter>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

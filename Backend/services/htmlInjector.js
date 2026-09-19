@@ -36,6 +36,7 @@ const {
   toIso,
 } = require("./structuredData");
 const { stripHtml } = require("./contentAnalysis");
+const { metaForRoute } = require("../config/routeMeta");
 
 // ---------------------------------------------------------------------------
 // Locating the built SPA
@@ -112,6 +113,14 @@ const escapeJsonLd = (obj) =>
     .replace(/>/g, "\\u003e")
     .replace(/&/g, "\\u0026");
 
+/**
+ * Collapses whitespace, and truncates only when a limit is given.
+ *
+ * Deliberately NOT applied to <title>. Google shortens the title it displays in
+ * a result; it still reads the whole tag, so cutting the tag short only loses
+ * information — and a limit set a character or two below a real title produces
+ * a mangled half-word.
+ */
 const collapse = (value, max) => {
   const str = String(value || "").replace(/\s+/g, " ").trim();
   if (!max || str.length <= max) return str;
@@ -131,10 +140,13 @@ const collapse = (value, max) => {
 const stripManagedTags = (head) =>
   head
     .replace(/<title>[\s\S]*?<\/title>/gi, "")
-    .replace(/<meta\s+name=["'](title|description|keywords|robots|author|language)["'][^>]*>/gi, "")
-    .replace(/<meta\s+property=["']og:[^"']*["'][^>]*>/gi, "")
-    .replace(/<meta\s+name=["']twitter:[^"']*["'][^>]*>/gi, "")
-    .replace(/<link\s+rel=["']canonical["'][^>]*>/gi, "")
+    // `[^>]*` before the attribute as well as after it, so a tag already
+    // carrying a marker attribute in the template is matched and replaced
+    // rather than left behind as a duplicate.
+    .replace(/<meta[^>]*\sname=["'](title|description|keywords|robots|author|language)["'][^>]*>/gi, "")
+    .replace(/<meta[^>]*\sproperty=["']og:[^"']*["'][^>]*>/gi, "")
+    .replace(/<meta[^>]*\sname=["']twitter:[^"']*["'][^>]*>/gi, "")
+    .replace(/<link[^>]*\srel=["']canonical["'][^>]*>/gi, "")
     .replace(/<script\s+type=["']application\/ld\+json["'][\s\S]*?<\/script>/gi, "");
 
 const injectIntoHead = (template, headHtml) => {
@@ -170,8 +182,50 @@ const setHtmlLang = (html, lang) =>
 // Tag builders
 // ---------------------------------------------------------------------------
 
-const metaTag = (attr, key, value) =>
-  value ? `    <meta ${attr}="${escapeAttr(key)}" content="${escapeAttr(value)}" />` : null;
+/**
+ * Tags the React app re-declares for itself once it mounts.
+ *
+ * Each is written with `data-seo-ssr="1"`, and Frontend/src/components/SEO.jsx
+ * removes every element carrying that attribute on mount. The hand-off is
+ * explicit for a reason worth recording.
+ *
+ * On React 19, react-helmet-async delegates to React's own metadata hoisting
+ * rather than running its own DOM reconciler. The tags React emits carry no
+ * marker attribute, and React does not remove look-alike tags that were already
+ * in the HTML — it appends its own alongside them. A server-injected canonical
+ * plus a React canonical is two canonicals, which is exactly the mistake this
+ * setup exists to prevent. An earlier attempt marked these with Helmet's own
+ * `data-rh` attribute, which does nothing here because the reconciler that
+ * reads it never runs on React 19.
+ *
+ * So the server labels its copies and the client deletes them once it has taken
+ * over. Crawlers that never run JavaScript keep the server's tags; browsers end
+ * up with exactly one of each.
+ *
+ * Anything NOT in this set — keywords, robots, author, the article:* fields —
+ * is left unlabelled on purpose. React never re-declares those, so deleting
+ * them would simply lose them.
+ */
+const CLIENT_MANAGED = new Set([
+  "description",
+  "og:title",
+  "og:description",
+  "og:url",
+  "og:type",
+  "og:site_name",
+  "og:locale",
+  "og:image",
+  "twitter:card",
+  "twitter:title",
+  "twitter:description",
+  "twitter:image",
+]);
+
+const metaTag = (attr, key, value) => {
+  if (!value) return null;
+  const ssr = CLIENT_MANAGED.has(key) ? ' data-seo-ssr="1"' : "";
+  return `    <meta${ssr} ${attr}="${escapeAttr(key)}" content="${escapeAttr(value)}" />`;
+};
 
 /**
  * Builds the complete managed <head> for a blog post.
@@ -183,7 +237,7 @@ const metaTag = (attr, key, value) =>
 const buildBlogHead = (blog) => {
   const url = blogUrl(blog.permalink);
   const canonical = absoluteUrl(blog.canonical_url, url);
-  const title = collapse(blog.meta_title || blog.title, 70) || SITE.name;
+  const title = collapse(blog.meta_title || blog.title) || SITE.name;
   const directAnswer = collapse(blog.direct_answer, 300);
   const description =
     collapse(blog.metaDescription, 160) ||
@@ -216,7 +270,7 @@ const buildBlogHead = (blog) => {
     metaTag("name", "googlebot", `${robots}, max-image-preview:large, max-snippet:-1`),
     metaTag("name", "author", author),
     metaTag("name", "language", SITE.language),
-    `    <link rel="canonical" href="${escapeAttr(canonical)}" />`,
+    `    <link data-seo-ssr="1" rel="canonical" href="${escapeAttr(canonical)}" />`,
 
     // ---- Open Graph ----
     metaTag("property", "og:type", "article"),
@@ -364,14 +418,15 @@ const renderBlogHtml = (blog) => {
 const buildSiteHead = ({ title, description, url, image, robots = "index,follow" } = {}) => {
   const pageUrl = url || `${SITE.url}/`;
   const pageImage = image || SITE.defaultOgImage;
-  const pageTitle = collapse(title || SITE.name, 70);
+  // Not truncated: see the note on titles in buildBlogHead.
+  const pageTitle = collapse(title || SITE.name);
   const pageDescription = collapse(description || SITE.description, 160);
 
   const tags = [
     `    <title>${escapeAttr(pageTitle)}</title>`,
     metaTag("name", "description", pageDescription),
     metaTag("name", "robots", `${robots}, max-image-preview:large, max-snippet:-1`),
-    `    <link rel="canonical" href="${escapeAttr(pageUrl)}" />`,
+    `    <link data-seo-ssr="1" rel="canonical" href="${escapeAttr(pageUrl)}" />`,
     metaTag("property", "og:type", "website"),
     metaTag("property", "og:site_name", SITE.name),
     metaTag("property", "og:locale", SITE.locale),
@@ -400,19 +455,24 @@ const renderBlogListHtml = (posts = []) => {
   const template = readTemplate();
   if (!template) return null;
 
+  // Title and description come from the shared route table, not from a string
+  // written here. /blogs is one of the six routes the React app also declares,
+  // and two different descriptions of the same page is exactly the mismatch
+  // that table exists to prevent.
+  const listMeta = metaForRoute("/blogs");
+
   const head = [
     buildSiteHead({
-      title: `Blog — ${SITE.name}`,
-      description:
-        "Articles on digital marketing, SEO, paid advertising and web development from the Genie Media & Studio team in Visakhapatnam.",
-      url: `${SITE.url}/blogs`,
+      title: listMeta.title,
+      description: listMeta.description,
+      url: listMeta.canonical,
     }).replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, ""),
     `    <script type="application/ld+json">${escapeJsonLd(generateBlogListSchema(posts))}</script>`,
   ].join("\n");
 
   const list = [
     '<div class="seo-prerender">',
-    `<h1>Blog — ${escapeAttr(SITE.name)}</h1>`,
+    `<h1>${escapeAttr(listMeta.title)}</h1>`,
     "<ul>",
     ...posts.slice(0, 50).map(
       (p) =>

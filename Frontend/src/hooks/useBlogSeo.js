@@ -1,20 +1,27 @@
 import { useEffect } from "react";
 
 /**
- * Keeps the document head in sync with the post being displayed.
+ * Head tags for a blog post that <SEO> does not already cover.
  *
- * The server already injects a complete head for the first request to
- * /blog/<slug> (Backend/services/htmlInjector.js), which is what crawlers and
- * AI bots read. This hook covers the case that injection cannot: a client-side
- * navigation, where React swaps the page without a new HTTP request and the head
- * would otherwise still describe whatever page the visitor arrived on.
+ * WHO OWNS WHAT, because getting this wrong is how you end up with two
+ * canonicals that disagree:
  *
- * That matters for anyone who hits "share" after browsing, for the tab title,
- * and for the in-page JSON-LD staying truthful about what is on screen.
+ *   src/components/SEO.jsx   title, description, canonical, og:title,
+ *   (react-helmet-async)     og:description, og:url, og:type, og:image,
+ *                            og:site_name, og:locale, twitter:*
  *
- * Everything written here is tagged with data-blog-seo so it can be removed
- * cleanly on unmount, without disturbing the server-injected tags of the
- * original page load.
+ *   this hook                keywords, robots, author, the article:* timestamps
+ *                            and section, and the JSON-LD graph
+ *
+ * They must not overlap. Helmet rewrites every tag marked `data-rh` on each
+ * render, so anything this hook wrote into one of those tags would be wiped the
+ * next time any route rendered — or worse, survive as a stale duplicate. The
+ * split above keeps exactly one owner per tag.
+ *
+ * As before, this exists for client-side navigation. The server already injects
+ * a complete head on the first request to /blog/<slug>; this covers the case
+ * where React swaps the page without a new HTTP request and the head would
+ * otherwise still describe wherever the visitor arrived from.
  */
 
 const SITE_URL = "https://geniemedia.in";
@@ -36,7 +43,7 @@ const upsertMeta = (attr, key, content) => {
   let el = document.head.querySelector(selector);
 
   if (el) {
-    // Remember what the server put there so it can be restored on unmount.
+    // Remember what was there so it can be put back on unmount.
     if (!el.hasAttribute(MARKER) && !el.hasAttribute("data-blog-seo-prev")) {
       el.setAttribute("data-blog-seo-prev", el.getAttribute("content") || "");
     }
@@ -63,29 +70,20 @@ const restoreMeta = (attr, key) => {
   }
 };
 
+// Only the tags this hook owns. Nothing here overlaps with <SEO>.
 const MANAGED = [
-  ["name", "description"],
   ["name", "keywords"],
   ["name", "robots"],
   ["name", "author"],
-  ["property", "og:type"],
-  ["property", "og:title"],
-  ["property", "og:description"],
-  ["property", "og:image"],
-  ["property", "og:url"],
   ["property", "article:published_time"],
   ["property", "article:modified_time"],
   ["property", "article:section"],
-  ["name", "twitter:card"],
-  ["name", "twitter:title"],
-  ["name", "twitter:description"],
-  ["name", "twitter:image"],
 ];
 
 /**
- * Builds the same JSON-LD graph the server emits, minus the nodes that depend on
- * data the browser does not have. It is written under a marked <script> so it
- * replaces rather than duplicates the server's block for this page.
+ * Builds the same JSON-LD graph the server emits, minus the nodes that depend
+ * on data the browser does not have. It is written under a marked <script> so
+ * it replaces rather than duplicates the server's block for this page.
  */
 const buildJsonLd = (blog) => {
   const url = `${SITE_URL}/blog/${cleanSlug(blog.permalink)}`;
@@ -102,6 +100,7 @@ const buildJsonLd = (blog) => {
       headline: (blog.meta_title || blog.title || "").slice(0, 110),
       description:
         blog.direct_answer || blog.metaDescription || stripHtml(blog.description).slice(0, 200),
+      abstract: blog.direct_answer || undefined,
       image: blog.image ? [blog.image] : undefined,
       datePublished: iso(blog.createdAt),
       dateModified: iso(blog.last_modified_at || blog.updatedAt || blog.createdAt),
@@ -140,10 +139,16 @@ const buildJsonLd = (blog) => {
     },
   ];
 
-  if (blog.direct_answer) {
-    graph[0].speakable = {
-      "@type": "SpeakableSpecification",
-      cssSelector: [".geo-direct-answer", ".aeo-answer-text", "h1"],
+  const areas = Array.isArray(blog.areas_covered) ? blog.areas_covered.filter(Boolean) : [];
+  if (areas.length) {
+    graph[0].areaServed = areas.map((name) => ({ "@type": "Place", name }));
+  }
+
+  if (String(blog.reviewer_name || "").trim()) {
+    graph[0].reviewedBy = {
+      "@type": "Person",
+      name: blog.reviewer_name,
+      jobTitle: blog.reviewer_role || undefined,
     };
   }
 
@@ -170,43 +175,19 @@ export default function useBlogSeo(blog) {
   useEffect(() => {
     if (!blog || !blog.title) return undefined;
 
-    const url = `${SITE_URL}/blog/${cleanSlug(blog.permalink)}`;
-    const title = blog.meta_title || blog.title;
-    const description =
-      blog.metaDescription || blog.direct_answer || stripHtml(blog.description).slice(0, 160);
+    const iso = (v) => {
+      if (!v) return "";
+      const d = new Date(Number(v) || v);
+      return Number.isNaN(d.getTime()) ? "" : d.toISOString();
+    };
 
-    const previousTitle = document.title;
-    document.title = title;
-
-    upsertMeta("name", "description", description);
     upsertMeta("name", "keywords", blog.keywords || "");
     upsertMeta("name", "robots", `${blog.robots_directive || "index,follow"}, max-image-preview:large`);
     upsertMeta("name", "author", blog.author_name || "Genie Media Editorial Team");
-
-    upsertMeta("property", "og:type", "article");
-    upsertMeta("property", "og:title", title);
-    upsertMeta("property", "og:description", description);
-    upsertMeta("property", "og:image", blog.og_image_url || blog.image || "");
-    upsertMeta("property", "og:url", url);
+    upsertMeta("property", "article:published_time", iso(blog.createdAt));
+    upsertMeta("property", "article:modified_time", iso(blog.last_modified_at || blog.updatedAt));
     upsertMeta("property", "article:section", blog.category || "");
 
-    upsertMeta("name", "twitter:card", "summary_large_image");
-    upsertMeta("name", "twitter:title", title);
-    upsertMeta("name", "twitter:description", description);
-    upsertMeta("name", "twitter:image", blog.og_image_url || blog.image || "");
-
-    // Canonical
-    let canonical = document.head.querySelector('link[rel="canonical"]');
-    const previousCanonical = canonical ? canonical.getAttribute("href") : null;
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      canonical.setAttribute(MARKER, "");
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute("href", blog.canonical_url || url);
-
-    // JSON-LD
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.setAttribute(MARKER, "");
@@ -214,11 +195,8 @@ export default function useBlogSeo(blog) {
     document.head.appendChild(script);
 
     return () => {
-      document.title = previousTitle;
       MANAGED.forEach(([attr, key]) => restoreMeta(attr, key));
       script.remove();
-      if (canonical.hasAttribute(MARKER)) canonical.remove();
-      else if (previousCanonical) canonical.setAttribute("href", previousCanonical);
     };
   }, [blog]);
 }

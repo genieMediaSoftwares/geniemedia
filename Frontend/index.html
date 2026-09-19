@@ -3,15 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GenieMedia & Studio</title>
+    <!--
+      DEFAULT / HOME-PAGE METADATA ONLY.
 
-    <meta name="title" content="Digital Marketing Agency in Visakhapatnam | SEO, Ads & Social Media - Genie Media">
-    <meta name="description" content="Genie Media is a leading digital marketing agency in Visakhapatnam offering SEO, Google Ads, social media marketing, and website development services to grow your business online.">
+      These three tags are what a visitor or a crawler sees before React has
+      run, so they describe the home page and nothing else. Every other route
+      replaces them from src/seo/routeMeta.js the moment the app mounts.
+
+      `data-seo-ssr="1"` marks a tag as a pre-React default. The SEO component
+      in src/components/SEO.jsx removes every element carrying it once the app
+      has mounted and declared its own. Without that hand-off /about ends up
+      with two canonicals pointing at different URLs, because React 19 appends
+      the metadata it renders rather than reconciling it against whatever was
+      already sitting in the HTML.
+
+      Do not add the other routes' tags here. Six canonicals in one document is
+      worse than none.
+    -->
+    <title>Genie Media | Digital Marketing Agency in Visakhapatnam</title>
+
+    <meta name="title" content="Genie Media | Digital Marketing Agency in Visakhapatnam">
+    <meta data-seo-ssr="1" name="description" content="Genie Media is a digital marketing agency in Visakhapatnam offering SEO, Google Ads, social media marketing, website development and online growth services.">
     <meta name="keywords" content="digital marketing agency in visakhapatnam, digital marketing services near me, affordable seo services in vizag, social media marketing vizag, google ads agency in vizag, website development company in visakhapatnam, best digital marketing agency for small business in vizag, local seo services in visakhapatnam, google my business optimization services india, lead generation services for small business india, ">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
 
-    <link rel="canonical" href="https://geniemedia.in/" />
+    <link data-seo-ssr="1" rel="canonical" href="https://geniemedia.in/" />
     <link rel="icon" type="image/png" href="/GenieMedia-Logo.png" />
     <link rel="apple-touch-icon" href="/GenieMedia-Logo.png" />
   </head>
