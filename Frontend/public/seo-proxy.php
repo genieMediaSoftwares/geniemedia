@@ -30,7 +30,7 @@ declare(strict_types=1);
 // Configuration
 // ---------------------------------------------------------------------------
 
-const API_BASE      = 'https://geniemedia.onrender.com';
+const API_BASE      = 'https://geniemedia-81qf.onrender.com';
 const CACHE_DIR     = __DIR__ . '/.seo-cache';
 const CACHE_TTL     = 900;   // 15 minutes for generated files
 const BLOG_TTL      = 300;   // 5 minutes for rendered blog HTML

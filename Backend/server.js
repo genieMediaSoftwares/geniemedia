@@ -31,8 +31,8 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "https://geniemedia.in",
-  "https://www.geniemedia.in",  // ✅ FIX 1: added www variant (no trailing slash)
-  "https://genie-media-studio.vercel.app/",
+  "https://www.geniemedia.in",
+  "https://genie-media-studio.vercel.app",
 ];
 
 const corsOptions = {
@@ -40,9 +40,12 @@ const corsOptions = {
     // Allow requests with no origin (mobile apps, curl, Postman, server-to-server)
     if (!origin) return callback(null, true);
 
-    const isAllowed = allowedOrigins.some((allowed) =>
-      origin.startsWith(allowed)
-    );
+    const cleanOrigin = origin.replace(/\/+$/, "");
+
+    const isAllowed = allowedOrigins.some((allowed) => {
+      const cleanAllowed = allowed.replace(/\/+$/, "");
+      return cleanOrigin === cleanAllowed || cleanOrigin.startsWith(cleanAllowed);
+    });
 
     if (isAllowed) return callback(null, true);
 

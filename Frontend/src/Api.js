@@ -6,7 +6,7 @@
 // without producing a double slash (`//api/...`), which Express treats as a
 // different path and answers with 404.
 const BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || "https://geniemedia.onrender.com"
+  import.meta.env.VITE_API_BASE_URL || "https://geniemedia-81qf.onrender.com"
 ).replace(/\/+$/, "");
 // const BASE_URL = "http://localhost:5000";
 export default BASE_URL;
