@@ -66,6 +66,7 @@ const SITE = {
     "https://m.facebook.com/826093997257312/",
     "https://www.instagram.com/itsgeniemedia_official/",
     "https://www.youtube.com/@itsgeniemedia_official",
+    "https://www.linkedin.com/company/itsgeniemediaofficial",
   ],
 };
 

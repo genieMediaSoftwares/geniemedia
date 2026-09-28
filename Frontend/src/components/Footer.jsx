@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from '../assets/GenieMedia-Logo.png'
-import { Mail, Phone, MapPin, Facebook, Instagram, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Instagram, Youtube, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   const services = [
@@ -75,6 +75,15 @@ const company = [
                 className="w-11 h-11 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300"
               >
                 <Youtube className="w-5 h-5" aria-hidden="true" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/itsgeniemediaofficial"
+                aria-label="Genie Media & Studio on LinkedIn"
+                rel="noopener noreferrer"
+                target="_blank"
+                className="w-11 h-11 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300"
+              >
+                <Linkedin className="w-5 h-5" aria-hidden="true" />
               </a>
             </div>
           </div>
