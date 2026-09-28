@@ -26,6 +26,76 @@ const IMG_SIZE = {
   [set]: LANDSCAPE,
 };
 
+const inlineLink = "text-orange-700 underline underline-offset-2 hover:text-orange-900";
+
+const PODCAST_SERVICES = [
+  {
+    title: "Studio-only hire",
+    body: "Use the studio and its set on your own, from ₹1,500 for one hour.",
+  },
+  {
+    title: "Video podcast with our team",
+    body: "Our production team runs the session with two cameras (from ₹3,999 an hour) or three cameras (from ₹5,000 an hour).",
+  },
+  {
+    title: "Audio podcasts and interviews",
+    body: "Two microphones on boom arms and a Zoom PodTrak P8 recorder, for solo shows and two-person conversations.",
+  },
+  {
+    title: "Editing and post-production",
+    body: (
+      <>
+        Video and photo editing is available at an additional charge. For shoots
+        beyond the studio, see our{" "}
+        <a href="/production_house" className={inlineLink}>video production services</a>.
+      </>
+    ),
+  },
+];
+
+const PODCAST_FAQS = [
+  {
+    q: "Where is the podcast studio?",
+    a: "At Genie Media & Studio, 5A2, 4th Floor, KP Icon, KP Infra, Yendada, Visakhapatnam 530045.",
+  },
+  {
+    q: "How much does it cost to record a podcast?",
+    a: "Studio-only hire starts at ₹1,500 an hour. With our team, sessions start at ₹3,999 an hour with two cameras or ₹5,000 with three. Two- and three-hour rates are listed in the packages above.",
+  },
+  {
+    q: "Can I record a video podcast?",
+    a: "Yes. The team packages include two or three cameras, operated by our production team.",
+  },
+  {
+    q: "I have never recorded a podcast. Can I still book?",
+    a: "Yes. With a team package, our crew handles the setup and supports you through the recording.",
+  },
+  {
+    q: "Do you edit the podcast?",
+    a: "Video and photo editing is available for an additional charge. Mention it when you book.",
+  },
+  {
+    q: "Can businesses use the studio?",
+    a: (
+      <>
+        Yes. Businesses book it for interviews and brand podcasts, and our{" "}
+        <a href="/digital_marketing" className={inlineLink}>social media marketing team</a>{" "}
+        can help promote the episodes.
+      </>
+    ),
+  },
+  {
+    q: "How do I book?",
+    a: (
+      <>
+        Use the booking form above, message us on WhatsApp at{" "}
+        <a href="https://wa.me/919032845433" className={inlineLink}>+91 90328 45433</a>, or{" "}
+        <a href="/contact" className={inlineLink}>contact our studio</a>.
+      </>
+    ),
+  },
+];
+
 /** <img> with explicit dimensions, lazy loading and async decoding. */
 const StudioImg = ({ src, alt, className }) => (
   <img
@@ -110,19 +180,19 @@ useEffect(() => {
         <div className="bg-gradient bg-gradient-2"></div>
 
         <h1 className="hero-title1">
-          <span>YOUR PODCAST BEGINS HERE</span>
+          <span>YOUR PODCAST STUDIO</span>
           <br />
           <span>IN</span>
           <span className="highlight">VISAKHAPATNAM</span>
         </h1>
 
         <p className="hero-description1">
-          Bring your voice to life at Genie Studio, the city’s most trusted
-          podcast recording and content creation space.
+          Bring your voice to life at Genie Studio. Record audio and video
+          podcasts with our production team and up to three cameras.
         </p>
 
         <div className="hero-cta">
-          <a href="https://wa.me/+919032845433" className="btn btn-primary">
+          <a href="https://wa.me/919032845433" className="btn btn-primary">
             Book Studio
           </a>
         </div>
@@ -140,9 +210,9 @@ useEffect(() => {
 
         <div className="marquee-container">
           <div className="marquee-track">
-            <StudioImg src={mics} alt="Studio microphones" />
-            <StudioImg src={nytview} alt="The studio at night" />
-            <StudioImg src={set} alt="Podcast set" />
+            <StudioImg src={mics} alt="Podcast microphones" />
+            <StudioImg src={nytview} alt="Podcast set with a white panelled wall" />
+            <StudioImg src={set} alt="Two-seat podcast set with boom microphones" />
             <StudioImg src={light} alt="Studio lighting" />
             <StudioImg src={cameras} alt="Studio cameras" />
 
@@ -169,7 +239,7 @@ useEffect(() => {
               high-quality acoustics, professional support, and more.
             </p>
             <a
-              href="https://wa.me/+919032845433"
+              href="https://wa.me/919032845433"
               className="cta-button"
             >
               Get Started
@@ -210,13 +280,13 @@ useEffect(() => {
             </div>
 
             <div className="studio-image large">
-              <StudioImg src={set2} alt="Red studio setup" />
+              <StudioImg src={set2} alt="Blue podcast set with two armchairs, microphones and studio lights" />
             </div>
           </div>
 
           <div className="right-column">
             <div className="studio-image small">
-              <StudioImg src={nytview} alt="Studio setup at night" />
+              <StudioImg src={nytview} alt="White podcast set with two boom microphones" />
             </div>
 
             <div className="studio-image small">
@@ -227,6 +297,42 @@ useEffect(() => {
 
       </section>
 
+      {/* WHO CAN USE THE STUDIO */}
+      <section className="bg-white text-black px-5 py-16 sm:py-20" id="who-can-use">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="section-title text-center">Who can use our podcast studio?</h2>
+          <p className="max-w-3xl mx-auto text-center text-lg text-gray-700 leading-relaxed -mt-8 mb-12">
+            Our podcast studio in Visakhapatnam is built for creators, businesses, entrepreneurs and professionals who want high-quality recordings without the hassle of setting up their own space.
+          </p>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                title: "Content Creators",
+                body: "Record YouTube podcasts, interview episodes and series episodes with professional cameras and audio. Walk in and start recording.",
+              },
+              {
+                title: "Businesses",
+                body: "Use the studio for brand podcasts, internal communications and customer-facing interview series. Our production team handles the setup.",
+              },
+              {
+                title: "Entrepreneurs & Professionals",
+                body: "Build thought leadership and personal branding through podcasting. Two microphones and a comfortable set make every conversation feel natural.",
+              },
+              {
+                title: "Interview Podcasts",
+                body: "Perfect for two-person conversations. Boom microphones, acoustic treatment and a Zoom PodTrak P8 recorder keep both voices crystal clear.",
+              },
+            ].map(({ title, body }) => (
+              <div key={title} className="bg-gray-50 rounded-2xl p-6 shadow-sm">
+                <h3 className="text-xl font-bold mb-2">{title}</h3>
+                <p className="text-gray-700 leading-relaxed">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* EQUIPMENT SECTION */}
       <section className="furniture-section" id="equipment">
         <h2 className="section-title">
@@ -235,12 +341,12 @@ useEffect(() => {
 
         <div className="furniture-container">
           <div className="furniture-item">
-            <StudioImg src={set2} alt="Complete podcast setup" />
+            <StudioImg src={set2} alt="Complete podcast set with seating and microphones" />
             <p className="item-text">1 x complete podcast setup</p>
           </div>
 
           <div className="furniture-item">
-            <StudioImg src={mics} alt="High-quality microphones" />
+            <StudioImg src={mics} alt="Two podcast microphones" />
             <p className="item-text">2 x high-quality mic</p>
           </div>
         </div>
@@ -250,12 +356,12 @@ useEffect(() => {
       <section className="sbf-section">
         <div className="sbf-grid">
           <figure className="sbf-card sbf-left">
-            <StudioImg src={cameras} alt="High-quality cameras" />
+            <StudioImg src={cameras} alt="Cameras for video podcast recording" />
             <figcaption>3 x high-quality camera</figcaption>
           </figure>
 
           <figure className="sbf-card sbf-right">
-            <StudioImg src={output} alt="Recording output" />
+            <StudioImg src={output} alt="Zoom PodTrak P8 podcast recorder" />
             <figcaption>4 x excellent output</figcaption>
           </figure>
 
@@ -267,6 +373,49 @@ useEffect(() => {
       </section>
 
       <PodcastStudioBooking/>
+
+      {/* SERVICES, BOOKING AND FAQ
+          Every fact here comes from the booking widget above (packages, prices,
+          hourly slots, WhatsApp confirmation), the podcast tab of
+          components/AllServices.jsx (editing at extra charge, team support) or
+          the address in the footer. Keep them in step. */}
+      <section className="bg-[#f1f1f1] text-black px-5 py-16 sm:py-20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="section-title text-center">Podcast recording in Visakhapatnam</h2>
+          <p className="max-w-3xl mx-auto text-center text-lg text-gray-700 leading-relaxed -mt-8 mb-12">
+            Book the studio on your own, or with our production team running two or
+            three cameras. It suits video podcasts, interviews and YouTube shows for
+            creators, businesses and professionals.
+          </p>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            {PODCAST_SERVICES.map(({ title, body }) => (
+              <div key={title} className="bg-white rounded-2xl p-6 shadow-sm">
+                <h3 className="text-xl font-bold mb-2">{title}</h3>
+                <p className="text-gray-700 leading-relaxed">{body}</p>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="section-title text-center mt-20">How to book the studio</h2>
+          <ol className="max-w-3xl mx-auto -mt-8 space-y-3 text-lg text-gray-700 list-decimal pl-6">
+            <li>Choose a package above: studio only, or studio with our team and two or three cameras.</li>
+            <li>Pick a date and an hourly slot between 10 am and 7 pm.</li>
+            <li>Add your name, email, phone number and any notes.</li>
+            <li>Send the booking to us on WhatsApp to confirm your slot.</li>
+          </ol>
+
+          <h2 className="section-title text-center mt-20">Podcast studio FAQs</h2>
+          <div className="max-w-3xl mx-auto -mt-8 space-y-8">
+            {PODCAST_FAQS.map(({ q, a }) => (
+              <div key={q}>
+                <h3 className="text-xl font-bold mb-2">{q}</h3>
+                <p className="text-gray-700 text-lg leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* TESTIMONIAL SECTION */}
       <section className="testimonial-section" id="reviews">
@@ -349,14 +498,9 @@ useEffect(() => {
           </div>
 
           <div className="testimonial-cta">
-            <button
-              className="cta-button"
-              onClick={() =>
-                window.open("/contact", "_blank")
-              }
-            >
+            <a href="/contact" target="_blank" rel="noopener" className="cta-button">
               Book Your Session Today
-            </button>
+            </a>
           </div>
         </div>
       </section>

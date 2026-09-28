@@ -9,6 +9,8 @@ import { WEBSITES_VIDEO_URL } from '../config/media';
 
 
 
+const inlineLink = "text-orange-700 underline underline-offset-2 hover:text-orange-900";
+
 export default function WebDevPg() {
 
    
@@ -19,17 +21,34 @@ export default function WebDevPg() {
     {
       title: "Expert Team of Designers & Developers",
       content: "Our projects are crafted by a talented team of UI/UX designers, front-end & back-end developers, and technical strategists. With years of hands-on experience across diverse industries, we ensure every website is built with precision, creativity, and the latest best practices. Our collaborative process guarantees high-quality results from concept to launch."},
+    // These three used to be copied from the digital marketing page (campaigns,
+    // KPIs, "Fortune 500 companies", "millions in revenue"). They now describe
+    // this service, using only what the rest of the site shows.
     {
-      title: "Strategy-First Approach",
-      content: "We don't just execute tactics—we build comprehensive marketing strategies tailored to your business goals. Our data-driven approach ensures every campaign is backed by insights, market research, and measurable KPIs that drive real business growth."
+      title: "Planning Before Code",
+      content: "Every build starts with your goals, audience and content. We plan the pages and features and choose the right platform (WordPress, Shopify or custom code) before design begins."
     },
     {
-      title: "Full-Service Expertise",
-      content: "From brand development and content creation to digital advertising and social media management, we offer end-to-end marketing solutions. Our diverse team of specialists collaborates seamlessly to deliver integrated campaigns that resonate across all channels."
+      title: "Websites, Marketing and Media Under One Roof",
+      content: (
+        <>
+          The team that builds your website can also run its{" "}
+          <a href="/digital_marketing" className={inlineLink}>SEO, social media and ads</a>{" "}
+          and shoot its{" "}
+          <a href="/production_house" className={inlineLink}>photos and videos</a>.
+        </>
+      )
     },
     {
-      title: "Proven Track Record",
-      content: "We've helped businesses of all sizes—from startups to Fortune 500 companies—achieve remarkable results. Our portfolio includes successful product launches, brand repositioning, and campaigns that have generated millions in revenue for our clients."
+      title: "Work You Can Check",
+      content: (
+        <>
+          We have built business websites and online stores for clients in India,
+          Australia and the US. Every one is listed in{" "}
+          <a href="/projects" className={inlineLink}>our portfolio</a>{" "}
+          with a link to the live site.
+        </>
+      )
     },
     {
       title: "Transparent Communication",
@@ -76,9 +95,11 @@ export default function WebDevPg() {
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
                   src= {web_services_hero}
-                  alt="Web development services" 
+                  alt="Web development concept with icons for code, devices and global websites"
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
-                  loading='lazy'
+                  // The Largest Contentful Paint element on this route, so it
+                  // is fetched immediately rather than lazily.
+                  fetchPriority="high"
                   width="848"
                   height="477"
                   decoding="async"
@@ -170,14 +191,14 @@ export default function WebDevPg() {
           {/* Left Column - Content */}
           <div className="lg:sticky lg:top-24">
             <h2 className="text-2xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Why Choose Genie Media as Your Marketing Agency?
+              Why Choose Genie Media for Your Website?
             </h2>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              With a proven track record of delivering high-impact marketing solutions for businesses from startups to established enterprises, we have earned a reputation as a trusted partner for all your marketing needs. Here are some reasons why our top clients have chosen us as their marketing agency:
+              From our office in Visakhapatnam we design, build and look after websites for startups and established businesses. Here is how we work:
             </p>
-            <button className="bg-orange-500 hover:bg-black text-black hover:text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl" onClick={() => window.location.href="https://wa.me/919032845433"}>
+            <a href="https://wa.me/919032845433" className="inline-block bg-orange-500 hover:bg-black text-black hover:text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
               Let's Discuss Your Project
-            </button>
+            </a>
           </div>
 
           {/* Right Column - Accordions */}

@@ -35,7 +35,10 @@ export default function Reviews() {
                 Reviews
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
-               Clients love our seamless blend of creative studio production and powerful digital marketing support-helping them record, create, and grow their brand all in one place.
+               Clients love our seamless blend of creative{" "}
+               <a href="/podcast_studio" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">studio production</a>{" "}
+               and powerful{" "}
+               <a href="/digital_marketing" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">digital marketing support</a>, helping them record, create, and grow their brand all in one place.
               </p>
             </div>
 
@@ -125,15 +128,9 @@ export default function Reviews() {
           </div>
 
           <div className="testimonial-cta">
-            <button
-              className="cta-button"
-              onClick={() =>
-                window.open("/contact", "_blank")
-              }
-            >
+            <a href="/contact" target="_blank" rel="noopener" className="cta-button">
               Book Your Session Today
-              
-            </button>
+            </a>
           </div>
         </div>
       </section>

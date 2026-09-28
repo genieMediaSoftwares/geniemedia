@@ -17,12 +17,15 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
   const [activeTab, setActiveTab] = useState('dm');
   const Heading = headingLevel === 'h1' ? 'h1' : 'h2';
 
+  // `href` is the service's own page. The tab heading links there, so the
+  // arrow beside it leads somewhere, and the home and /services pages give
+  // crawlers a real <a> to each service page.
   const tabs = [
-    { id: 'dm', label: 'Digital Marketing' },
-    { id: 'webdev', label: 'Web Development' },
-    { id: 'production', label: 'Production House' },
-    { id: 'podcast', label: 'Podcast Studio Rentals' },
-    
+    { id: 'dm', label: 'Digital Marketing', href: '/digital_marketing' },
+    { id: 'webdev', label: 'Web Development', href: '/web_development' },
+    { id: 'production', label: 'Production House', href: '/production_house' },
+    { id: 'podcast', label: 'Podcast Studio Rentals', href: '/podcast_studio' },
+
   ];
 
   const tabContent = {
@@ -164,6 +167,7 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
   };
 
   const currentContent = tabContent[activeTab];
+  const currentHref = tabs.find((tab) => tab.id === activeTab)?.href;
 
   return (
     <div className="bg-gray-100 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 mt-14">
@@ -171,11 +175,22 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
       <div className="max-w-7xl mx-auto">
         
         {/* Tabs Navigation */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <div className="flex flex-wrap justify-center gap-3 mb-12" role="tablist">
+          {/* Each tab is a real link to its service page, so every service URL
+              is in the HTML whichever tab is showing. A plain click switches
+              the tab in place, as the buttons did; a modified click (new tab,
+              new window) follows the link. */}
           {tabs.map((tab) => (
-            <button
+            <a
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              href={tab.href}
+              role="tab"
+              aria-selected={activeTab === tab.id}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+                e.preventDefault();
+                setActiveTab(tab.id);
+              }}
               className={`px-6 py-3 rounded-full font-semibold text-xs border-[1px] border-gray-800 sm:text-base transition-all duration-300 ${
                 activeTab === tab.id
                   ? 'bg-orange-500 text-black shadow-lg scale-105'
@@ -183,7 +198,7 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
               }`}
             >
               {tab.label}
-            </button>
+            </a>
           ))}
         </div>
 
@@ -193,8 +208,10 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
           {/* Header Section */}
           <div className="text-center max-w-4xl mx-auto space-y-4">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 flex items-center justify-center gap-3">
-              {currentContent.mainTitle}
-              <ArrowUpRight className="w-8 h-8 text-pink-600" />
+              <a href={currentHref} className="flex items-center justify-center gap-3">
+                {currentContent.mainTitle}
+                <ArrowUpRight className="w-8 h-8 text-pink-600" />
+              </a>
             </h2>
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
               {currentContent.mainDescription}

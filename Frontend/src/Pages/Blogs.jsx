@@ -224,7 +224,22 @@ export default function Blogs() {
                       )}
 
                       <h2 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 group-hover:text-[#6B4A2D] mb-2 sm:mb-3 line-clamp-3 transition-colors duration-300 leading-snug break-words [overflow-wrap:anywhere]">
-                        {blog.title}
+                        {/* A real link, so crawlers can reach each post from
+                            this page. A plain click still navigates in-app via
+                            the card's onClick; modified clicks (new tab, etc.)
+                            are left to the browser. */}
+                        <a
+                          href={`/blog/${blog.permalink}`}
+                          onClick={(e) => {
+                            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
+                              e.stopPropagation();
+                              return;
+                            }
+                            e.preventDefault();
+                          }}
+                        >
+                          {blog.title}
+                        </a>
                       </h2>
 
                       <p className="text-[11px] sm:text-xs md:text-sm text-slate-600 line-clamp-3 leading-relaxed mb-4 flex-1 break-words">

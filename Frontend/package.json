@@ -13,7 +13,8 @@
     "verify:routes": "node scripts/verify-routes.mjs http://localhost:5173",
     "verify:functionality": "node scripts/verify-functionality.mjs http://localhost:5173",
     "audit:contrast": "node scripts/audit-contrast.mjs http://localhost:5173 / /about /services /contact /reviews /projects /digital_marketing /web_development /production_house /podcast_studio /blogs",
-    "audit:headings": "node scripts/audit-headings.mjs http://localhost:5173 / /about /services /contact /reviews /projects /digital_marketing /web_development /production_house /podcast_studio /blogs"
+    "audit:headings": "node scripts/audit-headings.mjs http://localhost:5173 / /about /services /contact /reviews /projects /digital_marketing /web_development /production_house /podcast_studio /blogs",
+    "verify:live": "node scripts/verify-live-http.mjs"
   },
   "dependencies": {
     "@tiptap/extension-link": "^3.22.5",

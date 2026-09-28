@@ -121,7 +121,11 @@ const organizationSchema = () =>
       postalCode: SITE.address.postalCode,
       addressCountry: SITE.address.addressCountry,
     },
-    geo: { "@type": "GeoCoordinates", latitude: SITE.geo.latitude, longitude: SITE.geo.longitude },
+    // `geo` and `openingHoursSpecification` are deliberately not emitted until
+    // the owner confirms them: SITE.geo sits about 3 km from the KP Icon pin on
+    // the contact page map, and the hours in SITE.openingHours are not shown
+    // anywhere on the site. Add them back once config/site.js holds confirmed
+    // values.
     contactPoint: [
       {
         "@type": "ContactPoint",
@@ -132,12 +136,6 @@ const organizationSchema = () =>
         availableLanguage: SITE.contact.availableLanguage,
       },
     ],
-    openingHoursSpecification: SITE.openingHours.map((slot) => ({
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: slot.days,
-      opens: slot.opens,
-      closes: slot.closes,
-    })),
     sameAs: SITE.sameAs,
   });
 

@@ -26,28 +26,48 @@ const ORIGIN = "https://geniemedia.in";
 
 const EXPECTED = {
   "/": {
-    title: "Genie Media | Digital Marketing Agency in Visakhapatnam",
+    title: "Genie Media, Vizag | Digital Marketing, Podcast & Video Production",
     canonical: `${ORIGIN}/`,
   },
   "/services": {
-    title: "Digital Marketing Services in Visakhapatnam | Genie Media",
+    title: "Services | Marketing, Websites, Video & Podcast Studio | Genie Media",
     canonical: `${ORIGIN}/services`,
   },
   "/about": {
-    title: "About Genie Media | Digital Marketing Agency in Visakhapatnam",
+    title: "About Genie Media & Studio | Digital & Media Company in Visakhapatnam",
     canonical: `${ORIGIN}/about`,
   },
   "/projects": {
-    title: "Our Projects | Digital Marketing & Web Projects | Genie Media",
+    title: "Our Work | Website & E-commerce Projects | Genie Media",
     canonical: `${ORIGIN}/projects`,
   },
   "/contact": {
-    title: "Contact Genie Media | Digital Marketing Agency in Visakhapatnam",
+    title: "Contact Genie Media & Studio | Yendada, Visakhapatnam",
     canonical: `${ORIGIN}/contact`,
+  },
+  "/web_development": {
+    title: "Website Development Company in Visakhapatnam (Vizag) | Genie Media",
+    canonical: `${ORIGIN}/web_development`,
+  },
+  "/production_house": {
+    title: "Production House & Video Production in Vizag | Genie Media",
+    canonical: `${ORIGIN}/production_house`,
+  },
+  "/reviews": {
+    title: "Client Reviews & Testimonials | Genie Media & Studio",
+    canonical: `${ORIGIN}/reviews`,
   },
   "/blogs": {
     title: "Digital Marketing Blog | SEO, Marketing & Business Growth | Genie Media",
     canonical: `${ORIGIN}/blogs`,
+  },
+  "/digital_marketing": {
+    title: "Digital Marketing Company in Visakhapatnam (Vizag) | Genie Media",
+    canonical: `${ORIGIN}/digital_marketing`,
+  },
+  "/podcast_studio": {
+    title: "Podcast Studio in Visakhapatnam (Vizag) | Genie Media",
+    canonical: `${ORIGIN}/podcast_studio`,
   },
 };
 

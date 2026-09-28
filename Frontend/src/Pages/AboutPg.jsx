@@ -185,7 +185,7 @@ We blend design, storytelling, and technology to build meaningful brand experien
         </p>
 
         <p className="text-gray-700 text-lg leading-relaxed">
-         Our vision is to become a trusted growth partner for businesses by delivering impactful <span className="text-orange-800 font-medium">digital marketing solutions</span>{" "} that drive measurable results. 
+         Our vision is to become a trusted growth partner for businesses by delivering impactful <a href="/digital_marketing" className="text-orange-800 font-medium">digital marketing solutions</a>{" "} that drive measurable results. 
           
         </p>
       </div>

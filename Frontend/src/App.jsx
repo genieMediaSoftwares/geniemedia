@@ -27,6 +27,7 @@ const BlogDetail = lazy(() => import('./Pages/Blogdetail'));
 const AdminLogin = lazy(() => import('./Pages/AdminLogin'));
 const AdminBlogs = lazy(() => import('./Pages/AdminBlogs'));
 const AdminProjects = lazy(() => import('./Pages/AdminProjects'));
+const NotFound = lazy(() => import('./Pages/NotFound'));
 
 /**
  * Pairs a route element with its metadata.
@@ -46,7 +47,16 @@ function Seo({ path, children }) {
   const meta = metaForRoute(path);
   return (
     <>
-      {meta && <SEO title={meta.title} description={meta.description} canonical={meta.canonical} />}
+      {meta && <SEO title={meta.title} description={meta.description} canonical={meta.canonical} image={meta.image} />}
+      {/* JSON-LD is valid anywhere in the document, so it is rendered in place
+          rather than through Helmet. `<` is escaped so no string in the graph
+          can close the script element early. */}
+      {meta?.schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(meta.schema).replace(/</g, '\\u003c') }}
+        />
+      )}
       {children}
     </>
   );
@@ -98,12 +108,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Seo path="/"><HomePage /></Seo>} />
             <Route path="/about" element={<Seo path="/about"><AboutPage /></Seo>} />
-            <Route path="/digital_marketing" element={<DM />} />
-            <Route path="/web_development" element={<Web_dev />} />
-            <Route path="/production_house" element={<ProductionHouse />} />
-            <Route path="/podcast_studio" element={<PodcastStudio />} />
+            <Route path="/digital_marketing" element={<Seo path="/digital_marketing"><DM /></Seo>} />
+            <Route path="/web_development" element={<Seo path="/web_development"><Web_dev /></Seo>} />
+            <Route path="/production_house" element={<Seo path="/production_house"><ProductionHouse /></Seo>} />
+            <Route path="/podcast_studio" element={<Seo path="/podcast_studio"><PodcastStudio /></Seo>} />
             <Route path="/projects" element={<Seo path="/projects"><Projects /></Seo>} />
-            <Route path="/reviews" element={<Reviews />} />
+            <Route path="/reviews" element={<Seo path="/reviews"><Reviews /></Seo>} />
             <Route path="/contact" element={<Seo path="/contact"><ContactSec isPage /></Seo>} />
             <Route path="/services" element={<Seo path="/services"><TabbedServices headingLevel="h1" /></Seo>} />
             <Route path="/admin" element={<AdminLogin />} />
@@ -128,6 +138,7 @@ function App() {
 
             <Route path="/blogs" element={<Seo path="/blogs"><Blogs /></Seo>} />
             <Route path="/blog/*" element={<BlogDetail />} />
+            <Route path="*" element={<NotFound />} />
 
           </Routes>
         </Suspense>

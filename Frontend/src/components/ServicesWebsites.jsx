@@ -143,23 +143,28 @@ export default function ServicesSection2() {
             <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
               Let's collaborate to create something extraordinary that drives real results for your business
             </p>
-            <button 
+            <a
               className="bg-white text-orange-700 px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-100 transform hover:scale-110 transition-all duration-300 shadow-2xl hover:shadow-white/50 inline-flex items-center gap-3 group"
-              onClick={() => window.location.href="/contact"}
+              href="/contact"
             >
               <span>Start Your Project</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
+            </a>
           </div>
         </div>
 
-        {/* Stats Section */}
+        {/* Stats Section
+            Only figures a visitor can check on this site: the live portfolio
+            (/projects), its clients' countries, the platforms above and the
+            services on this page. "800+ projects", "98% satisfaction", "50+
+            clients" and "24/7 support" used to sit here with nothing behind
+            them. */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
           {[
-            { number: "800+", label: "Projects Completed" },
-            { number: "98%", label: "Client Satisfaction" },
-            { number: "50+", label: "Happy Clients" },
-            { number: "24/7", label: "Support Available" }
+            { number: "10+", label: "Websites Launched" },
+            { number: "3", label: "Countries Served" },
+            { number: "3", label: "Platforms: WordPress, Shopify, Custom" },
+            { number: "7", label: "Web Services" }
           ].map((stat, index) => (
             <div 
               key={index}

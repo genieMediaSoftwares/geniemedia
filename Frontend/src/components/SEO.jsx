@@ -51,9 +51,17 @@ export default function SEO({
     document.querySelectorAll(HANDOFF_SELECTOR).forEach((el) => el.remove());
   }, [title, description, canonical, image, type]);
 
+  // The title is written into the document's existing <title> rather than
+  // rendered through Helmet. On React 19 a rendered <title> is hoisted as a
+  // second element beside the one in index.html (or the build-time head), so
+  // every route ended up with two. Assigning document.title updates the one
+  // that is already there.
+  useEffect(() => {
+    if (title) document.title = title;
+  }, [title]);
+
   return (
     <Helmet prioritizeSeoTags>
-      {title ? <title>{title}</title> : null}
       {description ? <meta name="description" content={description} /> : null}
       {canonical ? <link rel="canonical" href={canonical} /> : null}
 

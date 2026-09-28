@@ -12,6 +12,22 @@ import BASE_URL from "../Api";
  *                          empty response renders an empty grid, so deleting
  *                          every project in the admin panel really empties it.
  */
+/**
+ * The service page each admin project category belongs to, so a portfolio card
+ * can link the work to the service that produced it. A category not listed
+ * here renders without a link rather than pointing somewhere wrong.
+ */
+const SERVICE_FOR_CATEGORY = {
+  "web development": { href: "/web_development", label: "Web Development" },
+  "e-commerce": { href: "/web_development", label: "E-commerce Website" },
+  "digital marketing": { href: "/digital_marketing", label: "Digital Marketing" },
+  "production": { href: "/production_house", label: "Video Production" },
+  "podcast": { href: "/podcast_studio", label: "Podcast" },
+};
+
+export const serviceForCategory = (category) =>
+  SERVICE_FOR_CATEGORY[String(category || "").trim().toLowerCase()] || null;
+
 export default function usePublishedProjects(fallback = []) {
   const [projects, setProjects] = useState(null); // null = not loaded / failed
   const [loading, setLoading] = useState(true);

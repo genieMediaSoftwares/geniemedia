@@ -15,7 +15,7 @@ import Shopify from '../assets/shopify.webp'
 import Code from '../assets/code.png'
 
 
-import usePublishedProjects from '../hooks/usePublishedProjects'
+import usePublishedProjects, { serviceForCategory } from '../hooks/usePublishedProjects'
 
 
 // Offline safety net only — rendered if the projects API cannot be reached.
@@ -118,24 +118,40 @@ const ProjectsSection = () => {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-semibold mb-6">
+              <h3 className={`text-xl font-semibold ${serviceForCategory(project.category) ? 'mb-2' : 'mb-6'}`}>
                 {project.name}
               </h3>
 
-             
-              <button className="
-                px-8 py-3 
-                rounded-full 
-                font-semibold 
+              {/* The service behind the project, linked to its page. */}
+              {serviceForCategory(project.category) && (
+                <a
+                  href={serviceForCategory(project.category).href}
+                  className="inline-block mb-5 text-sm font-medium text-orange-700 underline underline-offset-2 hover:text-orange-900"
+                >
+                  {serviceForCategory(project.category).label}
+                </a>
+              )}
+
+              <div>
+              {/* A real link so crawlers see which live sites the portfolio
+                  points to; it opens in a new tab as the button used to. */}
+              {project.url && (
+              <a href={project.url} target="_blank" rel="noopener" className="
+                inline-block
+                px-8 py-3
+                rounded-full
+                font-semibold
                 border-2 border-orange-400
-                text-white 
+                text-white
                 bg-gray-900
                 hover:bg-orange-400
                 hover:text-black
                 transition-all duration-300
-              " onClick={()=> project.url && window.open(project.url, "_blank")}>
+              ">
                 VIEW PROJECT
-              </button>
+              </a>
+              )}
+              </div>
 
             </div>
             

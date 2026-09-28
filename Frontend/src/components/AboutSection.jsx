@@ -295,7 +295,7 @@ const AboutSection1 = () => {
               About Us
             </h2>
             <p className="text-lg lg:text-xl text-gray-800">
-           Crafting powerful digital experiences with creative minds at top digital marketing companies in Vizag.
+           Crafting powerful digital experiences from our office in Visakhapatnam.
             </p>
           </div>
 

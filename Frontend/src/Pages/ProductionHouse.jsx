@@ -15,13 +15,16 @@ export default function ProductionHouse() {
 
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
+
             <div className="text-white space-y-6">
               <h1 className="text-4xl sm:text-6xl lg:text-6xl font-bold tracking-tight">
                 Production House
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
                We specialize in creating high-quality visual content, delivering professional video production, photography, and creative media solutions that bring stories to life and elevate brands across every platform.
+              </p>
+              <p className="text-base text-gray-400 leading-relaxed">
+                Looking for a dedicated <a href="/podcast_studio" className="text-orange-400 underline underline-offset-2 hover:text-orange-300">podcast studio in Vizag</a> for audio or video recording? We also offer podcast studio rental with full production support.
               </p>
             </div>
 
@@ -34,9 +37,11 @@ export default function ProductionHouse() {
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
                   src= {StudioNightView}
-                  alt="Genie Studio at night" 
+                  alt="Genie Media studio set with armchairs, boom microphones and lighting"
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
-                  loading='lazy'
+                  // The Largest Contentful Paint element on this route, so it
+                  // is fetched immediately rather than lazily.
+                  fetchPriority="high"
                   width="1400"
                   height="933"
                   decoding="async"

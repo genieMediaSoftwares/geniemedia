@@ -38,7 +38,7 @@ const company = [
                 className='h-32 w-auto mb-6 -mt-8'
               />
               <p className="text-gray-300 leading-relaxed">
-               Providing cutting-edge digital transformation solutions through a trusted top digital marketing companies in Vizag, helping businesses grow with strategy and innovation.
+               Digital marketing, websites, video production and a podcast studio in Visakhapatnam, helping businesses grow with strategy and innovation.
               </p>
             </div>
             
@@ -115,7 +115,7 @@ const company = [
                 <MapPin className="w-5 h-5 text-orange-500 flex-shrink-0 mt-1" />
                 <span className="text-gray-300">
                   5A2 4th Floor KP Icon KP Infra <br />
-                  Yendada, Vishakhapatnam - 530045
+                  Yendada, Visakhapatnam - 530045
                 </span>
               </li>
               <li className="flex items-center space-x-3">

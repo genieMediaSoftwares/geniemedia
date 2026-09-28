@@ -48,8 +48,12 @@ const SITE = {
     addressCountry: "IN",
   },
 
+  // UNCONFIRMED — not published in structured data until the owner confirms.
+  // The contact page map pin (KP Icon, KP Infra) is at roughly 17.7801, 83.3665,
+  // about 3 km from these values.
   geo: { latitude: 17.7594, longitude: 83.3411 },
 
+  // UNCONFIRMED — not published anywhere until the owner confirms them.
   openingHours: [
     { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "10:00", closes: "19:00" },
     { days: ["Saturday"], opens: "10:00", closes: "16:00" },

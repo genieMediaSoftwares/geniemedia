@@ -79,16 +79,20 @@ const Header = () => {
                   </a>
                   
                                   {/* Dropdown Menu */}
-                  {item.dropdown && activeDropdown === item.name && (
+                  {/* Always in the DOM, shown and hidden with CSS, so the
+                      service links are crawlable without a hover. The slide-in
+                      animation replays each time `hidden` is removed. */}
+                  {item.dropdown && (
                     <div
-                      className="
-                        dropdown-menu 
-                        absolute left-0 top-7 
-                        mt-2 w-64 
-                        bg-white rounded-2xl shadow-2xl 
-                        border border-gray-100 
+                      className={`
+                        dropdown-menu
+                        absolute left-0 top-7
+                        mt-2 w-64
+                        bg-white rounded-2xl shadow-2xl
+                        border border-gray-100
                         overflow-hidden z-50
-                      "
+                        ${activeDropdown === item.name ? '' : 'hidden'}
+                      `}
                       onMouseEnter={() => setActiveDropdown(item.name)}     
                       onMouseLeave={() => setActiveDropdown(null)}          
                     >

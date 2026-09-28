@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowRight, Sparkles, TrendingUp, Users, Award } from "lucide-react";
+import { ArrowRight, Sparkles, Layers, Mic, Globe } from "lucide-react";
 import "./HomePage.css";
 import { WEBSITES_VIDEO_URL } from "../config/media";
 
@@ -18,7 +18,7 @@ import Shopify from "../assets/shopify.webp";
 import Code from "../assets/code.png";
 import Nuconaerospace from '../assets/nuconaerospace.webp'
 import Synergene from '../assets/synergeneapi.webp'
-import usePublishedProjects from "../hooks/usePublishedProjects";
+import usePublishedProjects, { serviceForCategory } from "../hooks/usePublishedProjects";
 
 // Offline safety net only — rendered if the projects API cannot be reached.
 // The live portfolio comes from the database (see usePublishedProjects).
@@ -61,11 +61,18 @@ const HOME_PROJECTS_LIMIT = 6;
 
 // Static presentation data — hoisted out of the component so the arrays are not
 // re-allocated on every render.
+//
+// Every figure here must be checkable against the site itself: the four
+// service pages, the studio's one-hour rate in components/StudioBooking.jsx,
+// and the portfolio's clients in India, Australia and the US. Unverifiable
+// performance claims (success rates, ROI averages) used to sit here.
 const STATS = [
-  { icon: Users, value: "150+", label: "Growth Campaigns" },
-  { icon: Award, value: "98%", label: "Success Rate" },
-  { icon: TrendingUp, value: "250%", label: "ROI Average" },
+  { icon: Layers, value: "4", label: "Service Lines" },
+  { icon: Mic, value: "₹1,500", label: "Podcast Studio / hour" },
+  { icon: Globe, value: "3", label: "Countries Served" },
 ];
+
+const heroLink = "text-orange-700 underline decoration-orange-300 underline-offset-4 hover:text-orange-900";
 
 const HomePage = () => {
   const [videoError, setVideoError] = useState(false);
@@ -134,24 +141,24 @@ const HomePage = () => {
               <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-100 to-orange-50 border border-orange-200 rounded-full mt-8">
                 <Sparkles className="text-orange-500" size={16} />
                 <span className="text-sm font-semibold text-orange-700 ">
-                  Digital Marketing Agency in Vizag
+                  Genie Media &amp; Studio · Visakhapatnam
                 </span>
               </div>
 
+              {/* The home page names the company, what it does and where. The
+                  service pages each own their specific search terms, so this
+                  deliberately does not target one service. */}
               <h1 className="hero-title text-4xl sm:text-5xl lg:text-6xl xl:text-5xl font-extrabold leading-normal ">
-                {/* Transform your digital presence with excellence */}
-               Boost your growth with{" "} SEO services in Vizag
-                {/* <span className="gradient-text">SEO services in Vizag</span>  */}
-               
-
+                Digital Marketing, Podcast Studio &amp; Video Production in Vizag
               </h1>
               <p className="hero-description text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                At Genie Media & Studio, we bring brands to life by combining
-                thoughtful strategy with authentic, engaging storytelling. Each
-                project seamlessly blends creativity, technology, and purposeful
-                content-shaping digital experiences that stay clear, consistent,
-                and aligned with the Digital marketing future, leaving a
-                lasting impact.
+                Genie Media &amp; Studio is a digital marketing and media company
+                in Visakhapatnam. We run{" "}
+                <a href="/digital_marketing" className={heroLink}>SEO, social media and ad campaigns</a>,{" "}
+                <a href="/web_development" className={heroLink}>build websites</a>,{" "}
+                <a href="/production_house" className={heroLink}>shoot brand videos</a>{" "}
+                and rent out our{" "}
+                <a href="/podcast_studio" className={heroLink}>podcast studio</a>.
               </p>
 
               <div className="hero-buttons flex flex-row sm:flex-row gap-4 w-80% justify-center lg:justify-start ">
@@ -168,12 +175,12 @@ const HomePage = () => {
                     size={20}
                   />
                 </a>
-                <button
+                <a
+                  href="/projects"
                   className="w-42 sm:w-50 btn-secondary relative px-6 py-4 text-orange-700 font-bold rounded-full text-base flex items-center justify-center gap-2 z-10"
-                  onClick={() => (window.location.href = "/projects")}
                 >
                   See Portfolio
-                </button>
+                </a>
               </div>
 
               <div className="hero-stats grid grid-cols-3 gap-4 pt-4">
@@ -210,7 +217,7 @@ const HomePage = () => {
                       where it is never shown. */}
                   <img
                     src={GenieImg}
-                    alt="Digital Marketing Genie"
+                    alt="Genie Media's genie mascot rising from a lamp"
                     className="hidden lg:block w-full h-[600px] rounded-3xl mt-8"
                     width="1000"
                     height="1000"
@@ -264,7 +271,7 @@ const HomePage = () => {
             animate-fadeUp animation-delay-400
           `}
           >
-           We craft best digital marketing near me journeys that feel natural, human, and memorable.
+           We craft digital marketing journeys that feel natural, human, and memorable.
            From strategy to design and content, we help your brand rise above the noise, stay true to its voice,
            and build trust across every platform.
           </p>
@@ -370,24 +377,43 @@ const HomePage = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold mb-6">{project.name}</h3>
+                <h3 className={`text-xl font-semibold ${serviceForCategory(project.category) ? "mb-2" : "mb-6"}`}>{project.name}</h3>
 
-                <button
+                {/* The service behind the project, linked to its page. */}
+                {serviceForCategory(project.category) && (
+                  <a
+                    href={serviceForCategory(project.category).href}
+                    className="inline-block mb-5 text-sm font-medium text-orange-700 underline underline-offset-2 hover:text-orange-900"
+                  >
+                    {serviceForCategory(project.category).label}
+                  </a>
+                )}
+
+                <div>
+                {/* A real link so crawlers see which live sites the portfolio
+                    points to; it opens in a new tab as the button used to. */}
+                {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener"
                   className="
-                px-8 py-3 
-                rounded-full 
-                font-semibold 
+                inline-block
+                px-8 py-3
+                rounded-full
+                font-semibold
                 border-2 border-orange-400
-                text-white 
+                text-white
                 bg-gray-900
                 hover:bg-orange-400
                 hover:text-black
                 transition-all duration-300
               "
-                  onClick={() => project.url && window.open(project.url, "_blank")}
                 >
                   VIEW PROJECT
-                </button>
+                </a>
+                )}
+                </div>
               </div>
             ))}
           </div>

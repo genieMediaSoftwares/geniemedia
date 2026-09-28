@@ -76,14 +76,37 @@
   RewriteCond %{REQUEST_FILENAME}\.webp -f
   RewriteRule ^(.+)\.(jpe?g|png)$ $1.$2.webp [T=image/webp,E=WEBP_SERVED:1,L]
 
+  # -- Routes with a build-time <head> --------------------------------------
+  # vite.config.js emits <route>.html for each route in ROUTE_META
+  # (Frontend/src/seo/routeMeta.js):
+  # index.html with that route's own title, description, canonical, Open Graph
+  # and JSON-LD, so the first response no longer declares the home page as
+  # canonical. The clean URL is served from it internally; the trailing-slash
+  # form and a direct request for the .html file both 301 to the clean URL so
+  # only one address answers 200. Absolute targets, because Apache sees plain
+  # HTTP behind the Hostinger CDN and a relative redirect would add an extra
+  # http -> https hop. Keep the alternation in step with vite.config.js.
+  RewriteRule ^(about|services|projects|contact|blogs|reviews|digital_marketing|web_development|production_house|podcast_studio)/$ https://geniemedia.in/$1 [R=301,L]
+  RewriteCond %{THE_REQUEST} \s/+(about|services|projects|contact|blogs|reviews|digital_marketing|web_development|production_house|podcast_studio)\.html[\s?]
+  RewriteRule ^(about|services|projects|contact|blogs|reviews|digital_marketing|web_development|production_house|podcast_studio)\.html$ https://geniemedia.in/$1 [R=301,L]
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(about|services|projects|contact|blogs|reviews|digital_marketing|web_development|production_house|podcast_studio)$ /$1.html [L]
+
   # -- SPA routing ----------------------------------------------------------
-  # Unchanged behaviour: anything that is not a real file or directory is served
-  # index.html so React Router can handle the URL. This MUST stay last.
+  # Only paths the React app actually routes (src/App.jsx) are served
+  # index.html with a 200. [NC] because React Router matches case-insensitively,
+  # so /About already worked and must keep working. Anything else falls through
+  # to the ErrorDocument below: the same index.html, but with a real 404
+  # status, where the app's catch-all route shows "Page not found" (noindex).
+  # Previously every unknown URL answered 200 with an empty page — a soft 404.
+  # Add a path here whenever a route is added to App.jsx. This MUST stay last.
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+  RewriteRule ^(about|services|projects|contact|blogs|reviews|digital_marketing|web_development|production_house|podcast_studio|blog/.+|admin|admin/blogs|admin/projects)/?$ /index.html [NC,L]
 </IfModule>
+
+ErrorDocument 404 /index.html
 
 
 # ---------------------------------------------------------------------------

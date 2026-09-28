@@ -28,34 +28,59 @@ const canonicalFor = (path) => {
 
 const ROUTE_META = {
   "/": {
-    title: "Genie Media | Digital Marketing Agency in Visakhapatnam",
+    title: "Genie Media, Vizag | Digital Marketing, Podcast & Video Production",
     description:
-      "Genie Media is a digital marketing agency in Visakhapatnam offering SEO, Google Ads, social media marketing, website development and online growth services.",
+      "Genie Media & Studio in Visakhapatnam offers digital marketing, SEO, websites, video production and a podcast studio for hire. Book a call or a studio slot.",
   },
   "/services": {
-    title: "Digital Marketing Services in Visakhapatnam | Genie Media",
+    title: "Services | Marketing, Websites, Video & Podcast Studio | Genie Media",
     description:
-      "Digital marketing, SEO, social media and Google Ads services in Visakhapatnam from Genie Media.",
+      "Explore Genie Media & Studio's services in Visakhapatnam: digital marketing, website development, video production and podcast studio rental.",
   },
   "/about": {
-    title: "About Genie Media | Digital Marketing Agency in Visakhapatnam",
+    title: "About Genie Media & Studio | Digital & Media Company in Visakhapatnam",
     description:
-      "Learn about Genie Media, a digital marketing agency in Visakhapatnam helping businesses grow through SEO, social media, Google Ads and digital solutions.",
+      "Meet Genie Media & Studio, a Visakhapatnam team for digital marketing, websites, video production and podcasting. Our story, vision, mission and approach.",
   },
   "/projects": {
-    title: "Our Projects | Digital Marketing & Web Projects | Genie Media",
+    title: "Our Work | Website & E-commerce Projects | Genie Media",
     description:
-      "Explore digital marketing, website development, branding and online growth projects delivered by Genie Media for businesses.",
+      "Websites and online stores built by Genie Media & Studio for businesses in India, Australia and the US, on WordPress, Shopify and custom code.",
   },
   "/contact": {
-    title: "Contact Genie Media | Digital Marketing Agency in Visakhapatnam",
+    title: "Contact Genie Media & Studio | Yendada, Visakhapatnam",
     description:
-      "Contact Genie Media in Visakhapatnam for digital marketing, SEO, Google Ads, social media marketing and website development services.",
+      "Visit or call Genie Media & Studio at KP Icon, Yendada, Visakhapatnam 530045. Phone +91 90328 45433 or email admin@geniemedia.in about your project.",
+  },
+  "/web_development": {
+    title: "Website Development Company in Visakhapatnam (Vizag) | Genie Media",
+    description:
+      "Genie Media & Studio designs and builds websites in Visakhapatnam (Vizag): business sites, Shopify and WooCommerce stores, WordPress and custom web apps.",
+  },
+  "/production_house": {
+    title: "Production House & Video Production in Vizag | Genie Media",
+    description:
+      "Video production in Visakhapatnam (Vizag) by Genie Media & Studio: corporate and brand videos, events, product and model shoots, editing and live streaming.",
+  },
+  "/reviews": {
+    title: "Client Reviews & Testimonials | Genie Media & Studio",
+    description:
+      "Video and written reviews from clients of Genie Media & Studio in Visakhapatnam, covering our podcast studio, production and digital marketing work.",
   },
   "/blogs": {
     title: "Digital Marketing Blog | SEO, Marketing & Business Growth | Genie Media",
     description:
       "Read Genie Media's digital marketing blog for SEO, Google Ads, social media marketing, website growth and online business strategies.",
+  },
+  "/digital_marketing": {
+    title: "Digital Marketing Company in Visakhapatnam (Vizag) | Genie Media",
+    description:
+      "Genie Media & Studio offers digital marketing in Visakhapatnam (Vizag): SEO, social media marketing, Google & Facebook Ads, content strategy and branding.",
+  },
+  "/podcast_studio": {
+    title: "Podcast Studio in Visakhapatnam (Vizag) | Genie Media",
+    description:
+      "Book a podcast studio in Visakhapatnam (Vizag) from ₹1,500 an hour. Record audio or video podcasts with our team and up to three cameras. Editing available.",
   },
 };
 

@@ -24,7 +24,8 @@ export default function Projects() {
                 Our Work
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
-               From impactful digital campaigns to high-quality studio productions, our projects reflect creativity, precision, and results that help brands grow.
+               Business websites and online stores we have designed and built for clients in India, Australia and the US. See how we approach{" "}
+               <a href="/web_development" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">website development</a>.
               </p>
             </div>
 
@@ -76,7 +77,8 @@ export default function Projects() {
               </p>
       
               
-              <button
+              <a
+                href="https://wa.me/919032845433"
                 className="
                    inline-flex items-center justify-center gap-2
                     px-5 py-3                
@@ -95,11 +97,10 @@ export default function Projects() {
                     shadow-lg
                     w-full sm:w-auto  
                 "
-                onClick={() => window.location.href="https://wa.me/919032845433"}
               >
                 Need help to upscale your brand
                 <span className="text-xl font-bold">→</span>
-              </button>
+              </a>
             </div>
       
             <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02),transparent_70%)]" />

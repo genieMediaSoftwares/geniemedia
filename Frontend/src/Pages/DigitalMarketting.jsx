@@ -122,9 +122,18 @@ export default function DigitalMarketting() {
       title: "Full-Service Expertise",
       content: "From brand development and content creation to digital advertising and social media management, we offer end-to-end marketing solutions. Our diverse team of specialists collaborates seamlessly to deliver integrated campaigns that resonate across all channels."
     },
+    // Previously claimed work for "Fortune 500 companies" and campaigns that
+    // "generated millions in revenue", neither of which the site can support.
     {
-      title: "Proven Track Record",
-      content: "We've helped businesses of all sizes—from startups to Fortune 500 companies—achieve remarkable results. Our portfolio includes successful product launches, brand repositioning, and campaigns that have generated millions in revenue for our clients."
+      title: "Open About How We Work",
+      content: (
+        <>
+          We share our thinking on SEO, content and social media on{" "}
+          <a href="/blogs" className="text-orange-700 underline underline-offset-2 hover:text-orange-900">our blog</a>, and every
+          website we have launched is listed in{" "}
+          <a href="/projects" className="text-orange-700 underline underline-offset-2 hover:text-orange-900">our portfolio</a>.
+        </>
+      )
     },
     {
       title: "Transparent Communication",
@@ -157,7 +166,7 @@ export default function DigitalMarketting() {
                 Digital Marketing
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                We specialize in delivering innovative digital marketing solutions, creating data-driven, results-oriented strategies that boost brand visibility, increase engagement, and drive measurable growth for startups and established companies alike.
+                We specialize in delivering innovative digital marketing solutions, creating data-driven, results-oriented strategies that boost brand visibility, increase engagement, and drive measurable growth for startups and established companies alike. Our team works from Visakhapatnam, with businesses in Vizag and beyond.
               </p>
             </div>
 
@@ -170,8 +179,10 @@ export default function DigitalMarketting() {
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
                   src= {DigitalMarketting1}
-                  loading='lazy'
-                  alt="Digital marketing services" 
+                  // The Largest Contentful Paint element on this route, so it
+                  // is fetched immediately rather than lazily.
+                  fetchPriority="high"
+                  alt="Digital marketing concept with icons for SEO, social media, email, advertising, content and analytics"
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
                   width="1000"
                   height="666"
@@ -233,7 +244,7 @@ export default function DigitalMarketting() {
              >
               
              </div>
-             <img src={DigitalMarketing2} alt="Digital marketing campaign results" width="1400" height="788" loading='lazy' decoding="async" className='w-full h-auto rounded-xl'/>
+             <img src={DigitalMarketing2} alt="Digital marketing illustration with social media, Google Ads, SEO, email and growth chart icons" width="1400" height="788" loading='lazy' decoding="async" className='w-full h-auto rounded-xl'/>
       
            </div>
          </section>
@@ -269,7 +280,7 @@ export default function DigitalMarketting() {
           <div className="relative bg-orange-400 rounded-3xl p-8 shadow-2xl">
             <img
               src={DM_services}
-              alt="Digital Marketing Analytics"
+              alt="Website analytics dashboard showing page views, bounce rate and session charts"
               className="w-full h-auto rounded-2xl object-cover"
               loading='lazy'
                   width="600"
@@ -415,9 +426,9 @@ export default function DigitalMarketting() {
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
               With a proven track record of delivering high-impact marketing solutions for businesses from startups to established enterprises, we have earned a reputation as a trusted partner for all your marketing needs. Here are some reasons why our top clients have chosen us as their marketing agency:
             </p>
-            <button className="bg-orange-500 hover:bg-black text-black hover:text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl" onClick={() => window.location.href="/contact"}>
+            <a href="/contact" className="inline-block bg-orange-500 hover:bg-black text-black hover:text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
               Let's Discuss Your Project
-            </button>
+            </a>
           </div>
 
           {/* Right Column - Accordions */}

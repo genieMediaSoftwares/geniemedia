@@ -68,7 +68,7 @@ const ContactSec = ({ isPage = false }) => {
       title: "Office",
       details: [
         "5A2 4th Floor KP Icon KP Infra",
-        "Yendada, Vishakhapatnam - 530045",
+        "Yendada, Visakhapatnam - 530045",
       ],
       color: "from-blue-500 to-blue-600",
     },
@@ -524,7 +524,7 @@ const ContactSec = ({ isPage = false }) => {
                       <div>
                         <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
                         <p className="text-gray-600 text-sm">5A2 4th Floor KP Icon KP Infra</p>
-                        <p className="text-gray-600 text-sm">Yendada, Vishakhapatnam - 530045</p>
+                        <p className="text-gray-600 text-sm">Yendada, Visakhapatnam - 530045</p>
                       </div>
                     </div>
 
