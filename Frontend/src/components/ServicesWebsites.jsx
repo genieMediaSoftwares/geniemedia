@@ -117,7 +117,10 @@ export default function ServicesSection2() {
 
                 {/* Learn More Link */}
                 <div className="flex items-center gap-2 text-orange-700 group-hover:text-white font-semibold transition-colors duration-300">
-                 <a href="/projects"> <span>Learn more</span></a> 
+                 {/* Seven identical "Learn more" links failed Lighthouse's
+                     link-text audit; the screen-reader text gives each its
+                     full name without changing what is shown. */}
+                 <a href="/projects"> <span>Learn more</span><span className="sr-only"> about our {service.title} work</span></a>
                   <ArrowRight className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
               </div>

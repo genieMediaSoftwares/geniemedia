@@ -28,6 +28,32 @@ const ROUTE_HEAD_OPTIONS = {
   '/blogs': { lcpImage: 'src/assets/blog/blog-hero.webp' },
 }
 
+/**
+ * The lazily imported component each route renders (see src/App.jsx). Its
+ * chunk, the shared chunks it imports and its CSS are preloaded from that
+ * route's HTML. Without this the browser only learns the page chunk exists
+ * after the entry bundle has downloaded and run, a full extra round trip
+ * before anything but the header can render; on a throttled mobile run that
+ * was the largest part of LCP.
+ *
+ * index.html is also the fallback for routes not in ROUTE_META (blog posts,
+ * admin), so those visits fetch the home chunk too. That costs a few KB there
+ * and is worth it for the home page, the most visited entry point.
+ */
+const ROUTE_MODULES = {
+  '/': 'src/Pages/HomePage.jsx',
+  '/about': 'src/Pages/AboutPg.jsx',
+  '/services': 'src/components/AllServices.jsx',
+  '/digital_marketing': 'src/Pages/DigitalMarketting.jsx',
+  '/web_development': 'src/Pages/Web-devPg.jsx',
+  '/production_house': 'src/Pages/ProductionHouse.jsx',
+  '/podcast_studio': 'src/Pages/PodcastStudio.jsx',
+  '/projects': 'src/Pages/Projects.jsx',
+  '/reviews': 'src/Pages/Reviews.jsx',
+  '/contact': 'src/components/contactSection.jsx',
+  '/blogs': 'src/Pages/Blogs.jsx',
+}
+
 const PRERENDERED_HEAD_ROUTES = Object.fromEntries(
   Object.keys(ROUTE_META).map((path) => [path, ROUTE_HEAD_OPTIONS[path] || {}])
 )
@@ -41,7 +67,7 @@ const escapeAttr = (value) =>
  * tags carry `data-seo-ssr`, so src/components/SEO.jsx removes them once React
  * has declared its own copies, the same hand-off the index.html defaults use.
  */
-const headForRoute = (html, path, { lcpImageUrl, inlineSchema = true } = {}) => {
+const headForRoute = (html, path, { lcpImageUrl, inlineSchema = true, preloads = [] } = {}) => {
   const meta = metaForRoute(path)
   const tag = (attr, key, value) =>
     value ? `    <meta data-seo-ssr="1" ${attr}="${key}" content="${escapeAttr(value)}" />` : null
@@ -63,6 +89,7 @@ const headForRoute = (html, path, { lcpImageUrl, inlineSchema = true } = {}) => 
       ? `    <script data-seo-ssr="1" type="application/ld+json">${JSON.stringify(meta.schema).replace(/</g, '\\u003c')}</script>`
       : null,
     lcpImageUrl ? `    <link rel="preload" as="image" href="${escapeAttr(lcpImageUrl)}" fetchpriority="high" />` : null,
+    ...preloads,
   ].filter(Boolean)
 
   return html
@@ -87,18 +114,45 @@ const prerenderRouteHeads = () => ({
       )
       return file ? `/${file.fileName}` : null
     }
+    // <link> tags for a route's lazy chunk, the chunks it statically imports
+    // and their CSS. Chunks the entry already pulls in (and that index.html
+    // already modulepreloads) are skipped.
+    const chunks = Object.values(bundle).filter((f) => f.type === 'chunk')
+    const entry = chunks.find((c) => c.isEntry)
+    const alreadyLoaded = new Set([entry?.fileName, ...(entry?.imports || [])])
+    const routePreloads = (source) => {
+      const root = chunks.find((c) => (c.facadeModuleId || '').replace(/\\/g, '/').endsWith(source))
+      if (!root) return []
+      const js = new Set()
+      const css = new Set()
+      const visit = (fileName) => {
+        if (js.has(fileName) || alreadyLoaded.has(fileName)) return
+        const chunk = bundle[fileName]
+        if (!chunk || chunk.type !== 'chunk') return
+        js.add(fileName)
+        chunk.viteMetadata?.importedCss?.forEach((f) => css.add(f))
+        chunk.imports.forEach(visit)
+      }
+      visit(root.fileName)
+      return [
+        ...[...css].map((f) => `    <link rel="preload" as="style" crossorigin href="/${f}" />`),
+        ...[...js].map((f) => `    <link rel="modulepreload" crossorigin href="/${f}" />`),
+      ]
+    }
+
     // Every route starts from the untouched template, including the home page,
     // which is written back into index.html last.
     const template = String(index.source)
     for (const [path, { lcpImage, inlineSchema }] of Object.entries(PRERENDERED_HEAD_ROUTES)) {
+      const preloads = ROUTE_MODULES[path] ? routePreloads(ROUTE_MODULES[path]) : []
       if (path === '/') {
-        index.source = headForRoute(template, path, { inlineSchema })
+        index.source = headForRoute(template, path, { inlineSchema, preloads })
         continue
       }
       this.emitFile({
         type: 'asset',
         fileName: `${path.replace(/^\/+/, '')}.html`,
-        source: headForRoute(template, path, { lcpImageUrl: lcpImage && assetUrl(lcpImage), inlineSchema }),
+        source: headForRoute(template, path, { lcpImageUrl: lcpImage && assetUrl(lcpImage), inlineSchema, preloads }),
       })
     }
   },

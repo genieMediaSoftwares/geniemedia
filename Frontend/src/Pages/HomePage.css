@@ -183,7 +183,13 @@
 
         .btn-secondary {
           border: 2px solid #000000 !important;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          /* Not `all`: the header's phone button also carries this class, and
+             when this stylesheet arrives with the home page chunk its border
+             colour changed and was animated — a non-composited animation on
+             every home page load. Border colour now switches instantly. */
+          transition-property: transform, box-shadow, color, background-color;
+          transition-duration: 0.3s;
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
           overflow: hidden;
          

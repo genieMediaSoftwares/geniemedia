@@ -212,19 +212,27 @@ const HomePage = () => {
                   {/* This is the Largest Contentful Paint element on desktop.
                       It must stay eager and high-priority: marking it lazy hid
                       it from the preload scanner and pushed LCP out by seconds.
-                      It is `hidden` below lg, so a <link rel=preload> is
-                      deliberately NOT used — that would download it on mobile
-                      where it is never shown. */}
-                  <img
-                    src={GenieImg}
-                    alt="Genie Media's genie mascot rising from a lamp"
-                    className="hidden lg:block w-full h-[600px] rounded-3xl mt-8"
-                    width="1000"
-                    height="1000"
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="async"
-                  />
+                      It is `hidden` below lg, where a display:none <img> still
+                      downloads. The <source> hands phones and tablets a 1px
+                      inline placeholder instead, so the 42 KiB image is only
+                      fetched on screens that show it — no bytes competing with
+                      the mobile LCP (the headline). */}
+                  <picture>
+                    <source
+                      media="(max-width: 1023.98px)"
+                      srcSet="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                    />
+                    <img
+                      src={GenieImg}
+                      alt="Genie Media's genie mascot rising from a lamp"
+                      className="hidden lg:block w-full h-[600px] object-cover rounded-3xl mt-8"
+                      width="1000"
+                      height="1000"
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
+                    />
+                  </picture>
                 </div>
               </div>
             </div>

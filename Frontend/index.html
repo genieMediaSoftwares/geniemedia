@@ -5,14 +5,46 @@
     <meta name="google-site-verification" content="TV7lgY0NjiUrtUvsis_iTwxt3hwtztxF_CYIJ7D3b48" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google Tag Manager
-         Copied verbatim from the live site, where it was added directly on the
-         server. Without it here, every deploy of this build removed it. -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TZLCRWCB');</script>
+    <!-- Google Tag Manager (GTM-TZLCRWCB), deferred.
+
+         As of 2026-09-28 the published container has no tags. Page views are
+         sent by the separate GA4 snippet at the end of <body>, which is the
+         site's only analytics; keep it unless a GA4 tag is added to this
+         container first, or page views stop being recorded.
+
+         The dataLayer and the standard `gtm.js` start event are set up
+         immediately, exactly as Google's snippet does, so the container sees
+         the real page-start time. Only the ~110 KiB container download waits
+         until the page has loaded and the main thread is idle: fetched in
+         <head> it competed with the site's own JavaScript and delayed the
+         first render on mobile. Anything pushed to dataLayer before then is
+         queued and processed when GTM arrives. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      (function (w, d, id) {
+        var loaded = false;
+        function inject() {
+          if (loaded) return;
+          loaded = true;
+          var s = d.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtm.js?id=' + id;
+          d.head.appendChild(s);
+        }
+        // `load` can fire before React has rendered the route (the page chunk
+        // is preloaded, so its bytes are in before its render finishes), so a
+        // short settle period follows it; then the next idle moment.
+        function schedule() {
+          setTimeout(function () {
+            if ('requestIdleCallback' in w) w.requestIdleCallback(inject, { timeout: 2000 });
+            else inject();
+          }, 1500);
+        }
+        if (d.readyState === 'complete') schedule();
+        else w.addEventListener('load', schedule, { once: true });
+      })(window, document, 'GTM-TZLCRWCB');
+    </script>
     <!-- End Google Tag Manager -->
     <!--
       DEFAULT / HOME-PAGE METADATA ONLY.
@@ -41,8 +73,12 @@
     <meta name="language" content="English">
 
     <link data-seo-ssr="1" rel="canonical" href="https://geniemedia.in/" />
-    <link rel="icon" type="image/png" href="/GenieMedia-Logo.png" />
-    <link rel="apple-touch-icon" href="/GenieMedia-Logo.png" />
+    <!-- Small square icons generated from GenieMedia-Logo.png. Pointing the
+         favicon at the 691x1026, 32 KiB logo itself cost every first visit a
+         32 KiB download during page load. The full logo stays for og:image and
+         structured data. -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -81,12 +117,18 @@
           s.src = 'https://www.googletagmanager.com/gtag/js?id=G-H5GFQ5HH50';
           document.head.appendChild(s);
         }
+        // Same timing as GTM above: `load` can fire before React has rendered
+        // the route, so wait 1.5s after it, then the next idle moment. Loaded
+        // straight after `load`, this 170 KiB script ran during the mobile
+        // first render. Visitors who leave within ~2s may not be recorded.
         function schedule() {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(inject, { timeout: 3000 });
-          } else {
-            setTimeout(inject, 1500);
-          }
+          setTimeout(function () {
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(inject, { timeout: 2000 });
+            } else {
+              inject();
+            }
+          }, 1500);
         }
         if (document.readyState === 'complete') schedule();
         else window.addEventListener('load', schedule, { once: true });
