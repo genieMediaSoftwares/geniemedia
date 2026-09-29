@@ -28,8 +28,6 @@ the United States.
 - [Blog](https://geniemedia.in/blogs): Articles on digital marketing and web development.
 - [Contact](https://geniemedia.in/contact): Enquiry form, office address and map.
 
-## Optional
+## Sitemap
 
-- [Sitemap index](https://geniemedia.in/sitemap.xml)
-- [Page sitemap](https://geniemedia.in/pages.xml)
-- [Service sitemap](https://geniemedia.in/services.xml)
+- [Sitemap](https://geniemedia.in/sitemap.xml)

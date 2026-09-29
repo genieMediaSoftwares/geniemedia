@@ -47,12 +47,12 @@
   # slug_history and this block is unnecessary.
   # END GENIE SLUG REDIRECTS
 
-  # -- Generated SEO files --------------------------------------------------
-  # sitemap.xml, blogs.xml, llms.txt and robots.txt are generated from the
-  # database on the API host. seo-proxy.php fetches and caches them so they are
-  # reachable under this domain, which is the only one crawlers ever visit.
-  # A stale or static copy is served if the API is down — never a 500.
-  RewriteRule ^(sitemap\.xml|pages\.xml|blogs\.xml|llms\.txt|robots\.txt)$ /seo-proxy.php [L]
+  # -- Static SEO files — served directly from disk --------------------------
+  # sitemap.xml, robots.txt and llms.txt are static files deployed with the
+  # build. They must never be rewritten through seo-proxy.php (which depends on
+  # the API host) or routed to index.html. The [L] flag below stops all further
+  # rewriting unconditionally; no RewriteCond -f check is needed.
+  RewriteRule ^(sitemap\.xml|robots\.txt|llms\.txt)$ - [L]
 
   # -- Pre-rendered blog HTML for crawlers ----------------------------------
   # Bots only. They receive the document with the <head> and article text
@@ -224,8 +224,9 @@ ErrorDocument 404 /index.html
   AddType font/woff2                      .woff2
   AddType application/manifest+json       .webmanifest
   AddType application/ld+json             .jsonld
+  AddType application/xml                 .xml
+  AddType text/plain                      .txt
 </IfModule>
-
 
 # ---------------------------------------------------------------------------
 #  Crawler access
