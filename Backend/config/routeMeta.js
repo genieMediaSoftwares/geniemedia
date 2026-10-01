@@ -75,7 +75,7 @@ const ROUTE_META = {
   "/digital_marketing": {
     title: "Digital Marketing Services in Vizag | Genie Media",
     description:
-      "Genie Media & Studio provides SEO, Google Ads, social media marketing, website development and branding for businesses in Visakhapatnam (Vizag) and Andhra Pradesh.",
+      "Genie Media & Studio provides digital marketing, SEO, Google Ads, social media, web development and branding services for businesses in Vizag.",
   },
   "/podcast_studio": {
     title: "Podcast Studio in Visakhapatnam (Vizag) | Genie Media",
