@@ -87,11 +87,9 @@ export const ROUTE_META = {
       "Read Genie Media's digital marketing blog for SEO, Google Ads, social media marketing, website growth and online business strategies.",
   },
   "/digital_marketing": {
-    title: "Digital Marketing Company in Visakhapatnam (Vizag) | Genie Media",
+    title: "Digital Marketing Services in Vizag | Genie Media",
     description:
-      "Genie Media & Studio offers digital marketing in Visakhapatnam (Vizag): SEO, social media marketing, Google & Facebook Ads, content strategy and branding.",
-    // A literal, not built from SITE_ORIGIN: Backend/scripts/checkRouteMeta.js
-    // evaluates this table on its own, where SITE_ORIGIN is not in scope.
+      "Genie Media & Studio provides SEO, Google Ads, social media marketing, website development and branding for businesses in Visakhapatnam (Vizag) and Andhra Pradesh.",
     image: "https://geniemedia.in/GenieMedia-Logo.png",
   },
   "/podcast_studio": {
@@ -242,15 +240,28 @@ const ROUTE_SCHEMA = {
   "/digital_marketing": (meta) =>
     pageGraph(meta, {
       service: {
-        name: "Digital Marketing",
+        name: "Digital Marketing Services",
         serviceType: "Digital marketing",
+        description: "SEO, Google Ads, social media marketing, website development, content strategy, branding and email marketing for businesses in Visakhapatnam (Vizag).",
+        areaServed: {
+          "@type": "City",
+          name: "Visakhapatnam",
+          containedInPlace: {
+            "@type": "State",
+            name: "Andhra Pradesh",
+            containedInPlace: {
+              "@type": "Country",
+              name: "India"
+            }
+          }
+        },
         hasOfferCatalog: catalog("Digital marketing services", [
-          "Personal Branding",
-          "Creative Campaign Development",
-          "Content Strategy & Blogs/Articles",
-          "Social Media Marketing",
-          "Google and Facebook Ads",
           "SEO (Search Engine Optimization)",
+          "Google Ads & PPC",
+          "Social Media Marketing",
+          "Website Design & Development",
+          "Content Strategy & Branding",
+          "Email & Performance Marketing",
         ]),
       },
     }),
