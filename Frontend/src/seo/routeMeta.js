@@ -148,7 +148,7 @@ const ORGANIZATION = {
  * ContactPage, CollectionPage...). `service` is merged into a Service node
  * whose provider is the business.
  */
-const pageGraph = (meta, { type = "WebPage", service } = {}) => ({
+const pageGraph = (meta, { type = "WebPage", service, extraNodes = [] } = {}) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -173,6 +173,7 @@ const pageGraph = (meta, { type = "WebPage", service } = {}) => ({
           },
         ]
       : []),
+    ...extraNodes,
     ORGANIZATION,
   ],
 });
@@ -183,6 +184,33 @@ const catalog = (name, items) => ({
   name,
   itemListElement: items.map((item) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: item } })),
 });
+
+const DIGITAL_MARKETING_FAQS = [
+  {
+    q: "What does a digital marketing agency in Vizag do?",
+    a: "A digital marketing agency like Genie Media & Studio helps businesses in Vizag and Visakhapatnam grow their online presence. We handle SEO to improve Google rankings, run Google Ads and social media campaigns, build and optimize websites, create content, and develop brand identities."
+  },
+  {
+    q: "How can digital marketing help my business in Visakhapatnam?",
+    a: "Digital marketing puts your business in front of people actively searching for what you offer. For businesses in Visakhapatnam, local SEO helps you appear in 'near me' searches, Google Ads target local customers, and social media builds brand community."
+  },
+  {
+    q: "How long does SEO take to show results?",
+    a: "SEO is a long-term strategy. Most businesses start seeing noticeable improvements in rankings and traffic within 3 to 6 months. We provide monthly reports so you can track progress."
+  },
+  {
+    q: "Does Genie Media & Studio provide Google Ads management in Vizag?",
+    a: "Yes, we manage Google Ads (PPC) campaigns for businesses in Vizag and across Visakhapatnam. We set up search campaigns, display campaigns, and remarketing, track conversions, and optimize ad spend."
+  },
+  {
+    q: "Do you build SEO-friendly websites in Vizag?",
+    a: "Yes, every website we build follows SEO best practices from the start, including proper page structure, fast loading times, mobile responsiveness, and clean code."
+  },
+  {
+    q: "How do I get started with Genie Media & Studio?",
+    a: "Reach out through our contact page or call us at +91 90328 45433. We will schedule a free consultation to discuss your goals and suggest a strategy that fits your needs."
+  }
+];
 
 /**
  * JSON-LD per route, for routes that describe something more specific than the
@@ -243,18 +271,21 @@ const ROUTE_SCHEMA = {
         name: "Digital Marketing Services",
         serviceType: "Digital marketing",
         description: "SEO, Google Ads, social media marketing, website development, content strategy, branding and email marketing for businesses in Visakhapatnam (Vizag).",
-        areaServed: {
-          "@type": "City",
-          name: "Visakhapatnam",
-          containedInPlace: {
-            "@type": "State",
-            name: "Andhra Pradesh",
+        areaServed: [
+          {
+            "@type": "City",
+            name: "Visakhapatnam",
+            alternateName: "Vizag",
             containedInPlace: {
-              "@type": "Country",
-              name: "India"
+              "@type": "State",
+              name: "Andhra Pradesh",
+              containedInPlace: {
+                "@type": "Country",
+                name: "India"
+              }
             }
           }
-        },
+        ],
         hasOfferCatalog: catalog("Digital marketing services", [
           "SEO (Search Engine Optimization)",
           "Google Ads & PPC",
@@ -264,6 +295,20 @@ const ROUTE_SCHEMA = {
           "Email & Performance Marketing",
         ]),
       },
+      extraNodes: [
+        {
+          "@type": "FAQPage",
+          "@id": `${meta.canonical}#faq`,
+          mainEntity: DIGITAL_MARKETING_FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: f.a,
+            },
+          })),
+        },
+      ],
     }),
   "/podcast_studio": (meta) =>
     pageGraph(meta, {

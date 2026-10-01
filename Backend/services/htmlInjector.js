@@ -444,10 +444,58 @@ const buildSiteHead = ({ title, description, url, image, robots = "index,follow"
   return tags.join("\n");
 };
 
+const buildMarketingNoscriptBody = (meta) => {
+  const path = meta?.canonical ? new URL(meta.canonical).pathname.replace(/\/+$/, "") || "/" : "/";
+
+  const parts = [
+    '<div class="seo-prerender">',
+    `<h1>${escapeAttr(meta.title || SITE.name)}</h1>`,
+    `<p>${escapeAttr(meta.description || SITE.description)}</p>`,
+  ];
+
+  if (path === "/digital_marketing") {
+    parts.push(`
+      <h2>Digital Marketing Agency in Visakhapatnam (Vizag)</h2>
+      <p>Genie Media & Studio provides end-to-end digital marketing services for businesses in Vizag, Visakhapatnam, and Andhra Pradesh. Our core services include Search Engine Optimization (SEO), Google Ads & PPC campaigns, Social Media Marketing (Instagram, Facebook, LinkedIn), Website Design & Development, Content Strategy & Branding, and Performance Marketing.</p>
+      
+      <h3>Our Key Marketing Services in Vizag</h3>
+      <ul>
+        <li><strong>SEO (Search Engine Optimization):</strong> Technical SEO, local SEO for Vizag, keyword research, Google Search Console audits.</li>
+        <li><strong>Google Ads & PPC:</strong> Search campaigns, display advertising, remarketing, conversion tracking.</li>
+        <li><strong>Social Media Marketing:</strong> Content strategy, Instagram Reels, Facebook ads, LinkedIn B2B marketing.</li>
+        <li><strong>Website Design & Development:</strong> Responsive React & WordPress websites, e-commerce stores, landing pages.</li>
+        <li><strong>Content Strategy & Branding:</strong> Blog creation, logo design, brand identity kits.</li>
+        <li><strong>Email & Performance Marketing:</strong> Lead nurturing campaigns and conversion optimization.</li>
+      </ul>
+
+      <h3>Industries Served in Visakhapatnam</h3>
+      <p>We work with E-Commerce brands, Fitness & Wellness centers, Industrial & Manufacturing firms in Vizag, Educational institutions, Real Estate agencies, Healthcare providers, Hospitality & Restaurants, Professional Services, and Tech Startups.</p>
+
+      <h3>Frequently Asked Questions</h3>
+      <dl>
+        <dt>What does a digital marketing agency in Vizag do?</dt>
+        <dd>A digital marketing agency like Genie Media & Studio helps businesses in Vizag and Visakhapatnam grow their online presence through SEO, Google Ads, social media marketing, content strategy, and website development.</dd>
+        <dt>How can digital marketing help my business in Visakhapatnam?</dt>
+        <dd>Local SEO puts your business in front of customers searching for services in Vizag, while Google Ads and targeted social media drive qualified leads and sales.</dd>
+        <dt>How long does SEO take to show results?</dt>
+        <dd>SEO is a long-term strategy that typically shows noticeable improvements in rankings and organic traffic within 3 to 6 months.</dd>
+      </dl>
+
+      <p><a href="/contact">Contact Genie Media & Studio in Visakhapatnam</a> | <a href="/services">View All Services</a> | <a href="/projects">Our Portfolio</a> | <a href="/blogs">Digital Marketing Blog</a></p>
+    `);
+  }
+
+  parts.push("</div>");
+  return parts.join("\n");
+};
+
 const renderSiteHtml = (meta) => {
   const template = readTemplate();
   if (!template) return null;
-  return setHtmlLang(injectIntoHead(template, buildSiteHead(meta)), SITE.language);
+  let html = setHtmlLang(injectIntoHead(template, buildSiteHead(meta)), SITE.language);
+  const noscriptBody = buildMarketingNoscriptBody(meta);
+  html = injectIntoRoot(html, noscriptBody);
+  return html;
 };
 
 /** /blogs index: site head plus a CollectionPage ItemList of the posts. */
