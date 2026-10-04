@@ -33,6 +33,15 @@ const allowedOrigins = [
   "https://geniemedia.in",
   "https://www.geniemedia.in",
   "https://genie-media-studio.vercel.app",
+  // Next.js dev server (frontend-next).
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  // Additional origins (e.g. a Vercel preview URL), comma-separated:
+  //   CORS_EXTRA_ORIGINS=https://geniemedia-next.vercel.app
+  ...String(process.env.CORS_EXTRA_ORIGINS || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean),
 ];
 
 const corsOptions = {
@@ -53,7 +62,7 @@ const corsOptions = {
     return callback(new Error("Not allowed by CORS"));
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Accept", "Authorization"],
   credentials: true,
 };
 
@@ -219,6 +228,10 @@ const optimiseImage = async (tempFilePath) => {
   }
 };
 
+// Hostinger upload script. When geniemedia.in itself moves to Vercel, point
+// this at a hostname that still reaches Hostinger (e.g. https://files.geniemedia.in/upload.php).
+const UPLOAD_ENDPOINT = process.env.UPLOAD_ENDPOINT || "https://geniemedia.in/upload.php";
+
 // ================= HELPER: Upload file to Hostinger =================
 // Uploads temp file to upload.php, returns full HTTPS URL, cleans up temp files
 const uploadToHostinger = async (tempFilePath) => {
@@ -233,7 +246,7 @@ const uploadToHostinger = async (tempFilePath) => {
     });
 
     const response = await axios.post(
-      "https://geniemedia.in/upload.php",
+      UPLOAD_ENDPOINT,
       formData,
       { headers: formData.getHeaders() }
     );
@@ -257,7 +270,7 @@ const uploadToHostinger = async (tempFilePath) => {
 const uploadProcessedFile = async (filePath, filename) => {
   const formData = new FormData();
   formData.append("file", fs.createReadStream(filePath), { filename });
-  const response = await axios.post("https://geniemedia.in/upload.php", formData, {
+  const response = await axios.post(UPLOAD_ENDPOINT, formData, {
     headers: formData.getHeaders(),
   });
   return response.data.url;

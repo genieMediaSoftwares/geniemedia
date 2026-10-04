@@ -1,0 +1,22 @@
+{
+  "name": "Genie Media & Studio",
+  "short_name": "Genie Media",
+  "description": "Digital marketing, websites, video production and a podcast studio in Visakhapatnam, helping businesses grow with strategy and innovation.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "/favicon-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
