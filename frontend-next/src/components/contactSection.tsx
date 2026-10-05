@@ -1,4 +1,5 @@
 "use client";
+import { CONTACT_FORM_URL } from "@/lib/env";
 
 import { Loader2 } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
@@ -118,7 +119,7 @@ const ContactSec = ({ isPage = false }) => {
     setError("");
 
     try {
-      const response = await fetch("https://geniemedia.in/contact.php", {
+      const response = await fetch(CONTACT_FORM_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

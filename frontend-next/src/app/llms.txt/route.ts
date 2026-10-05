@@ -4,7 +4,7 @@ import { blogCanonical } from "@/lib/seo/metadata";
 
 // llms.txt — a plain-Markdown map of the site for retrieval engines. Generated
 // so the article list never goes stale (same content as the Express version).
-export const revalidate = 3600;
+export const dynamic = "force-static";
 
 const PAGES: Array<[string, string]> = [
   ["Home", "/"],

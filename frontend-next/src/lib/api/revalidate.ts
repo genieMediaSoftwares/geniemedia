@@ -1,18 +1,11 @@
-import { authHeaders } from "@/lib/auth";
-
 /**
- * Asks the Next.js server to refresh its cached copies after an admin save,
- * so the public pages, the sitemap and llms.txt update immediately. Fire and
- * forget: the save already succeeded on the backend, and the 60-second ISR
- * window is the fallback if this request fails.
+ * On a server deployment this asked Next.js to refresh its cached pages after
+ * an admin save. The site is now a static export on Hostinger, where pages
+ * only change when the site is rebuilt, so this is intentionally a no-op.
+ * Publish changes with `npm run build` and upload `dist/` again.
  */
-export function requestRevalidate(token: string | null, type: "blogs" | "projects", permalinks: Array<string | null | undefined> = []): void {
-  if (!token) return;
-  void fetch("/api/revalidate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...authHeaders(token) },
-    body: JSON.stringify({ type, permalinks: permalinks.filter(Boolean) }),
-  }).catch(() => {
-    /* ISR picks the change up within a minute regardless */
-  });
+export function requestRevalidate(_token: string | null, _type: "blogs" | "projects", _permalinks: Array<string | null | undefined> = []): void {
+  void _token;
+  void _type;
+  void _permalinks;
 }

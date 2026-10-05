@@ -7,8 +7,7 @@ import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
 import { blogListGraph } from "@/lib/seo/schema";
 
-// New posts appear within a minute, or immediately when the admin saves one.
-export const revalidate = 60;
+// Posts are fetched at build time; rebuild and redeploy after publishing.
 
 export async function generateMetadata(): Promise<Metadata> {
   const base = buildRouteMetadata("/blogs");

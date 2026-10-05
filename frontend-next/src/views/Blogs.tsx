@@ -11,6 +11,7 @@ import BlogHeroAsset from "@/assets/blog/blog-hero.webp";
 import BlogFallbackAsset from "@/assets/blog/blog-fallback.webp";
 import type { BlogCard } from "@/types";
 import { formatDate } from "@/lib/blog";
+import { useLatestBlogCards } from "@/lib/liveData";
 
 const BlogHero = BlogHeroAsset.src;
 const BlogFallback = BlogFallbackAsset.src;
@@ -25,7 +26,9 @@ interface Lightbox {
  * arrive as props, so every title, excerpt and link is in the first HTML
  * response. Only the category filter and the image lightbox run in the browser.
  */
-export default function Blogs({ blogs }: { blogs: BlogCard[] }) {
+export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
+  // Build-time posts first, then the latest from the API (new posts show without a rebuild).
+  const blogs = useLatestBlogCards(initialBlogs);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [lightbox, setLightbox] = useState<Lightbox | null>(null);
   const loading = false;
@@ -50,7 +53,9 @@ export default function Blogs({ blogs }: { blogs: BlogCard[] }) {
       console.error("Missing permalink", blog);
       return;
     }
-    navigate(`/blog/${blog.permalink}`);
+    // Full page load: a post published after the last build is served by the
+    // .htaccess fallback, which client-side routing cannot reach.
+    window.location.assign(`/blog/${blog.permalink}`);
   };
 
   const openLightbox = (e: React.MouseEvent, src: string, alt: string) => {

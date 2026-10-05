@@ -1,5 +1,9 @@
 import type {
   Blog,
+  BlogCard,
+  PortfolioItem,
+  Project,
+  ProjectStatus,
   BlogDefinition,
   BlogFaq,
   BlogInternalLink,
@@ -10,7 +14,7 @@ import type {
   SlugHistoryEntry,
 } from "@/types";
 import { arr, isRecord, num, str } from "@/lib/api/coerce";
-import { cleanSlug } from "@/lib/blog";
+import { cleanSlug, stripHtml, toIso } from "@/lib/blog";
 
 /**
  * Typed adapters for rows of the `blogs` table. Shared by the server pages and
@@ -109,4 +113,47 @@ export function normalizeBlog(raw: unknown, { lenient = false }: { lenient?: boo
     last_modified_at: str(raw.last_modified_at),
   };
 }
+
+
+/** The slim card shape the listing pages send to the browser. */
+export const toBlogCard = (blog: Blog): BlogCard => ({
+  id: blog.id,
+  title: blog.title,
+  permalink: blog.permalink,
+  excerpt: blog.metaDescription || stripHtml(blog.description).slice(0, 220),
+  category: blog.category,
+  image: blog.image,
+  createdAt: blog.createdAt,
+  createdIso: toIso(blog.createdAt),
+});
+
+
+export function normalizeProject(raw: unknown): Project | null {
+  if (!isRecord(raw)) return null;
+  const id = num(raw.id);
+  const title = str(raw.title);
+  if (id === null || !title) return null;
+  return {
+    id,
+    title,
+    description: str(raw.description),
+    category: str(raw.category),
+    image: str(raw.image),
+    projectUrl: str(raw.projectUrl),
+    status: (str(raw.status) === "published" ? "published" : "draft") as ProjectStatus,
+    displayOrder: num(raw.displayOrder) ?? 0,
+    createdAt: num(raw.createdAt),
+    updatedAt: num(raw.updatedAt),
+  };
+}
+
+/** The shape the existing portfolio markup renders ({ name, image, url }). */
+export const toPortfolioItem = (p: Project): PortfolioItem => ({
+  id: p.id,
+  name: p.title,
+  image: p.image || "",
+  url: p.projectUrl || "",
+  description: p.description || "",
+  category: p.category || "",
+});
 

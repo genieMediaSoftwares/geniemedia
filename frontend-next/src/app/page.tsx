@@ -6,9 +6,8 @@ import { getPublishedPortfolio } from "@/lib/api/projects";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
 
-// Portfolio comes from the backend; refreshed in the background every minute
-// and immediately when the admin saves a project (see /api/revalidate).
-export const revalidate = 60;
+// Portfolio is fetched from the backend at build time (static export).
+// Run `npm run build` and redeploy to publish project changes.
 
 export const metadata: Metadata = buildRouteMetadata("/");
 

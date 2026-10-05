@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import LegalPage, { LegalContact, type LegalSection } from "@/components/legal/LegalPage";
 import JsonLd from "@/components/seo/JsonLd";
+import { SITE_HOST, SITE_ORIGIN } from "@/lib/site";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
 
@@ -16,7 +17,7 @@ const SECTIONS: LegalSection[] = [
     title: "Who we are",
     body: (
       <p>
-        This website, <a href="https://geniemedia.in">geniemedia.in</a>, is operated by Genie Media &amp; Studio, a
+        This website, <a href={SITE_ORIGIN}>{SITE_HOST}</a>, is operated by Genie Media &amp; Studio, a
         digital marketing, web development, video production and podcast studio business based in Visakhapatnam,
         Andhra Pradesh, India (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;). We are responsible for the personal
         data described in this policy.

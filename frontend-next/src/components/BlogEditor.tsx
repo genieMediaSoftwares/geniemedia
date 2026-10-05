@@ -129,7 +129,9 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      // StarterKit v3 bundles Link and Underline; they are added below with
+      // their own settings, so the bundled copies are switched off.
+      StarterKit.configure({ heading: { levels: [1, 2, 3] }, link: false, underline: false }),
       Link.configure({ openOnClick: false, autolink: true }),
       Underline,
       TextAlign.configure({ types: ["heading", "paragraph"] }),

@@ -78,7 +78,7 @@ interface PreviewProps {
   permalink: string;
 }
 
-const SITE_URL = "https://geniemedia.in";
+import { SITE_URL } from "@/lib/env";
 
 const inputCls =
   "w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:border-[#6B4A2D] focus:ring-4 focus:ring-[#6B4A2D]/10 outline-none transition font-medium";

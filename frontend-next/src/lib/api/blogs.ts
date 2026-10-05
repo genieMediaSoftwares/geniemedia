@@ -1,24 +1,12 @@
 import "server-only";
 
-import type { Blog, BlogCard } from "@/types";
+import type { Blog } from "@/types";
 import { CACHE_TAGS, arr, serverGetJson } from "@/lib/api/client";
-import { normalizeBlog } from "@/lib/api/normalize";
+import { normalizeBlog, toBlogCard } from "@/lib/api/normalize";
 
-import { cleanSlug, stripHtml, toIso } from "@/lib/blog";
+import { cleanSlug } from "@/lib/blog";
 
-export { normalizeBlog };
-
-/** The slim card shape the listing pages send to the browser. */
-export const toBlogCard = (blog: Blog): BlogCard => ({
-  id: blog.id,
-  title: blog.title,
-  permalink: blog.permalink,
-  excerpt: blog.metaDescription || stripHtml(blog.description).slice(0, 220),
-  category: blog.category,
-  image: blog.image,
-  createdAt: blog.createdAt,
-  createdIso: toIso(blog.createdAt),
-});
+export { normalizeBlog, toBlogCard };
 
 /** Every published post, newest first. Throws if the backend is unreachable. */
 export async function getPublishedBlogs(): Promise<Blog[]> {

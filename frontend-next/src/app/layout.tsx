@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: { default: "Genie Media & Studio", template: "%s | Genie Media & Studio" },
   description: SITE.description,
   applicationName: SITE.name,
-  verification: { google: GOOGLE_SITE_VERIFICATION },
+  verification: GOOGLE_SITE_VERIFICATION ? { google: GOOGLE_SITE_VERIFICATION } : undefined,
   manifest: "/site.webmanifest",
   icons: {
     icon: [{ url: "/favicon-48.png", sizes: "48x48", type: "image/png" }],

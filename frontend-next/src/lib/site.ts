@@ -5,9 +5,13 @@
  * files in step.
  */
 
-const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://geniemedia.in";
+import { GA4_ID, GOOGLE_SITE_VERIFICATION, GTM_ID, SITE_URL } from "@/lib/env";
 
-export const SITE_ORIGIN = rawSiteUrl.trim().replace(/\/+$/, "");
+/** Public origin of the site (NEXT_PUBLIC_SITE_URL in .env). */
+export const SITE_ORIGIN = SITE_URL;
+
+/** The bare host name, e.g. for showing the domain in text. */
+export const SITE_HOST = new URL(SITE_URL).host;
 
 export const SITE = {
   url: SITE_ORIGIN,
@@ -50,10 +54,8 @@ export const DEFAULT_AUTHOR = {
   jobTitle: "Editorial Team",
 } as const;
 
-/** Analytics IDs, unchanged from the Vite build's index.html. */
-export const GTM_ID = "GTM-TZLCRWCB";
-export const GA4_ID = "G-H5GFQ5HH50";
-export const GOOGLE_SITE_VERIFICATION = "TV7lgY0NjiUrtUvsis_iTwxt3hwtztxF_CYIJ7D3b48";
+/** Analytics and verification IDs (from .env, via src/lib/env.ts). */
+export { GA4_ID, GOOGLE_SITE_VERIFICATION, GTM_ID };
 
 /**
  * Canonical URL for a path. The root keeps its trailing slash and nothing else

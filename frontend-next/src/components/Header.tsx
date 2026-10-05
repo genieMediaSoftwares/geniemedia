@@ -76,7 +76,7 @@ const Header = () => {
 
   const menuItems = MENU_ITEMS;
 
-  // The header lives in the root layout and uses <Link>, so it stays mounted
+  // The header lives in the root layout and uses <Link prefetch={false}>, so it stays mounted
   // (and still) across navigations. Close any open menu when the route changes.
   const pathname = usePathname();
   useEffect(() => {
@@ -94,7 +94,7 @@ const Header = () => {
         <div className="max-w-8xl mx-auto px-0 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 ">
             
-            <Link href="/" className="flex items-center cursor-pointer" aria-label="Genie Media & Studio — home">
+            <Link prefetch={false} href="/" className="flex items-center cursor-pointer" aria-label="Genie Media & Studio — home">
               <img
                 src={logo}
                 alt="Genie Media & Studio"
@@ -114,7 +114,7 @@ const Header = () => {
                   onMouseEnter={() => item.dropdown && setActiveDropdown(item.name)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <Link
+                  <Link prefetch={false}
                     href={item.href}
                     className={`${NAV_LINK} flex items-center gap-1 text-m font-semibold text-gray-100 py-1`}
                   >
@@ -148,7 +148,7 @@ const Header = () => {
                       onMouseLeave={() => setActiveDropdown(null)}          
                     >
                       {item.dropdown.map((subItem) => (
-                        <Link
+                        <Link prefetch={false}
                           key={subItem.name}
                           href={subItem.href}
                           className={`
@@ -178,7 +178,7 @@ const Header = () => {
                 <Phone size={16} />
                 Book a Call
               </a>
-              <Link href="/contact" className={`${BTN_PRIMARY} px-6 py-2.5 text-black font-semibold rounded-full text-sm flex items-center gap-2 shadow-lg z-10`}>
+              <Link prefetch={false} href="/contact" className={`${BTN_PRIMARY} px-6 py-2.5 text-black font-semibold rounded-full text-sm flex items-center gap-2 shadow-lg z-10`}>
                 <Mail size={16} />
                 Contact Us
               </Link>
@@ -224,7 +224,7 @@ const Header = () => {
                       {activeMobileDropdown === item.name && (
                         <div className="ml-4 mt-1 space-y-1">
                           {item.dropdown.map((subItem) => (
-                            <Link
+                            <Link prefetch={false}
                               key={subItem.name}
                               href={subItem.href}
                               className="flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 transition-all"
@@ -238,7 +238,7 @@ const Header = () => {
                       )}
                     </div>
                   ) : (
-                    <Link
+                    <Link prefetch={false}
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="block py-3 px-4 rounded-xl text-gray-700 font-semibold hover:bg-orange-50 hover:text-orange-600 transition-all"
@@ -262,7 +262,7 @@ const Header = () => {
                   <Phone size={18} />
                   Book a Call
                 </a>
-                <Link
+                <Link prefetch={false}
                   href="/contact"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`w-80% ${BTN_PRIMARY} px-6 py-3 text-black font-semibold rounded-full flex items-center justify-center gap-2 shadow-lg z-10`}

@@ -4,6 +4,7 @@ import { Ruler, Lightbulb, ArrowRight } from "lucide-react";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import BASE_URL from "@/Api";
+import { clearToken } from "@/lib/auth";
 import type { Project } from "@/types";
 import type { LucideIcon } from "lucide-react";
 import { requestRevalidate } from "@/lib/api/revalidate";
@@ -356,9 +357,10 @@ export default function AdminProjects() {
         headers: { Authorization: token ?? "" },
       });
 
+      // An expired or invalid login: start a fresh session.
       if (res.status === 401 || res.status === 403) {
-        showToast("Your session expired. Please log in again.", "error");
-        setProjects([]);
+        clearToken();
+        navigate("/admin");
         return;
       }
 

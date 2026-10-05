@@ -12,7 +12,7 @@ import { SITE_ORIGIN } from "@/lib/site";
  * silently remove the site from AI Overviews, ChatGPT search, Perplexity or
  * Claude.
  */
-const DISALLOW = ["/admin", "/admin/", "/api/", "/share/"];
+const DISALLOW = ["/admin", "/admin/", "/api/", "/share/", "/blog-view"];
 
 const AI_CRAWLERS = [
   "GPTBot",
@@ -34,6 +34,8 @@ const AI_CRAWLERS = [
   "DuckAssistBot",
   "YouBot",
 ];
+
+export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
   return {

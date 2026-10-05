@@ -1,3 +1,5 @@
+"use client";
+
 
 import meerabasuAsset from "@/assets/meerabasuWebsite.webp";
 import AvanttaGemsAsset from "@/assets/AvanttaGems.webp";
@@ -12,6 +14,7 @@ import DecagonAsset from "@/assets/decagon.webp";
 import FreenomeAsset from "@/assets/freenome.webp";
 import type { PortfolioItem } from "@/types";
 import { portfolioOrFallback, serviceForCategory } from "@/lib/portfolio";
+import { useLatestProjects } from "@/lib/liveData";
 
 const meerabasu = meerabasuAsset.src;
 const AvanttaGems = AvanttaGemsAsset.src;
@@ -89,7 +92,9 @@ const FALLBACK_PROJECTS: PortfolioItem[] = [
 
 const ProjectsSection = ({ initialProjects }: { initialProjects: PortfolioItem[] | null }) => {
 
-  const projects = portfolioOrFallback(initialProjects, FALLBACK_PROJECTS);
+  // Build-time list first, then the latest from the API (new projects show without a rebuild).
+  const liveProjects = useLatestProjects(initialProjects);
+  const projects = portfolioOrFallback(liveProjects, FALLBACK_PROJECTS);
 
   return (
     <>

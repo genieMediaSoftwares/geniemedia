@@ -12,8 +12,20 @@
  * Exits non-zero on any failure.
  */
 
+import fs from "node:fs";
+
 const BASE = (process.argv[2] || "http://localhost:3000").replace(/\/+$/, "");
-const SITE = "https://geniemedia.in";
+// Expected canonical origin, from NEXT_PUBLIC_SITE_URL in .env.
+const readSiteUrl = () => {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  for (const file of [".env"]) {
+    if (!fs.existsSync(file)) continue;
+    const m = fs.readFileSync(file, "utf8").match(/^NEXT_PUBLIC_SITE_URL=(.*)$/m);
+    if (m) return m[1].trim();
+  }
+  throw new Error("NEXT_PUBLIC_SITE_URL is not set in .env");
+};
+const SITE = readSiteUrl().replace(/\/+$/, "");
 const UA = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
 
 let failures = 0;

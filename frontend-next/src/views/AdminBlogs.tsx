@@ -1,4 +1,5 @@
 "use client";
+import { SHARE_PREVIEW_URL } from "@/lib/env";
 
 import { Ruler, Lightbulb, ArrowRight } from "lucide-react";
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -8,6 +9,7 @@ import SeoPanel from "@/components/SeoPanel";
 import TagInput from "@/components/TagInput";
 import { validateForPublish } from "@/utils/seoAnalysis";
 import BASE_URL from "@/Api";
+import { clearToken } from "@/lib/auth";
 import type { Blog } from "@/types";
 import type { BlogForm, SetBlogField, ToastState } from "@/types/admin";
 import type { LucideIcon } from "lucide-react";
@@ -151,7 +153,7 @@ function BlogCard({ blog, onEdit, onDelete, onPublish, onUnpublish, formatDate }
   const handleCopyShareLink = () => {
     if (!blog.permalink) return;
     // const shareUrl = `${BASE_URL}/share/${blog.permalink}`;
-const shareUrl = `https://geniemedia.in/og.php?slug=${blog.permalink}`;
+const shareUrl = `${SHARE_PREVIEW_URL}?slug=${blog.permalink}`;
 
 
     navigator.clipboard
@@ -458,6 +460,14 @@ export default function AdminBlogs() {
       const allRes = await fetch(`${BASE_URL}/api/admin/blogs`, {
         headers: { Authorization: token ?? "" },
       });
+
+      // An expired or invalid login: start a fresh session instead of quietly
+      // showing only published posts (drafts would look as if they vanished).
+      if (allRes.status === 401 || allRes.status === 403) {
+        clearToken();
+        navigate("/admin");
+        return;
+      }
 
       if (allRes.ok) {
         const allData = await allRes.json();

@@ -1,11 +1,12 @@
 import BASE_URL from "@/Api";
+import { API_INTERNAL_BASE_URL } from "@/lib/env";
 
 /**
  * Base URL for server-side fetches. API_INTERNAL_BASE_URL (server-only, never
  * sent to the browser) lets the Next.js server reach the backend on a private
  * address; otherwise it uses the public one.
  */
-export const SERVER_API_BASE_URL = (process.env.API_INTERNAL_BASE_URL || BASE_URL).trim().replace(/\/+$/, "");
+export const SERVER_API_BASE_URL = API_INTERNAL_BASE_URL || BASE_URL;
 
 /** Revalidation window for public content (seconds). */
 export const CONTENT_REVALIDATE_SECONDS = 60;

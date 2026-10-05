@@ -10,18 +10,17 @@ import { blogPostingGraph } from "@/lib/seo/schema";
 
 /**
  * /blog/<permalink> — permalinks contain slashes ("category/post"), hence the
- * catch-all segment. Every published post is pre-rendered at build time and
- * re-validated every minute; a post published later is rendered on its first
- * request (dynamicParams) and the admin panel triggers an immediate refresh
- * through /api/revalidate on save.
+ * catch-all segment. Every published post is pre-rendered to static HTML at
+ * build time (static export for Hostinger). After publishing a new post, run
+ * `npm run build` and upload `dist/` again so it gets its page.
  *
  * Outcomes:
- *   published post   -> 200 with its own canonical, metadata and JSON-LD
- *   retired slug     -> 308/301 permanent redirect to the current permalink
- *   unknown or draft -> real 404 (notFound), never the home page
+ *   published post   -> static page with its own canonical, metadata and JSON-LD
+ *   retired slug     -> redirect to the current permalink
+ *   unknown or draft -> no file is generated, so Apache answers a real 404
  */
-export const revalidate = 60;
-export const dynamicParams = true;
+// Only posts known at build time exist; anything else is a 404.
+export const dynamicParams = false;
 
 type Params = { slug: string[] };
 

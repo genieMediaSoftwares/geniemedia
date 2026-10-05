@@ -21,6 +21,7 @@ import NuconaerospaceAsset from "@/assets/nuconaerospace.webp";
 import SynergeneAsset from "@/assets/synergeneapi.webp";
 import type { PortfolioItem } from "@/types";
 import { portfolioOrFallback, serviceForCategory } from "@/lib/portfolio";
+import { useLatestProjects } from "@/lib/liveData";
 
 const GenieImg = GenieImgAsset.src;
 const meerabasu = meerabasuAsset.src;
@@ -131,7 +132,9 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
 
   // Published projects come from the database — admins manage them in
   // Admin Panel → Projects. No code change is needed to add a new one.
-  const allProjects = portfolioOrFallback(initialProjects, FALLBACK_PROJECTS);
+  // Build-time list first, then the latest from the API (new projects show without a rebuild).
+  const liveProjects = useLatestProjects(initialProjects);
+  const allProjects = portfolioOrFallback(liveProjects, FALLBACK_PROJECTS);
   const projects = allProjects.slice(0, HOME_PROJECTS_LIMIT);
 
   return (

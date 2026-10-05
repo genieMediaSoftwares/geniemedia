@@ -37,19 +37,19 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
     title: "Privacy Policy | Genie Media & Studio",
     description:
       "How Genie Media & Studio in Visakhapatnam collects, uses and protects personal information submitted through geniemedia.in, and the choices you have.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/terms-and-conditions": {
     title: "Terms & Conditions | Genie Media & Studio",
     description:
       "The terms that apply to using geniemedia.in and requesting digital marketing, website, video production and podcast studio services from Genie Media & Studio.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/": {
     title: "Genie Media, Vizag | Digital Marketing, Podcast & Video Production",
     description:
       "Genie Media & Studio in Visakhapatnam offers digital marketing, SEO, websites, video production and a podcast studio for hire. Book a call or a studio slot.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   // Each page owns one search intent. The home page is the business itself,
   // each service page its service, and the rest (about, contact, projects,
@@ -58,43 +58,43 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
     title: "Services | Marketing, Websites, Video & Podcast Studio | Genie Media",
     description:
       "Explore Genie Media & Studio's services in Visakhapatnam: digital marketing, website development, video production and podcast studio rental.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/about": {
     title: "About Genie Media & Studio | Digital & Media Company in Visakhapatnam",
     description:
       "Meet Genie Media & Studio, a Visakhapatnam team for digital marketing, websites, video production and podcasting. Our story, vision, mission and approach.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/projects": {
     title: "Our Work | Website & E-commerce Projects | Genie Media",
     description:
       "Websites and online stores built by Genie Media & Studio for businesses in India, Australia and the US, on WordPress, Shopify and custom code.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/contact": {
     title: "Contact Genie Media & Studio | Yendada, Visakhapatnam",
     description:
       "Visit or call Genie Media & Studio at KP Icon, Yendada, Visakhapatnam 530045. Phone +91 90328 45433 or email admin@geniemedia.in about your project.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/web_development": {
     title: "Website Development Company in Visakhapatnam (Vizag) | Genie Media",
     description:
       "Genie Media & Studio designs and builds websites in Visakhapatnam (Vizag): business sites, Shopify and WooCommerce stores, WordPress and custom web apps.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/production_house": {
     title: "Production House & Video Production in Vizag | Genie Media",
     description:
       "Video production in Visakhapatnam (Vizag) by Genie Media & Studio: corporate and brand videos, events, product and model shoots, editing and live streaming.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/reviews": {
     title: "Client Reviews & Testimonials | Genie Media & Studio",
     description:
       "Video and written reviews from clients of Genie Media & Studio in Visakhapatnam, covering our podcast studio, production and digital marketing work.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/blogs": {
     title: "Digital Marketing Blog | SEO, Marketing & Business Growth | Genie Media",
@@ -105,13 +105,13 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
     title: "Digital Marketing Services in Vizag | Genie Media",
     description:
       "Genie Media & Studio provides digital marketing, SEO, Google Ads, social media, web development and branding services for businesses in Vizag.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/podcast_studio": {
     title: "Podcast Studio in Visakhapatnam (Vizag) | Genie Media",
     description:
       "Book a podcast studio in Visakhapatnam (Vizag) from ₹1,500 an hour. Record audio or video podcasts with our team and up to three cameras. Editing available.",
-    image: "https://geniemedia.in/GenieMedia-Logo.png",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
 };
 

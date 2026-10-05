@@ -4,8 +4,9 @@ import { getPublishedBlogsSafe } from "@/lib/api/blogs";
 import { canonicalFor } from "@/lib/site";
 import { blogCanonical } from "@/lib/seo/metadata";
 
-// Regenerated at most once a minute, and on demand when the admin publishes.
-export const revalidate = 60;
+// Generated at build time from the published posts.
+// A static export needs the sitemap route marked static explicitly.
+export const dynamic = "force-static";
 
 /** Every indexable public route. Admin, API, share and 404 are never listed. */
 const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: "daily" | "weekly" | "monthly" }> = [

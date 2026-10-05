@@ -24,6 +24,7 @@ import { GA4_ID, GTM_ID } from "@/lib/site";
 export default function Analytics() {
   return (
     <>
+      {GTM_ID && (
       <Script id="gtm-init" strategy="afterInteractive">
         {`window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
@@ -47,6 +48,8 @@ window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
   else w.addEventListener('load', schedule, { once: true });
 })(window, document, '${GTM_ID}');`}
       </Script>
+      )}
+      {GA4_ID && (
       <Script id="ga4-init" strategy="afterInteractive">
         {`window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
@@ -73,12 +76,14 @@ gtag('config', '${GA4_ID}');
   else window.addEventListener('load', schedule, { once: true });
 })();`}
       </Script>
+      )}
     </>
   );
 }
 
 /** The GTM <noscript> fallback, placed first in <body> as Google specifies. */
 export function GtmNoScript() {
+  if (!GTM_ID) return null;
   return (
     <noscript>
       <iframe

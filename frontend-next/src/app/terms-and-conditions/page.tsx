@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import LegalPage, { LegalContact, type LegalSection } from "@/components/legal/LegalPage";
 import JsonLd from "@/components/seo/JsonLd";
+import { SITE_HOST, SITE_ORIGIN } from "@/lib/site";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
 
@@ -16,7 +17,7 @@ const SECTIONS: LegalSection[] = [
     title: "Acceptance of these terms",
     body: (
       <p>
-        These terms govern your use of <a href="https://geniemedia.in">geniemedia.in</a>, operated by Genie Media
+        These terms govern your use of <a href={SITE_ORIGIN}>{SITE_HOST}</a>, operated by Genie Media
         &amp; Studio, Visakhapatnam, India. By using the website you agree to them. If you do not agree, please do not
         use the website.
       </p>
