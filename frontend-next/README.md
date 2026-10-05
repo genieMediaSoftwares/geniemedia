@@ -100,9 +100,18 @@ the backend.
 
 ### Publishing new content
 
-The site is static, so **a new or edited blog post or project appears on the
-website after the next `npm run build` and upload**. The admin panel still
-saves to the backend immediately; only the public pages wait for the rebuild.
+What updates by itself, with no rebuild:
+
+- **Projects and the blog list**: the pages load the latest data from the API
+  after they open.
+- **A new blog post's page**: until the next build, `.htaccess` serves a
+  fallback page that loads the post from the API (marked noindex).
+- **sitemap.xml**: served live by `sitemap.php` (fixed pages from the build +
+  every published post from the API, cached 5 minutes; falls back to the
+  build-time sitemap if the backend is down).
+
+What a rebuild adds: a fully pre-rendered, indexable page for each new post.
+So after publishing a post, run `npm run build` and upload `dist/` when you can.
 
 ### Local development
 

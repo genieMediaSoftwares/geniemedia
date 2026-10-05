@@ -87,6 +87,30 @@ fs.writeFileSync(
 console.log(`postbuild: ${rules.length} retired blog slug redirect(s) and site URL ${siteUrl} written to dist/.htaccess`);
 
 // ---------------------------------------------------------------------------
+// Live sitemap: sitemap.php (served at /sitemap.xml) needs the fixed pages and
+// a full build-time copy to fall back on, plus the API and site URLs.
+// ---------------------------------------------------------------------------
+const SITEMAP = path.join(ROOT, "dist", "sitemap.xml");
+const SITEMAP_PHP = path.join(ROOT, "dist", "sitemap.php");
+if (fs.existsSync(SITEMAP) && fs.existsSync(SITEMAP_PHP)) {
+  const full = fs.readFileSync(SITEMAP, "utf8");
+  fs.writeFileSync(path.join(ROOT, "dist", "sitemap-static.xml"), full);
+  // Fixed pages only: drop every blog post entry; sitemap.php adds them live.
+  const pagesOnly = full.replace(/<url>\s*<loc>[^<]*\/blog\/[^<]*<\/loc>[\s\S]*?<\/url>\s*/g, "");
+  fs.writeFileSync(path.join(ROOT, "dist", "sitemap-pages.xml"), pagesOnly);
+
+  if (!api) {
+    console.error("postbuild: NEXT_PUBLIC_API_BASE_URL is not set in .env — cannot write dist/sitemap.php.");
+    process.exit(1);
+  }
+  let php = fs.readFileSync(SITEMAP_PHP, "utf8");
+  php = php.split("__API_BASE_URL__").join(api).split("__SITE_URL__").join(siteUrl);
+  fs.writeFileSync(SITEMAP_PHP, php);
+  const pageCount = (pagesOnly.match(/<url>/g) || []).length;
+  console.log(`postbuild: live sitemap configured (${pageCount} fixed pages + published posts from ${api})`);
+}
+
+// ---------------------------------------------------------------------------
 // contact.php: fill in the email settings and site URL from .env.
 // ---------------------------------------------------------------------------
 const CONTACT_PHP = path.join(ROOT, "dist", "contact.php");
