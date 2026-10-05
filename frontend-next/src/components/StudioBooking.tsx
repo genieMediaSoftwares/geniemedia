@@ -287,7 +287,7 @@ export default function PodcastStudioBooking() {
               <div>
                 {/* Category Filter */}
                 <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-                  <h2 className="text-xl font-bold text-gray-800 mb-4">Select Category</h2>
+                  <p className="text-xl font-bold text-gray-800 mb-4">Select Category</p>
                   <div className="flex flex-wrap gap-3">
                     {categories.map((cat) => (
                       <button
@@ -295,7 +295,7 @@ export default function PodcastStudioBooking() {
                         onClick={() => setSelectedCategory(cat)}
                         className={`px-4 py-2 rounded-lg border-2 transition-all ${
                           selectedCategory === cat
-                            ? 'bg-amber-50 border-amber-600 text-amber-800 font-semibold'
+                            ? 'bg-amber-50 border-gray-900 text-amber-800 font-semibold'
                             : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
                         }`}
                       >
@@ -308,7 +308,7 @@ export default function PodcastStudioBooking() {
 
                 {/* Service Cards */}
                 <div className="bg-white rounded-lg shadow-sm p-6">
-                  <h2 className="text-xl font-bold text-gray-800 mb-4">Select Service</h2>
+                  <p className="text-xl font-bold text-gray-800 mb-4">Select Service</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-2">
                     {filteredServices.map((service, index) => (
                       <div
@@ -316,7 +316,7 @@ export default function PodcastStudioBooking() {
                         onClick={() => handleServiceSelect(service)}
                         className={`relative border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md animate-booking-slide-up motion-reduce:animate-none ${SERVICE_DELAY[index] ?? ''} ${
                           selectedService?.id === service.id
-                            ? 'border-amber-600 bg-amber-50'
+                            ? 'border-gray-900 bg-amber-50'
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
@@ -331,7 +331,7 @@ export default function PodcastStudioBooking() {
                             <Mic className="w-6 h-6" aria-hidden="true" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-gray-800 mb-2">{service.name}</h3>
+                            <p className="font-semibold text-gray-800 mb-2">{service.name}</p>
                             <div className="flex items-center justify-between text-sm">
                               <span className="text-gray-600">Duration: <span className="font-semibold text-gray-800">{service.duration}</span></span>
                               <span className="bg-amber-700 text-white px-3 py-1 rounded-md font-semibold">
@@ -350,7 +350,7 @@ export default function PodcastStudioBooking() {
             {/* Step 2: Date & Time */}
             {currentStep === 2 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
-                <h2 className="text-xl font-bold text-gray-800 mb-6">Date & Time</h2>
+                <p className="text-xl font-bold text-gray-800 mb-6">Date & Time</p>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Calendar */}
@@ -364,9 +364,9 @@ export default function PodcastStudioBooking() {
                       >
                         <ChevronLeft className="w-5 h-6" aria-hidden="true" />
                       </button>
-                      <h3 className="font-semibold text-gray-800">
+                      <p className="font-semibold text-gray-800">
                         {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                      </h3>
+                      </p>
                       <button
                         onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
                         className="p-2 hover:bg-gray-100 rounded-lg"
@@ -422,7 +422,7 @@ export default function PodcastStudioBooking() {
 
                   {/* Time Slots */}
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-4">Time Slot</h3>
+                    <p className="font-semibold text-gray-800 mb-4">Time Slot</p>
                     <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2">
                       
                       {/* Morning */}
@@ -435,7 +435,7 @@ export default function PodcastStudioBooking() {
                               onClick={() => setSelectedTimeSlot(slot)}
                               className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                                 selectedTimeSlot?.id === slot.id
-                                  ? 'border-amber-600 bg-amber-50'
+                                  ? 'border-gray-900 bg-amber-50'
                                   : 'border-gray-200 hover:border-gray-300'
                               }`}
                             >
@@ -456,7 +456,7 @@ export default function PodcastStudioBooking() {
                               onClick={() => setSelectedTimeSlot(slot)}
                               className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                                 selectedTimeSlot?.id === slot.id
-                                  ? 'border-amber-600 bg-amber-50'
+                                  ? 'border-gray-900 bg-amber-50'
                                   : 'border-gray-200 hover:border-gray-300'
                               }`}
                             >
@@ -477,7 +477,7 @@ export default function PodcastStudioBooking() {
                               onClick={() => setSelectedTimeSlot(slot)}
                               className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                                 selectedTimeSlot?.id === slot.id
-                                  ? 'border-amber-600 bg-amber-50'
+                                  ? 'border-gray-900 bg-amber-50'
                                   : 'border-gray-200 hover:border-gray-300'
                               }`}
                             >
@@ -496,7 +496,7 @@ export default function PodcastStudioBooking() {
             {/* Step 3: Basic Details */}
             {currentStep === 3 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
-                <h2 className="text-xl font-bold text-gray-800 mb-6">Basic Details</h2>
+                <p className="text-xl font-bold text-gray-800 mb-6">Basic Details</p>
                 <div className="space-y-4 max-w-md">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
@@ -505,7 +505,7 @@ export default function PodcastStudioBooking() {
                       name="name"
                       value={bookingDetails.name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-amber-600 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none"
                       placeholder="Enter your name"
                       required
                     />
@@ -517,7 +517,7 @@ export default function PodcastStudioBooking() {
                       name="email"
                       value={bookingDetails.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-amber-600 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none"
                       placeholder="your@email.com"
                       required
                     />
@@ -529,7 +529,7 @@ export default function PodcastStudioBooking() {
                       name="phone"
                       value={bookingDetails.phone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-amber-600 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none"
                       placeholder="+91 1234567890"
                       required
                     />
@@ -540,7 +540,7 @@ export default function PodcastStudioBooking() {
                       name="notes"
                       value={bookingDetails.notes}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-amber-600 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none"
                       rows={4}
                       placeholder="Any special requirements or notes..."
                     />
@@ -552,11 +552,11 @@ export default function PodcastStudioBooking() {
             {/* Step 4: Summary */}
             {currentStep === 4 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
-                <h2 className="text-xl font-bold text-gray-800 mb-6">Booking Summary</h2>
+                <p className="text-xl font-bold text-gray-800 mb-6">Booking Summary</p>
                 <div className="space-y-6">
                   {/* Service Info */}
-                  <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
-                    <h3 className="font-semibold text-amber-900 mb-3">Selected Service</h3>
+                  <div className="bg-amber-50 border-2 border-gray-200 rounded-lg p-4">
+                    <p className="font-semibold text-amber-900 mb-3">Selected Service</p>
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-12 h-12 bg-gradient-to-br from-amber-700 to-amber-900 rounded-full flex items-center justify-center text-white text-xl">
                         <Mic className="w-6 h-6" aria-hidden="true" />
@@ -571,14 +571,14 @@ export default function PodcastStudioBooking() {
 
                   {/* Date & Time */}
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">Date & Time</h3>
+                    <p className="font-semibold text-gray-800 mb-2">Date & Time</p>
                     <p className="text-gray-600"><CalendarDays className="inline-block w-4 h-4 mr-1.5 -mt-0.5" aria-hidden="true" />{selectedDate ? selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'Not selected'}</p>
                     <p className="text-gray-600"><Clock className="inline-block w-4 h-4 mr-1.5 -mt-0.5" aria-hidden="true" />{selectedTimeSlot ? selectedTimeSlot.time : 'Not selected'}</p>
                   </div>
 
                   {/* Contact Info */}
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">Contact Information</h3>
+                    <p className="font-semibold text-gray-800 mb-2">Contact Information</p>
                     <p className="text-gray-600"><User className="inline-block w-4 h-4 mr-1.5 -mt-0.5" aria-hidden="true" />{bookingDetails.name}</p>
                     <p className="text-gray-600"><Mail className="inline-block w-4 h-4 mr-1.5 -mt-0.5" aria-hidden="true" />{bookingDetails.email}</p>
                     <p className="text-gray-600"><Smartphone className="inline-block w-4 h-4 mr-1.5 -mt-0.5" aria-hidden="true" />{bookingDetails.phone}</p>

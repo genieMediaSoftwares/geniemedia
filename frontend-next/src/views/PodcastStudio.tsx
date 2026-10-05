@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, type ReactNode } from "react";
 import { Mic } from "lucide-react";
 import PodcastStudioBooking from "@/components/StudioBooking";
 import StudioReviews, { PODCAST_CTA_BUTTON } from "@/components/StudioReviews";
@@ -13,6 +13,7 @@ import lightAsset from "@/assets/podcast/studio-light2-min.jpg";
 import set2Asset from "@/assets/podcast/studio-set2-min.jpg";
 import nytviewAsset from "@/assets/podcast/StudioNightView-min.jpg";
 import setAsset from "@/assets/podcast/studioSet-min.jpg";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const cameras = camerasAsset.src;
 const chairs = chairsAsset.src;
@@ -37,7 +38,7 @@ const IMG_SIZE = {
   [set]: LANDSCAPE,
 };
 
-const inlineLink = "text-orange-700 underline underline-offset-2 hover:text-orange-900";
+const inlineLink = CONTENT_LINK;
 
 const PODCAST_SERVICES = [
   {
@@ -46,7 +47,7 @@ const PODCAST_SERVICES = [
   },
   {
     title: "Video podcast with our team",
-    body: "Our production team runs the session with two cameras (from ₹3,999 an hour) or three cameras (from ₹5,000 an hour).",
+    body: "For video podcast production, our team handles the podcast filming with two cameras (from ₹3,999 an hour) or three cameras (from ₹5,000 an hour).",
   },
   {
     title: "Audio podcasts and interviews",
@@ -56,7 +57,8 @@ const PODCAST_SERVICES = [
     title: "Editing and post-production",
     body: (
       <>
-        Video and photo editing is available at an additional charge. For shoots
+        Podcast editing for audio and video, including short clips for Reels and
+        Shorts, plus photo editing, is available at an additional charge. For shoots
         beyond the studio, see our{" "}
         <a href="/production_house" className={inlineLink}>video production services</a>.
       </>
@@ -89,9 +91,12 @@ const PODCAST_FAQS = [
     q: "Can businesses use the studio?",
     a: (
       <>
-        Yes. Businesses book it for interviews and brand podcasts, and our{" "}
+        Yes. Businesses book it for interviews, branded podcasts and corporate
+        podcasts, and our{" "}
         <a href="/digital_marketing" className={inlineLink}>social media marketing team</a>{" "}
-        can help promote the episodes.
+        can help promote the episodes. You can also see{" "}
+        <a href="/projects" className={inlineLink}>our client projects</a> or read{" "}
+        <a href="/blogs" className={inlineLink}>content and marketing tips on our blog</a>.
       </>
     ),
   },
@@ -162,7 +167,11 @@ const WAVE_BARS = [
   "h-[68px] ![animation-delay:1.6s]", "h-[72px] ![animation-delay:1.7s]", "h-[58px] ![animation-delay:1.8s]", "h-[65px] ![animation-delay:1.9s]",
 ];
 
-export default function PodcastStudio() {
+/**
+ * `platforms` is the server-rendered "Platforms we use" section, passed in by
+ * the route so its logo data never ships to the browser as JavaScript.
+ */
+export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) {
   // Reveal-on-scroll: elements marked `data-reveal` get the `animate` class
   // when they enter the viewport, which their `[&.animate]:` classes respond to.
   useEffect(() => {
@@ -213,16 +222,16 @@ export default function PodcastStudio() {
         <div className={`${HERO_GLOW} ![animation-delay:-10s] -bottom-[200px] -right-[200px] left-0 top-0 bg-[#6B4FFF]`}></div>
 
         <h1 className="mb-5 mt-10 text-center text-[clamp(38px,6vw,60px)] font-extrabold leading-[1.1] tracking-[-0.03em]">
-          <span className="inline-block animate-podcast-hero-rise">YOUR PODCAST STUDIO</span>
+          <span className="inline-block animate-podcast-hero-rise">PODCAST STUDIO</span>
           <br />
           <span className="inline-block animate-podcast-hero-rise ![animation-delay:0.08s]">IN</span>
           <span className="ml-[1.2rem] inline-block animate-podcast-hero-rise bg-[linear-gradient(135deg,#ffffff,#ffffff)] bg-clip-text [-webkit-text-fill-color:transparent]">
-            VISAKHAPATNAM
+            VIZAG
           </span>
         </h1>
 
         <p className="mb-10 max-w-[700px] animate-podcast-desc text-center text-[clamp(16px,2vw,18px)] leading-[1.6] text-white">
-          Book our podcast studio in Visakhapatnam to record audio and video podcasts with professional equipment and our production team. We support solo shows, two-person conversations and video podcasts with up to three cameras.
+          Book our podcast studio in Vizag (Visakhapatnam) to record audio and video podcasts with professional equipment and our production team. We support solo shows, two-person conversations and video podcasts with up to three cameras.
         </p>
 
         <div className="flex animate-podcast-cta items-center gap-5 max-[768px]:w-full max-[768px]:flex-col">
@@ -271,7 +280,7 @@ export default function PodcastStudio() {
               YOUR VOICE. OUR STUDIO. ONE VISION.
             </h2>
             <p className="mb-10 max-w-[580px] text-[clamp(16px,1.8vw,18px)] leading-[1.7] text-white/75">
-              At Genie Studio, your ideas become sound that connects. We provide
+              At Genie Media & Studio, your ideas become sound that connects. We provide
               high-quality acoustics, professional support, and more.
             </p>
             <a href="https://wa.me/919032845433" className={PODCAST_CTA_BUTTON}>
@@ -449,6 +458,8 @@ export default function PodcastStudio() {
           </div>
         </div>
       </section>
+
+      {platforms}
 
       {/* TESTIMONIAL SECTION */}
       <StudioReviews heading="WHAT OUR CREATORS SAY" orbAnimation="animate-podcast-drift-20" />

@@ -1,17 +1,12 @@
-import { ArrowRight } from "lucide-react";
 import React from 'react'
 import type { PortfolioItem } from "@/types";
 
 
 import ContactSec from "@/components/contactSection"
 import ProjectsSection from "@/components/ProjectsSection"
-import WordpressAsset from "@/assets/wordpress.png";
-import ShopifyAsset from "@/assets/shopify.webp";
-import CodeAsset from "@/assets/code.png";
+import WhatWeBuild from "@/components/WhatWeBuild"
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
-const Wordpress = WordpressAsset.src;
-const Shopify = ShopifyAsset.src;
-const Code = CodeAsset.src;
 export default function Projects({ initialProjects }: { initialProjects: PortfolioItem[] | null }) {
 
    
@@ -30,88 +25,19 @@ export default function Projects({ initialProjects }: { initialProjects: Portfol
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
                Business websites and online stores we have designed and built for clients in India, Australia and the US. See how we approach{" "}
-               <a href="/web_development" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">website development</a>{" "}
+               <a href="/web_development" className={CONTENT_LINK}>website development</a>{" "}
                and how we help those websites grow with{" "}
-               <a href="/digital_marketing" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">digital marketing and SEO</a>.
+               <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing and SEO</a>.
+               Planning a new site?{" "}
+               <a href="/contact" className={CONTENT_LINK}>Talk to our web team</a>.
               </p>
             </div>
 
         </div>
       </div>
 
-      <section className="relative py-10 bg-white overflow-hidden border-y-2">
-            
-            <h2 className="text-center text-4xl font-bold mb-16">
-              Platforms we use for Web Development
-            </h2>
-      
-           
-            <div className="flex flex-col md:flex-row items-center justify-center gap-20 mb-12">
-              <img
-                src={Wordpress}
-                alt="WordPress"
-                className="w-28 md:w-32 hover:scale-110 transition-transform duration-300 -mb-8"
-                loading='lazy'
-                  width="225"
-                  height="225"
-                  decoding="async"
-                />
-              <img
-                src={Shopify}
-                alt="Shopify"
-                className="w-36 md:w-42 hover:scale-110 transition-transform duration-300 -mb-8"
-                loading='lazy'
-                  width="1302"
-                  height="1400"
-                  decoding="async"
-                />
-              <img
-                src={Code}
-                alt="Custom code development"
-                className="w-36 md:w-48 hover:scale-110 transition-transform duration-300"
-                loading='lazy'
-                  width="259"
-                  height="194"
-                  decoding="async"
-                />
-            </div>
-      
-            
-            <div className="max-w-4xl mx-auto text-center px-4">
-              <p className="text-xl md:text-2xl font-semibold text-gray-800 leading-relaxed mb-8">
-                If you're looking for an agency that elevates your brand with creativity,
-                strategy, and innovation, then you’re ready for us.
-              </p>
-      
-              
-              <a
-                href="https://wa.me/919032845433"
-                className="
-                   inline-flex items-center justify-center gap-2
-                    px-5 py-3                
-                    sm:px-8 sm:py-4          
-                    
-                    rounded-full
-                    bg-orange-500
-                    text-black
-                    text-sm sm:text-base    
-                    font-semibold
-                    hover:bg-gray-900
-                    hover:text-gray-100
-                    active:scale-95
-                    
-                    transition-all duration-300
-                    shadow-lg
-                    w-full sm:w-auto  
-                "
-              >
-                Need help to upscale your brand
-                <ArrowRight className="w-5 h-7" strokeWidth={2.5} aria-hidden="true" />
-              </a>
-            </div>
-      
-            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02),transparent_70%)]" />
-          </section>
+      {/* Replaces the old three-image "Platforms we use" block; same position, above the projects. */}
+      <WhatWeBuild />
 
           <ProjectsSection initialProjects={initialProjects} />
 

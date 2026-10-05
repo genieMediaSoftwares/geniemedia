@@ -377,3 +377,47 @@ export const auditPage = (doc: SeoDocument, opts: AuditOptions): AuditResult => 
     },
   };
 };
+
+/* ── Keyword coverage ───────────────────────────────────────────────────── */
+
+export type KeywordTier = "primary" | "secondary" | "semantic" | "local" | "supporting";
+
+export interface CoverageRow {
+  term: string;
+  tier: KeywordTier;
+  title: boolean;
+  description: boolean;
+  h1: boolean;
+  h2: boolean;
+  opening: boolean;
+  /** Natural uses in the visible content. */
+  body: number;
+  linkText: boolean;
+  alt: boolean;
+}
+
+/**
+ * Where each target term appears on the page. This is a placement report,
+ * not a score: nothing here rewards repetition, and a term is never expected
+ * in every element. A primary term belongs in the title, H1 and opening; a
+ * semantic term only needs to occur naturally in the body.
+ */
+export const keywordCoverage = (doc: SeoDocument, terms: Array<{ term: string; tier: KeywordTier }>): CoverageRow[] => {
+  const h1 = doc.headings.filter((h) => h.level === 1).map((h) => h.text).join(" ");
+  const h2 = doc.headings.filter((h) => h.level === 2 || h.level === 3).map((h) => h.text).join(" | ");
+  const opening = doc.paragraphs.slice(0, 2).join(" ");
+  const links = doc.links.filter((l) => l.internal).map((l) => l.text).join(" | ");
+  const alts = doc.images.map((i) => i.alt ?? "").join(" | ");
+  return terms.map(({ term, tier }) => ({
+    term,
+    tier,
+    title: has(doc.metadata.titles[0] ?? "", term),
+    description: has(doc.metadata.descriptions[0] ?? "", term),
+    h1: has(h1, term),
+    h2: has(h2, term),
+    opening: has(opening, term),
+    body: countPhrase(doc.text, term),
+    linkText: has(links, term),
+    alt: has(alts, term),
+  }));
+};

@@ -57,7 +57,7 @@ export default function LegalPage({
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
                   {i + 1}. {s.title}
                 </h2>
-                <div className="space-y-4 text-gray-700 leading-relaxed [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-orange-700 [&_a]:underline [&_a]:underline-offset-2 [&_strong]:text-gray-900">
+                <div className="space-y-4 text-gray-700 leading-relaxed [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_a]:text-inherit [&_a]:no-underline [&_a]:transition-opacity [&_a]:duration-200 [&_a:hover]:opacity-80 [&_a]:rounded-sm [&_a:focus-visible]:outline [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-2 [&_a:focus-visible]:outline-current [&_strong]:text-gray-900">
                   {s.body}
                 </div>
               </section>

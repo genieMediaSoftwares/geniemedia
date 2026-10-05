@@ -15,6 +15,7 @@
 import type { JsonLdGraph, JsonLdObject, RouteMeta, RouteMetaEntry } from "@/types";
 import { SITE_ORIGIN, canonicalFor } from "@/lib/site";
 import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
+import { PRODUCTION_HOUSE_FAQS, WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
 
 export { SITE_ORIGIN, canonicalFor };
 
@@ -89,14 +90,14 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
     breadcrumb: "Web Development",
     title: "Web Development Company in Vizag | Genie Media",
     description:
-      "Genie Media & Studio offers web development in Visakhapatnam (Vizag): business websites, Shopify and WooCommerce stores, WordPress and custom web apps.",
+      "Custom web development in Vizag by Genie Media & Studio: business and ecommerce websites on WordPress, Shopify or React and Next.js, plus UI/UX and upkeep.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/production_house": {
     breadcrumb: "Production House",
     title: "Production House & Video Production in Vizag | Genie Media",
     description:
-      "Genie Media & Studio is a production house in Visakhapatnam (Vizag) for corporate and brand videos, events, product shoots, editing and live streaming.",
+      "Genie Media & Studio is a production house in Vizag for corporate, commercial and product videos, brand films, events, editing, photography and live streaming.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/reviews": {
@@ -121,9 +122,9 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
   "/podcast_studio": {
     breadcrumb: "Podcast Studio",
-    title: "Podcast Studio in Visakhapatnam (Vizag) | Genie Media",
+    title: "Podcast Studio in Vizag | Genie Media & Studio",
     description:
-      "Book a podcast studio in Visakhapatnam (Vizag) from ₹1,500 an hour. Record audio or video podcasts with our team and up to three cameras. Editing available.",
+      "Book a podcast studio in Vizag from ₹1,500 an hour. Podcast recording, video podcast filming with up to three cameras, and podcast editing by our team.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
 };
@@ -176,6 +177,14 @@ const ORGANIZATION: JsonLdObject & { "@id": string } = {
  * ContactPage, CollectionPage...). `service` is merged into a Service node
  * whose provider is the business.
  */
+/** Where every service is offered: Visakhapatnam (Vizag), Andhra Pradesh. */
+const VIZAG_AREA: JsonLdObject = {
+  "@type": "City",
+  name: "Visakhapatnam",
+  alternateName: "Vizag",
+  containedInPlace: { "@type": "State", name: "Andhra Pradesh", containedInPlace: { "@type": "Country", name: "India" } },
+};
+
 interface PageGraphOptions {
   type?: string;
   service?: JsonLdObject;
@@ -203,6 +212,7 @@ const pageGraph = (meta: RouteMeta, { type = "WebPage", service, extraNodes = []
             url: meta.canonical,
             description: meta.description,
             provider: { "@id": ORGANIZATION["@id"] },
+            areaServed: VIZAG_AREA,
             ...service,
           },
         ]
@@ -222,6 +232,13 @@ const pageGraph = (meta: RouteMeta, { type = "WebPage", service, extraNodes = []
     ...extraNodes,
     ORGANIZATION,
   ],
+});
+
+/** A FAQPage node built from the FAQ list the page renders. */
+const faqPage = (meta: RouteMeta, faqs: Array<{ q: string; a: string }>): JsonLdObject => ({
+  "@type": "FAQPage",
+  "@id": `${meta.canonical}#faq`,
+  mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 });
 
 /** An OfferCatalog of named sub-services, exactly as a page lists them. */
@@ -310,7 +327,8 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
           "Google Ads & PPC Management",
           "Social Media Marketing",
           "Content Marketing",
-          "Lead Generation & Conversion Optimization",
+          "Lead Generation",
+          "Conversion Optimization",
           "Website Design & Development",
           "Branding & Creative Services",
         ]),
@@ -335,6 +353,12 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
       service: {
         name: "Podcast Studio Rental",
         serviceType: "Podcast recording studio",
+        hasOfferCatalog: catalog("Podcast studio services", [
+          "Studio-only hire",
+          "Video podcast with our team",
+          "Audio podcasts and interviews",
+          "Editing and post-production",
+        ]),
         offers: PODCAST_PACKAGES.map(({ name, price }) => ({
           "@type": "Offer",
           name,
@@ -365,6 +389,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
           "Hosting & Deployment Solutions",
         ]),
       },
+      extraNodes: [faqPage(meta, WEB_DEVELOPMENT_FAQS)],
     }),
   "/production_house": (meta) =>
     pageGraph(meta, {
@@ -380,6 +405,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
           "Live Streaming & Event Coverage",
         ]),
       },
+      extraNodes: [faqPage(meta, PRODUCTION_HOUSE_FAQS)],
     }),
   "/about": (meta) => pageGraph(meta, { type: "AboutPage" }),
   "/contact": (meta) => pageGraph(meta, { type: "ContactPage" }),

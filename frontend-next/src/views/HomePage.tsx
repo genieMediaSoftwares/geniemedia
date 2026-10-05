@@ -1,4 +1,5 @@
-import { ArrowRight, ChevronRight, Sparkles, Layers, Mic, Globe } from "lucide-react";
+import { Fragment } from "react";
+import { ArrowDown, ArrowRight, Sparkles, Layers, Mic, Globe } from "lucide-react";
 
 import AboutUs from "@/components/AboutSection";
 import Contact from "@/components/contactSection";
@@ -10,14 +11,13 @@ import meerabasuAsset from "@/assets/meerabasuWebsite.webp";
 import AvanttaGemsAsset from "@/assets/AvanttaGems.webp";
 import KNSAsset from "@/assets/knsMetals.webp";
 import laserFoldAsset from "@/assets/LaserFold.webp";
-import WordpressAsset from "@/assets/wordpress.png";
-import ShopifyAsset from "@/assets/shopify.webp";
-import CodeAsset from "@/assets/code.png";
 import NuconaerospaceAsset from "@/assets/nuconaerospace.webp";
 import SynergeneAsset from "@/assets/synergeneapi.webp";
 import HomeProjects from "@/components/home/HomeProjects";
+import PlatformsWeUse from "@/components/PlatformsWeUse";
 import WhatsAppContactLink from "@/components/home/WhatsAppContactLink";
 import type { PortfolioItem } from "@/types";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const GenieImg = GenieImgAsset.src;
 const GenieImg640 = GenieImg640Asset.src;
@@ -25,9 +25,6 @@ const meerabasu = meerabasuAsset.src;
 const AvanttaGems = AvanttaGemsAsset.src;
 const KNS = KNSAsset.src;
 const laserFold = laserFoldAsset.src;
-const Wordpress = WordpressAsset.src;
-const Shopify = ShopifyAsset.src;
-const Code = CodeAsset.src;
 const Nuconaerospace = NuconaerospaceAsset.src;
 const Synergene = SynergeneAsset.src;
 
@@ -94,7 +91,7 @@ const HOME_BTN_SECONDARY =
 const STAT_CARD =
   "transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(255,107,0,0.2)]";
 
-const heroLink = "text-orange-700 underline decoration-orange-300 underline-offset-4 hover:text-orange-900";
+const heroLink = CONTENT_LINK;
 
 const WHATSAPP_URL = "https://wa.me/919032845433";
 
@@ -159,7 +156,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left Content */}
             <div className="animate-home-content motion-reduce:animate-none space-y-8 text-center lg:text-left mt-4">
-              <div className="animate-home-badge motion-reduce:animate-none inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-100 to-orange-50 border border-orange-200 rounded-full mt-8">
+              <div className="animate-home-badge motion-reduce:animate-none inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-100 to-orange-50 rounded-full mt-8">
                 <Sparkles className="text-orange-500" size={16} />
                 <span className="text-sm font-semibold text-orange-700 ">
                   Genie Media &amp; Studio · Visakhapatnam
@@ -176,8 +173,8 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 Genie Media &amp; Studio is a digital marketing agency and creative
                 media company in Vizag, Andhra Pradesh. We run{" "}
                 <a href="/digital_marketing" className={heroLink}>SEO, social media marketing and Google Ads campaigns</a>,{" "}
-                <a href="/web_development" className={heroLink}>build websites</a>,{" "}
-                <a href="/production_house" className={heroLink}>shoot brand videos</a>{" "}
+                <a href="/web_development" className={heroLink}>offer website development</a>,{" "}
+                <a href="/production_house" className={heroLink}>shoot brand videos in our production house</a>{" "}
                 and rent out our{" "}
                 <a href="/podcast_studio" className={heroLink}>podcast studio</a>.
               </p>
@@ -204,7 +201,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 {stats.map((stat, index) => (
                   <div
                     key={index}
-                    className={`${STAT_CARD} bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-orange-100 shadow-lg`}
+                    className={`${STAT_CARD} bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-100 shadow-lg`}
                   >
                     <stat.icon
                       className="text-orange-500 mb-2 mx-auto lg:mx-0"
@@ -260,7 +257,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-bounce ">
-          <div className="w-6 h-10 border-2 border-orange-400 rounded-full flex items-start justify-center p-2">
+          <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex items-start justify-center p-2">
             <div className="w-1 h-2 bg-orange-500 rounded-full animate-home-pulse motion-reduce:animate-none"></div>
           </div>
         </div>
@@ -294,7 +291,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
           <p className="max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed mb-0">
            We create digital marketing that feels natural, human and easy to remember.
            From SEO and social media to website design, branding and content, we help businesses in Vizag
-           get seen online. As a result, they win more leads and build trust on every platform.
+           grow their online visibility. As a result, they win more leads and build trust on every platform.
           </p>
 
         </div>
@@ -302,67 +299,52 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
 
       <AboutUs />
 
+      {/* How It Works.
+          The arrows are their own grid columns (not absolutely positioned),
+          so each one always sits centred in the gap between two cards and can
+          never overlap or be clipped. lg+: card | arrow | card | arrow | card.
+          Below lg: one column with downward arrows. Cards share one structure
+          and stretch to equal height. */}
       <section className="bg-white py-10 md:py-14">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center gap-3 mb-4 ">
-            <span className="w-8 h-[1px] bg-[#F7F7F7]"></span>
-            <p className="text-orange-600 text-center font-medium text-2xl sm:text-4xl uppercase tracking-wide">
-              How It Works
-            </p>
-          </div>
+          <h2 className="text-orange-600 text-center font-medium text-2xl sm:text-4xl uppercase tracking-wide mb-8 md:mb-10">
+            How It Works
+          </h2>
 
-          {/* Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
+          <ol className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-stretch max-w-xl lg:max-w-none mx-auto">
             {steps.map((item, index) => (
-              <div key={item.step} className="relative">
-                {index !== 2 && (
-                  <span className="hidden md:block absolute -right-7 top-1/2 -translate-y-1/2 text-5xl text-gray-700">
-                    <ChevronRight className="w-12 h-12" aria-hidden="true" />
-                  </span>
-                )}
-
-                {/* Card */}
-                <div
-                  className={`
-                  h-full rounded-xl p-10 text-center transition-all duration-300
-                  ${
-                    item.active
-                      ? "bg-orange-400 text-black scale-105"
-                      : "bg-[#0B1220] text-white"
-                  }
-                `}
+              <Fragment key={item.step}>
+                <li
+                  className={`flex flex-col items-center justify-center text-center rounded-xl px-6 py-8 sm:px-8 lg:px-8 lg:py-10 min-h-[18.5rem] sm:min-h-[15rem] transition-shadow duration-300 hover:shadow-xl ${
+                    item.active ? "bg-orange-400 text-black" : "bg-[#0B1220] text-white"
+                  }`}
                 >
-                  <p
-                    className={`text-lg font-medium mb-4 
-                    ${item.active ? "text-black/70" : "text-orange-600"}`}
-                  >
+                  <p className={`text-lg font-semibold mb-3 ${item.active ? "text-black/70" : "text-orange-500"}`}>
                     {item.step}
                   </p>
-
-                  <h3 className="text-2xl font-bold mb-6">{item.title}</h3>
-
-                  <div
-                    className={`w-14 h-[1px] mx-auto mb-6 
-                    ${item.active ? "bg-black/30" : "bg-gray-700"}`}
-                  />
-
-                  <p
-                    className={`text-base leading-relaxed
-                    ${item.active ? "text-black/100" : "text-gray-100"}`}
-                  >
+                  <h3 className="text-xl sm:text-2xl font-bold leading-snug mb-4">{item.title}</h3>
+                  <div className={`w-14 h-px mb-4 ${item.active ? "bg-black/30" : "bg-gray-600"}`} />
+                  <p className={`max-w-xs text-base leading-relaxed ${item.active ? "text-black" : "text-gray-100"}`}>
                     {item.desc}
                   </p>
-                </div>
-              </div>
+                </li>
+
+                {index < steps.length - 1 && (
+                  <li aria-hidden="true" className="flex items-center justify-center py-3 lg:py-0 lg:px-5 text-[#0B1220]">
+                    <ArrowDown className="w-8 h-8 lg:hidden" strokeWidth={2.25} />
+                    <ArrowRight className="hidden lg:block w-9 h-9" strokeWidth={2.25} />
+                  </li>
+                )}
+              </Fragment>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
       <TabbedServices />
 
       <section className="bg-white py-8 md:py-12" id="projects">
-        <div className="max-w-7xl mx-auto px-2">
+        <div className="max-w-7xl mx-auto px-4 md:px-2">
           <h2 className="text-center text-4xl md:text-5xl font-bold text-gray-700 mb-10">
             Your Digital Presence, Perfected
           </h2>
@@ -376,7 +358,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
     px-6 py-2 
     rounded-full 
     font-semibold 
-    border-2 border-orange-400
+    border-2 border-transparent
     hover:text-white 
     hover:bg-gray-900
     bg-orange-400
@@ -391,37 +373,18 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
       </section>
 
       <section className="relative py-10 bg-white overflow-hidden border-y-2">
-        <h2 className="text-center text-4xl font-bold mb-16">
-          Platforms we use
-        </h2>
-
-        <div className="flex flex-col md:flex-row items-center justify-center gap-20 mb-12">
-          <img
-            src={Wordpress}
-            alt="WordPress"
-            width="225"
-            height="225"
-            className="w-28 md:w-32 hover:scale-110 transition-transform duration-300 -mb-8"
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            src={Shopify}
-            alt="Shopify"
-            width="1302"
-            height="1400"
-            className="w-40 md:w-42 hover:scale-110 transition-transform duration-300 -mb-8"
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            src={Code}
-            alt="Custom code development"
-            width="259"
-            height="194"
-            className="w-36 md:w-48 hover:scale-110 transition-transform duration-300"
-            loading="lazy"
-            decoding="async"
+        <div className="mb-12">
+          <PlatformsWeUse
+            type="webDevelopment"
+            section={false}
+            title="Platforms we use"
+            headingClassName="text-center text-4xl font-bold mb-4"
+            intro={
+              <>
+                The technologies and platforms behind our{" "}
+                <a href="/web_development" className={heroLink}>web development services</a>.
+              </>
+            }
           />
         </div>
 

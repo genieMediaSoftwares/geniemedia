@@ -8,12 +8,15 @@ import { ArrowRight, Calendar, Tag } from "lucide-react";
 // images.unsplash.com. Same pictures, but they no longer cost a public page an
 // extra DNS lookup + TLS handshake to a third-party origin.
 import BlogHeroAsset from "@/assets/blog/blog-hero.webp";
+import BlogHero640Asset from "@/assets/blog/blog-hero-640.webp";
 import BlogFallbackAsset from "@/assets/blog/blog-fallback.webp";
 import type { BlogCard } from "@/types";
 import { formatDate } from "@/lib/blog";
 import { useLatestBlogCards } from "@/lib/liveData";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const BlogHero = BlogHeroAsset.src;
+const BlogHero640 = BlogHero640Asset.src;
 const BlogFallback = BlogFallbackAsset.src;
 
 interface Lightbox {
@@ -69,17 +72,36 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
     <div className="w-full overflow-x-hidden">
 
       <section className="relative min-h-[45vh] sm:min-h-[50vh] md:min-h-[60vh] lg:min-h-[55vh] flex items-center text-white overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${BlogHero})` }}
+        {/* A real <img> (not a CSS background) so the browser finds it in the
+            HTML and fetches it first: it is this page's largest element.
+            Phones get the 640px version. Decorative: the heading says it all. */}
+        <img
+          src={BlogHero}
+          srcSet={`${BlogHero640} 640w, ${BlogHero} 1400w`}
+          sizes="100vw"
+          alt=""
+          width={1400}
+          height={700}
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-12 sm:py-16">
+        {/* pt clears the fixed header: on phones the text is taller than the
+            hero's min-height, so centring alone pushed the heading under it. */}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full pt-28 pb-12 sm:pt-28 sm:pb-16">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 drop-shadow-lg">
             Digital Marketing &amp; Creative Blog
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-2xl sm:max-w-3xl mx-auto drop-shadow-md">
             SEO, social media, website and content insights from the Genie Media &amp; Studio team in Visakhapatnam
+          </p>
+          <p className="mt-3 text-sm sm:text-base text-slate-200 max-w-2xl sm:max-w-3xl mx-auto drop-shadow-md">
+            Want help putting a tip into practice? Explore our{" "}
+            <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing services</a>,{" "}
+            <a href="/web_development" className={CONTENT_LINK}>web development</a> and{" "}
+            <a href="/production_house" className={CONTENT_LINK}>video production</a>, or{" "}
+            <a href="/contact" className={CONTENT_LINK}>contact our team</a>.
           </p>
         </div>
       </section>
@@ -89,22 +111,14 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
 
           {categories.length > 1 && (
             <div className="mb-10 sm:mb-12 md:mb-14 lg:mb-16">
-              <div
-                className="
-                  flex gap-2 sm:gap-3
-                  overflow-x-auto sm:overflow-visible
-                  sm:flex-wrap sm:justify-center
-                  -mx-4 px-4 sm:mx-0 sm:px-0
-                  pb-2 sm:pb-0
-                  snap-x snap-mandatory sm:snap-none
-                  [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-                "
-              >
+              {/* Wraps on every screen size: a sideways-scrolling row cut the
+                  last category in half on phones and read as broken text. */}
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`shrink-0 snap-start whitespace-nowrap inline-flex items-center min-h-[44px] lg:min-h-0 px-4 sm:px-5 md:px-6 py-2.5 rounded-lg font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 ${
+                    className={`whitespace-nowrap inline-flex items-center min-h-[44px] lg:min-h-0 px-4 sm:px-5 md:px-6 py-2.5 rounded-lg font-semibold text-xs sm:text-sm md:text-base transition-all duration-300 ${
                       selectedCategory === cat
                         ? "bg-[#6B4A2D] text-white shadow-lg sm:scale-105"
                         : "bg-[#F7F6F3] text-slate-700 hover:bg-slate-200"

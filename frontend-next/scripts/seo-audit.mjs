@@ -6,6 +6,8 @@
  *   npm run seo:audit -- /digital_marketing one page, every check listed
  *   npm run seo:audit -- --url https://geniemedia.in/digital_marketing
  *                                          audit the live page instead
+ *   npm run seo:audit -- --coverage        also show where each target term
+ *                                          appears (scripts/seo-keywords.mjs)
  *
  * The page HTML is parsed (jsdom) and reduced to what a visitor can read in
  * <main data-seo-content="true">: scripts, styles, JSON-LD, the React payload,
@@ -16,7 +18,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { JSDOM } from "jsdom";
-import { auditPage } from "../src/utils/pageSeoAudit.ts";
+import { auditPage, keywordCoverage } from "../src/utils/pageSeoAudit.ts";
+import { PAGE_KEYWORDS } from "./seo-keywords.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "..");
 const DIST = path.join(ROOT, "dist");
@@ -125,7 +128,8 @@ export const buildDocument = (html, url) => {
     images,
     structuredData,
     metadata: {
-      titles: [...document.querySelectorAll("title")].map((t) => t.textContent.trim()),
+      // Only the document title: an <svg><title> just names an icon.
+      titles: [...document.querySelectorAll("head > title")].map((t) => t.textContent.trim()),
       descriptions: attr("meta[name='description']", "content"),
       canonicals: attr("link[rel='canonical']", "href"),
       robots: attr("meta[name='robots']", "content").join(", "),
@@ -159,6 +163,7 @@ const knownPaths = () => {
 
 const args = process.argv.slice(2);
 const liveUrl = args.includes("--url") ? args[args.indexOf("--url") + 1] : null;
+const showCoverage = args.includes("--coverage");
 const routes = liveUrl ? [new URL(liveUrl).pathname || "/"] : args.filter((a) => a.startsWith("/"));
 const targets = routes.length ? routes : Object.keys(PAGES);
 const detailed = targets.length === 1;
@@ -182,7 +187,8 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
       html = fs.readFileSync(file, "utf8");
     }
     const url = liveUrl || (route === "/" ? `${SITE}/` : `${SITE}${route}`);
-    const result = auditPage(buildDocument(html, url), { ...cfg, locations: LOCATIONS, napPhrases: NAP, knownPaths: known });
+    const doc = buildDocument(html, url);
+    const result = auditPage(doc, { ...cfg, locations: LOCATIONS, napPhrases: NAP, knownPaths: known });
     worst = Math.min(worst, result.score);
     const s = result.stats;
 
@@ -198,6 +204,24 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
       console.log(`  ${String(c.score).padStart(3)}%  ${c.name}${failed.length ? "" : " ✓"}`);
       for (const x of detailed ? c.checks : failed) {
         console.log(`         ${x.passed ? "✓" : "✗"} ${x.label}${x.detail ? `  (${x.detail})` : ""}`);
+      }
+    }
+    if (showCoverage && PAGE_KEYWORDS[route]) {
+      const mark = (b) => (b ? "✓" : "·");
+      console.log(`\n  ${"keyword coverage".padEnd(38)} ${"tier".padEnd(10)}  title desc  H1  H2/3 open  links alt   uses`);
+      const rows = keywordCoverage(doc, PAGE_KEYWORDS[route]);
+      // Topic coverage per tier: how many of the planned terms the visible
+      // content actually covers. More repetitions never raise it.
+      const tiers = ["primary", "secondary", "semantic", "local", "supporting"].map((tier) => {
+        const inTier = rows.filter((r) => r.tier === tier);
+        const covered = inTier.filter((r) => r.body > 0 || r.title || r.description);
+        return `${tier} ${covered.length}/${inTier.length}`;
+      });
+      console.log(`\n  topic coverage: ${tiers.join(" · ")}`);
+      for (const r of rows) {
+        console.log(
+          `  ${r.term.padEnd(38).slice(0, 38)} ${r.tier.padEnd(10)}  ${mark(r.title)}     ${mark(r.description)}     ${mark(r.h1)}   ${mark(r.h2)}    ${mark(r.opening)}     ${mark(r.linkText)}     ${mark(r.alt)}   ${String(r.body).padStart(3)}`,
+        );
       }
     }
   }

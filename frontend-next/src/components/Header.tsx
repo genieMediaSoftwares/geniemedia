@@ -25,7 +25,7 @@ const BTN_PRIMARY =
 
 // White outlined button that fills orange from the centre on hover.
 const BTN_SECONDARY =
-  "relative overflow-hidden border-2 border-[#FF6B00] !bg-white !text-black transition-all duration-300 ease-in-out hover:!text-white hover:border-[#FF8C3A] hover:shadow-[0_8px_25px_rgba(255,107,0,0.3)] before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:z-[-1] before:h-0 before:w-0 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[linear-gradient(135deg,#FF6B00,#FF8C3A)] before:[transition:width_0.5s_ease,height_0.5s_ease] hover:before:h-[300px] hover:before:w-[300px]";
+  "relative overflow-hidden border-2 border-transparent !bg-white !text-black transition-all duration-300 ease-in-out hover:!text-white hover:shadow-[0_8px_25px_rgba(255,107,0,0.3)] before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:z-[-1] before:h-0 before:w-0 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[linear-gradient(135deg,#FF6B00,#FF8C3A)] before:[transition:width_0.5s_ease,height_0.5s_ease] hover:before:h-[300px] hover:before:w-[300px]";
 
 const HAMBURGER_LINE = "w-full h-0.5 bg-gray-400 rounded-full transition-all duration-300 ease-in-out";
 const HAMBURGER_OPEN = [

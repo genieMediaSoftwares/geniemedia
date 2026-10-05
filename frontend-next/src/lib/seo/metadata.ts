@@ -86,7 +86,6 @@ export function buildBlogMetadata(blog: Blog): Metadata {
   return {
     title: { absolute: title },
     description,
-    keywords: blog.keywords || undefined,
     authors: [{ name: blog.author_name || "Genie Media Editorial Team" }],
     alternates: { canonical },
     robots: noindex

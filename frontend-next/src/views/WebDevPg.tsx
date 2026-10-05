@@ -3,16 +3,20 @@ import { ChevronDown } from 'lucide-react';
 import type { PortfolioItem } from "@/types";
 
 import ServicesSection2 from "@/components/ServicesWebsites";
+import PlatformsWeUse from "@/components/PlatformsWeUse";
 import ProjectsSection from "@/components/ProjectsSection";
 import VideoTestimonials from "@/components/testimonials";
+import ServiceFaq from "@/components/ServiceFaq";
+import { WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
 import web_services_heroAsset from "@/assets/web_services_hero.jpg";
 import { WEBSITES_VIDEO_URL } from "@/config/media";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const web_services_hero = web_services_heroAsset.src;
 
 
 
-const inlineLink = "text-orange-700 underline underline-offset-2 hover:text-orange-900";
+const inlineLink = CONTENT_LINK;
 
 export default function WebDevPg({ initialProjects }: { initialProjects: PortfolioItem[] | null }) {
   
@@ -31,9 +35,10 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
       content: (
         <>
           The team that builds your website can also run its{" "}
-          <a href="/digital_marketing" className={inlineLink}>SEO, social media and ads</a>{" "}
+          <a href="/digital_marketing" className={inlineLink}>digital marketing: SEO, social media and ads</a>{" "}
           and shoot its{" "}
-          <a href="/production_house" className={inlineLink}>photos and videos</a>.
+          <a href="/production_house" className={inlineLink}>photos and videos</a>. For practical
+          tips, read <a href="/blogs" className={inlineLink}>our website and SEO guides</a>.
           In addition, this means consistent branding and faster turnarounds across every channel.
         </>
       )
@@ -44,7 +49,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
         <>
           We have built business websites and online stores for clients in India,
           Australia and the US. Every one is listed in{" "}
-          <a href="/projects" className={inlineLink}>our portfolio</a>{" "}
+          <a href="/projects" className={inlineLink}>our website projects portfolio</a>{" "}
           with a link to the live site. Therefore, you can see the quality of our work before you start your own project.
         </>
       )
@@ -172,6 +177,20 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
 
              <ServicesSection2/>
 
+             {/* Technologies: added below the services; nothing else on the page changed. */}
+             <PlatformsWeUse
+               type="webDevelopment"
+               intro={
+                 <>
+                   We use modern web technologies and cloud platforms to build fast, scalable,
+                   responsive and reliable websites and web applications for businesses, from
+                   full-stack custom builds to ecommerce stores and cloud deployment. See them at
+                   work in{" "}
+                   <a href="/projects" className={inlineLink}>our web development projects</a>.
+                 </>
+               }
+             />
+
 
              {/* projcts */}
              <ProjectsSection initialProjects={initialProjects} />
@@ -230,6 +249,43 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
         </div>
       </div>
     </div>
+
+
+      {/* Website development for businesses in Vizag: who it is for and how a project runs. */}
+      <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+              Website Development for Businesses in Vizag
+            </h2>
+            <p className="text-lg text-gray-600 leading-relaxed mb-4">
+              Your website is often the first place a customer meets your business. So it has to load fast, look right on a phone and make the next step obvious. Genie Media &amp; Studio offers website development and website design for startups, shops, clinics, schools, manufacturers and service firms across Visakhapatnam.
+            </p>
+            <p className="text-lg text-gray-600 leading-relaxed">
+              We build business websites, landing pages and ecommerce stores, with a clear user experience and SEO built in. Once the site is live, our{" "}
+              <a href="/digital_marketing" className={inlineLink}>digital marketing team in Vizag</a>{" "}
+              can bring in visitors through SEO, Google Ads and social media. You can also browse{" "}
+              <a href="/projects" className={inlineLink}>websites we have built for clients</a>. Need video for your new site? Record it in our{" "}
+              <a href="/podcast_studio" className={inlineLink}>podcast studio in Vizag</a>.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">How a Website Project Works</h2>
+            <ol className="space-y-4">
+              <li className="bg-gray-50 rounded-xl p-5"><p className="text-gray-700"><strong>1. Discovery:</strong> First, we learn your goals, your customers and the pages you need.</p></li>
+              <li className="bg-gray-50 rounded-xl p-5"><p className="text-gray-700"><strong>2. Design:</strong> Next, we design the layout and user experience, and you review it before we build.</p></li>
+              <li className="bg-gray-50 rounded-xl p-5"><p className="text-gray-700"><strong>3. Development:</strong> Then we build the site on WordPress, Shopify or custom code, and test it on phones and desktops.</p></li>
+              <li className="bg-gray-50 rounded-xl p-5"><p className="text-gray-700"><strong>4. Launch and support:</strong> Finally, we handle hosting and launch, and we stay on hand for maintenance and updates.</p></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <ServiceFaq
+        title="Web Development FAQs"
+        intro="Answers to common questions about website development in Vizag."
+        faqs={WEB_DEVELOPMENT_FAQS}
+      />
 
      <VideoTestimonials/>
       

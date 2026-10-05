@@ -1,8 +1,12 @@
 import React from 'react'
 import ProductionHouseServices from "@/components/ProductionServices"
 import ContactSec from "@/components/contactSection"
+import ServiceFaq from "@/components/ServiceFaq"
+import PlatformsWeUse from "@/components/PlatformsWeUse";
+import { PRODUCTION_HOUSE_FAQS } from "@/content/serviceFaqs"
 import ProdHouseCamsAsset from "@/assets/Production-House-cams.jpg";
 import StudioNightViewAsset from "@/assets/podcast/StudioNightView-min.jpg";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const ProdHouseCams = ProdHouseCamsAsset.src;
 const StudioNightView = StudioNightViewAsset.src;
@@ -18,10 +22,10 @@ export default function ProductionHouse() {
 
             <div className="text-white space-y-6">
               <h1 className="text-4xl sm:text-6xl lg:text-6xl font-bold tracking-tight">
-                Production House in Vizag
+                Production House &amp; Video Production in Vizag
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                Genie Media & Studio is a production house in Vizag that creates professional video content for businesses, brands and organisations. We handle everything from planning and filming to editing and final delivery, so you get polished visual stories that connect with your audience.
+                Genie Media & Studio is a production house in Vizag that creates professional video content for businesses, brands and organisations: corporate videos, commercial and product videos, brand films and short videos for social media. We handle everything from planning and filming to editing and final delivery, so you get polished visual stories that connect with your audience.
               </p>
               <p className="text-base text-gray-400 leading-relaxed">
                 Our team works with you from concept to screen. First, we learn your goals and audience. Next, we plan the shoot, write the script and set up the studio or location. Then we film with professional cameras and lighting. Finally, we edit the footage, add graphics and deliver a final product ready for social media, TV, web or events.
@@ -143,7 +147,7 @@ export default function ProductionHouse() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-8 text-center">Why Choose Genie Media & Studio</h2>
           <p className="max-w-3xl mx-auto text-center text-lg text-gray-600 leading-relaxed mb-12">
-            Our production house in Vizag brings together experienced filmmakers, editors and creative directors under one roof. We also run a <a href="/podcast_studio" className="text-orange-700 underline underline-offset-2 hover:text-orange-900">podcast studio in Vizag</a> for audio and video recording, and our <a href="/digital_marketing" className="text-orange-700 underline underline-offset-2 hover:text-orange-900">digital marketing team</a> can help promote your video content across social media and search engines. See our <a href="/projects" className="text-orange-700 underline underline-offset-2 hover:text-orange-900">web development projects</a> for examples of our client work, or <a href="/about" className="text-orange-700 underline underline-offset-2 hover:text-orange-900">learn more about our team</a>.
+            Our production house in Vizag brings together experienced filmmakers, editors and creative directors under one roof. We also run a <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio in Vizag</a> for audio and video recording, and our <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing team</a> can help promote your video content across social media and search engines. When your videos need a home, our <a href="/web_development" className={CONTENT_LINK}>website development team</a> can build it. See our <a href="/projects" className={CONTENT_LINK}>web development projects</a> for examples of our client work, or <a href="/about" className={CONTENT_LINK}>learn more about our team</a>.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -175,6 +179,14 @@ export default function ProductionHouse() {
       </section>
 
       <ProductionHouseServices/>
+
+      <PlatformsWeUse type="productionHouse" />
+      <ServiceFaq
+        title="Production House FAQs"
+        intro="Answers to common questions about video production in Vizag."
+        faqs={PRODUCTION_HOUSE_FAQS}
+      />
+
       <ContactSec/>
 
     </>

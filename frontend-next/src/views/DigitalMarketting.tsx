@@ -7,19 +7,21 @@ import DigitalMarketting1Asset from "@/assets/DigitalMarketting.jpg";
 import DigitalMarketing2Asset from "@/assets/DigitalMarketing2.jpg";
 import DM_servicesAsset from "@/assets/DM_services.webp";
 import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
+import PlatformsWeUse from "@/components/PlatformsWeUse";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const DigitalMarketting1 = DigitalMarketting1Asset.src;
 const DigitalMarketing2 = DigitalMarketing2Asset.src;
 const DM_services = DM_servicesAsset.src;
 
-const inlineLink = "text-orange-600 font-medium underline hover:text-orange-800";
+const inlineLink = CONTENT_LINK;
 
 const services = [
   {
     id: "seo",
     title: "SEO Services in Vizag",
     subtitle: "Search Engine Optimization & Organic Growth",
-    description: "SEO helps people find you on Google without paying for each click. First, we run an SEO audit of your website. Next, we fix technical SEO issues, improve on-page SEO and research the keywords your customers type. We also handle local SEO, internal links and structured data. Finally, we report on your rankings and organic traffic every month.",
+    description: "SEO helps people find you on Google without paying for each click. First, we run an SEO audit of your website. Next, we fix technical SEO issues, improve on-page SEO and research the keywords your customers type. We also handle local SEO, Google Business Profile optimization, internal links and structured data. Finally, we report on your rankings and organic traffic every month.",
     keywords: ["SEO Audit", "Technical SEO", "On-Page SEO", "Local SEO", "Keyword Research"],
     link: "/blogs",
     linkLabel: "Read our SEO guides"
@@ -28,7 +30,7 @@ const services = [
     id: "google-ads",
     title: "Google Ads & PPC Management",
     subtitle: "Paid Search & Performance Campaigns",
-    description: "Google Ads put you at the top of the page today, not in six months. We plan your PPC campaigns, write the ads and set up conversion tracking. After launch, we watch every search term and every rupee. As a result, your budget moves to the ads that bring calls and leads, and away from the ones that do not.",
+    description: "Google Ads and search engine marketing put you at the top of the page today, not in six months. We plan your PPC campaigns, write the ads and set up conversion tracking. After launch, we watch every search term and every rupee. As a result, your budget moves to the ads that bring calls and leads, and away from the ones that do not.",
     keywords: ["Google Search Ads", "PPC Management", "Conversion Tracking", "Remarketing"],
     link: "/contact",
     linkLabel: "Plan a Google Ads campaign"
@@ -37,7 +39,7 @@ const services = [
     id: "social-media",
     title: "Social Media Marketing",
     subtitle: "Social Strategy, Creatives & Advertising",
-    description: "We plan your social media strategy around the people you want to reach. Then we design posts, edit Reels and short videos, and keep your pages active. We also run paid social ads on Instagram and Facebook. The goal is simple: more brand awareness, more engagement and more enquiries, not just likes.",
+    description: "We plan your social media strategy around the people you want to reach. Then we design posts, edit Reels and short videos, and keep your pages active. We also run paid social ads on Instagram and Facebook. The goal is simple: more brand awareness, stronger audience engagement and more enquiries, not just likes.",
     keywords: ["Social Media Management", "Instagram Marketing", "Facebook Ads", "Reels"],
     link: "/contact",
     linkLabel: "Grow your social media"
@@ -53,12 +55,21 @@ const services = [
   },
   {
     id: "lead-generation",
-    title: "Lead Generation & Conversion Optimization",
-    subtitle: "More Enquiries From the Same Traffic",
-    description: "Traffic is only useful when it turns into enquiries. For that reason, we build focused landing pages and simple forms with clear calls to action. We test what works, follow up leads by email and track every step. In short, conversion rate optimization (CRO) helps you get more from the visitors you already have.",
-    keywords: ["Lead Generation", "Landing Pages", "CRO", "Email Follow-Up"],
+    title: "Lead Generation",
+    subtitle: "Campaigns That Bring In Qualified Enquiries",
+    description: "Lead generation turns interest into real enquiries. We plan lead generation campaigns on Google and social media, build focused landing pages and keep forms short. Then we follow up leads by email. As a result, your team spends its time on qualified leads, not cold contacts.",
+    keywords: ["Lead Generation Campaigns", "Landing Pages", "Qualified Leads", "Email Follow-Up"],
     link: "/contact",
     linkLabel: "Talk about lead generation"
+  },
+  {
+    id: "conversion-optimization",
+    title: "Conversion Optimization",
+    subtitle: "More Enquiries From the Same Traffic",
+    description: "Conversion optimization helps you get more from the visitors you already have. We study how people use your pages. Then we improve headlines, forms, page speed and calls to action. Next, we test each change and keep what works. In short, conversion rate optimization (CRO) lowers your cost per lead.",
+    keywords: ["CRO", "A/B Testing", "Page Speed", "Calls to Action"],
+    link: "/web_development",
+    linkLabel: "Improve your website"
   },
   {
     id: "web-development",
@@ -95,7 +106,7 @@ const industries = [
 const strategySteps = [
   { num: "01", title: "Research & Audience Analysis", desc: "First, we learn your goals, your customers and your rivals in Vizag. We also check how visible you are online today. This way, the plan starts from facts, not guesses." },
   { num: "02", title: "SEO & Organic Search", desc: "Next, we audit your website and research the keywords your buyers use. Then we fix the technical and on-page issues that hold back your rankings." },
-  { num: "03", title: "Paid Advertising", desc: "Then we launch Google Ads and social ads with clear goals and conversion tracking. After that, we move budget towards the ads that bring in leads." },
+  { num: "03", title: "Paid Advertising", desc: "Then we launch Google Ads and social ads as performance marketing campaigns, with clear goals and conversion tracking. After that, we move budget towards the ads that bring in leads." },
   { num: "04", title: "Content & Social Media", desc: "Meanwhile, we create content that answers your audience's questions. This includes blog posts, website copy, social posts and short videos." },
   { num: "05", title: "Conversion Optimization", desc: "We also improve landing pages, page speed, forms and calls to action. As a result, more visitors turn into enquiries, bookings and sales." },
   { num: "06", title: "Analytics & Reporting", desc: "Finally, we track rankings, traffic, leads and ROI. We share plain-language reports and keep improving the campaigns every month." }
@@ -202,7 +213,7 @@ export default function DigitalMarketting() {
               Genie Media & Studio is a digital marketing agency in Visakhapatnam, Andhra Pradesh. Our team works from KP Icon in Yendada. We help local shops, clinics, schools, startups and growing brands reach more of the right people online.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
-              Most businesses do not need more noise. Instead, they need a plan that brings in real enquiries. So we start with your goals, your customers and your budget. Then we pick the channels that will move the numbers for you.
+              Most businesses do not need more noise. Instead, they need a plan that brings in real enquiries. So we start with your goals, your customers and your budget. Then we pick the channels that will drive real business growth for you.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
               For some brands, that means SEO and better Google rankings. For others, it means Google Ads, social media marketing or a faster website. In most cases, it is a mix. Either way, you get one team, one plan and one clear report.
@@ -249,6 +260,8 @@ export default function DigitalMarketting() {
           </div>
         </div>
       </section>
+
+      <PlatformsWeUse type="digitalMarketing" />
 
       {/* Section: Digital Marketing for Businesses in Vizag */}
       <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
@@ -366,7 +379,7 @@ export default function DigitalMarketting() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {industries.map((industry) => (
-              <div key={industry.title} className="bg-slate-800 rounded-2xl p-8 border border-slate-700 hover:border-orange-500 transition-all duration-300">
+              <div key={industry.title} className="bg-slate-800 rounded-2xl p-8 border border-slate-700 hover:border-slate-500 transition-all duration-300">
                 <div className="bg-slate-700/50 rounded-full w-14 h-14 flex items-center justify-center mb-6 text-2xl">
                   <industry.icon className="w-7 h-7 text-orange-400" aria-hidden="true" />
                 </div>
@@ -450,7 +463,7 @@ export default function DigitalMarketting() {
             <div className="lg:col-span-2 space-y-4">
               <h2 className="text-3xl font-bold">In-House Video Production & Podcast Studio in Vizag</h2>
               <p className="text-lg opacity-90 leading-relaxed">
-                Beyond digital marketing, we run our own <a href="/podcast_studio" className="font-bold underline hover:opacity-100">podcast studio in Visakhapatnam</a> with multi-camera setups and pro audio. We also have a <a href="/production_house" className="font-bold underline hover:opacity-100">video production house</a> for brand videos, ad shoots and live streams. So your content can be planned, shot and promoted by one team.
+                Beyond digital marketing, we run our own <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio in Visakhapatnam</a> with multi-camera setups and pro audio. We also have a <a href="/production_house" className={CONTENT_LINK}>video production house</a> for brand videos, ad shoots and live streams. So your content can be planned, shot and promoted by one team.
               </p>
             </div>
             <div className="flex justify-start lg:justify-end">

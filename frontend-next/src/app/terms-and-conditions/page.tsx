@@ -5,6 +5,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import { SITE_HOST, SITE_ORIGIN } from "@/lib/site";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 export const metadata: Metadata = buildRouteMetadata("/terms-and-conditions");
 
@@ -173,7 +174,7 @@ export default function TermsRoute() {
         intro={
           <p>
             Please read these terms before using our website. They sit alongside our{" "}
-            <a href="/privacy-policy" className="text-orange-700 underline underline-offset-2">Privacy Policy</a> and
+            <a href="/privacy-policy" className={CONTENT_LINK}>Privacy Policy</a> and
             any written agreement for a specific project.
           </p>
         }

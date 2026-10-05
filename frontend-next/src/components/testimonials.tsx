@@ -62,7 +62,7 @@ const testimonials = [
  * youtube-nocookie.com is used so no tracking cookie is set unless the visitor
  * chooses to play a video.
  */
-const LiteYouTube = ({ videoId, title }: { videoId: string; title: string }) => {
+const LiteYouTube = ({ videoId, title, onPlay }: { videoId: string; title: string; onPlay?: () => void }) => {
   const [activated, setActivated] = useState(false);
 
   if (activated) {
@@ -80,7 +80,10 @@ const LiteYouTube = ({ videoId, title }: { videoId: string; title: string }) => 
   return (
     <button
       type="button"
-      onClick={() => setActivated(true)}
+      onClick={() => {
+        setActivated(true);
+        onPlay?.();
+      }}
       aria-label={`Play video testimonial from ${title}`}
       className="group/yt w-full h-full rounded-xl overflow-hidden relative block bg-black border-0 p-0 cursor-pointer focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#ff6b00] focus-visible:outline-offset-2"
     >
@@ -110,12 +113,12 @@ const LiteYouTube = ({ videoId, title }: { videoId: string; title: string }) => 
 /* ── Tailwind class sets (formerly this component's <style> block) ────── */
 
 const CAROUSEL_NAV =
-  "z-20 flex h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff6b00,#ff8c00)] shadow-[0_10px_30px_rgba(255,107,0,0.3)] transition-all duration-300 ease-[ease] hover:scale-110 hover:shadow-[0_15px_40px_rgba(255,107,0,0.5)] active:scale-95 max-[768px]:h-[50px] max-[768px]:w-[50px]";
+  "z-20 flex h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff6b00,#ff8c00)] shadow-[0_10px_30px_rgba(255,107,0,0.3)] transition-all duration-300 ease-[ease] hover:scale-110 hover:shadow-[0_15px_40px_rgba(255,107,0,0.5)] active:scale-95 max-[768px]:h-11 max-[768px]:w-11";
 
 const CAROUSEL_ITEM = "shrink-0 transition-all duration-[600ms] ease-in-out motion-reduce:transition-none";
 const CAROUSEL_POSITION: Record<string, string> = {
   side: "w-[320px] [transform:scale(0.75)_translateZ(-100px)] opacity-50 blur-[0.5px] max-[768px]:hidden",
-  center: "w-[430px] [transform:scale(1)_translateZ(0)] opacity-100 blur-0 z-10 max-[768px]:!w-full max-[768px]:max-w-[400px]",
+  center: "w-[430px] [transform:scale(1)_translateZ(0)] opacity-100 blur-0 z-10 max-[768px]:!w-full max-[768px]:max-w-[480px]",
   hidden: "hidden",
 };
 // Staggered reveal, one step per card.
@@ -128,6 +131,12 @@ const VIDEO_CARD_CENTER = "shadow-[0_30px_80px_rgba(255,107,0,0.3)] hover:-trans
 const VideoTestimonials = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  // Which way the last move went: the new slide enters from that side on phones.
+  const [direction, setDirection] = useState<"next" | "prev">("next");
+  // Auto-advance runs until the visitor takes over (arrow, dot, swipe or play),
+  // so it never moves a slide out from under someone.
+  const [autoPlay, setAutoPlay] = useState(true);
+  const touchStartX = useRef<number | null>(null);
   const sectionRef = useRef(null);
 
   useEffect(() => {
@@ -149,17 +158,60 @@ const VideoTestimonials = () => {
     return () => observer.disconnect();
   }, []);
 
-  const nextSlide = () => {
+  const advance = () => {
+    setDirection("next");
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
   };
 
+  // Every 6 s while the section is on screen, until the visitor interacts.
+  useEffect(() => {
+    if (!autoPlay || !isVisible) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(advance, 6000);
+    return () => window.clearInterval(timer);
+  }, [autoPlay, isVisible]);
+
+  const nextSlide = () => {
+    setAutoPlay(false);
+    advance();
+  };
+
   const prevSlide = () => {
+    setAutoPlay(false);
+    setDirection("prev");
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   const goToSlide = (index: number) => {
+    setAutoPlay(false);
+    setDirection(index < currentIndex ? "prev" : "next");
     setCurrentIndex(index);
   };
+
+  // Swipe left/right on the slide (phones).
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0) nextSlide();
+    else prevSlide();
+  };
+
+  // Previous / next button.
+  const arrow = (dir: "prev" | "next", extra: string) => (
+    <button
+      type="button"
+      onClick={dir === "prev" ? prevSlide : nextSlide}
+      className={`${CAROUSEL_NAV} ${extra}`}
+      aria-label={dir === "prev" ? "Previous testimonial" : "Next testimonial"}
+    >
+      {dir === "prev" ? <ChevronLeft size={22} className="text-white" aria-hidden="true" /> : <ChevronRight size={22} className="text-white" aria-hidden="true" />}
+    </button>
+  );
 
   return (
     <>
@@ -177,7 +229,7 @@ const VideoTestimonials = () => {
         <div className="relative max-w-8xl mx-auto">
           {/* Section Header */}
           <div className={`text-center mb-8 ${isVisible ? 'animate-fade-in-up-slow motion-reduce:animate-none' : 'opacity-0'}`}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 border border-orange-200 rounded-full mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 rounded-full mb-4">
               <Star className="text-orange-500" size={16} fill="currentColor" />
               <span className="text-sm font-semibold text-orange-700">
                 Video Testimonials
@@ -193,18 +245,13 @@ const VideoTestimonials = () => {
 
           {/* Carousel */}
           <div className="relative">
-            <div className="flex items-center justify-center gap-8 [perspective:1000px] min-h-[580px] max-[768px]:gap-4 max-[768px]:min-h-[500px]">
-              {/* Previous Button */}
-              <button
-                onClick={prevSlide}
-                className={CAROUSEL_NAV}
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft size={24} className="text-white" aria-hidden="true" />
-              </button>
+            <div className="relative flex items-center justify-center gap-8 [perspective:1000px] min-h-[580px] max-[768px]:gap-0 max-[768px]:min-h-0">
+              {/* Arrows on both sides: beside the cards on desktop; on phones over the card edges,
+                  level with the middle of the video (card width x 9/32), clear of the text. */}
+              {arrow("prev", "max-[768px]:absolute max-[768px]:top-[calc(min(100vw-2rem,480px)*0.28125)] max-[768px]:-translate-y-1/2 max-[768px]:left-2 max-[768px]:shadow-[0_6px_18px_rgba(0,0,0,0.25)]")}
 
               {/* Carousel Items */}
-              <div className="flex-1 flex items-center justify-center gap-8 overflow-hidden max-w-8xl">
+              <div className="flex-1 flex items-center justify-center gap-8 overflow-hidden max-w-8xl touch-pan-y" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                 {testimonials.map((testimonial, index) => {
                   let position = 'hidden';
                   const prevIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
@@ -222,20 +269,28 @@ const VideoTestimonials = () => {
                       }`}
                       onClick={() => position !== 'center' && goToSlide(index)}
                     >
+                      {/* Remounts when this card becomes the centre one, so on phones the
+                          slide-in plays from the side the visitor moved to. Desktop keeps
+                          the outer element's position transition. */}
+                      <div
+                        key={position === "center" ? `active-${currentIndex}` : "idle"}
+                        className={position === "center" ? (direction === "next" ? "max-[768px]:animate-carousel-from-right" : "max-[768px]:animate-carousel-from-left") : undefined}
+                      >
                       <div className={`${VIDEO_CARD} ${position === 'center' ? VIDEO_CARD_CENTER : VIDEO_CARD_SIDE} bg-white rounded-2xl overflow-hidden`}>
                        
                         <div className="relative overflow-hidden rounded-2xl aspect-video bg-gray-900">
                           <LiteYouTube
                             videoId={testimonial.videoId}
                             title={testimonial.name}
+                            onPlay={() => setAutoPlay(false)}
                           />
                         </div>
 
                        
-                        <div className="p-6">
+                        <div className="p-6 max-[768px]:p-4">
                           
-                          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                            <Quote className="text-white" size={24} />
+                          <div className="w-12 h-12 max-[768px]:w-9 max-[768px]:h-9 max-[768px]:mb-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                            <Quote className="text-white w-6 h-6 max-[768px]:w-4 max-[768px]:h-4" />
                           </div>
 
                        
@@ -251,7 +306,7 @@ const VideoTestimonials = () => {
                           </div>
 
                          
-                          <p className="text-gray-700 text-sm mb-4 italic leading-relaxed">
+                          <p className="text-gray-700 text-sm mb-4 max-[768px]:mb-3 italic leading-relaxed">
                             "{testimonial.quote}"
                           </p>
 
@@ -266,23 +321,18 @@ const VideoTestimonials = () => {
                           </div>
                         </div>
                       </div>
+                      </div>
                     </div>
                   );
                 })}
               </div>
 
        
-              <button
-                onClick={nextSlide}
-                className={CAROUSEL_NAV}
-                aria-label="Next testimonial"
-              >
-                <ChevronRight size={24} className="text-white" aria-hidden="true" />
-              </button>
+              {arrow("next", "max-[768px]:absolute max-[768px]:top-[calc(min(100vw-2rem,480px)*0.28125)] max-[768px]:-translate-y-1/2 max-[768px]:right-2 max-[768px]:shadow-[0_6px_18px_rgba(0,0,0,0.25)]")}
             </div>
 
-            {/* Carousel Indicators */}
-            <div className="flex justify-center gap-2 mt-8">
+            {/* Indicators */}
+            <div className="flex items-center justify-center gap-2 mt-8 max-[768px]:mt-5 max-[768px]:gap-3">
               {testimonials.map((_, index) => (
                 <button
                   key={index}

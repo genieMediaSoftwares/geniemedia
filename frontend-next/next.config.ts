@@ -21,6 +21,10 @@ const nextConfig: NextConfig = {
   // `/about` is emitted as `about.html`; .htaccess serves it at `/about`. The
   // root keeps its slash and nothing else gets one, matching the canonicals.
   trailingSlash: false,
+  // Hide the floating "N" build/route indicator `next dev` draws over the page
+  // (it never appears in the production build, but it covered content on
+  // mobile while testing). Build errors still show as an overlay.
+  devIndicators: false,
   images: {
     // There is no image optimisation server on static hosting.
     unoptimized: true,

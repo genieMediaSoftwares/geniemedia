@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import PodcastStudio from "@/views/PodcastStudio";
 import JsonLd from "@/components/seo/JsonLd";
+import PlatformsWeUse from "@/components/PlatformsWeUse";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
 
@@ -11,7 +12,7 @@ export default function PodcastStudioRoute() {
   return (
     <>
       <JsonLd data={metaForRoute("/podcast_studio").schema} />
-      <PodcastStudio />
+      <PodcastStudio platforms={<PlatformsWeUse type="podcastStudio" />} />
     </>
   );
 }

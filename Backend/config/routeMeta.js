@@ -55,12 +55,12 @@ const ROUTE_META = {
   "/web_development": {
     title: "Web Development Company in Vizag | Genie Media",
     description:
-      "Genie Media & Studio offers web development in Visakhapatnam (Vizag): business websites, Shopify and WooCommerce stores, WordPress and custom web apps.",
+      "Custom web development in Vizag by Genie Media & Studio: business and ecommerce websites on WordPress, Shopify or React and Next.js, plus UI/UX and upkeep.",
   },
   "/production_house": {
     title: "Production House & Video Production in Vizag | Genie Media",
     description:
-      "Genie Media & Studio is a production house in Visakhapatnam (Vizag) for corporate and brand videos, events, product shoots, editing and live streaming.",
+      "Genie Media & Studio is a production house in Vizag for corporate, commercial and product videos, brand films, events, editing, photography and live streaming.",
   },
   "/reviews": {
     title: "Client Reviews & Testimonials | Genie Media & Studio",
@@ -78,9 +78,9 @@ const ROUTE_META = {
       "Genie Media & Studio offers digital marketing in Vizag: SEO, Google Ads, social media marketing, content, websites and branding for local businesses.",
   },
   "/podcast_studio": {
-    title: "Podcast Studio in Visakhapatnam (Vizag) | Genie Media",
+    title: "Podcast Studio in Vizag | Genie Media & Studio",
     description:
-      "Book a podcast studio in Visakhapatnam (Vizag) from ₹1,500 an hour. Record audio or video podcasts with our team and up to three cameras. Editing available.",
+      "Book a podcast studio in Vizag from ₹1,500 an hour. Podcast recording, video podcast filming with up to three cameras, and podcast editing by our team.",
   },
 };
 

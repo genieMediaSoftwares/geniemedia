@@ -13,7 +13,8 @@ import VivodyneAsset from "@/assets/vivodyne.webp";
 import DecagonAsset from "@/assets/decagon.webp";
 import FreenomeAsset from "@/assets/freenome.webp";
 import type { PortfolioItem } from "@/types";
-import { portfolioOrFallback, serviceForCategory } from "@/lib/portfolio";
+import { portfolioOrFallback } from "@/lib/portfolio";
+import ProjectCard, { PROJECT_GRID } from "@/components/ProjectCard";
 import { useLatestProjects } from "@/lib/liveData";
 
 const meerabasu = meerabasuAsset.src;
@@ -102,7 +103,7 @@ const ProjectsSection = ({ initialProjects }: { initialProjects: PortfolioItem[]
 
 
      <section className="bg-white py-8 md:py-12" id='projects'>
-      <div className="max-w-7xl mx-auto px-2">
+      <div className="max-w-7xl mx-auto px-4 md:px-2">
 
        
         <h2 className="text-center text-4xl md:text-5xl font-bold text-gray-700 mb-10">
@@ -110,64 +111,9 @@ const ProjectsSection = ({ initialProjects }: { initialProjects: PortfolioItem[]
         </h2>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
-
+        <div className={PROJECT_GRID}>
           {projects.map((project, index) => (
-            <div key={project.id ?? index} className="text-center group">
-
-             
-              <div className="rounded-3xl p-0 md:p-0.5 mb-8 transition-transform duration-300 group-hover:scale-105">
-                <div className="overflow-hidden rounded-2xl aspect-[11/5]">
-                  <img
-                    src={project.image}
-                    alt={`${project.name} website`}
-                    width="1280"
-                    height="582"
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-              </div>
-
-              {/* Title */}
-              <h3 className={`text-xl font-semibold ${serviceForCategory(project.category) ? 'mb-2' : 'mb-6'}`}>
-                {project.name}
-              </h3>
-
-              {/* The service behind the project, linked to its page. */}
-              {serviceForCategory(project.category) && (
-                <a
-                  href={serviceForCategory(project.category)?.href}
-                  className="inline-block mb-5 text-sm font-medium text-orange-700 underline underline-offset-2 hover:text-orange-900"
-                >
-                  {serviceForCategory(project.category)?.label}
-                </a>
-              )}
-
-              <div>
-              {/* A real link so crawlers see which live sites the portfolio
-                  points to; it opens in a new tab as the button used to. */}
-              {project.url && (
-              <a href={project.url} target="_blank" rel="noopener" className="
-                inline-block
-                px-8 py-3
-                rounded-full
-                font-semibold
-                border-2 border-orange-400
-                text-white
-                bg-gray-900
-                hover:bg-orange-400
-                hover:text-black
-                transition-all duration-300
-              ">
-                VIEW PROJECT
-              </a>
-              )}
-              </div>
-
-            </div>
-            
+            <ProjectCard key={project.id ?? index} project={project} />
           ))}
         </div>
         

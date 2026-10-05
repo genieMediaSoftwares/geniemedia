@@ -9,12 +9,9 @@ import { blogListGraph } from "@/lib/seo/schema";
 
 // Posts are fetched at build time; rebuild and redeploy after publishing.
 
-export async function generateMetadata(): Promise<Metadata> {
-  const base = buildRouteMetadata("/blogs");
-  const blogs = await getPublishedBlogsSafe();
-  const keywords = [...new Set(blogs.flatMap((b) => String(b.keywords || "").split(",").map((k) => k.trim())).filter(Boolean))];
-  return keywords.length ? { ...base, keywords } : base;
-}
+// No meta keywords: search engines ignore the tag, and merging every post's
+// keywords into one list produced exactly the keyword dump the site avoids.
+export const metadata: Metadata = buildRouteMetadata("/blogs");
 
 export default async function BlogsRoute() {
   const blogs = await getPublishedBlogsSafe();

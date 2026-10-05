@@ -10,28 +10,28 @@ export default function ServicesSection2() {
     {
       icon: <Palette className="w-8 h-8" />,
       title: "UI/UX Design",
-      description: "Crafting intuitive and visually stunning interfaces that engage users and drive conversions.",
+      description: "UI/UX web design that gives visitors a clear, attractive user experience and guides them to get in touch.",
       color: "from-purple-500 to-pink-500",
       bgColor: "bg-purple-500"
     },
     {
       icon: <Code className="w-8 h-8" />,
       title: "Web Development",
-      description: "Building robust, scalable websites with clean code and modern technologies.",
+      description: "Custom web development with modern technologies such as React, Next.js and Node.js, from business websites to web applications.",
       color: "from-blue-500 to-cyan-500",
       bgColor: "bg-blue-500"
     },
     {
       icon: <ShoppingBag className="w-8 h-8" />,
       title: "Shopify Solutions",
-      description: "Creating powerful e-commerce stores that maximize sales and customer experience.",
+      description: "Ecommerce website development on Shopify, with online stores built to sell and easy for customers to use.",
       color: "from-green-500 to-emerald-500",
       bgColor: "bg-green-500"
     },
     {
       icon: <Globe className="w-8 h-8" />,
       title: "WordPress Development",
-      description: "Designing and developing custom WordPress sites that are easy to manage and scale.",
+      description: "WordPress website development: custom sites you can update yourself, built to grow with your business.",
       color: "from-indigo-500 to-blue-500",
       bgColor: "bg-indigo-500"
     },
@@ -45,7 +45,7 @@ export default function ServicesSection2() {
     {
       icon: <Wrench className="w-8 h-8" />,
       title: "Maintenance & Support",
-      description: "Ongoing maintenance and support to keep your digital presence running smoothly.",
+      description: "Website maintenance, redesigns and speed optimization to keep your site fast, secure and up to date.",
       color: "from-teal-500 to-green-500",
       bgColor: "bg-teal-500"
     },
@@ -70,7 +70,7 @@ export default function ServicesSection2() {
           <div className="inline-block">
             <span className="text-orange-700 font-semibold text-sm uppercase tracking-wider mb-2 block">What We Offer</span>
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 relative">
-              Our web Services
+              Our Web Development Services
               <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full"></div>
             </h2>
           </div>

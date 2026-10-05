@@ -6,12 +6,13 @@ import BlogFallbackAsset from "@/assets/blog/blog-hero.webp";
 import type { Blog } from "@/types";
 import { blogPath, formatDate, toIso } from "@/lib/blog";
 import { blogCanonical } from "@/lib/seo/metadata";
-import { CopyLinkButton, CopyLinkCta, FallbackImg } from "@/components/blog/BlogClientParts";
+import { CopyLinkCta, FallbackImg, ShareButton } from "@/components/blog/BlogClientParts";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const FALLBACK = BlogFallbackAsset.src;
 
 /** Rendered body classes, unchanged from the Vite BlogDetail page. */
-const PROSE = "text-[16px] leading-[1.8] text-slate-800 sm:text-[18px] sm:leading-[1.9] break-words [overflow-wrap:anywhere] [&_*]:box-border [&_pre]:overflow-x-auto [&_pre]:text-sm [&_table]:block [&_table]:overflow-x-auto [&_table]:max-w-full sm:[&_table]:table [&_p]:my-4 [&_p]:leading-[1.8] [&_p]:text-slate-700 [&_p]:text-[16px] sm:[&_p]:my-5 sm:[&_p]:text-[18px] sm:[&_p]:leading-[1.85] [&_h1]:text-2xl [&_h1]:sm:text-4xl [&_h1]:font-extrabold [&_h1]:text-slate-900 [&_h1]:tracking-tight [&_h1]:leading-tight [&_h1]:mt-10 [&_h1]:mb-4 [&_h2]:text-xl [&_h2]:sm:text-3xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:tracking-tight [&_h2]:leading-snug [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:pb-2 [&_h2]:border-b [&_h2]:border-slate-100 [&_h3]:text-lg [&_h3]:sm:text-2xl [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:leading-snug [&_h3]:mt-8 [&_h3]:mb-3 [&_h4]:text-lg [&_h4]:sm:text-xl [&_h4]:font-semibold [&_h4]:text-slate-800 [&_h4]:leading-snug [&_h4]:mt-6 [&_h4]:mb-2 [&_strong]:font-bold [&_strong]:text-slate-900 [&_b]:font-bold [&_b]:text-slate-900 [&_em]:italic [&_em]:text-slate-600 [&_i]:italic [&_i]:text-slate-600 [&_u]:underline [&_u]:underline-offset-[3px] [&_u]:decoration-slate-400 [&_s]:line-through [&_s]:text-slate-400 [&_del]:line-through [&_del]:text-slate-400 [&_strike]:line-through [&_strike]:text-slate-400 [&_mark]:bg-amber-100 [&_mark]:text-slate-900 [&_mark]:px-1 [&_mark]:rounded-sm [&_a]:text-[#6B4A2D] [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-2 [&_a]:decoration-[#6B4A2D]/40 [&_a]:transition-colors [&_a:hover]:text-[#9b6a3d] [&_a:hover]:decoration-[#9b6a3d]/60 [&_blockquote]:my-8 [&_blockquote]:pl-5 [&_blockquote]:pr-4 [&_blockquote]:py-4 [&_blockquote]:border-l-4 [&_blockquote]:border-[#6B4A2D] [&_blockquote]:bg-amber-50 [&_blockquote]:rounded-r-xl [&_blockquote]:text-slate-600 [&_blockquote]:italic [&_blockquote]:text-[17px] [&_blockquote]:leading-relaxed [&_blockquote_p]:my-0 [&_blockquote_p]:text-slate-600 [&_code]:font-mono [&_code]:text-[14px] [&_code]:text-[#6B4A2D] [&_code]:bg-slate-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:border [&_code]:border-slate-200 [&_pre]:my-6 [&_pre]:bg-slate-900 [&_pre]:text-slate-100 [&_pre]:rounded-xl [&_pre]:p-5 [&_pre]:overflow-x-auto [&_pre]:text-[13px] [&_pre]:sm:text-[14px] [&_pre]:leading-relaxed [&_pre]:font-mono [&_pre_code]:bg-transparent [&_pre_code]:border-none [&_pre_code]:text-slate-100 [&_pre_code]:p-0 [&_pre_code]:text-[13px] [&_pre_code]:sm:text-[14px] [&_ul]:my-5 [&_ul]:pl-6 [&_ul]:list-disc [&_ol]:my-5 [&_ol]:pl-6 [&_ol]:list-decimal [&_li]:my-2 [&_li]:leading-[1.75] [&_li]:text-slate-700 [&_li]:text-[17px] sm:[&_li]:text-[18px] [&_ul_li]:marker:text-[#6B4A2D] [&_ol_li]:marker:text-[#6B4A2D] [&_ol_li]:marker:font-bold [&_li_ul]:mt-2 [&_li_ul]:mb-1 [&_li_ol]:mt-2 [&_li_ol]:mb-1 [&_hr]:my-10 [&_hr]:border-0 [&_hr]:border-t-2 [&_hr]:border-slate-100 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-6 [&_img]:block [&_img]:mx-auto [&_table]:w-full [&_table]:my-6 [&_table]:border-collapse [&_table]:text-sm [&_table]:sm:text-base [&_th]:bg-slate-50 [&_th]:font-bold [&_th]:text-slate-900 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:border [&_th]:border-slate-200 [&_td]:px-4 [&_td]:py-3 [&_td]:text-slate-700 [&_td]:border [&_td]:border-slate-200 [&_tr:nth-child(even)_td]:bg-slate-50";
+const PROSE = "text-[16px] leading-[1.8] text-slate-800 sm:text-[18px] sm:leading-[1.9] break-words [overflow-wrap:anywhere] [&_*]:box-border [&_pre]:overflow-x-auto [&_pre]:text-sm [&_table]:block [&_table]:overflow-x-auto [&_table]:max-w-full sm:[&_table]:table [&_p]:my-4 [&_p]:leading-[1.8] [&_p]:text-slate-700 [&_p]:text-[16px] sm:[&_p]:my-5 sm:[&_p]:text-[18px] sm:[&_p]:leading-[1.85] [&_h1]:text-2xl [&_h1]:sm:text-4xl [&_h1]:font-extrabold [&_h1]:text-slate-900 [&_h1]:tracking-tight [&_h1]:leading-tight [&_h1]:mt-10 [&_h1]:mb-4 [&_h2]:text-xl [&_h2]:sm:text-3xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:tracking-tight [&_h2]:leading-snug [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:pb-2 [&_h2]:border-b [&_h2]:border-slate-100 [&_h3]:text-lg [&_h3]:sm:text-2xl [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:leading-snug [&_h3]:mt-8 [&_h3]:mb-3 [&_h4]:text-lg [&_h4]:sm:text-xl [&_h4]:font-semibold [&_h4]:text-slate-800 [&_h4]:leading-snug [&_h4]:mt-6 [&_h4]:mb-2 [&_strong]:font-bold [&_strong]:text-slate-900 [&_b]:font-bold [&_b]:text-slate-900 [&_em]:italic [&_em]:text-slate-600 [&_i]:italic [&_i]:text-slate-600 [&_u]:underline [&_u]:underline-offset-[3px] [&_u]:decoration-slate-400 [&_s]:line-through [&_s]:text-slate-400 [&_del]:line-through [&_del]:text-slate-400 [&_strike]:line-through [&_strike]:text-slate-400 [&_mark]:bg-amber-100 [&_mark]:text-slate-900 [&_mark]:px-1 [&_mark]:rounded-sm [&_a]:text-inherit [&_a]:no-underline [&_a]:transition-opacity [&_a]:duration-200 [&_a:hover]:opacity-80 [&_a]:rounded-sm [&_a:focus-visible]:outline [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-2 [&_a:focus-visible]:outline-current [&_blockquote]:my-8 [&_blockquote]:pl-5 [&_blockquote]:pr-4 [&_blockquote]:py-4 [&_blockquote]:border-l-4 [&_blockquote]:border-[#6B4A2D] [&_blockquote]:bg-amber-50 [&_blockquote]:rounded-r-xl [&_blockquote]:text-slate-600 [&_blockquote]:italic [&_blockquote]:text-[17px] [&_blockquote]:leading-relaxed [&_blockquote_p]:my-0 [&_blockquote_p]:text-slate-600 [&_code]:font-mono [&_code]:text-[14px] [&_code]:text-[#6B4A2D] [&_code]:bg-slate-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:border [&_code]:border-slate-200 [&_pre]:my-6 [&_pre]:bg-slate-900 [&_pre]:text-slate-100 [&_pre]:rounded-xl [&_pre]:p-5 [&_pre]:overflow-x-auto [&_pre]:text-[13px] [&_pre]:sm:text-[14px] [&_pre]:leading-relaxed [&_pre]:font-mono [&_pre_code]:bg-transparent [&_pre_code]:border-none [&_pre_code]:text-slate-100 [&_pre_code]:p-0 [&_pre_code]:text-[13px] [&_pre_code]:sm:text-[14px] [&_ul]:my-5 [&_ul]:pl-6 [&_ul]:list-disc [&_ol]:my-5 [&_ol]:pl-6 [&_ol]:list-decimal [&_li]:my-2 [&_li]:leading-[1.75] [&_li]:text-slate-700 [&_li]:text-[17px] sm:[&_li]:text-[18px] [&_ul_li]:marker:text-[#6B4A2D] [&_ol_li]:marker:text-[#6B4A2D] [&_ol_li]:marker:font-bold [&_li_ul]:mt-2 [&_li_ul]:mb-1 [&_li_ol]:mt-2 [&_li_ol]:mb-1 [&_hr]:my-10 [&_hr]:border-0 [&_hr]:border-t-2 [&_hr]:border-slate-100 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-6 [&_img]:block [&_img]:mx-auto [&_table]:w-full [&_table]:my-6 [&_table]:border-collapse [&_table]:text-sm [&_table]:sm:text-base [&_th]:bg-slate-50 [&_th]:font-bold [&_th]:text-slate-900 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:border [&_th]:border-slate-200 [&_td]:px-4 [&_td]:py-3 [&_td]:text-slate-700 [&_td]:border [&_td]:border-slate-200 [&_tr:nth-child(even)_td]:bg-slate-50";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -113,7 +114,7 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
                 </>
               )}
             </div>
-            <CopyLinkButton url={canonical} />
+            <ShareButton url={canonical} title={blog.title} />
           </div>
 
           {/* ── Category ── */}
@@ -211,12 +212,12 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-2">Work with Genie Media &amp; Studio</h2>
             <p className="text-sm sm:text-base leading-relaxed text-slate-600">
               Want help putting this into practice? Our team in Visakhapatnam offers{" "}
-              <a href="/digital_marketing" className="font-medium text-[#6B4A2D] underline underline-offset-2">digital marketing and SEO services</a>,{" "}
-              <a href="/web_development" className="font-medium text-[#6B4A2D] underline underline-offset-2">website design and development</a>,{" "}
-              <a href="/production_house" className="font-medium text-[#6B4A2D] underline underline-offset-2">video production</a>{" "}
+              <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing and SEO services</a>,{" "}
+              <a href="/web_development" className={CONTENT_LINK}>website design and development</a>,{" "}
+              <a href="/production_house" className={CONTENT_LINK}>video production</a>{" "}
               and a{" "}
-              <a href="/podcast_studio" className="font-medium text-[#6B4A2D] underline underline-offset-2">podcast studio</a>.{" "}
-              <a href="/contact" className="font-medium text-[#6B4A2D] underline underline-offset-2">Contact us</a> to talk about your goals.
+              <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio</a>.{" "}
+              <a href="/contact" className={CONTENT_LINK}>Contact us</a> to talk about your goals.
             </p>
           </section>
 
@@ -300,7 +301,7 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             Ready to Create Amazing Visuals?
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-slate-500 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Let&apos;s bring your creative vision to life. Contact Genie Studio today.
+            Let&apos;s bring your creative vision to life. Contact Genie Media &amp; Studio today.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <a

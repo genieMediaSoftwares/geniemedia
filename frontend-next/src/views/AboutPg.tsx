@@ -10,6 +10,7 @@ import VideoTestimonials from "@/components/testimonials";
 import AboutHeroAsset from "@/assets/about_hero.jpg";
 import OurMissionAsset from "@/assets/ourMission.jpg";
 import OurVissionAsset from "@/assets/our-vision2.jpg";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const AboutHero = AboutHeroAsset.src;
 const OurMission = OurMissionAsset.src;
@@ -80,7 +81,12 @@ export default function AboutPage() {
                 About Us
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                We are digital transformation firm that provides cutting-edge solutions to a number of companies and technology startups.
+                Genie Media &amp; Studio is a creative and digital team in Vizag. We help companies and startups grow with{" "}
+                <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing</a>,{" "}
+                <a href="/web_development" className={CONTENT_LINK}>website development</a>, a{" "}
+                <a href="/production_house" className={CONTENT_LINK}>production house</a> and a{" "}
+                <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio</a>.{" "}
+                <a href="/contact" className={CONTENT_LINK}>Get in touch</a> to start a project.
               </p>
             </div>
 
@@ -128,7 +134,7 @@ export default function AboutPage() {
                       className="flex items-start space-x-3"
                     >
                       <div className="flex-shrink-0 mt-1">
-                        <div className="w-5 h-5 rounded-full border-2 border-orange-600 mt-px flex items-center justify-center">
+                        <div className="w-5 h-5 rounded-full border-2 border-gray-300 mt-px flex items-center justify-center">
                           <Check className="w-3 h-3 text-orange-600" strokeWidth={3} />
                         </div>
                       </div>
@@ -187,7 +193,7 @@ We blend design, storytelling, and technology to build meaningful brand experien
         </p>
 
         <p className="text-gray-700 text-lg leading-relaxed">
-         Our vision is to become a trusted growth partner for businesses by delivering impactful <a href="/digital_marketing" className="text-orange-800 font-medium">digital marketing solutions</a>{" "} that drive measurable results. 
+         Our vision is to become a trusted growth partner for businesses by delivering impactful <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing solutions</a>{" "} that drive measurable results. 
           
         </p>
       </div>
@@ -233,9 +239,9 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
         </p>
 
         <p className="text-gray-700 text-lg leading-relaxed">
-          Through  <span className="text-orange-800 font-medium">innovation</span>,{" "}
-         <span className="text-orange-800 font-medium">collaboration</span>,{" "} and
-         <span className="text-orange-800 font-medium">continuous optimization</span>{" "}we turn ideas into powerful digital experiences that fuel long-term growth.
+          Through  <span className={CONTENT_LINK}>innovation</span>,{" "}
+         <span className={CONTENT_LINK}>collaboration</span>,{" "} and
+         <span className={CONTENT_LINK}>continuous optimization</span>{" "}we turn ideas into powerful digital experiences that fuel long-term growth.
         </p>
       </div>
     </section>
@@ -276,11 +282,12 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
             {values.map((value, index) => (
               <div 
                 key={index} 
-                className="relative flex items-start gap-6 sm:gap-8 pb-8 last:pb-0"
+                className="relative flex items-center gap-4 sm:gap-8 pb-8 last:pb-0"
               >
                 {/* Letter Circle */}
-                <div className="flex-shrink-0 relative mt-4 z-10">
-                  <div className="w-12 h-24 sm:w-14 sm:h-14 rounded-full bg-orange-400 flex items-center justify-center shadow-lg">
+                <div className="flex-shrink-0 relative z-10">
+                  {/* A true circle at every size (it was 48 x 96 on phones). */}
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 aspect-square rounded-full bg-orange-400 flex items-center justify-center shadow-lg">
                     <span className="text-2xl sm:text-3xl font-bold text-black">
                       {value.letter}
                     </span>

@@ -25,7 +25,7 @@ const CONTACT_CARD =
   "transition-all duration-[400ms] ease-in-out hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)]";
 
 const FORM_INPUT =
-  "transition-[border-color,box-shadow] duration-200 ease-[ease] focus:outline-none focus:border-[#9463EE] focus:shadow-[0_0_0_3px_rgba(148,99,238,0.12)] [&_option]:text-gray-700";
+  "transition-[border-color,box-shadow] duration-200 ease-[ease] focus:outline-none focus:border-gray-500 focus:shadow-[0_0_0_3px_rgba(107,114,128,0.12)] [&_option]:text-gray-700";
 
 // Orange submit button with an expanding light circle on hover.
 const SUBMIT_BTN =
@@ -223,7 +223,7 @@ const ContactSec = ({ isPage = false }) => {
                   : "opacity-0"
             }`}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 border border-orange-700 rounded-full mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 rounded-full mb-4">
               <Globe className="text-orange-500" size={16} />
               <span className="text-sm font-semibold text-black">Get In Touch</span>
             </div>

@@ -122,6 +122,9 @@ const config: Config = {
         "fade-in-up-slow": `fade-in-up-lg 0.8s ${EASE_OUT_EXPO} both`,
         "slide-in-left": `slide-in-left-md 0.8s ${EASE_OUT_EXPO} both`,
         "slide-in-right": `slide-in-right-md 0.8s ${EASE_OUT_EXPO} both`,
+        // Testimonial carousel (phones): the new slide comes from the side you moved to.
+        "carousel-from-right": `slide-in-right-md 0.45s ${EASE_OUT_EXPO} both`,
+        "carousel-from-left": `slide-in-left-md 0.45s ${EASE_OUT_EXPO} both`,
         "bounce-in": `bounce-in 0.6s ${EASE_OUT_EXPO} both`,
         "scale-in": `scale-in 0.6s ${EASE_OUT_EXPO} both`,
         "success-pop": "success-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both",

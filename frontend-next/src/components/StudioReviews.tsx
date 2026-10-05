@@ -13,7 +13,7 @@ const SECTION =
 const ORB = "pointer-events-none absolute z-0 rounded-full opacity-[0.08] blur-[100px]";
 
 const CARD =
-  "relative cursor-pointer rounded-[24px] border-2 border-[#f0f0f0] bg-white p-10 opacity-0 shadow-[0_4px_20px_rgba(0,0,0,0.04)] [transform:translateY(40px)_scale(0.95)] [&.animate]:opacity-100 [&.animate]:[transform:translateY(0)_scale(1)] hover:!border-[#a045e0] hover:!shadow-[0_12px_40px_rgba(166,0,255,0.15)] hover:![transform:translateY(-8px)_scale(1)] max-[768px]:px-6 max-[768px]:py-8 max-[480px]:px-5 max-[480px]:py-7";
+  "relative cursor-pointer rounded-[24px] border-2 border-[#f0f0f0] bg-white p-10 opacity-0 shadow-[0_4px_20px_rgba(0,0,0,0.04)] [transform:translateY(40px)_scale(0.95)] [&.animate]:opacity-100 [&.animate]:[transform:translateY(0)_scale(1)] hover:!border-[#e5e5e5] hover:!shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:![transform:translateY(-8px)_scale(1)] max-[768px]:px-6 max-[768px]:py-8 max-[480px]:px-5 max-[480px]:py-7";
 // Staggered reveal, one step per card.
 const CARD_TRANSITION = [
   "[transition:all_0.8s_cubic-bezier(0.16,1,0.3,1)_0.1s]",
@@ -62,14 +62,14 @@ export default function StudioReviews({
 
       <div className="relative z-[1] mx-auto max-w-[1200px]">
         <div className="mb-10 translate-y-[30px] text-center [transition:all_1s_cubic-bezier(0.16,1,0.3,1)] max-[1024px]:mb-[60px]">
-          <span className="mb-5 inline-block rounded-[25px] border border-[rgba(255,107,0,0.2)] bg-[rgba(140,0,255,0.08)] px-5 py-2 text-[13px] font-semibold uppercase tracking-[3px] !text-[#c2410c]">
+          <span className="mb-5 inline-block rounded-[25px] bg-gray-100 px-5 py-2 text-[13px] font-semibold uppercase tracking-[3px] !text-[#c2410c]">
             Testimonials
           </span>
           <h2 className="mb-5 text-[clamp(36px,5vw,56px)] font-extrabold leading-[1.2] tracking-[-0.02em] text-[#1a1a1a] max-[768px]:text-[32px] max-[480px]:text-[28px]">
             {heading}
           </h2>
           <p className="mx-auto text-[clamp(16px,1.8vw,20px)] leading-[1.6] text-[#403e3e]">
-            Every voice, every emotion, every story, that’s the Genie Studio experience.
+            Every voice, every emotion, every story, that’s the Genie Media &amp; Studio experience.
           </p>
         </div>
 

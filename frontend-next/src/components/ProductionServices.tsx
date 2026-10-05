@@ -69,7 +69,7 @@ export default function ProductionHouseServices() {
         {/* Header Section */}
         <div className="text-center mb-16 sm:mb-20 space-y-6">
           <div className="inline-block">
-            <span className="px-4 py-2 bg-orange-500 bg-opacity-50 text-black rounded-full text-sm font-semibold border border-orange-500 border-opacity-30">
+            <span className="px-4 py-2 bg-orange-500 bg-opacity-50 text-black rounded-full text-sm font-semibold">
               Our Expert-led Services
             </span>
           </div>

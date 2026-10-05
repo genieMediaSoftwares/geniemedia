@@ -5,6 +5,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import { SITE_HOST, SITE_ORIGIN } from "@/lib/site";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 export const metadata: Metadata = buildRouteMetadata("/privacy-policy");
 
@@ -184,7 +185,7 @@ export default function PrivacyPolicyRoute() {
         intro={
           <p>
             This policy explains what personal information Genie Media &amp; Studio collects through this website, how
-            we use it and the choices you have. See also our <a href="/terms-and-conditions" className="text-orange-700 underline underline-offset-2">Terms &amp; Conditions</a>.
+            we use it and the choices you have. See also our <a href="/terms-and-conditions" className={CONTENT_LINK}>Terms &amp; Conditions</a>.
           </p>
         }
         sections={SECTIONS}

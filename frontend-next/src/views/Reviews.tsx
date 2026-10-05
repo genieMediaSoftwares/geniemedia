@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import VideoTestimonials from "@/components/testimonials"
 import ContactSec from "@/components/contactSection";
 import StudioReviews from "@/components/StudioReviews";
+import { CONTENT_LINK } from "@/lib/linkStyles";
 
 export default function Reviews() {
   useEffect( () =>{
@@ -34,9 +35,9 @@ export default function Reviews() {
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
                Clients love our seamless blend of creative{" "}
-               <a href="/podcast_studio" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">studio production</a>{" "}
+               <a href="/podcast_studio" className={CONTENT_LINK}>studio production</a>{" "}
                and powerful{" "}
-               <a href="/digital_marketing" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">digital marketing support</a>, helping them record, create, and grow their brand all in one place.
+               <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing support</a>, helping them record, create, and grow their brand all in one place.
               </p>
             </div>
 
