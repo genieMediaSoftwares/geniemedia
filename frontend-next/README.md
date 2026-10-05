@@ -52,6 +52,7 @@ comment inside `.env`.
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | no | Search Console verification tag |
 | `CONTACT_TO_EMAIL` | yes | Inbox that receives contact-form enquiries (written into `contact.php`) |
 | `CONTACT_FROM_EMAIL` | yes | Sender address for those emails; must be a mailbox on your domain |
+| `UPLOAD_DELETE_SECRET` | yes | Key the backend sends to `delete-upload.php`; must match the backend's `UPLOAD_DELETE_SECRET` |
 | `API_INTERNAL_BASE_URL` | no | Server-only backend address used while building |
 
 Values are built into the pages, so **change `.env`, then run `npm run build`
@@ -97,6 +98,15 @@ Google gets the full content without running JavaScript.
 (`/about` serves `about.html`), the old redirects, admin noindex, caching, and
 a real 404 page. `scripts/postbuild.mjs` adds the retired-blog-slug 301s from
 the backend.
+
+### Image cleanup
+
+When a blog or project is deleted, or its image is replaced or removed, the
+backend deletes the old file from Hostinger `uploads/` through
+`delete-upload.php` (built from `public/delete-upload.php`). It only deletes a
+file no other blog or project still uses. The backend needs
+`UPLOAD_DELETE_URL=https://geniemedia.in/delete-upload.php` and the same
+`UPLOAD_DELETE_SECRET` as this `.env` (in `Backend/.env` and on Render).
 
 ### Publishing new content
 

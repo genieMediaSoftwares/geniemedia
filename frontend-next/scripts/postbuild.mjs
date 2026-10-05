@@ -111,6 +111,20 @@ if (fs.existsSync(SITEMAP) && fs.existsSync(SITEMAP_PHP)) {
 }
 
 // ---------------------------------------------------------------------------
+// delete-upload.php: the secret the backend uses to delete replaced images.
+// ---------------------------------------------------------------------------
+const DELETE_PHP = path.join(ROOT, "dist", "delete-upload.php");
+if (fs.existsSync(DELETE_PHP)) {
+  const secret = readEnv("UPLOAD_DELETE_SECRET");
+  if (!/^[A-Za-z0-9]{32,}$/.test(secret)) {
+    console.error("postbuild: UPLOAD_DELETE_SECRET in .env must be at least 32 letters/digits — cannot write dist/delete-upload.php.");
+    process.exit(1);
+  }
+  fs.writeFileSync(DELETE_PHP, fs.readFileSync(DELETE_PHP, "utf8").split("__UPLOAD_DELETE_SECRET__").join(secret));
+  console.log("postbuild: delete-upload.php configured");
+}
+
+// ---------------------------------------------------------------------------
 // contact.php: fill in the email settings and site URL from .env.
 // ---------------------------------------------------------------------------
 const CONTACT_PHP = path.join(ROOT, "dist", "contact.php");

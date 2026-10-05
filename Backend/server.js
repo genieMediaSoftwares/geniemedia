@@ -232,6 +232,63 @@ const optimiseImage = async (tempFilePath) => {
 // this at a hostname that still reaches Hostinger (e.g. https://files.geniemedia.in/upload.php).
 const UPLOAD_ENDPOINT = process.env.UPLOAD_ENDPOINT || "https://geniemedia.in/upload.php";
 
+// ================= HELPER: Delete unused images from Hostinger =================
+// When a blog/project is deleted, or its image is replaced or removed, the old
+// file is deleted from Hostinger's uploads/ folder via delete-upload.php
+// (frontend-next/public/delete-upload.php), so uploads/ always matches the DB.
+//
+// A file is only deleted when no blog (featured image, OG image or article
+// body) and no project still references it. Runs after the DB change has been
+// committed and never blocks or fails the admin request.
+const UPLOAD_DELETE_URL = (process.env.UPLOAD_DELETE_URL || "").trim();
+const UPLOAD_DELETE_SECRET = (process.env.UPLOAD_DELETE_SECRET || "").trim();
+
+const dbQuery = (sql, params = []) =>
+  new Promise((resolve) => db.query(sql, params, (err, rows) => resolve(err ? null : rows)));
+
+/** "https://geniemedia.in/uploads/abc.webp" -> "abc.webp" (only for the Hostinger uploads host). */
+const uploadFileName = (url) => {
+  if (!url || !UPLOAD_DELETE_URL) return null;
+  try {
+    const parsed = new URL(String(url));
+    if (parsed.host !== new URL(UPLOAD_DELETE_URL).host) return null;
+    const match = parsed.pathname.match(/^\/uploads\/([^/]+)$/);
+    return match ? decodeURIComponent(match[1]) : null;
+  } catch (_) {
+    return null;
+  }
+};
+
+/** How many rows still use this file, or null if that cannot be determined (then nothing is deleted). */
+const countUploadReferences = async (fileName) => {
+  const like = `%${fileName}%`;
+  const blogs = await dbQuery("SELECT COUNT(*) AS n FROM blogs WHERE image LIKE ? OR description LIKE ?", [like, like]);
+  const projects = await dbQuery("SELECT COUNT(*) AS n FROM projects WHERE image LIKE ?", [like]);
+  if (!blogs || !projects) return null;
+  // og_image_url only exists once the SEO migration has run; a missing column counts as 0.
+  const og = await dbQuery("SELECT COUNT(*) AS n FROM blogs WHERE og_image_url LIKE ?", [like]);
+  return Number(blogs[0].n) + Number(projects[0].n) + (og ? Number(og[0].n) : 0);
+};
+
+const removeUploadsIfUnused = async (urls) => {
+  if (!UPLOAD_DELETE_URL || !UPLOAD_DELETE_SECRET) return; // feature not configured
+  const files = [...new Set((urls || []).map(uploadFileName).filter(Boolean))];
+  for (const file of files) {
+    try {
+      const refs = await countUploadReferences(file);
+      if (refs !== 0) continue; // still in use, or unknown: keep the file
+      const { data } = await axios.post(
+        UPLOAD_DELETE_URL,
+        { file },
+        { headers: { "X-Delete-Secret": UPLOAD_DELETE_SECRET }, timeout: 15000 }
+      );
+      console.log(`🗑️  uploads/${file}: ${data && data.message ? data.message : "deleted"}`);
+    } catch (err) {
+      console.error(`Could not delete uploads/${file}:`, err.response ? err.response.status : err.message);
+    }
+  }
+};
+
 // ================= HELPER: Upload file to Hostinger =================
 // Uploads temp file to upload.php, returns full HTTPS URL, cleans up temp files
 const uploadToHostinger = async (tempFilePath) => {
@@ -654,6 +711,12 @@ app.put("/api/blogs/:id", verifyToken, upload.single("image"), async (req, res) 
 
       invalidateSitemapCache();
       res.json({ success: true, message: "Blog updated", warnings: imageWarnings });
+
+      // Delete the old featured/OG images if this edit replaced or removed them.
+      const nextOg = "og_image_url" in values ? values.og_image_url : previousRow.og_image_url;
+      removeUploadsIfUnused(
+        [previousRow.image, previousRow.og_image_url].filter((url) => url && url !== values.image && url !== nextOg)
+      );
     });
   } catch (err) {
     console.error("Error updating blog:", err);
@@ -664,15 +727,16 @@ app.put("/api/blogs/:id", verifyToken, upload.single("image"), async (req, res) 
 
 // ================= DELETE BLOG =================
 app.delete("/api/blogs/:id", verifyToken, (req, res) => {
-  db.query("SELECT image FROM blogs WHERE id = ?", [req.params.id], (err, result) => {
-    // Note: images are stored on Hostinger, not locally, so local file deletion is skipped
-    // If you want to also delete from Hostinger you'd need a delete endpoint on upload.php
+  db.query("SELECT * FROM blogs WHERE id = ?", [req.params.id], (err, result) => {
+    const old = !err && result && result[0] ? result[0] : null;
 
     db.query("DELETE FROM blogs WHERE id = ?", [req.params.id], (err2) => {
       if (err2) return res.status(500).json({ success: false, message: "Failed to delete blog" });
       // The sitemap must stop advertising a URL that now 404s.
       invalidateSitemapCache();
       res.json({ success: true, message: "Blog deleted" });
+      // Remove its images from Hostinger uploads/ (if nothing else uses them).
+      if (old) removeUploadsIfUnused([old.image, old.og_image_url]);
     });
   });
 });
@@ -854,6 +918,10 @@ app.put("/api/projects/:id", verifyToken, uploadProjectImage, async (req, res) =
   try {
     let imageUrl;
 
+    // The current image, so it can be deleted from uploads/ once replaced.
+    const previous = await dbQuery("SELECT image FROM projects WHERE id = ?", [id]);
+    const previousImage = previous && previous[0] ? previous[0].image : null;
+
     if (req.file) {
       // New file chosen → upload it and replace the stored URL
       imageUrl = await uploadToHostinger(req.file.path);
@@ -906,6 +974,8 @@ app.put("/api/projects/:id", verifyToken, uploadProjectImage, async (req, res) =
           return res.status(404).json({ success: false, message: "Project not found" });
 
         res.json({ success: true, message: "Project updated" });
+        // A new image replaced the old one: delete the old file (if unused elsewhere).
+        if (previousImage && previousImage !== imageUrl) removeUploadsIfUnused([previousImage]);
       }
     );
   } catch (err) {
@@ -946,9 +1016,12 @@ app.put("/api/projects/:id/status", verifyToken, (req, res) => {
 });
 
 // ---------- DELETE PROJECT (ADMIN) ----------
-app.delete("/api/projects/:id", verifyToken, (req, res) => {
-  // Images live on Hostinger (uploaded via upload.php), not on this server's disk —
-  // same architecture as blogs, so no local file removal is performed here.
+app.delete("/api/projects/:id", verifyToken, async (req, res) => {
+  // Images live on Hostinger (uploaded via upload.php). The file is removed
+  // from uploads/ via delete-upload.php after the row is deleted.
+  const previous = await dbQuery("SELECT image FROM projects WHERE id = ?", [req.params.id]);
+  const previousImage = previous && previous[0] ? previous[0].image : null;
+
   db.query("DELETE FROM projects WHERE id = ?", [req.params.id], (err, result) => {
     if (err) {
       console.error("DB error deleting project:", err);
@@ -958,6 +1031,7 @@ app.delete("/api/projects/:id", verifyToken, (req, res) => {
       return res.status(404).json({ success: false, message: "Project not found" });
 
     res.json({ success: true, message: "Project deleted" });
+    if (previousImage) removeUploadsIfUnused([previousImage]);
   });
 });
 
