@@ -50,6 +50,8 @@ comment inside `.env`.
 | `NEXT_PUBLIC_GA4_ID` | no | Google Analytics 4 (empty = off) |
 | `NEXT_PUBLIC_GTM_ID` | no | Google Tag Manager (empty = off) |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | no | Search Console verification tag |
+| `CONTACT_TO_EMAIL` | yes | Inbox that receives contact-form enquiries (written into `contact.php`) |
+| `CONTACT_FROM_EMAIL` | yes | Sender address for those emails; must be a mailbox on your domain |
 | `API_INTERNAL_BASE_URL` | no | Server-only backend address used while building |
 
 Values are built into the pages, so **change `.env`, then run `npm run build`
@@ -85,7 +87,8 @@ Google gets the full content without running JavaScript.
 3. Upload the **contents** of `dist/` into `public_html`, including the hidden
    `.htaccess` file and the `_next/` folder. Overwrite existing files.
 4. **Do not delete** server files that are not part of the build:
-   `uploads/`, `upload.php`, `contact.php`. They hold the images and the
+   `uploads/`, `upload.php`, `og.php`. (`contact.php` is part of the build: it lives in
+   `public/contact.php` and gets its email settings from `.env`.) They hold the images and the
    contact form. Old Vite files such as `assets/`, `seo-proxy.php` and the
    old per-route `.html` heads can be removed once the new site works.
 5. Verify: `npm run test:routes -- https://geniemedia.in`

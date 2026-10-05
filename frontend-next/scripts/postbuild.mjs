@@ -85,3 +85,27 @@ fs.writeFileSync(
   s.replace(/  # BEGIN GENIE SLUG REDIRECTS[\s\S]*?  # END GENIE SLUG REDIRECTS/, block).split("__SITE_URL__").join(siteUrl),
 );
 console.log(`postbuild: ${rules.length} retired blog slug redirect(s) and site URL ${siteUrl} written to dist/.htaccess`);
+
+// ---------------------------------------------------------------------------
+// contact.php: fill in the email settings and site URL from .env.
+// ---------------------------------------------------------------------------
+const CONTACT_PHP = path.join(ROOT, "dist", "contact.php");
+if (fs.existsSync(CONTACT_PHP)) {
+  const values = {
+    __CONTACT_TO_EMAIL__: readEnv("CONTACT_TO_EMAIL"),
+    __CONTACT_FROM_EMAIL__: readEnv("CONTACT_FROM_EMAIL"),
+    __SITE_URL__: siteUrl,
+  };
+  const missing = Object.entries(values).filter(([, v]) => !v).map(([k]) => k.replace(/^__|__$/g, ""));
+  if (missing.length) {
+    console.error(`postbuild: ${missing.join(", ")} not set in .env — cannot write dist/contact.php.`);
+    process.exit(1);
+  }
+  let php = fs.readFileSync(CONTACT_PHP, "utf8");
+  for (const [placeholder, value] of Object.entries(values)) {
+    // Values are written into single-quoted PHP strings.
+    php = php.split(placeholder).join(value.replace(/\\/g, "\\\\").replace(/'/g, "\\'"));
+  }
+  fs.writeFileSync(CONTACT_PHP, php);
+  console.log(`postbuild: contact.php configured (enquiries go to ${values.__CONTACT_TO_EMAIL__})`);
+}
