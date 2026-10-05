@@ -1,8 +1,5 @@
-"use client";
-
 import { Check } from "lucide-react";
-import { useState } from 'react'
-import { ChevronUp } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import type { PortfolioItem } from "@/types";
 
 import ServicesSection2 from "@/components/ServicesWebsites";
@@ -18,9 +15,6 @@ const web_services_hero = web_services_heroAsset.src;
 const inlineLink = "text-orange-700 underline underline-offset-2 hover:text-orange-900";
 
 export default function WebDevPg({ initialProjects }: { initialProjects: PortfolioItem[] | null }) {
-
-   
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
   
 
   const accordionData = [
@@ -65,9 +59,6 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
     }
   ];
 
-  const toggleAccordion = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
 
   // An "industries we serve" carousel (state, data and next/prev handlers) used
   // to be declared here but was never rendered — roughly 60 lines of unused
@@ -208,15 +199,12 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
 
           {/* Right Column - Accordions */}
           <div className="space-y-4">
-            {accordionData.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md"
+            {accordionData.map((item) => (
+              <details
+                key={item.title}
+                className="group bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md"
               >
-                <button
-                  onClick={() => toggleAccordion(index)}
-                  className="w-full flex items-center justify-between p-6 text-left focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset"
-                >
+                <summary className="w-full flex items-center justify-between p-6 text-left cursor-pointer list-none [&::-webkit-details-marker]:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-inset">
                   <div className="flex items-center gap-4 flex-1">
                     <div className="flex-shrink-0">
                       <div className="w-8 h-8 rounded-full border-2 border-gray-900 flex items-center justify-center">
@@ -228,26 +216,15 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
                     </h3>
                   </div>
                   <div className="flex-shrink-0 ml-4">
-                    <ChevronUp
-                      className={`w-6 h-6 text-gray-900 transition-transform duration-300 ${
-                        openIndex === index ? 'transform rotate-180' : ''
-                      }`}
-                    />
+                    <ChevronDown className="w-6 h-6 text-gray-900 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
                   </div>
-                </button>
-                
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                  }`}
-                >
-                  <div className="px-6 pb-6 pt-2">
-                    <p className="text-gray-600 leading-relaxed pl-12">
-                      {item.content}
-                    </p>
-                  </div>
+                </summary>
+                <div className="px-6 pb-6 pt-2">
+                  <p className="text-gray-600 leading-relaxed pl-12">
+                    {item.content}
+                  </p>
                 </div>
-              </div>
+              </details>
             ))}
           </div>
         </div>

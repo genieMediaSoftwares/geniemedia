@@ -1,5 +1,3 @@
-"use client";
-
 import { ChevronRight } from "lucide-react";
 import React from 'react';
 import { Palette, Code, ShoppingBag, Wrench, Smartphone, Globe } from 'lucide-react';
@@ -91,9 +89,9 @@ export default function ServicesSection() {
 
         
         <div className="text-center mt-10">
-          <button className="bg-orange-400 text-black px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-black-500/50 transform hover:scale-105 transition-all duration-300" onClick={() => window.location.href="https://wa.me/919032845433"}>
+          <a href="https://wa.me/919032845433" className="inline-block bg-orange-400 text-black px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-black-500/50 transform hover:scale-105 transition-all duration-300">
             Start Your Project
-          </button>
+          </a>
         </div>
       </div>
     </section>

@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, Phone, Mail } from 'lucide-react';
-import logoAsset from "@/assets/GenieMedia-Logo.png";
+// 120px-tall WebP: the header shows the logo at most 60px tall (2x for retina).
+import logoAsset from "@/assets/GenieMedia-Logo-120.webp";
 import { TrendingUp, Code, Video, Mic } from 'lucide-react';
 
 const logo = logoAsset.src;
@@ -98,8 +99,8 @@ const Header = () => {
               <img
                 src={logo}
                 alt="Genie Media & Studio"
-                width="283"
-                height="420"
+                width="81"
+                height="120"
                 className="max-h-[60px] w-36 sm:w-32 md:w-36 object-contain"
               />
             </Link>

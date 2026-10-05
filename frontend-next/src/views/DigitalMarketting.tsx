@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 import DigitalMarketting1Asset from "@/assets/DigitalMarketting.jpg";
 import DigitalMarketing2Asset from "@/assets/DigitalMarketing2.jpg";
-import DM_servicesAsset from "@/assets/DM_services.jpg";
+import DM_servicesAsset from "@/assets/DM_services.webp";
 import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
 
 const DigitalMarketting1 = DigitalMarketting1Asset.src;

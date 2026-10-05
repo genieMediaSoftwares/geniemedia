@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react'
 import ProductionHouseServices from "@/components/ProductionServices"
 import ContactSec from "@/components/contactSection"

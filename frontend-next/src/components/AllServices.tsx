@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import Dm_servicesAsset from "@/assets/DM_services.jpg";
+import Dm_servicesAsset from "@/assets/DM_services.webp";
 import WebDev_servicesAsset from "@/assets/WebDev_services.jpg";
 import lampAsset from "@/assets/lamp.jpg";
 import productionHouseAsset from "@/assets/Production_house.jpg";

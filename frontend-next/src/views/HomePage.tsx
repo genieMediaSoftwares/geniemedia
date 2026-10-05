@@ -1,15 +1,11 @@
-"use client";
-
-import { ChevronRight } from "lucide-react";
-import React, { useState } from "react";
-import { ArrowRight, Sparkles, Layers, Mic, Globe } from "lucide-react";
-import { WEBSITES_VIDEO_URL } from "@/config/media";
+import { ArrowRight, ChevronRight, Sparkles, Layers, Mic, Globe } from "lucide-react";
 
 import AboutUs from "@/components/AboutSection";
 import Contact from "@/components/contactSection";
 import VideoTestimonials2 from "@/components/testimonials";
 import TabbedServices from "@/components/AllServices";
 import GenieImgAsset from "@/assets/genieHeroImg.webp";
+import GenieImg640Asset from "@/assets/genieHeroImg-640.webp";
 import meerabasuAsset from "@/assets/meerabasuWebsite.webp";
 import AvanttaGemsAsset from "@/assets/AvanttaGems.webp";
 import KNSAsset from "@/assets/knsMetals.webp";
@@ -19,11 +15,12 @@ import ShopifyAsset from "@/assets/shopify.webp";
 import CodeAsset from "@/assets/code.png";
 import NuconaerospaceAsset from "@/assets/nuconaerospace.webp";
 import SynergeneAsset from "@/assets/synergeneapi.webp";
+import HomeProjects from "@/components/home/HomeProjects";
+import WhatsAppContactLink from "@/components/home/WhatsAppContactLink";
 import type { PortfolioItem } from "@/types";
-import { portfolioOrFallback, serviceForCategory } from "@/lib/portfolio";
-import { useLatestProjects } from "@/lib/liveData";
 
 const GenieImg = GenieImgAsset.src;
+const GenieImg640 = GenieImg640Asset.src;
 const meerabasu = meerabasuAsset.src;
 const AvanttaGems = AvanttaGemsAsset.src;
 const KNS = KNSAsset.src;
@@ -69,10 +66,6 @@ const FALLBACK_PROJECTS: PortfolioItem[] = [
   },
 ];
 
-// The home page shows a preview of the portfolio — "View More Projects"
-// links to /projects where the full list is rendered.
-const HOME_PROJECTS_LIMIT = 6;
-
 // Static presentation data — hoisted out of the component so the arrays are not
 // re-allocated on every render.
 //
@@ -103,10 +96,15 @@ const STAT_CARD =
 
 const heroLink = "text-orange-700 underline decoration-orange-300 underline-offset-4 hover:text-orange-900";
 
-const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null }) => {
-  const [videoError, setVideoError] = useState(false);
-  const showVideo = Boolean(WEBSITES_VIDEO_URL) && !videoError;
+const WHATSAPP_URL = "https://wa.me/919032845433";
 
+/**
+ * The home page. A server component: the hero, steps, platforms and copy are
+ * plain HTML that React never has to hydrate. Only the interactive sections
+ * (about animation, service tabs, project grid, testimonials, contact form)
+ * are client components.
+ */
+const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null }) => {
   const stats = STATS;
 
   const steps = [
@@ -129,13 +127,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
       active: false,
     },
   ];
-
-  // Published projects come from the database — admins manage them in
-  // Admin Panel → Projects. No code change is needed to add a new one.
-  // Build-time list first, then the latest from the API (new projects show without a rebuild).
-  const liveProjects = useLatestProjects(initialProjects);
-  const allProjects = portfolioOrFallback(liveProjects, FALLBACK_PROJECTS);
-  const projects = allProjects.slice(0, HOME_PROJECTS_LIMIT);
 
   return (
     <>
@@ -192,19 +183,15 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
               </p>
 
               <div className="animate-home-buttons motion-reduce:animate-none flex flex-row sm:flex-row gap-4 w-80% justify-center lg:justify-start ">
-                <a
-                  href="/contact"
+                <WhatsAppContactLink
                   className={`w-42 sm:w-56 ${HOME_BTN_PRIMARY} group px-5 py-4 text-black font-bold rounded-full text-base shadow-xl flex items-center justify-center gap-2 z-10`}
-                  onClick={() =>
-                    (window.location.href = "https://wa.me/919032845433")
-                  }
                 >
                   Get Started
                   <ArrowRight
                     className="group-hover:translate-x-1 transition-transform"
                     size={20}
                   />
-                </a>
+                </WhatsAppContactLink>
                 <a
                   href="/projects"
                   className={`w-42 sm:w-50 ${HOME_BTN_SECONDARY} px-6 py-4 font-bold rounded-full text-base flex items-center justify-center gap-2 z-10`}
@@ -254,6 +241,8 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                     />
                     <img
                       src={GenieImg}
+                      srcSet={`${GenieImg640} 640w, ${GenieImg} 1000w`}
+                      sizes="(min-width: 1280px) 600px, 50vw"
                       alt="Genie Media's genie mascot rising from a lamp"
                       className="hidden lg:block w-full h-[600px] object-cover rounded-3xl mt-8"
                       width="1000"
@@ -277,7 +266,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
         </div>
       </section>
 
-      <section className={`relative bg-[#f9fafc] overflow-hidden ${showVideo ? 'py-10 md:py-14' : 'py-8 md:py-10'}`}>
+      <section className="relative bg-[#f9fafc] overflow-hidden py-8 md:py-10">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <p
             className="
@@ -302,30 +291,12 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
            & Grows Brands
           </h2>
 
-          <p
-            className={`
-            max-w-3xl mx-auto text-lg text-gray-600
-            leading-relaxed ${showVideo ? 'mb-12' : 'mb-0'}
-           
-          `}
-          >
+          <p className="max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed mb-0">
            We create digital marketing that feels natural, human and easy to remember.
            From SEO and social media to website design, branding and content, we help businesses in Vizag
            get seen online. As a result, they win more leads and build trust on every platform.
           </p>
 
-          {showVideo && (
-            <video
-              src={WEBSITES_VIDEO_URL ?? undefined}
-              muted
-              autoPlay
-              loop
-              playsInline
-              preload="none"
-              onError={() => setVideoError(true)}
-              className="w-full h-auto rounded-xl mt-8"
-            ></video>
-          )}
         </div>
       </section>
 
@@ -396,65 +367,8 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
             Your Digital Presence, Perfected
           </h2>
 
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
-            {projects.map((project, index) => (
-              <div key={project.id ?? index} className="text-center group">
-                <div className="rounded-3xl p-0 md:p-0.5 mb-8 transition-transform duration-300 group-hover:scale-105">
-                  <div className="overflow-hidden rounded-2xl aspect-[11/5]">
-                    <img
-                      src={project.image}
-                      alt={`${project.name} website`}
-                      width="1280"
-                      height="582"
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  </div>
-                </div>
-
-                {/* Title */}
-                <h3 className={`text-xl font-semibold ${serviceForCategory(project.category) ? "mb-2" : "mb-6"}`}>{project.name}</h3>
-
-                {/* The service behind the project, linked to its page. */}
-                {serviceForCategory(project.category) && (
-                  <a
-                    href={serviceForCategory(project.category)?.href}
-                    className="inline-block mb-5 text-sm font-medium text-orange-700 underline underline-offset-2 hover:text-orange-900"
-                  >
-                    {serviceForCategory(project.category)?.label}
-                  </a>
-                )}
-
-                <div>
-                {/* A real link so crawlers see which live sites the portfolio
-                    points to; it opens in a new tab as the button used to. */}
-                {project.url && (
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener"
-                  className="
-                inline-block
-                px-8 py-3
-                rounded-full
-                font-semibold
-                border-2 border-orange-400
-                text-white
-                bg-gray-900
-                hover:bg-orange-400
-                hover:text-black
-                transition-all duration-300
-              "
-                >
-                  VIEW PROJECT
-                </a>
-                )}
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Projects Grid: the one client island in this section. */}
+          <HomeProjects initialProjects={initialProjects} fallback={FALLBACK_PROJECTS} />
           <div className="flex justify-center mt-6">
             <a
               href="/projects"
@@ -517,7 +431,8 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
 
           </p>
 
-          <button
+          <a
+            href={WHATSAPP_URL}
             className="
              inline-flex items-center justify-center gap-2
               px-5 py-3                
@@ -536,13 +451,10 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
               shadow-lg
               w-full sm:w-auto  
           "
-            onClick={() =>
-              (window.location.href = "https://wa.me/919032845433")
-            }
           >
             Need help to upscale your brand
             <ArrowRight className="w-5 h-7" strokeWidth={2.5} aria-hidden="true" />
-          </button>
+          </a>
         </div>
 
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.02),transparent_70%)]" />
