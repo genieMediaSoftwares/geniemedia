@@ -88,7 +88,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
                 Web  Development
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                We specialize in delivering innovative web development services, crafting responsive, scalable, and user-friendly websites that drive business growth for startups and established companies alike.
+                We design and build responsive, mobile-friendly and SEO-friendly websites in Visakhapatnam (Vizag): business websites, landing pages and ecommerce stores that load fast, are easy to use and help startups and established companies grow.
               </p>
             </div>
 

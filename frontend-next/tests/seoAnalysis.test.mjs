@@ -52,7 +52,16 @@ test("content statistics", () => {
   assert.equal(s.internalLinkCount, 1);
   assert.equal(s.externalLinkCount, 1);
   assert.ok(s.sentenceCount >= 3);
-  assert.ok(s.readability >= 0 && s.readability <= 100);
+  // A short article is not enough prose to score.
+  assert.equal(s.readability, null);
+  assert.equal(s.readabilityLabel, "insufficient prose");
+});
+
+test("readability is scored, and bounded, once there is enough prose", () => {
+  const sentence = "Our team helps local businesses in Vizag grow with clear and simple marketing plans. ";
+  const s = contentStats(`<p>${sentence.repeat(10)}</p>`);
+  assert.ok(typeof s.readability === "number" && s.readability >= 0 && s.readability <= 100);
+  assert.equal(s.readabilityLabel, String(s.readability));
 });
 
 test("publish gate blocks an empty post and passes a complete one", () => {

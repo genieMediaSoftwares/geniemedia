@@ -6,6 +6,7 @@ import { ChevronRight, ArrowUpRight, ChevronLeft, ChevronUp, CheckCircle, Phone,
 import DigitalMarketting1Asset from "@/assets/DigitalMarketting.jpg";
 import DigitalMarketing2Asset from "@/assets/DigitalMarketing2.jpg";
 import DM_servicesAsset from "@/assets/DM_services.jpg";
+import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
 
 const DigitalMarketting1 = DigitalMarketting1Asset.src;
 const DigitalMarketing2 = DigitalMarketing2Asset.src;
@@ -21,49 +22,64 @@ export default function DigitalMarketting() {
       id: "seo",
       title: "SEO Services in Vizag",
       subtitle: "Search Engine Optimization & Organic Growth",
-      description: "Our search engine optimization (SEO) services help your business achieve higher visibility on Google search engine results pages (SERP). We execute comprehensive SEO strategies tailored for local businesses in Visakhapatnam and regional brands, covering technical SEO, on-page SEO, local SEO for Vizag, keyword research, content optimization, and performance tracking via Google Search Console.",
-      keywords: ["SEO Services in Vizag", "Search Engine Optimization", "Organic Traffic", "Local SEO", "Technical SEO", "SEO Company in Vizag"],
-      link: "/blogs"
+      description: "Our SEO services help your website earn better Google rankings and steady organic traffic. Every engagement starts with an SEO audit, then covers technical SEO, on-page SEO, keyword research, content optimization, internal linking, structured data and local SEO for businesses in Vizag and Visakhapatnam, with clear SEO reporting from Google Search Console and Google Analytics.",
+      keywords: ["SEO Audit", "Technical SEO", "On-Page SEO", "Local SEO", "Keyword Research"],
+      link: "/blogs",
+      linkLabel: "Read our SEO guides"
     },
     {
       id: "google-ads",
       title: "Google Ads & PPC Management",
-      subtitle: "Paid Search & High-Conversion Campaigns",
-      description: "As a data-driven digital marketing company, we design and manage conversion-focused Google Ads and pay-per-click (PPC) campaigns. From paid search advertising to display ads and remarketing, our digital marketing specialists set up conversion tracking, craft compelling ad copy, optimize landing pages, and continuously refine spend to deliver strong return on investment (ROI).",
-      keywords: ["Google Ads Management", "PPC Management", "Paid Search", "Paid Media", "Conversion Rate", "ROI-Driven Ads"],
-      link: "/contact"
+      subtitle: "Paid Search & Performance Campaigns",
+      description: "We plan, launch and manage Google Ads and pay-per-click (PPC) campaigns, including Google Search Ads, display and remarketing. Our team sets up conversion tracking, writes ad copy, improves landing pages and keeps refining keywords, audiences and budgets so your paid advertising brings in qualified leads at a healthy return on investment (ROI).",
+      keywords: ["Google Search Ads", "PPC Management", "Conversion Tracking", "Remarketing"],
+      link: "/contact",
+      linkLabel: "Plan a Google Ads campaign"
     },
     {
       id: "social-media",
       title: "Social Media Marketing",
-      subtitle: "Brand Storytelling & Community Engagement",
-      description: "We build and execute engaging social media marketing campaigns across Instagram, Facebook, and LinkedIn. Our creative team develops structured content calendars, designs high-impact imagery, produces short-form video Reels, and manages paid social advertising to amplify your brand story, engage your target audience, and turn followers into loyal customers.",
-      keywords: ["Social Media Marketing in Vizag", "Instagram Ads", "Facebook Campaigns", "LinkedIn Marketing", "Brand Engagement"],
-      link: "/contact"
+      subtitle: "Social Strategy, Creatives & Advertising",
+      description: "We build a social media strategy around your audience, then design creatives, edit short-form videos and Reels, manage your posting calendar and run social media advertising on Instagram and Facebook. The aim is real brand awareness, audience engagement and enquiries, not just likes.",
+      keywords: ["Social Media Management", "Instagram Marketing", "Facebook Advertising", "Reels"],
+      link: "/contact",
+      linkLabel: "Grow your social media"
+    },
+    {
+      id: "content-marketing",
+      title: "Content Marketing",
+      subtitle: "Content Strategy, Blogs & Brand Storytelling",
+      description: "Useful content is what search engines and customers both reward. We plan a content marketing strategy around what your audience searches for, then write SEO-friendly website content, blog articles, ad copy and social posts, and produce visual content in our own studio to tell your brand story.",
+      keywords: ["Content Strategy", "Blog Content", "SEO Content", "Visual Storytelling"],
+      link: "/blogs",
+      linkLabel: "Browse our blog"
+    },
+    {
+      id: "lead-generation",
+      title: "Lead Generation & Conversion Optimization",
+      subtitle: "More Enquiries From the Same Traffic",
+      description: "Traffic only matters when it turns into enquiries and sales. We build lead generation campaigns, design focused landing pages, improve forms and calls to action, and use conversion rate optimization (CRO), email follow-ups and analytics to turn more visitors into qualified leads and customers.",
+      keywords: ["Lead Generation", "Landing Page Optimization", "CRO", "Email Marketing"],
+      link: "/contact",
+      linkLabel: "Talk about lead generation"
     },
     {
       id: "web-development",
       title: "Website Design & Development",
-      subtitle: "Responsive, Fast & SEO-Friendly Web Applications",
-      description: "A high-performing website is the foundation of digital marketing. As a leading web design agency in Visakhapatnam, our website designers and developers build custom business websites, landing pages, and e-commerce stores. Every site features responsive web design, rapid load speeds, intuitive user experience (UX), and SEO best practices built in from day one.",
-      keywords: ["Website Design in Vizag", "Web Design Agency", "Responsive Web Design", "Website Developer", "E-Commerce Stores"],
-      link: "/web_development"
+      subtitle: "Responsive, Fast & SEO-Friendly Websites",
+      description: "Your website is where most digital marketing ends up, so it has to perform. Our designers and developers build responsive, mobile-friendly business websites, landing pages and ecommerce stores with fast page speed, good Core Web Vitals, clear user experience (UI/UX) and SEO built in from day one.",
+      keywords: ["Website Design", "Responsive Website", "Ecommerce Website", "UI/UX"],
+      link: "/web_development",
+      linkLabel: "Explore web development"
     },
     {
       id: "branding",
-      title: "Branding & Creative Services",
-      subtitle: "Brand Identity, Positioning & Visual Communication",
-      description: "We help companies establish a distinct visual identity and market positioning. Our branding specialists craft brand identity kits, design custom logos, establish brand guidelines, write persuasive website messaging, and create creative visual communication assets that distinguish your business from competitors.",
-      keywords: ["Branding Strategy", "Brand Identity", "Logo Design", "Creative Messaging", "Visual Communication"],
-      link: "/contact"
-    },
-    {
-      id: "performance-marketing",
-      title: "Email & Performance Marketing",
-      subtitle: "Lead Nurturing & Revenue Optimization",
-      description: "We create automated email marketing workflows and performance marketing campaigns that nurture prospective leads into repeat customers. Our approach integrates email outreach, audience segmentation, conversion optimization, and analytics to ensure every channel works seamlessly toward your business growth targets.",
-      keywords: ["Email Marketing", "Lead Nurturing", "Performance Tracking", "Customer Retention", "Analytics"],
-      link: "/contact"
+      title: "Branding & Creative Marketing",
+      subtitle: "Brand Identity, Positioning & Creatives",
+      description: "We help businesses build a brand people remember: brand strategy and positioning, logo and visual identity, brand guidelines, website messaging, graphic design and marketing creatives. When a campaign needs video or photography, our production house creates it in-house.",
+      keywords: ["Brand Strategy", "Brand Identity", "Graphic Design", "Marketing Creatives"],
+      link: "/production_house",
+      linkLabel: "See our creative production"
     }
   ];
 
@@ -139,16 +155,12 @@ export default function DigitalMarketting() {
   };
 
   const strategySteps = [
-    { num: "01", title: "Business & Audience Research", desc: "We analyze your business goals, target audience demographics, competitive landscape in Vizag, and current online visibility." },
-    { num: "02", title: "SEO & Search Analysis", desc: "Our team performs technical site audits, competitor keyword analysis, and local search intent mapping for Visakhapatnam." },
-    { num: "03", title: "Strategy Development", desc: "We craft a multi-channel digital marketing plan covering organic search, paid advertising, content planning, and social media." },
-    { num: "04", title: "Content Planning & Messaging", desc: "We develop engaging brand messaging, visual assets, blog content plans, and ad copy tailored for your audience." },
-    { num: "05", title: "Campaign Implementation", desc: "Our specialists set up search ads, paid social campaigns, tracking scripts, and technical website optimizations." },
-    { num: "06", title: "Website Optimization", desc: "We optimize landing page UX, page speed, mobile responsiveness, and call-to-action pathways for maximum conversion." },
-    { num: "07", title: "Paid Media Execution", desc: "We launch targeted Google Ads, PPC, display, and social media campaigns with precise geographic and interest targeting." },
-    { num: "08", title: "Social Media Engagement", desc: "We publish creative posts, Reels, and community messaging on Instagram, Facebook, and LinkedIn." },
-    { num: "09", title: "Performance Measurement", desc: "We monitor daily campaign data, conversion metrics, organic rankings, and traffic quality through analytics tools." },
-    { num: "10", title: "Continuous Optimization", desc: "We refine targeting, ad spend, keyword optimization, and landing pages to ensure sustainable business growth and high ROI." }
+    { num: "01", title: "Research & Audience Analysis", desc: "We study your business goals, customers, competitors in Vizag and current online visibility, so the marketing strategy starts from facts rather than assumptions." },
+    { num: "02", title: "SEO & Search Visibility", desc: "We audit your website, research the keywords your customers use, map local search intent in Visakhapatnam and fix the technical and on-page issues that hold back your rankings." },
+    { num: "03", title: "Paid Advertising", desc: "We launch targeted Google Ads and social media advertising with clear goals, conversion tracking and location targeting, then shift budget towards the ads that bring in leads." },
+    { num: "04", title: "Content & Social Media", desc: "We create content that answers your audience's questions, from blog articles and website copy to social media creatives and short videos, and publish it on a steady schedule." },
+    { num: "05", title: "Conversion Optimization", desc: "We improve landing pages, page speed, forms and calls to action so more of your visitors become enquiries, bookings and customers." },
+    { num: "06", title: "Analytics & Reporting", desc: "We track rankings, organic traffic, ad performance, leads and ROI, share regular reports in plain language and keep refining the campaigns month after month." }
   ];
 
   const whyChooseUs = [
@@ -191,44 +203,7 @@ export default function DigitalMarketting() {
     }
   ];
 
-  const faqs = [
-    {
-      q: "What does a digital marketing agency in Vizag do?",
-      a: "A digital marketing agency like Genie Media & Studio helps businesses in Vizag and Visakhapatnam grow their online presence. We handle search engine optimization (SEO) to improve Google rankings, manage Google Ads and PPC campaigns, build websites, run social media marketing, create content, and develop brand identities."
-    },
-    {
-      q: "What digital marketing services does Genie Media & Studio provide?",
-      a: "We provide comprehensive digital marketing services in Visakhapatnam, including Search Engine Optimization (SEO), Google Ads & PPC management, social media marketing on Instagram, Facebook, and LinkedIn, website design & development, branding strategy, and performance email marketing."
-    },
-    {
-      q: "Do you provide SEO services in Vizag?",
-      a: "Yes, we offer specialized SEO services in Vizag. Our work includes technical SEO audits, on-page optimization, local SEO for Visakhapatnam businesses, keyword research, quality backlinking, and continuous tracking through Google Search Console."
-    },
-    {
-      q: "Do you manage Google Ads and PPC campaigns?",
-      a: "Yes, as a performance-driven digital marketing company in Vizag, we set up, manage, and optimize Google Ads and pay-per-click (PPC) search and display campaigns to drive qualified traffic and maximize conversion ROI."
-    },
-    {
-      q: "Do you provide social media marketing?",
-      a: "Yes, we deliver full social media marketing services. We plan content strategy, design creative graphics, edit video Reels, run paid social ad campaigns on Instagram, Facebook, and LinkedIn, and engage your target audience."
-    },
-    {
-      q: "Do you build websites?",
-      a: "Yes, our team of website designers and developers builds fast, responsive websites, landing pages, and e-commerce platforms using WordPress, React, and custom code with built-in SEO standards."
-    },
-    {
-      q: "Do you provide local SEO for Visakhapatnam businesses?",
-      a: "Yes, we specialize in local SEO for Visakhapatnam businesses. We optimize your Google Business Profile, local citations, and geo-targeted keywords so nearby customers in Vizag, Yendada, MVP Colony, Gajuwaka, and Madhurawada find you easily."
-    },
-    {
-      q: "How does digital marketing help businesses grow?",
-      a: "Digital marketing puts your business directly in front of potential customers actively searching for your services online. It increases brand awareness, drives organic and paid web traffic, generates qualified inquiries, and delivers measurable ROI."
-    },
-    {
-      q: "How can I contact Genie Media & Studio?",
-      a: "You can contact Genie Media & Studio by filling out our online form, booking a meeting, emailing admin@geniemedia.in, or calling us directly at +91 90328 45433 to discuss your digital marketing project."
-    }
-  ];
+  const faqs = DIGITAL_MARKETING_FAQS;
 
   const toggleAccordion = (index: number) => {
     setOpenAccordion(openAccordion === index ? null : index);
@@ -310,7 +285,7 @@ export default function DigitalMarketting() {
               Our Digital Marketing Services
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              We offer a complete suite of specialized digital marketing services tailored for local, regional, and national growth.
+              Search, paid advertising, social media, content, websites and branding, planned together as one digital marketing strategy for your business growth.
             </p>
           </div>
 
@@ -329,7 +304,7 @@ export default function DigitalMarketting() {
                 </div>
                 <div>
                   <a href={service.link} className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-600 hover:text-orange-800 group">
-                    Learn More <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    {service.linkLabel} <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 </div>
               </div>
@@ -389,11 +364,11 @@ export default function DigitalMarketting() {
               Our Digital Marketing Strategy
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Our structured 10-step digital marketing process ensures disciplined strategy execution, continuous optimization, and measurable ROI.
+              Every campaign follows the same six stages, from research to reporting, so you always know what we are doing, why, and what it is achieving.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {strategySteps.map((step) => (
               <div key={step.num} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-start gap-4">
                 <span className="text-2xl font-bold text-orange-500 flex-shrink-0 w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center">
@@ -414,7 +389,7 @@ export default function DigitalMarketting() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Why Businesses Choose Genie Media & Studio
+              Why Choose Genie Media & Studio
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               We combine creative storytelling, technical web development expertise, and rigorous data analysis to help your business thrive.
@@ -532,7 +507,7 @@ export default function DigitalMarketting() {
             <div>
               <img
                 src={DM_services}
-                alt="Genie Media & Studio digital marketing services overview showcase image"
+                alt="Overview of the digital marketing services offered by Genie Media & Studio"
                 className="rounded-2xl shadow-lg w-full object-cover"
                 width={800}
                 height={533}
@@ -550,7 +525,7 @@ export default function DigitalMarketting() {
             Digital Marketing Services Near Me
           </h2>
           <p className="text-lg text-gray-600 leading-relaxed mb-6">
-            If you are searching for a digital marketing agency near me or an SEO company near me in Visakhapatnam, Genie Media & Studio offers accessible local consultation. Located at KP Icon in Yendada, Visakhapatnam, we work closely with nearby businesses across Vizag, Madhurawada, Dwaraka Nagar, MVP Colony, Gajuwaka, and surrounding Andhra Pradesh regions.
+            If you are searching for a digital marketing agency near me, SEO services near me or a marketing agency near me in Visakhapatnam, Genie Media & Studio is close by and easy to meet in person. Located at KP Icon in Yendada, Visakhapatnam, we work closely with nearby businesses across Vizag, Madhurawada, Dwaraka Nagar, MVP Colony, Gajuwaka, and surrounding Andhra Pradesh regions.
           </p>
           <p className="text-lg text-gray-600 leading-relaxed mb-8">
             Whether you need a web design company near me, website developer near me, or a dedicated team for Google Ads management and social media marketing in Vizag, our team is ready to discuss your goals.
@@ -625,7 +600,7 @@ export default function DigitalMarketting() {
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Get Started with Digital Marketing in Vizag
+            Get Started with Genie Media & Studio
           </h2>
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
             Ready to grow your online visibility, capture qualified leads, and elevate your brand? Book a meeting or call our digital marketing team in Visakhapatnam to request a consultation.

@@ -688,8 +688,13 @@ export interface ContentStats {
   imagesMissingAlt: number;
   internalLinkCount: number;
   externalLinkCount: number;
-  /** Flesch reading ease, 0-100 (higher is easier). */
-  readability: number;
+  /**
+   * Flesch reading ease, 0-100 (higher is easier), or null when there is not
+   * enough prose to measure (see READABILITY_MIN_*); show readabilityLabel.
+   */
+  readability: number | null;
+  /** "62.4" or "insufficient prose". */
+  readabilityLabel: string;
   avgWordsPerSentence: number;
 }
 
@@ -698,6 +703,10 @@ export interface ContentStats {
  * every other check, so scripts, JSON-LD, hidden blocks and the panel itself
  * are never counted.
  */
+/** Below this much prose a Flesch score is noise, not a measurement. */
+const READABILITY_MIN_WORDS = 100;
+const READABILITY_MIN_SENTENCES = 3;
+
 export const contentStats = (html: unknown): ContentStats => {
   const source = String(html || "");
   const text = stripHtml(source);
@@ -709,7 +718,10 @@ export const contentStats = (html: unknown): ContentStats => {
   const syllables = words.reduce((sum, w) => sum + countSyllables(w), 0);
   const sentenceCount = Math.max(sentences.length, words.length ? 1 : 0);
   const avgWords = sentenceCount ? words.length / sentenceCount : 0;
-  const flesch = words.length ? 206.835 - 1.015 * avgWords - 84.6 * (syllables / words.length) : 0;
+  const enoughProse = words.length >= READABILITY_MIN_WORDS && sentences.length >= READABILITY_MIN_SENTENCES;
+  const readability = enoughProse
+    ? Number(Math.max(0, Math.min(100, 206.835 - 1.015 * avgWords - 84.6 * (syllables / words.length))).toFixed(1))
+    : null;
 
   return {
     wordCount: words.length,
@@ -720,7 +732,8 @@ export const contentStats = (html: unknown): ContentStats => {
     imagesMissingAlt: missingAlt,
     internalLinkCount: extractInternalLinks(source).length,
     externalLinkCount: extractExternalLinks(source).length,
-    readability: Number(Math.max(0, Math.min(100, flesch)).toFixed(1)),
+    readability,
+    readabilityLabel: readability === null ? "insufficient prose" : String(readability),
     avgWordsPerSentence: Number(avgWords.toFixed(1)),
   };
 };
@@ -732,9 +745,12 @@ export const contentStats = (html: unknown): ContentStats => {
  * script/style/noscript/template/svg, JSON-LD, [hidden], [aria-hidden=true],
  * elements hidden by computed style, and the SEO panel ([data-seo-panel]).
  * This is what stops a page-level audit from counting keyword arrays, source
- * code or configuration as body text.
+ * code or configuration as body text. When the root contains a
+ * <main data-seo-content="true"> container, only that container is measured,
+ * so the header, navigation and footer boilerplate are left out.
  */
-export const analyseRenderedPage = (root: HTMLElement, keyword: string) => {
+export const analyseRenderedPage = (pageRoot: HTMLElement, keyword: string) => {
+  const root = pageRoot.querySelector<HTMLElement>("[data-seo-content='true']") ?? pageRoot;
   const clone = root.cloneNode(true) as HTMLElement;
   const live = root.querySelectorAll<HTMLElement>("*");
   const cloned = clone.querySelectorAll<HTMLElement>("*");

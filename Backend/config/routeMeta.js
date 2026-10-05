@@ -28,9 +28,9 @@ const canonicalFor = (path) => {
 
 const ROUTE_META = {
   "/": {
-    title: "Genie Media, Vizag | Digital Marketing, Podcast & Video Production",
+    title: "Genie Media & Studio, Vizag | Digital Marketing, Web, Video & Podcast",
     description:
-      "Genie Media & Studio in Visakhapatnam offers digital marketing, SEO, websites, video production and a podcast studio for hire. Book a call or a studio slot.",
+      "Genie Media & Studio is a digital marketing agency in Visakhapatnam offering SEO, social media marketing, website design, video production and a podcast studio.",
   },
   "/services": {
     title: "Services | Marketing, Websites, Video & Podcast Studio | Genie Media",
@@ -73,9 +73,9 @@ const ROUTE_META = {
       "Read Genie Media's digital marketing blog for SEO, Google Ads, social media marketing, website growth and online business strategies.",
   },
   "/digital_marketing": {
-    title: "Digital Marketing Services in Vizag | Genie Media",
+    title: "Digital Marketing Services in Vizag | Genie Media & Studio",
     description:
-      "Genie Media & Studio provides digital marketing, SEO, Google Ads, social media, web development and branding services for businesses in Vizag.",
+      "Genie Media & Studio provides digital marketing, SEO, Google Ads, social media marketing, web development and branding services for businesses in Vizag and Visakhapatnam.",
   },
   "/podcast_studio": {
     title: "Podcast Studio in Visakhapatnam (Vizag) | Genie Media",

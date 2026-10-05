@@ -76,10 +76,10 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-12 sm:py-16">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 drop-shadow-lg">
-            Our Blog
+            Digital Marketing &amp; Creative Blog
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-2xl sm:max-w-3xl mx-auto drop-shadow-md">
-            Insights and creative stories from Genie Studio
+            SEO, social media, website and content insights from the Genie Media &amp; Studio team in Visakhapatnam
           </p>
         </div>
       </section>
@@ -256,7 +256,7 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
               Want to Share Your Story?
             </h2>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-              Get in touch with us to discuss your project, book a shoot, or collaborate with Genie Studio.
+              Get in touch with us to discuss your project, book a shoot, or collaborate with Genie Media &amp; Studio.
             </p>
             <button
               onClick={() => navigate("/contact")}

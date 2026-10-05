@@ -182,9 +182,9 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 Digital Marketing, Podcast Studio &amp; Video Production in Vizag
               </h1>
               <p className="animate-home-rise motion-reduce:animate-none text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Genie Media &amp; Studio is a digital marketing and media company
-                in Visakhapatnam. We run{" "}
-                <a href="/digital_marketing" className={heroLink}>SEO, social media and ad campaigns</a>,{" "}
+                Genie Media &amp; Studio is a digital marketing agency and creative
+                media company in Visakhapatnam (Vizag), Andhra Pradesh. We run{" "}
+                <a href="/digital_marketing" className={heroLink}>SEO, social media marketing and Google Ads campaigns</a>,{" "}
                 <a href="/web_development" className={heroLink}>build websites</a>,{" "}
                 <a href="/production_house" className={heroLink}>shoot brand videos</a>{" "}
                 and rent out our{" "}
@@ -297,9 +297,9 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
             mb-8
           "
           >
-           We Build SERPs in Digital Marketing
+           Digital Marketing That Connects
             <br />
-           That Connect & Grow Brands
+           & Grows Brands
           </h2>
 
           <p
@@ -310,8 +310,8 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
           `}
           >
            We craft digital marketing journeys that feel natural, human, and memorable.
-           From strategy to design and content, we help your brand rise above the noise, stay true to its voice,
-           and build trust across every platform.
+           From SEO and social media to website design, branding and content, we help businesses in Vizag
+           grow their online visibility, generate leads and build trust across every platform.
           </p>
 
           {showVideo && (
@@ -513,7 +513,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
 
         <div className="max-w-4xl mx-auto text-center px-4">
           <p className="text-xl md:text-2xl font-semibold text-gray-800 leading-relaxed mb-8">
-          If you're looking for digital marketing agencies in Vizag that elevate your brand with creativity, strategy, and innovation, then you’re ready for us.
+          If you're looking for a digital marketing agency in Vizag that grows your brand with creativity, strategy, and innovation, then you’re ready for us.
 
           </p>
 

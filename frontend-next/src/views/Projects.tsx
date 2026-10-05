@@ -30,7 +30,9 @@ export default function Projects({ initialProjects }: { initialProjects: Portfol
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
                Business websites and online stores we have designed and built for clients in India, Australia and the US. See how we approach{" "}
-               <a href="/web_development" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">website development</a>.
+               <a href="/web_development" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">website development</a>{" "}
+               and how we help those websites grow with{" "}
+               <a href="/digital_marketing" className="text-orange-300 underline underline-offset-2 hover:text-orange-200">digital marketing and SEO</a>.
               </p>
             </div>
 

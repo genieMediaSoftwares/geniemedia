@@ -187,6 +187,8 @@ export interface RouteMetaEntry {
   title: string;
   description: string;
   image?: string;
+  /** Short page name for the BreadcrumbList (defaults to the title's first part). */
+  breadcrumb?: string;
 }
 
 export interface RouteMeta extends RouteMetaEntry {

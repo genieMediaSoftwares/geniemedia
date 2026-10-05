@@ -206,6 +206,20 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             </section>
           )}
 
+          {/* Related services: every article points readers to what the team offers. */}
+          <section className="mt-10 sm:mt-12 rounded-2xl bg-stone-50 border border-stone-200 p-5 sm:p-6">
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-2">Work with Genie Media &amp; Studio</h2>
+            <p className="text-sm sm:text-base leading-relaxed text-slate-600">
+              Want help putting this into practice? Our team in Visakhapatnam offers{" "}
+              <a href="/digital_marketing" className="font-medium text-[#6B4A2D] underline underline-offset-2">digital marketing and SEO services</a>,{" "}
+              <a href="/web_development" className="font-medium text-[#6B4A2D] underline underline-offset-2">website design and development</a>,{" "}
+              <a href="/production_house" className="font-medium text-[#6B4A2D] underline underline-offset-2">video production</a>{" "}
+              and a{" "}
+              <a href="/podcast_studio" className="font-medium text-[#6B4A2D] underline underline-offset-2">podcast studio</a>.{" "}
+              <a href="/contact" className="font-medium text-[#6B4A2D] underline underline-offset-2">Contact us</a> to talk about your goals.
+            </p>
+          </section>
+
           <div className="my-10 sm:my-12 border-t-2 border-slate-100" />
 
           <div className="rounded-2xl p-6 sm:p-8 text-center mb-2 bg-stone-50 border border-stone-200">
