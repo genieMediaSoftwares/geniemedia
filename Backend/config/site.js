@@ -41,17 +41,16 @@ const SITE = {
   },
 
   address: {
-    streetAddress: "5A2, 4th Floor, KP Icon, KP Infra",
+    streetAddress: "5A-2, 4th Floor, KP Icon, near MK Gold Coast",
     addressLocality: "Yendada, Visakhapatnam",
     addressRegion: "Andhra Pradesh",
     postalCode: "530045",
     addressCountry: "IN",
   },
 
-  // UNCONFIRMED — not published in structured data until the owner confirms.
-  // The contact page map pin (KP Icon, KP Infra) is at roughly 17.7801, 83.3665,
-  // about 3 km from these values.
-  geo: { latitude: 17.7594, longitude: 83.3411 },
+  // From the owner's "Genie Media and Studio" Google Maps listing embed
+  // (2026-10-05). Still not published in structured data.
+  geo: { latitude: 17.7802, longitude: 83.3640 },
 
   // UNCONFIRMED — not published anywhere until the owner confirms them.
   openingHours: [

@@ -125,14 +125,15 @@ const company = [
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-orange-500 flex-shrink-0 mt-1" />
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=KP+Icon%2C+KP+Infra%2C+Yendada%2C+Visakhapatnam+530045"
+                  href="https://maps.google.com/?cid=6757437658106176471"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Open our office address in Google Maps (opens in a new tab)"
                   className="text-gray-300 hover:text-orange-500 transition-colors duration-200"
                 >
-                  5A2 4th Floor KP Icon KP Infra <br />
-                  Yendada, Visakhapatnam - 530045
+                  5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam, <br />
+                  near MK Gold Coast, Endada, <br />
+                  Andhra Pradesh 530045
                 </a>
               </li>
               <li className="flex items-center space-x-3">
@@ -158,9 +159,20 @@ const company = [
       <div className="-mt-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 text-sm text-center md:text-left">
-              © 2025 Genie Media & Studio. All rights reserved.
-            </p>
+            <div className="text-gray-400 text-sm text-center md:text-left space-y-1">
+              <p>© 2025 Genie Media & Studio. All rights reserved.</p>
+              <p>
+                Powered by{" "}
+                <a
+                  href="https://www.kkdigitalgrowth.com/"
+                  target="_blank"
+                  rel="noopener"
+                  className="text-gray-300 hover:text-orange-500 transition-colors duration-200"
+                >
+                  KKDigitalGrowth
+                </a>
+              </p>
+            </div>
             <nav aria-label="Legal" className="flex items-center gap-6 text-sm">
               <a href="/privacy-policy" className="text-gray-400 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] md:min-h-0">
                 Privacy Policy

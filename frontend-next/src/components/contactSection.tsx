@@ -84,8 +84,8 @@ const ContactSec = ({ isPage = false }) => {
       icon: MapPin,
       title: "Office",
       details: [
-        "5A2 4th Floor KP Icon KP Infra",
-        "Yendada, Visakhapatnam - 530045",
+        "5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam,",
+        "near MK Gold Coast, Endada, Andhra Pradesh 530045",
       ],
       color: "from-blue-500 to-blue-600",
     },
@@ -428,13 +428,14 @@ const ContactSec = ({ isPage = false }) => {
               <div className="bg-white rounded-3xl shadow-2xl overflow-hidden h-full">
                 <div className="relative h-64 lg:h-80">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d400.67734146285284!2d83.36646125424554!3d17.780138304199394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a395b9f81ce4773%3A0xdb3f7e114ab5a4f3!2sKP%20ICON%20KP%20INFRA%20LLP!5e0!3m2!1sen!2sin!4v1764246017962!5m2!1sen!2si"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3799.244232054185!2d83.36400847494433!3d17.78021518317547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a395b852ac6e3ff%3A0x5dc73dbf634423d7!2sGenie%20Media%20and%20Studio!5e0!3m2!1sen!2sin!4v1791199424384!5m2!1sen!2sin"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
                     allowFullScreen
                     loading="lazy"
-                    title="Office Location"
+                    title="Genie Media & Studio on Google Maps"
+                    referrerPolicy="strict-origin-when-cross-origin"
                   ></iframe>
                 </div>
 
@@ -447,8 +448,8 @@ const ContactSec = ({ isPage = false }) => {
                       </div>
                       <div>
                         <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
-                        <p className="text-gray-600 text-sm">5A2 4th Floor KP Icon KP Infra</p>
-                        <p className="text-gray-600 text-sm">Yendada, Visakhapatnam - 530045</p>
+                        <p className="text-gray-600 text-sm">5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam,</p>
+                        <p className="text-gray-600 text-sm">near MK Gold Coast, Endada, Andhra Pradesh 530045</p>
                       </div>
                     </div>
 

@@ -67,7 +67,7 @@ const PODCAST_SERVICES = [
 const PODCAST_FAQS = [
   {
     q: "Where is the podcast studio?",
-    a: "At Genie Media & Studio, 5A2, 4th Floor, KP Icon, KP Infra, Yendada, Visakhapatnam 530045.",
+    a: "At Genie Media & Studio, 5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam, near MK Gold Coast, Endada, Andhra Pradesh 530045.",
   },
   {
     q: "How much does it cost to record a podcast?",

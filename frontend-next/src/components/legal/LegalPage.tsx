@@ -75,7 +75,7 @@ export function LegalContact() {
     <address className="not-italic rounded-xl border border-gray-200 p-4 sm:p-5 bg-gray-50">
       <strong>Genie Media &amp; Studio</strong>
       <br />
-      5A2, 4th Floor, KP Icon, KP Infra, Yendada, Visakhapatnam, Andhra Pradesh 530045, India
+      5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam, near MK Gold Coast, Endada, Andhra Pradesh 530045, India
       <br />
       Email: <a href="mailto:admin@geniemedia.in">admin@geniemedia.in</a>
       <br />

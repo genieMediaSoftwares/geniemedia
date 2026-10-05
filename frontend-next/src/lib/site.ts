@@ -33,7 +33,7 @@ export const SITE = {
     availableLanguage: ["en", "hi", "te"],
   },
   address: {
-    streetAddress: "5A2, 4th Floor, KP Icon, KP Infra",
+    streetAddress: "5A-2, 4th Floor, KP Icon, near MK Gold Coast",
     addressLocality: "Yendada, Visakhapatnam",
     addressRegion: "Andhra Pradesh",
     postalCode: "530045",
