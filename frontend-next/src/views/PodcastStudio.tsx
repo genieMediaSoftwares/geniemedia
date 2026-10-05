@@ -222,8 +222,7 @@ export default function PodcastStudio() {
         </h1>
 
         <p className="mb-10 max-w-[700px] animate-podcast-desc text-center text-[clamp(16px,2vw,18px)] leading-[1.6] text-white">
-          Bring your voice to life at Genie Studio. Record audio and video
-          podcasts with our production team and up to three cameras.
+          Book our podcast studio in Visakhapatnam to record audio and video podcasts with professional equipment and our production team. We support solo shows, two-person conversations and video podcasts with up to three cameras.
         </p>
 
         <div className="flex animate-podcast-cta items-center gap-5 max-[768px]:w-full max-[768px]:flex-col">
@@ -310,8 +309,7 @@ export default function PodcastStudio() {
                 A SPACE DESIGNED FOR EVERY CREATOR
               </h2>
               <p className="max-w-[600px] text-[clamp(15px,1.5vw,18px)] font-normal leading-[1.6] text-[#333333] max-[968px]:text-[16px] max-[640px]:text-[14px] max-[640px]:leading-[1.5]">
-                Whether you&apos;re a solo podcaster or influencer, Genie Studio
-                adapts to you.
+                Whether you&apos;re a solo podcaster or an influencer, our podcast studio in Visakhapatnam adapts to you. First, choose a studio-only session. Next, add our team and cameras. Then record your show in comfort. Finally, walk away with a finished episode ready to publish.
               </p>
             </div>
 
@@ -344,19 +342,19 @@ export default function PodcastStudio() {
             {[
               {
                 title: "Content Creators",
-                body: "Record YouTube podcasts, interview episodes and series episodes with professional cameras and audio. Walk in and start recording.",
+                body: <>Record YouTube podcasts and interview episodes with professional cameras and audio. First, book your slot. Then walk in and start recording. Afterwards, share your episode with your audience.</>,
               },
               {
                 title: "Businesses",
-                body: "Use the studio for brand podcasts, internal communications and customer-facing interview series. Our production team handles the setup.",
+                body: <>Use the studio for brand podcasts and customer interview series. Our <a href="/digital_marketing" className={inlineLink}>social media marketing</a> team can also help promote each episode across your channels.</>,
               },
               {
                 title: "Entrepreneurs & Professionals",
-                body: "Build thought leadership and personal branding through podcasting. Two microphones and a comfortable set make every conversation feel natural.",
+                body: <>Build thought leadership through podcasting. Because two microphones and a comfortable set are included, every conversation feels natural and professional.</>,
               },
               {
                 title: "Interview Podcasts",
-                body: "Perfect for two-person conversations. Boom microphones, acoustic treatment and a Zoom PodTrak P8 recorder keep both voices crystal clear.",
+                body: <>This studio is perfect for two-person conversations. Boom microphones, acoustic treatment and a Zoom PodTrak P8 recorder keep both voices crystal clear. Then our <a href="/production_house" className={inlineLink}>video production team</a> can help with the final edit.</>,
               },
             ].map(({ title, body }) => (
               <div key={title} className="bg-gray-50 rounded-2xl p-6 shadow-sm">

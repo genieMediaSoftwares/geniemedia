@@ -32,6 +32,7 @@ Runtime:     Browser ──> Hostinger (static HTML, uploads/, upload.php, conta
 | `npm run typecheck` | `tsc --noEmit` (strict) |
 | `npm run lint` | ESLint (eslint-config-next) |
 | `npm test` | Unit tests for the SEO analyzer |
+| `npm run seo:audit` | Scores each built page in `dist/` (technical, metadata, content, headings, links, images, structured data, local). Add `-- /digital_marketing` for every check, or `-- --url https://geniemedia.in/` for the live site. Counts only visible text in `<main data-seo-content>` |
 | `npm run test:routes -- <base-url>` | Crawlability/SEO checks against a running site (default `http://localhost:3000`; use `https://geniemedia.in` after deploy) |
 
 ## Configuration (.env)

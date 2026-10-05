@@ -137,7 +137,7 @@ const company = [
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <a href="tel:+91 9032845433" className="text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] lg:min-h-0">
+                <a href="tel:+919032845433" className="text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] lg:min-h-0">
                   +91 9032845433
                 </a>
               </li>

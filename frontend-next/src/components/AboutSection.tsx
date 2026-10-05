@@ -186,9 +186,9 @@ const AboutSection1 = () => {
                 Who We Are
               </h3>
               <p className="text-base lg:text-lg text-gray-700 leading-relaxed">
-                A dedicated team of digital creators helping brands grow with clarity, creativity, and purpose.
-                At Genie Media & Studio, we blend strategy, design, content, and technology to create work that
-                 speaks to people, stays with them, and supports lasting success.
+                We are a team of digital creators who help brands grow with clear, creative work.
+                At Genie Media & Studio, we mix strategy, design, content and technology. As a result,
+                our work speaks to people, stays with them and keeps paying off.
 
               </p>
             </div>
@@ -199,8 +199,8 @@ const AboutSection1 = () => {
               </h3>
               <p className="text-base lg:text-lg text-gray-700 leading-relaxed">
                <b> Creativity fuels every move we make. </b>
-                We think with intention, create with heart, and keep raising the bar day after day.
-                Our mission is simple: help brands shape meaningful experiences that people remember, trust, and genuinely enjoy.
+                We think before we create, and we put real care into every piece of work.
+                Our mission is simple: help brands create experiences that people remember, trust and enjoy.
 
               </p>
             </div>

@@ -41,7 +41,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {/* The single <main> landmark for every route. Pages must not render
             their own <main>. `flow-root` stops a page's first margin collapsing
             out through <main>, which used to register as a layout shift. */}
-        <main id="main-content" style={{ display: "flow-root" }}>
+        <main id="main-content" data-seo-content="true" className="flow-root">
           {children}
         </main>
         <Footer />

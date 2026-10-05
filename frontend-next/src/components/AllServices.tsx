@@ -36,35 +36,35 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
   const tabContent = {
     'dm': {
       mainTitle: 'Digital Marketing Services',
-      mainDescription: 'We craft digital marketing strategies in Vizag that are data-driven, targeted, and designed for growth. From brand strategy to content, SEO, social media, and paid campaigns, we build powerful digital experiences that elevate your brand, attract the right audience, and turn prospects into loyal customers.',
+      mainDescription: 'We plan digital marketing in Vizag around one goal: real business growth. First, we learn who your customers are. Then we bring together brand strategy, content, SEO, social media and paid ads. As a result, the right people find you, trust you and get in touch.',
       mainImage: Dm_services,
       mainImageWidth: 600,
       mainImageHeight: 700,
       services: [
         {
           title: 'Personal Branding',
-          description: 'Build a strong personal brand that reflects your unique strengths and values. We help you craft an authentic online presence across platforms to enhance credibility and influence.'
+          description: 'Build a personal brand that shows your strengths and values. We help you create an honest online presence, so people trust you and listen to you.'
         },
         {
           title: 'Creative Campaign Development',
-          description: 'Transform ideas into impactful marketing campaigns. Our team develops innovative, visually appealing, and result-driven campaigns to captivate your target audience.'
+          description: 'Turn ideas into campaigns people notice. Our team plans the message, designs the creatives and runs the campaign. Then we measure what it achieved.'
         },
         {
           title: 'Content Strategy & Blogs/Articles',
-          description: 'Drive engagement with a trusted content marketing agency, using well-researched strategies that include blogs, articles, and content calendars that resonate with your audience and strengthen your digital presence.'
+          description: 'Good content builds trust over time. So we plan blogs, articles and a content calendar around the questions your customers ask. In turn, your brand becomes easier to find.'
         },
         {
           title: 'Social Media Marketing',
-          description: 'Boost your brand visibility and engagement on social platforms. We craft tailored social media strategies, design attractive posts, and manage campaigns for maximum reach.'
+          description: 'Grow your brand on social media. We plan your strategy, design posts and manage your pages. We also run campaigns that reach more of the right people.'
         },
         
         {
           title: 'Google and Facebook Ads',
-          description: 'Maximize ROI with targeted paid advertising campaigns. Our experts optimize Google and Facebook Ads to reach your ideal audience and generate measurable results.'
+          description: 'Get more from every rupee you spend on ads. We run Google and Facebook Ads for your ideal customers. After that, we track the results and keep improving them.'
         },
         {
           title: 'SEO (Search Engine Optimization)',
-          description: 'Improve your website’s visibility on search engines with our SEO services in Visakhapatnam, using comprehensive strategies that cover on-page optimization to link building. We help you rank higher organically and attract the right audience.'
+          description: 'Help more people find your website on Google with our SEO services in Visakhapatnam. We cover everything from on-page SEO to link building. As a result, you rank higher and attract the right visitors.'
         }
       ]
     },

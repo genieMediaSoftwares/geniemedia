@@ -113,19 +113,19 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
     {
       step: "Step 01",
       title: "Research & Planning",
-      desc: "We analyze user needs, business goals, and industry benchmarks using advanced tools to build a clear, scalable websites .",
+      desc: "First, we study your users, your goals and your industry. Then we plan a clear website that can grow with you.",
       active: false,
     },
     {
       step: "Step 02",
       title: "Design & Implementation",
-      desc: "Our team designs and develops a high-performance website using smart strategiesand modern technologies.",
+      desc: "Next, our team designs and builds a fast website with modern tools and a clear structure.",
       active: true,
     },
     {
       step: "Step 03",
       title: "Results & Growth",
-      desc: "We track performance, analyze real user data, and refine strategies to ensure continuous growth and long-term success.",
+      desc: "Finally, we track how the site performs and how people use it. Then we keep improving it for long-term growth.",
       active: false,
     },
   ];
@@ -183,7 +183,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
               </h1>
               <p className="animate-home-rise motion-reduce:animate-none text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Genie Media &amp; Studio is a digital marketing agency and creative
-                media company in Visakhapatnam (Vizag), Andhra Pradesh. We run{" "}
+                media company in Vizag, Andhra Pradesh. We run{" "}
                 <a href="/digital_marketing" className={heroLink}>SEO, social media marketing and Google Ads campaigns</a>,{" "}
                 <a href="/web_development" className={heroLink}>build websites</a>,{" "}
                 <a href="/production_house" className={heroLink}>shoot brand videos</a>{" "}
@@ -309,9 +309,9 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
            
           `}
           >
-           We craft digital marketing journeys that feel natural, human, and memorable.
+           We create digital marketing that feels natural, human and easy to remember.
            From SEO and social media to website design, branding and content, we help businesses in Vizag
-           grow their online visibility, generate leads and build trust across every platform.
+           get seen online. As a result, they win more leads and build trust on every platform.
           </p>
 
           {showVideo && (

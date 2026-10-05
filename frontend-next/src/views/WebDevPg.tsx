@@ -26,13 +26,11 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
   const accordionData = [
     {
       title: "Expert Team of Designers & Developers",
-      content: "Our projects are crafted by a talented team of UI/UX designers, front-end & back-end developers, and technical strategists. With years of hands-on experience across diverse industries, we ensure every website is built with precision, creativity, and the latest best practices. Our collaborative process guarantees high-quality results from concept to launch."},
-    // These three used to be copied from the digital marketing page (campaigns,
-    // KPIs, "Fortune 500 companies", "millions in revenue"). They now describe
-    // this service, using only what the rest of the site shows.
+      content: <>Our team includes UI/UX designers, front-end and back-end developers, and technical strategists. Because every industry is different, we bring years of hands-on experience to each project. As a result, every website we build meets the latest standards and your specific goals.</>
+    },
     {
       title: "Planning Before Code",
-      content: "Every build starts with your goals, audience and content. We plan the pages and features and choose the right platform (WordPress, Shopify or custom code) before design begins."
+      content: "Every build starts with your goals and audience. First, we map the pages and features. Then we choose the right platform, whether that is WordPress, Shopify or custom code. Only after this planning do we begin the design work."
     },
     {
       title: "Websites, Marketing and Media Under One Roof",
@@ -42,6 +40,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
           <a href="/digital_marketing" className={inlineLink}>SEO, social media and ads</a>{" "}
           and shoot its{" "}
           <a href="/production_house" className={inlineLink}>photos and videos</a>.
+          In addition, this means consistent branding and faster turnarounds across every channel.
         </>
       )
     },
@@ -52,17 +51,17 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
           We have built business websites and online stores for clients in India,
           Australia and the US. Every one is listed in{" "}
           <a href="/projects" className={inlineLink}>our portfolio</a>{" "}
-          with a link to the live site.
+          with a link to the live site. Therefore, you can see the quality of our work before you start your own project.
         </>
       )
     },
     {
       title: "Transparent Communication",
-      content: "We believe in complete transparency with our clients. You'll receive regular progress updates, detailed analytics reports, and direct access to your dedicated account manager. We work in your timezone to ensure seamless collaboration and quick response times."
+      content: "We share regular progress updates with every client. You also get detailed reports on how the site performs. Because we value transparency, your account manager is always available to answer questions."
     },
     {
       title: "Custom-Built, Not Cookie-Cutter",
-      content: "We never rely on generic templates. Every website we build is uniquely designed and custom-developed to match your brand identity, performance needs, and long-term goals—giving you a digital presence that truly stands out."
+      content: "We never use generic templates. Instead, every website is uniquely designed to match your brand. Furthermore, our custom approach means your site stands out from competitors and grows with your business."
     }
   ];
 
@@ -85,10 +84,10 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
           
             <div className="text-white space-y-6">
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-                Web  Development
+                Web Development Company in Vizag
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                We design and build responsive, mobile-friendly and SEO-friendly websites in Visakhapatnam (Vizag): business websites, landing pages and ecommerce stores that load fast, are easy to use and help startups and established companies grow.
+                Genie Media & Studio provides professional web development services in Vizag for businesses that need fast, responsive, and SEO-friendly websites. We build business websites, landing pages and ecommerce stores that load fast, are easy to use and help startups and established companies grow.
               </p>
             </div>
 
@@ -137,7 +136,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
                      mb-8
                    "
                  >
-                We Build Websites That <br />
+                Web Development Services That <br />
                  Connect, Engage & Convert
                      
                  </h2>
@@ -200,7 +199,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
               Why Choose Genie Media for Your Website?
             </h2>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              From our office in Visakhapatnam we design, build and look after websites for startups and established businesses. Here is how we work:
+              From our office in Visakhapatnam we design, build and support websites for startups and established businesses. First, we learn your goals. Next, we plan the site. Then we build and test it. Finally, we hand over a fast, modern website that your customers can trust.
             </p>
             <a href="https://wa.me/919032845433" className="inline-block bg-orange-500 hover:bg-black text-black hover:text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
               Let's Discuss Your Project

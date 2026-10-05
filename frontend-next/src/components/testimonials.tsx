@@ -86,7 +86,7 @@ const LiteYouTube = ({ videoId, title }: { videoId: string; title: string }) => 
     >
       <img
         src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
-        alt=""
+        alt={`Thumbnail of the video testimonial from ${title}`}
         width="480"
         height="360"
         loading="lazy"

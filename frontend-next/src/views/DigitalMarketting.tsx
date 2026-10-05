@@ -1,8 +1,8 @@
-"use client";
-
-import { ShoppingCart, Dumbbell, Factory, GraduationCap, House, Stethoscope, UtensilsCrossed, Briefcase, Rocket } from "lucide-react";
-import React, { useState } from 'react';
-import { ChevronRight, ArrowUpRight, ChevronLeft, ChevronUp, CheckCircle, Phone, Calendar, Mail, MapPin } from 'lucide-react';
+import type { ReactNode } from "react";
+import {
+  ShoppingCart, Dumbbell, Factory, GraduationCap, House, Stethoscope, UtensilsCrossed, Briefcase, Rocket,
+  ArrowUpRight, ChevronDown, CheckCircle, Phone, Calendar, Mail, MapPin,
+} from "lucide-react";
 import DigitalMarketting1Asset from "@/assets/DigitalMarketting.jpg";
 import DigitalMarketing2Asset from "@/assets/DigitalMarketing2.jpg";
 import DM_servicesAsset from "@/assets/DM_services.jpg";
@@ -11,210 +11,144 @@ import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
 const DigitalMarketting1 = DigitalMarketting1Asset.src;
 const DigitalMarketing2 = DigitalMarketing2Asset.src;
 const DM_services = DM_servicesAsset.src;
+
+const inlineLink = "text-orange-600 font-medium underline hover:text-orange-800";
+
+const services = [
+  {
+    id: "seo",
+    title: "SEO Services in Vizag",
+    subtitle: "Search Engine Optimization & Organic Growth",
+    description: "SEO helps people find you on Google without paying for each click. First, we run an SEO audit of your website. Next, we fix technical SEO issues, improve on-page SEO and research the keywords your customers type. We also handle local SEO, internal links and structured data. Finally, we report on your rankings and organic traffic every month.",
+    keywords: ["SEO Audit", "Technical SEO", "On-Page SEO", "Local SEO", "Keyword Research"],
+    link: "/blogs",
+    linkLabel: "Read our SEO guides"
+  },
+  {
+    id: "google-ads",
+    title: "Google Ads & PPC Management",
+    subtitle: "Paid Search & Performance Campaigns",
+    description: "Google Ads put you at the top of the page today, not in six months. We plan your PPC campaigns, write the ads and set up conversion tracking. After launch, we watch every search term and every rupee. As a result, your budget moves to the ads that bring calls and leads, and away from the ones that do not.",
+    keywords: ["Google Search Ads", "PPC Management", "Conversion Tracking", "Remarketing"],
+    link: "/contact",
+    linkLabel: "Plan a Google Ads campaign"
+  },
+  {
+    id: "social-media",
+    title: "Social Media Marketing",
+    subtitle: "Social Strategy, Creatives & Advertising",
+    description: "We plan your social media strategy around the people you want to reach. Then we design posts, edit Reels and short videos, and keep your pages active. We also run paid social ads on Instagram and Facebook. The goal is simple: more brand awareness, more engagement and more enquiries, not just likes.",
+    keywords: ["Social Media Management", "Instagram Marketing", "Facebook Ads", "Reels"],
+    link: "/contact",
+    linkLabel: "Grow your social media"
+  },
+  {
+    id: "content-marketing",
+    title: "Content Marketing",
+    subtitle: "Content Strategy, Blogs & Brand Storytelling",
+    description: "Good content answers the questions your customers already ask. So we plan topics around real searches. Then we write clear website copy, blog posts and social captions. Because we have our own studio, we can also shoot the photos and videos that bring your story to life.",
+    keywords: ["Content Strategy", "Blog Content", "SEO Content", "Visual Storytelling"],
+    link: "/blogs",
+    linkLabel: "Browse our blog"
+  },
+  {
+    id: "lead-generation",
+    title: "Lead Generation & Conversion Optimization",
+    subtitle: "More Enquiries From the Same Traffic",
+    description: "Traffic is only useful when it turns into enquiries. For that reason, we build focused landing pages and simple forms with clear calls to action. We test what works, follow up leads by email and track every step. In short, conversion rate optimization (CRO) helps you get more from the visitors you already have.",
+    keywords: ["Lead Generation", "Landing Pages", "CRO", "Email Follow-Up"],
+    link: "/contact",
+    linkLabel: "Talk about lead generation"
+  },
+  {
+    id: "web-development",
+    title: "Website Design & Development",
+    subtitle: "Responsive, Fast & SEO-Friendly Websites",
+    description: "Most marketing ends on your website, so it has to work well. Our team builds fast, responsive websites, landing pages and online stores. Each site is mobile-friendly, easy to use and SEO-friendly from day one. We also check page speed and Core Web Vitals before launch.",
+    keywords: ["Website Design", "Responsive Website", "Ecommerce Website", "UI/UX"],
+    link: "/web_development",
+    linkLabel: "Explore web development"
+  },
+  {
+    id: "branding",
+    title: "Branding & Creative Services",
+    subtitle: "Brand Identity, Positioning & Creatives",
+    description: "A clear brand makes every campaign work harder. We help you shape your brand strategy, logo, colours and tone of voice. Then we turn them into graphic design, ad creatives and website messaging. When you need video or photos, our production house creates them in-house.",
+    keywords: ["Brand Strategy", "Brand Identity", "Graphic Design", "Ad Creatives"],
+    link: "/production_house",
+    linkLabel: "See our creative production"
+  }
+];
+
+const industries = [
+  { icon: ShoppingCart, title: "E-Commerce & Retail", description: "We build online stores and run campaigns that bring in buyers, cut abandoned carts and grow sales." },
+  { icon: Dumbbell, title: "Fitness & Wellness", description: "We help gyms and wellness brands win local members and build an active community online." },
+  { icon: Factory, title: "Industrial & Manufacturing", description: "We build clear B2B websites and run lead generation campaigns for firms in Visakhapatnam." },
+  { icon: GraduationCap, title: "Education & Coaching", description: "We help schools, colleges and coaching centres in Vizag reach more students and parents." },
+  { icon: House, title: "Real Estate & Construction", description: "We build project websites and run local Google and Facebook ads for builders and property agents." },
+  { icon: Stethoscope, title: "Healthcare & Clinics", description: "We help clinics, hospitals and labs in Vizag show up in local search and earn patient trust." },
+  { icon: UtensilsCrossed, title: "Hospitality & Restaurants", description: "We help restaurants, hotels and travel brands attract locals and tourists with social media and local ads." },
+  { icon: Briefcase, title: "Professional Services", description: "We help law firms, consultants and accountants build authority with content, SEO and a strong website." },
+  { icon: Rocket, title: "Startups & Tech", description: "We help new ventures in Andhra Pradesh build a brand, win early users and grow online." }
+];
+
+const strategySteps = [
+  { num: "01", title: "Research & Audience Analysis", desc: "First, we learn your goals, your customers and your rivals in Vizag. We also check how visible you are online today. This way, the plan starts from facts, not guesses." },
+  { num: "02", title: "SEO & Organic Search", desc: "Next, we audit your website and research the keywords your buyers use. Then we fix the technical and on-page issues that hold back your rankings." },
+  { num: "03", title: "Paid Advertising", desc: "Then we launch Google Ads and social ads with clear goals and conversion tracking. After that, we move budget towards the ads that bring in leads." },
+  { num: "04", title: "Content & Social Media", desc: "Meanwhile, we create content that answers your audience's questions. This includes blog posts, website copy, social posts and short videos." },
+  { num: "05", title: "Conversion Optimization", desc: "We also improve landing pages, page speed, forms and calls to action. As a result, more visitors turn into enquiries, bookings and sales." },
+  { num: "06", title: "Analytics & Reporting", desc: "Finally, we track rankings, traffic, leads and ROI. We share plain-language reports and keep improving the campaigns every month." }
+];
+
+const whyChooseUs: Array<{ title: string; content: ReactNode }> = [
+  {
+    title: "One Team for Everything",
+    content: "Our team includes marketers, designers, developers, writers and video makers. So you do not need to manage five different agencies."
+  },
+  {
+    title: "We Know the Local Market",
+    content: "We are based in Visakhapatnam. We know how people in Vizag and across Andhra Pradesh search, compare and buy, and we plan around that."
+  },
+  {
+    title: "Decisions Based on Data",
+    content: "We use analytics, conversion tracking and campaign data to decide what to do next. In other words, we never guess with your budget."
+  },
+  {
+    title: "Marketing, Web and Media Under One Roof",
+    content: (
+      <>
+        Your SEO, ads, website and videos come from one place. Explore our{" "}
+        <a href="/web_development" className={inlineLink}>website development services</a>, visit our{" "}
+        <a href="/podcast_studio" className={inlineLink}>podcast studio</a>, or learn more{" "}
+        <a href="/about" className={inlineLink}>about Genie Media & Studio</a>.
+      </>
+    )
+  },
+  {
+    title: "Plans Built for Your Business",
+    content: "No two businesses are the same. That is why we shape each plan around your goals, your industry and your budget."
+  },
+  {
+    title: "Clear, Honest Reporting",
+    content: (
+      <>
+        You get regular reports on rankings, traffic and leads, written in plain language. You can also look through{" "}
+        <a href="/projects" className={inlineLink}>our projects portfolio</a> and read{" "}
+        <a href="/reviews" className={inlineLink}>client reviews</a>.
+      </>
+    )
+  }
+];
+
+/**
+ * /digital_marketing. A server component: every word, including the FAQ
+ * answers and all nine industries, is in the HTML Google receives. The FAQ
+ * uses native <details> so it needs no JavaScript to open.
+ */
 export default function DigitalMarketting() {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [openAccordion, setOpenAccordion] = useState<number | null>(null);
-  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const services = [
-    {
-      id: "seo",
-      title: "SEO Services in Vizag",
-      subtitle: "Search Engine Optimization & Organic Growth",
-      description: "Our SEO services help your website earn better Google rankings and steady organic traffic. Every engagement starts with an SEO audit, then covers technical SEO, on-page SEO, keyword research, content optimization, internal linking, structured data and local SEO for businesses in Vizag and Visakhapatnam, with clear SEO reporting from Google Search Console and Google Analytics.",
-      keywords: ["SEO Audit", "Technical SEO", "On-Page SEO", "Local SEO", "Keyword Research"],
-      link: "/blogs",
-      linkLabel: "Read our SEO guides"
-    },
-    {
-      id: "google-ads",
-      title: "Google Ads & PPC Management",
-      subtitle: "Paid Search & Performance Campaigns",
-      description: "We plan, launch and manage Google Ads and pay-per-click (PPC) campaigns, including Google Search Ads, display and remarketing. Our team sets up conversion tracking, writes ad copy, improves landing pages and keeps refining keywords, audiences and budgets so your paid advertising brings in qualified leads at a healthy return on investment (ROI).",
-      keywords: ["Google Search Ads", "PPC Management", "Conversion Tracking", "Remarketing"],
-      link: "/contact",
-      linkLabel: "Plan a Google Ads campaign"
-    },
-    {
-      id: "social-media",
-      title: "Social Media Marketing",
-      subtitle: "Social Strategy, Creatives & Advertising",
-      description: "We build a social media strategy around your audience, then design creatives, edit short-form videos and Reels, manage your posting calendar and run social media advertising on Instagram and Facebook. The aim is real brand awareness, audience engagement and enquiries, not just likes.",
-      keywords: ["Social Media Management", "Instagram Marketing", "Facebook Advertising", "Reels"],
-      link: "/contact",
-      linkLabel: "Grow your social media"
-    },
-    {
-      id: "content-marketing",
-      title: "Content Marketing",
-      subtitle: "Content Strategy, Blogs & Brand Storytelling",
-      description: "Useful content is what search engines and customers both reward. We plan a content marketing strategy around what your audience searches for, then write SEO-friendly website content, blog articles, ad copy and social posts, and produce visual content in our own studio to tell your brand story.",
-      keywords: ["Content Strategy", "Blog Content", "SEO Content", "Visual Storytelling"],
-      link: "/blogs",
-      linkLabel: "Browse our blog"
-    },
-    {
-      id: "lead-generation",
-      title: "Lead Generation & Conversion Optimization",
-      subtitle: "More Enquiries From the Same Traffic",
-      description: "Traffic only matters when it turns into enquiries and sales. We build lead generation campaigns, design focused landing pages, improve forms and calls to action, and use conversion rate optimization (CRO), email follow-ups and analytics to turn more visitors into qualified leads and customers.",
-      keywords: ["Lead Generation", "Landing Page Optimization", "CRO", "Email Marketing"],
-      link: "/contact",
-      linkLabel: "Talk about lead generation"
-    },
-    {
-      id: "web-development",
-      title: "Website Design & Development",
-      subtitle: "Responsive, Fast & SEO-Friendly Websites",
-      description: "Your website is where most digital marketing ends up, so it has to perform. Our designers and developers build responsive, mobile-friendly business websites, landing pages and ecommerce stores with fast page speed, good Core Web Vitals, clear user experience (UI/UX) and SEO built in from day one.",
-      keywords: ["Website Design", "Responsive Website", "Ecommerce Website", "UI/UX"],
-      link: "/web_development",
-      linkLabel: "Explore web development"
-    },
-    {
-      id: "branding",
-      title: "Branding & Creative Marketing",
-      subtitle: "Brand Identity, Positioning & Creatives",
-      description: "We help businesses build a brand people remember: brand strategy and positioning, logo and visual identity, brand guidelines, website messaging, graphic design and marketing creatives. When a campaign needs video or photography, our production house creates it in-house.",
-      keywords: ["Brand Strategy", "Brand Identity", "Graphic Design", "Marketing Creatives"],
-      link: "/production_house",
-      linkLabel: "See our creative production"
-    }
-  ];
-
-  const industries = [
-    {
-      icon: ShoppingCart,
-      title: "E-Commerce & Retail",
-      description: "We build high-converting online stores and run multi-channel digital marketing campaigns that drive qualified product traffic, decrease abandoned carts, and boost revenue."
-    },
-    {
-      icon: Dumbbell,
-      title: "Fitness & Wellness",
-      description: "From gym websites to wellness brand campaigns, we craft engaging digital strategies that drive local memberships, build active communities, and elevate your fitness brand."
-    },
-    {
-      icon: Factory,
-      title: "Industrial & Manufacturing",
-      description: "We design polished B2B websites and execute lead-generation campaigns for industrial and manufacturing enterprises in Visakhapatnam, connecting you with commercial partners."
-    },
-    {
-      icon: GraduationCap,
-      title: "Education & Coaching",
-      description: "We build user-friendly websites and run targeted ad campaigns for schools, colleges, and coaching institutes in Vizag to boost prospective student enrollments."
-    },
-    {
-      icon: House,
-      title: "Real Estate & Construction",
-      description: "We design property showcase websites and run targeted local Google Ads and Facebook campaign ads for real estate developers and property agencies in Visakhapatnam."
-    },
-    {
-      icon: Stethoscope,
-      title: "Healthcare & Clinics",
-      description: "We build patient-centric websites and manage local search visibility for hospitals, specialized clinics, and diagnostic centers across Vizag to connect with local patients."
-    },
-    {
-      icon: UtensilsCrossed,
-      title: "Hospitality & Restaurants",
-      description: "From restaurant websites to social media video showcases, we help hospitality businesses in Vizag attract food enthusiasts and tourists with targeted local advertising."
-    },
-    {
-      icon: Briefcase,
-      title: "Professional Services",
-      description: "We assist legal firms, financial consultants, corporate advisors, and accounting firms in Visakhapatnam in building authority through strategic content, SEO, and web design."
-    },
-    {
-      icon: Rocket,
-      title: "Startups & Tech",
-      description: "We partner with technology startups and emerging ventures in Andhra Pradesh to establish their brand identity, acquire early users, and scale their online presence."
-    }
-  ];
-
-  const nextSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev + 1) % industries.length);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
-
-  const prevSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev - 1 + industries.length) % industries.length);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
-
-  const getVisibleCards = () => {
-    const cards = [];
-    for (let i = 0; i < 3; i++) {
-      const index = (currentIndex + i) % industries.length;
-      cards.push(industries[index]);
-    }
-    return cards;
-  };
-
-  const strategySteps = [
-    { num: "01", title: "Research & Audience Analysis", desc: "We study your business goals, customers, competitors in Vizag and current online visibility, so the marketing strategy starts from facts rather than assumptions." },
-    { num: "02", title: "SEO & Search Visibility", desc: "We audit your website, research the keywords your customers use, map local search intent in Visakhapatnam and fix the technical and on-page issues that hold back your rankings." },
-    { num: "03", title: "Paid Advertising", desc: "We launch targeted Google Ads and social media advertising with clear goals, conversion tracking and location targeting, then shift budget towards the ads that bring in leads." },
-    { num: "04", title: "Content & Social Media", desc: "We create content that answers your audience's questions, from blog articles and website copy to social media creatives and short videos, and publish it on a steady schedule." },
-    { num: "05", title: "Conversion Optimization", desc: "We improve landing pages, page speed, forms and calls to action so more of your visitors become enquiries, bookings and customers." },
-    { num: "06", title: "Analytics & Reporting", desc: "We track rankings, organic traffic, ad performance, leads and ROI, share regular reports in plain language and keep refining the campaigns month after month." }
-  ];
-
-  const whyChooseUs = [
-    {
-      title: "Experienced Team of Specialists",
-      content: "Our team consists of experienced website designers, developers, digital marketing specialists, and strategists. We bring specialized discipline and technical expertise to every campaign."
-    },
-    {
-      title: "Deep Local Market Understanding",
-      content: "Based in Visakhapatnam, we understand the local business environment in Vizag, buyer behaviors across Andhra Pradesh, and effective regional market positioning."
-    },
-    {
-      title: "Data-Driven Approach for Maximum ROI",
-      content: "We make decisions based on analytics, traffic data, conversion tracking, and campaign insights rather than guesswork. Every strategy is engineered for measurable business growth."
-    },
-    {
-      title: "Integrated Full-Service Capabilities",
-      content: (
-        <>
-          From search engine optimization and Google Ads to web design and media production, we manage all digital touchpoints under one roof. Explore our{" "}
-          <a href="/web_development" className="text-orange-600 font-medium underline hover:text-orange-800">website development services</a>, visit our{" "}
-          <a href="/podcast_studio" className="text-orange-600 font-medium underline hover:text-orange-800">podcast studio</a>, or learn more{" "}
-          <a href="/about" className="text-orange-600 font-medium underline hover:text-orange-800">about Genie Media & Studio</a>.
-        </>
-      )
-    },
-    {
-      title: "Customized Strategies, Never Cookie-Cutter Templates",
-      content: "We tailor our digital marketing and web design strategies to your unique business model, industry challenges, and budget requirements for maximum impact."
-    },
-    {
-      title: "Transparent Reporting & Proven Results",
-      content: (
-        <>
-          We share detailed performance reports clearly outlining your keyword rankings, traffic growth, and conversion metrics. See examples in{" "}
-          <a href="/projects" className="text-orange-600 font-medium underline hover:text-orange-800">our projects portfolio</a> and read{" "}
-          <a href="/reviews" className="text-orange-600 font-medium underline hover:text-orange-800">client reviews and testimonials</a>.
-        </>
-      )
-    }
-  ];
-
-  const faqs = DIGITAL_MARKETING_FAQS;
-
-  const toggleAccordion = (index: number) => {
-    setOpenAccordion(openAccordion === index ? null : index);
-  };
-
-  const toggleFAQ = (index: number) => {
-    setOpenFAQ(openFAQ === index ? null : index);
-  };
-
   return (
-    <main data-seo-content="true">
+    <div>
       {/* Hero Section */}
       <section className="text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 sm:px-6 lg:px-16 pt-24 mt-12 sm:pt-24 pb-12 sm:pb-12 lg:pb-18">
         <div className="max-w-6xl mx-auto">
@@ -227,7 +161,7 @@ export default function DigitalMarketting() {
                 Digital Marketing Services in Vizag
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                Genie Media & Studio provides comprehensive digital marketing services for businesses in Vizag, Visakhapatnam, and across Andhra Pradesh. We combine strategic search engine optimization (SEO), targeted Google Ads, engaging social media marketing, web design, and brand strategy to drive measurable business growth.
+                Genie Media & Studio offers digital marketing services that help businesses in Vizag get found, get chosen and grow. We plan SEO, Google Ads, social media, content, websites and branding as one clear plan. As a result, every part of your budget has a job to do.
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <a href="/contact" className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-black font-semibold px-8 py-3.5 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
@@ -245,7 +179,7 @@ export default function DigitalMarketting() {
                 <img
                   src={DigitalMarketting1}
                   fetchPriority="high"
-                  alt="Genie Media & Studio digital marketing team working on a campaign strategy in Visakhapatnam"
+                  alt="Genie Media & Studio team planning a digital marketing campaign in Visakhapatnam"
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
                   width={1000}
                   height={666}
@@ -265,13 +199,16 @@ export default function DigitalMarketting() {
               Digital Marketing Agency in Vizag
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
-              Genie Media & Studio is a trusted digital marketing company based in Visakhapatnam, Andhra Pradesh. We partner with local businesses, regional companies, and national brands seeking to elevate their online presence to new heights. Our experienced team of digital marketing specialists, web designers, developers, and content strategists delivers customized, data-driven solutions built around your specific commercial goals.
+              Genie Media & Studio is a digital marketing agency in Visakhapatnam, Andhra Pradesh. Our team works from KP Icon in Yendada. We help local shops, clinics, schools, startups and growing brands reach more of the right people online.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
-              Whether your goal is to rank higher on Google SERP through targeted SEO services in Vizag, generate instant qualified leads with Google Ads and PPC management, cultivate a loyal social media audience, or build a fast responsive website — we provide the full spectrum of online marketing discipline.
+              Most businesses do not need more noise. Instead, they need a plan that brings in real enquiries. So we start with your goals, your customers and your budget. Then we pick the channels that will move the numbers for you.
+            </p>
+            <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              For some brands, that means SEO and better Google rankings. For others, it means Google Ads, social media marketing or a faster website. In most cases, it is a mix. Either way, you get one team, one plan and one clear report.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed">
-              Learn more <a href="/about" className="text-orange-600 font-medium underline hover:text-orange-800">about Genie Media & Studio</a>, explore <a href="/projects" className="text-orange-600 font-medium underline hover:text-orange-800">our portfolio of work</a>, or read our latest <a href="/blogs" className="text-orange-600 font-medium underline hover:text-orange-800">digital marketing insights</a>.
+              Want to know us first? Read more <a href="/about" className={inlineLink}>about Genie Media & Studio</a>, look through <a href="/projects" className={inlineLink}>our portfolio of work</a>, or browse our <a href="/blogs" className={inlineLink}>digital marketing insights</a>.
             </p>
           </div>
         </div>
@@ -285,7 +222,7 @@ export default function DigitalMarketting() {
               Our Digital Marketing Services
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Search, paid advertising, social media, content, websites and branding, planned together as one digital marketing strategy for your business growth.
+              Each service works on its own. However, they work best together, because search, ads, content and your website all feed each other.
             </p>
           </div>
 
@@ -322,33 +259,34 @@ export default function DigitalMarketting() {
                 Digital Marketing for Businesses in Vizag & Visakhapatnam
               </h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-4">
-                Visakhapatnam is rapidly emerging as a dynamic hub for commercial enterprises, industrial growth, technology startups, and professional service providers. To compete effectively, local businesses in Vizag require a strategic online marketing approach that connects with regional search intent and targeted demographic behavior.
+                Vizag is growing fast. New shops, clinics, startups and firms open every month, and most of their customers search online first. Therefore, a local business needs to show up where those searches happen.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                At Genie Media & Studio, we specialize in helping local companies build strong online visibility. From local search optimization and Google Maps positioning to targeted social media campaigns, we help you capture nearby customers when they are actively seeking your products or services.
+                We help you do exactly that. For example, we tune your Google Business Profile so you appear on Google Maps. We also aim ads at the areas you serve, and we build pages that speak to local buyers. As a result, nearby customers find you at the moment they need you.
               </p>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700"><strong>Local Visibility:</strong> Dominating 'near me' search queries across Vizag, Yendada, Dwaraka Nagar, and MVP Colony.</p>
-                </div>
-                <div className="flex items-start gap-3">
+                  <p className="text-gray-700"><strong>Local visibility:</strong> Show up in &quot;near me&quot; searches across Vizag, Yendada, Dwaraka Nagar and MVP Colony.</p>
+                </li>
+                <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700"><strong>Audience Targeting:</strong> Connecting with consumer and B2B buyers across Visakhapatnam and Andhra Pradesh.</p>
-                </div>
-                <div className="flex items-start gap-3">
+                  <p className="text-gray-700"><strong>Audience targeting:</strong> Reach the right buyers across Visakhapatnam and Andhra Pradesh.</p>
+                </li>
+                <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700"><strong>Measurable Growth:</strong> Delivering trackable inquiry volume, foot traffic, and digital ROI.</p>
-                </div>
-              </div>
+                  <p className="text-gray-700"><strong>Measurable growth:</strong> Track calls, form leads, store visits and ROI.</p>
+                </li>
+              </ul>
             </div>
             <div className="flex justify-center">
               <img
                 src={DigitalMarketing2}
-                alt="Genie Media & Studio digital marketing agency team managing campaigns in Visakhapatnam"
+                alt="Digital marketing team at Genie Media & Studio reviewing campaign results"
                 className="rounded-2xl shadow-xl w-full max-w-lg object-cover"
                 width={800}
                 height={533}
+                loading="lazy"
                 decoding="async"
               />
             </div>
@@ -364,7 +302,7 @@ export default function DigitalMarketting() {
               Our Digital Marketing Strategy
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Every campaign follows the same six stages, from research to reporting, so you always know what we are doing, why, and what it is achieving.
+              Every campaign follows the same six steps. That way, you always know what we are doing, why we are doing it and what it is achieving.
             </p>
           </div>
 
@@ -392,20 +330,20 @@ export default function DigitalMarketting() {
               Why Choose Genie Media & Studio
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              We combine creative storytelling, technical web development expertise, and rigorous data analysis to help your business thrive.
+              We mix creative work, web skills and data. Here is what that means for you.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             {whyChooseUs.map((item, index) => (
-              <div key={index} className="bg-gray-50 rounded-2xl p-6 sm:p-8 hover:bg-gray-100 transition-colors duration-300">
+              <div key={item.title} className="bg-gray-50 rounded-2xl p-6 sm:p-8 hover:bg-gray-100 transition-colors duration-300">
                 <div className="flex items-start gap-4">
                   <span className="flex-shrink-0 w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-sm">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
-                    <div className="text-gray-600 leading-relaxed">{item.content}</div>
+                    <p className="text-gray-600 leading-relaxed">{item.content}</p>
                   </div>
                 </div>
               </div>
@@ -417,39 +355,18 @@ export default function DigitalMarketting() {
       {/* Section: Industries We Serve */}
       <section className="bg-slate-900 py-16 px-6 md:px-12 lg:px-20 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 mb-12">
-            <div className="flex-1">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-orange-400 mb-4 leading-tight">
-                Industries We Serve
-              </h2>
-              <p className="text-lg text-gray-300 leading-relaxed max-w-3xl">
-                As a versatile digital marketing agency in Visakhapatnam, we tailor marketing strategies to the unique audience expectations of diverse sectors.
-              </p>
-            </div>
-
-            <div className="flex gap-3 self-start md:self-center">
-              <button
-                onClick={prevSlide}
-                disabled={isAnimating}
-                className="bg-slate-800 hover:bg-slate-700 text-orange-400 p-3.5 rounded-full transition-all duration-300 disabled:opacity-50"
-                aria-label="Previous industries"
-              >
-                <ChevronLeft className="w-8 h-8" />
-              </button>
-              <button
-                onClick={nextSlide}
-                disabled={isAnimating}
-                className="bg-slate-800 hover:bg-slate-700 text-orange-400 p-3.5 rounded-full transition-all duration-300 disabled:opacity-50"
-                aria-label="Next industries"
-              >
-                <ChevronRight className="w-8 h-8" />
-              </button>
-            </div>
+          <div className="mb-12">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-orange-400 mb-4 leading-tight">
+              Industries We Serve
+            </h2>
+            <p className="text-lg text-gray-300 leading-relaxed max-w-3xl">
+              Every industry has its own buyers and its own way of buying. So we shape each digital marketing campaign to fit.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getVisibleCards().map((industry, idx) => (
-              <div key={`${industry.title}-${currentIndex}-${idx}`} className="bg-slate-800 rounded-2xl p-8 border border-slate-700 hover:border-orange-500 transition-all duration-300">
+            {industries.map((industry) => (
+              <div key={industry.title} className="bg-slate-800 rounded-2xl p-8 border border-slate-700 hover:border-orange-500 transition-all duration-300">
                 <div className="bg-slate-700/50 rounded-full w-14 h-14 flex items-center justify-center mb-6 text-2xl">
                   <industry.icon className="w-7 h-7 text-orange-400" aria-hidden="true" />
                 </div>
@@ -458,29 +375,10 @@ export default function DigitalMarketting() {
               </div>
             ))}
           </div>
-
-          <div className="flex justify-center gap-2 mt-8">
-            {industries.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  if (!isAnimating) {
-                    setIsAnimating(true);
-                    setCurrentIndex(index);
-                    setTimeout(() => setIsAnimating(false), 500);
-                  }
-                }}
-                className={`transition-all duration-300 rounded-full ${
-                  index === currentIndex ? 'bg-orange-500 w-8 h-2.5' : 'bg-slate-700 w-2.5 h-2.5 hover:bg-slate-600'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
       </section>
 
-      {/* Section: Portfolio & Case Studies */}
+      {/* Section: Portfolio */}
       <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -488,19 +386,19 @@ export default function DigitalMarketting() {
               Our Work & Portfolio
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Explore custom websites, branding projects, and digital campaigns built by Genie Media & Studio for clients in India, Australia, and global markets.
+              See websites, branding and digital campaigns that Genie Media & Studio has built for clients in India, Australia and other markets.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-gray-900">Delivering Real Results for Growth Brands</h3>
+              <h3 className="text-2xl font-bold text-gray-900">Work Judged on Real Results</h3>
               <p className="text-gray-600 leading-relaxed">
-                From technical website redesigns to lead generation and paid search campaigns, our work focuses on clear business outcomes, brand positioning, and digital performance.
+                From website redesigns to lead generation and paid search campaigns, we judge our work on one thing. Does it help the business grow? That is why every project starts with a clear goal.
               </p>
               <div className="pt-2">
                 <a href="/projects" className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-full transition-all">
-                  View Complete Portfolio <ArrowUpRight className="w-4 h-4" />
+                  View Our Projects <ArrowUpRight className="w-4 h-4" />
                 </a>
               </div>
             </div>
@@ -511,6 +409,7 @@ export default function DigitalMarketting() {
                 className="rounded-2xl shadow-lg w-full object-cover"
                 width={800}
                 height={533}
+                loading="lazy"
                 decoding="async"
               />
             </div>
@@ -525,10 +424,10 @@ export default function DigitalMarketting() {
             Digital Marketing Services Near Me
           </h2>
           <p className="text-lg text-gray-600 leading-relaxed mb-6">
-            If you are searching for a digital marketing agency near me, SEO services near me or a marketing agency near me in Visakhapatnam, Genie Media & Studio is close by and easy to meet in person. Located at KP Icon in Yendada, Visakhapatnam, we work closely with nearby businesses across Vizag, Madhurawada, Dwaraka Nagar, MVP Colony, Gajuwaka, and surrounding Andhra Pradesh regions.
+            Searching for a digital marketing agency near me or SEO services near me in Visakhapatnam? Genie Media & Studio is close by and easy to meet. Our office is at KP Icon in Yendada.
           </p>
           <p className="text-lg text-gray-600 leading-relaxed mb-8">
-            Whether you need a web design company near me, website developer near me, or a dedicated team for Google Ads management and social media marketing in Vizag, our team is ready to discuss your goals.
+            We work with businesses across Vizag, including Madhurawada, Dwaraka Nagar, MVP Colony and Gajuwaka. Whether you need a website, Google Ads or social media marketing in Vizag, we are happy to talk it through.
           </p>
           <div className="inline-flex flex-wrap justify-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
             <div className="flex items-center gap-2 text-gray-700 font-medium">
@@ -551,12 +450,12 @@ export default function DigitalMarketting() {
             <div className="lg:col-span-2 space-y-4">
               <h2 className="text-3xl font-bold">In-House Video Production & Podcast Studio in Vizag</h2>
               <p className="text-lg opacity-90 leading-relaxed">
-                Beyond traditional digital marketing, Genie Media operates a professional <a href="/podcast_studio" className="font-bold underline hover:opacity-100">podcast studio in Visakhapatnam</a> equipped with multi-camera setups, high-grade audio mics, and a complete <a href="/production_house" className="font-bold underline hover:opacity-100">video production house</a> for corporate videos, commercial shoots, and live streaming.
+                Beyond digital marketing, we run our own <a href="/podcast_studio" className="font-bold underline hover:opacity-100">podcast studio in Visakhapatnam</a> with multi-camera setups and pro audio. We also have a <a href="/production_house" className="font-bold underline hover:opacity-100">video production house</a> for brand videos, ad shoots and live streams. So your content can be planned, shot and promoted by one team.
               </p>
             </div>
             <div className="flex justify-start lg:justify-end">
               <a href="/podcast_studio" className="bg-black hover:bg-slate-900 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300">
-                Book Studio Slot
+                Book a Studio Slot
               </a>
             </div>
           </div>
@@ -571,26 +470,21 @@ export default function DigitalMarketting() {
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-gray-600">
-              Clear answers to common questions regarding digital marketing services in Vizag and Visakhapatnam.
+              Clear answers to common questions about digital marketing services in Vizag.
             </p>
           </div>
 
           <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-                <button
-                  onClick={() => toggleFAQ(index)}
-                  className="w-full flex items-center justify-between p-6 text-left focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset"
-                >
+            {DIGITAL_MARKETING_FAQS.map((faq) => (
+              <details key={faq.q} className="group bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                <summary className="w-full flex items-center justify-between p-6 text-left cursor-pointer list-none [&::-webkit-details-marker]:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-inset">
                   <h3 className="text-lg font-semibold text-gray-900 pr-4">{faq.q}</h3>
-                  <ChevronUp className={`w-5 h-5 text-gray-500 flex-shrink-0 transition-transform duration-300 ${openFAQ === index ? 'transform rotate-180' : ''}`} />
-                </button>
-                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openFAQ === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
-                    {faq.a}
-                  </div>
-                </div>
-              </div>
+                  <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
+                </summary>
+                <p className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                  {faq.a}
+                </p>
+              </details>
             ))}
           </div>
         </div>
@@ -603,7 +497,7 @@ export default function DigitalMarketting() {
             Get Started with Genie Media & Studio
           </h2>
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Ready to grow your online visibility, capture qualified leads, and elevate your brand? Book a meeting or call our digital marketing team in Visakhapatnam to request a consultation.
+            Ready to grow your online visibility and win more leads? Book a meeting or call our team in Visakhapatnam. We will look at where you are today and suggest clear next steps.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/contact" className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-black font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
@@ -615,6 +509,6 @@ export default function DigitalMarketting() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

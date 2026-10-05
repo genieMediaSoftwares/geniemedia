@@ -6,42 +6,42 @@
 export const DIGITAL_MARKETING_FAQS: Array<{ q: string; a: string }> = [
   {
     q: "What does a digital marketing agency in Vizag do?",
-    a: "A digital marketing agency like Genie Media & Studio helps businesses in Vizag and Visakhapatnam grow their online presence. We handle search engine optimization (SEO) to improve Google rankings, manage Google Ads and PPC campaigns, run social media marketing, create content, build websites and develop brand identities, all planned around measurable business growth.",
+    a: "A digital marketing agency helps businesses grow online. At Genie Media & Studio, we handle SEO, Google Ads, social media, content, websites and branding. In short, we help people in Vizag find you, trust you and contact you.",
   },
   {
     q: "What digital marketing services does Genie Media & Studio provide?",
-    a: "We provide SEO services, Google Ads and PPC management, social media marketing on Instagram, Facebook and LinkedIn, content marketing, lead generation and conversion optimization, website design and development, and branding and creative services for businesses in Visakhapatnam and across Andhra Pradesh.",
+    a: "We offer SEO services, Google Ads and PPC management, social media marketing, content marketing, lead generation, conversion optimization, website design and branding. We serve businesses in Visakhapatnam and across Andhra Pradesh.",
   },
   {
     q: "Do you provide SEO services in Vizag?",
-    a: "Yes. Our SEO services in Vizag include SEO audits, technical SEO, on-page SEO, keyword research, content optimization, internal linking, structured data, local SEO and monthly SEO reporting, tracked through Google Search Console and Google Analytics.",
+    a: "Yes. Our SEO work covers audits, technical SEO, on-page SEO, keyword research, content, internal links, structured data and local SEO. We also send a monthly report based on Google Search Console and Google Analytics.",
   },
   {
     q: "How long does SEO take to show results?",
-    a: "SEO is a long-term strategy. Most websites start to see clear movement in search rankings and organic traffic within three to six months, depending on competition and the starting point of the site. We share regular reports so you can follow the progress.",
+    a: "SEO takes time. Most sites see clear gains in rankings and organic traffic within three to six months. However, it depends on your competition and where your site starts. We share progress reports along the way.",
   },
   {
     q: "Do you manage Google Ads and PPC campaigns?",
-    a: "Yes. We set up and manage Google Search Ads, display and remarketing campaigns, configure conversion tracking, write ad copy, improve landing pages and keep refining targeting and budgets so your paid advertising delivers a better return on investment (ROI).",
+    a: "Yes. We set up Google Search Ads, display ads and remarketing. We also add conversion tracking, write the ads and improve landing pages. Then we keep tuning targeting and budgets to raise your return on investment (ROI).",
   },
   {
     q: "Do you provide social media marketing?",
-    a: "Yes. We plan your social media strategy, design creatives, edit short-form videos and Reels, manage posting and run social media advertising on Instagram and Facebook to grow brand awareness and audience engagement.",
+    a: "Yes. We plan your social media strategy, design posts, edit Reels and run ads on Instagram and Facebook. The aim is more brand awareness, more engagement and more enquiries.",
   },
   {
     q: "Do you provide local SEO for Visakhapatnam businesses?",
-    a: "Yes. We optimize your Google Business Profile, local citations, location pages and local keywords so nearby customers in Vizag, Yendada, MVP Colony, Gajuwaka and Madhurawada can find you in local search and on Google Maps.",
+    a: "Yes. We improve your Google Business Profile, local listings and location pages. As a result, nearby customers in Yendada, MVP Colony, Gajuwaka and Madhurawada can find you on Google Maps and in local search.",
   },
   {
     q: "Do you build websites?",
-    a: "Yes. Our designers and developers build responsive, mobile-friendly and SEO-friendly business websites, landing pages and ecommerce stores, with attention to page speed, Core Web Vitals and user experience.",
+    a: "Yes. We build fast, responsive and SEO-friendly websites, landing pages and online stores. Each one works well on mobile, and we check its page speed before launch.",
   },
   {
     q: "Which industries do you work with?",
-    a: "We work with local businesses, startups, small businesses and growing companies in healthcare and clinics, education, real estate, ecommerce and retail, hospitality and restaurants, travel and professional services. Every plan is built around the audience of that industry.",
+    a: "We work with local businesses, startups and growing firms. This includes healthcare, education, real estate, ecommerce, retail, hospitality, travel and professional services.",
   },
   {
     q: "How can I contact Genie Media & Studio?",
-    a: "Fill in the form on our contact page, email admin@geniemedia.in, or call +91 90328 45433. You can also visit us at KP Icon, Yendada, Visakhapatnam to discuss your digital marketing goals.",
+    a: "Use the form on our contact page, email admin@geniemedia.in or call +91 90328 45433. You can also visit us at KP Icon, Yendada, Visakhapatnam.",
   },
 ];
