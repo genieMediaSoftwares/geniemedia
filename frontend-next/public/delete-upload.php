@@ -1,23 +1,4 @@
 <?php
-/**
- * Deletes one image from public_html/uploads/ (Hostinger).
- *
- * Called by the Express backend (server-to-server) after a blog or project is
- * deleted, or its image is replaced/removed, so the uploads folder always
- * matches the database. Not for browsers.
- *
- *   POST /delete-upload.php
- *   Header:  X-Delete-Secret: <UPLOAD_DELETE_SECRET>
- *   Body:    {"file": "1791179014_1791179014571-854746835.png.webp"}
- *
- * Safety: shared-secret auth (constant-time compare), POST only, a bare file
- * name only (no paths), image extensions only, and the resolved path must be
- * inside uploads/. A file that is already gone counts as success.
- *
- * __UPLOAD_DELETE_SECRET__ is filled from frontend-next/.env by
- * `npm run build` (scripts/postbuild.mjs). Edit .env, not this file.
- */
-
 declare(strict_types=1);
 
 const DELETE_SECRET = '__UPLOAD_DELETE_SECRET__';
@@ -40,7 +21,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     respond(405, false, 'Method not allowed.');
 }
 
-// Refuse to run with a missing or placeholder secret.
 if (strlen(DELETE_SECRET) < 32 || strpos(DELETE_SECRET, '__') === 0) {
     respond(503, false, 'Delete endpoint is not configured.');
 }
@@ -53,7 +33,6 @@ if ($given === '' || !hash_equals(DELETE_SECRET, $given)) {
 $payload = json_decode((string) file_get_contents('php://input', false, null, 0, 2000), true);
 $file = is_array($payload) && isset($payload['file']) && is_string($payload['file']) ? trim($payload['file']) : '';
 
-// A bare file name only: no folders, no "..", nothing unusual.
 if ($file === '' || $file !== basename($file) || !preg_match('/^[A-Za-z0-9][A-Za-z0-9._-]{0,200}$/', $file)) {
     respond(400, false, 'Invalid file name.');
 }
@@ -72,7 +51,6 @@ if (!file_exists($target)) {
     respond(200, true, 'Already deleted.');
 }
 
-// The real path must still be inside uploads/ (guards against symlinks).
 $real = realpath($target);
 if ($real === false || strpos($real, $dir . DIRECTORY_SEPARATOR) !== 0 || !is_file($real)) {
     respond(400, false, 'Invalid file.');

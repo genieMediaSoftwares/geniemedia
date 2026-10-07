@@ -1,4 +1,3 @@
-// Run with: npm test   (Node 22.18+ strips TypeScript types natively)
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
@@ -52,7 +51,6 @@ test("content statistics", () => {
   assert.equal(s.internalLinkCount, 1);
   assert.equal(s.externalLinkCount, 1);
   assert.ok(s.sentenceCount >= 3);
-  // A short article is not enough prose to score.
   assert.equal(s.readability, null);
   assert.equal(s.readabilityLabel, "insufficient prose");
 });

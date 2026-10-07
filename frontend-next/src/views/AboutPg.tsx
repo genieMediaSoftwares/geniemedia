@@ -91,10 +91,6 @@ export default function AboutPage() {
             </div>
 
             <div className="flex justify-center lg:justify-end">
-              {/* The wrapper carries the max-width, not just the <img>. Without it
-                  the wrapper had no resolvable width until the image had loaded,
-                  so the width/height attributes could not reserve any height and
-                  the hero collapsed-then-expanded — a ~0.35 layout shift. */}
               <div className="relative w-full max-w-lg lg:max-w-2xl">
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
@@ -113,7 +109,6 @@ export default function AboutPage() {
       </div>
 
     </div>
-      {/* We Assist Businesses Section - White Card Overlapping */}
       <div className="px-4 mt-6 sm:px-6 lg:px-16 pb-16 bg-gray-50 sm:-mt-20">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-3xl shadow-2xl p-8 sm:p-12 lg:p-16  sm: lg: relative z-10">
@@ -125,7 +120,6 @@ export default function AboutPage() {
                 </h2>
               </div>
 
-              {/* Benefits Grid */}
               <div className="lg:col-span-7">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
                   {benefits.map((benefit, index) => (
@@ -149,8 +143,6 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-
-
 
     <section
       ref={sectionRef}
@@ -176,7 +168,6 @@ export default function AboutPage() {
                 />
       </div>
 
-     
       <div
         className={`text-center mt-8 lg:-mt-4 w-full md:w-[70%] transition-all duration-[800ms] delay-100 ease-out sm:mr-14 sm:ml-14 
        `}
@@ -189,7 +180,6 @@ export default function AboutPage() {
          At Genie Media, we empower brands to grow in the digital-first world through strategy, creativity, and performance-driven marketing.
 We blend design, storytelling, and technology to build meaningful brand experiences that attract, and convert audiences across all channels.
 
-
         </p>
 
         <p className="text-gray-700 text-lg leading-relaxed">
@@ -199,7 +189,6 @@ We blend design, storytelling, and technology to build meaningful brand experien
       </div>
     </section>
 
-   {/* our mission */}
    <section
       ref={sectionRef}
       className=" w-full 
@@ -224,7 +213,6 @@ We blend design, storytelling, and technology to build meaningful brand experien
                 />
       </div>
 
-     
       <div
         className={`text-center w-full md:w-1/2 transition-all duration-[800ms] delay-100 ease-out ml-0 md:ml-20
         ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
@@ -249,11 +237,9 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
     <AboutSection1/>
 
     <div className="relative bg-gray-200 px-4 sm:px-6 lg:px-16 py-16 sm:py-20 lg:py-14 overflow-hidden">
-     
-      
+
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Left Section - Core Values Header */}
           <div className="text-black space-y-8 sm:mt-40">
             <div className="space-y-6">
               <h2 className=" text-4xl sm:text-5xl lg:text-6xl font-bold">
@@ -264,19 +250,15 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
               </p>
             </div>
 
-            {/* GENIE Large Text */}
             <div className="mt-12 lg:mt-20">
               <h3 className=" text-orange-700 text-6xl t sm:text-7xl lg:text-8xl  font-bold tracking-widest">
                 GENIE
               </h3>
             </div>
 
-           
           </div>
 
-          {/* Right Section - Values List with Letters */}
           <div className="space-y-0 relative">
-            {/* Vertical line connecting letters */}
             <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-black opacity-20 hidden sm:block"></div>
 
             {values.map((value, index) => (
@@ -284,9 +266,7 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
                 key={index} 
                 className="relative flex items-center gap-4 sm:gap-8 pb-8 last:pb-0"
               >
-                {/* Letter Circle */}
                 <div className="flex-shrink-0 relative z-10">
-                  {/* A true circle at every size (it was 48 x 96 on phones). */}
                   <div className="w-12 h-12 sm:w-14 sm:h-14 aspect-square rounded-full bg-orange-400 flex items-center justify-center shadow-lg">
                     <span className="text-2xl sm:text-3xl font-bold text-black">
                       {value.letter}
@@ -294,7 +274,6 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className="flex-1 rounded-lg bg-white p-6 space-y-2">
                   <h4 className="text-xl sm:text-2xl font-bold text-black">
                     {value.title}
@@ -310,7 +289,6 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
       </div>
     </div>
 
-    
     <VideoTestimonials/>
       </>
   );

@@ -11,17 +11,10 @@ import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const FALLBACK = BlogFallbackAsset.src;
 
-/** Rendered body classes, unchanged from the Vite BlogDetail page. */
 const PROSE = "text-[16px] leading-[1.8] text-slate-800 sm:text-[18px] sm:leading-[1.9] break-words [overflow-wrap:anywhere] [&_*]:box-border [&_pre]:overflow-x-auto [&_pre]:text-sm [&_table]:block [&_table]:overflow-x-auto [&_table]:max-w-full sm:[&_table]:table [&_p]:my-4 [&_p]:leading-[1.8] [&_p]:text-slate-700 [&_p]:text-[16px] sm:[&_p]:my-5 sm:[&_p]:text-[18px] sm:[&_p]:leading-[1.85] [&_h1]:text-2xl [&_h1]:sm:text-4xl [&_h1]:font-extrabold [&_h1]:text-slate-900 [&_h1]:tracking-tight [&_h1]:leading-tight [&_h1]:mt-10 [&_h1]:mb-4 [&_h2]:text-xl [&_h2]:sm:text-3xl [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:tracking-tight [&_h2]:leading-snug [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:pb-2 [&_h2]:border-b [&_h2]:border-slate-100 [&_h3]:text-lg [&_h3]:sm:text-2xl [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:leading-snug [&_h3]:mt-8 [&_h3]:mb-3 [&_h4]:text-lg [&_h4]:sm:text-xl [&_h4]:font-semibold [&_h4]:text-slate-800 [&_h4]:leading-snug [&_h4]:mt-6 [&_h4]:mb-2 [&_strong]:font-bold [&_strong]:text-slate-900 [&_b]:font-bold [&_b]:text-slate-900 [&_em]:italic [&_em]:text-slate-600 [&_i]:italic [&_i]:text-slate-600 [&_u]:underline [&_u]:underline-offset-[3px] [&_u]:decoration-slate-400 [&_s]:line-through [&_s]:text-slate-400 [&_del]:line-through [&_del]:text-slate-400 [&_strike]:line-through [&_strike]:text-slate-400 [&_mark]:bg-amber-100 [&_mark]:text-slate-900 [&_mark]:px-1 [&_mark]:rounded-sm [&_a]:text-inherit [&_a]:no-underline [&_a]:transition-opacity [&_a]:duration-200 [&_a:hover]:opacity-80 [&_a]:rounded-sm [&_a:focus-visible]:outline [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-2 [&_a:focus-visible]:outline-current [&_blockquote]:my-8 [&_blockquote]:pl-5 [&_blockquote]:pr-4 [&_blockquote]:py-4 [&_blockquote]:border-l-4 [&_blockquote]:border-[#6B4A2D] [&_blockquote]:bg-amber-50 [&_blockquote]:rounded-r-xl [&_blockquote]:text-slate-600 [&_blockquote]:italic [&_blockquote]:text-[17px] [&_blockquote]:leading-relaxed [&_blockquote_p]:my-0 [&_blockquote_p]:text-slate-600 [&_code]:font-mono [&_code]:text-[14px] [&_code]:text-[#6B4A2D] [&_code]:bg-slate-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:border [&_code]:border-slate-200 [&_pre]:my-6 [&_pre]:bg-slate-900 [&_pre]:text-slate-100 [&_pre]:rounded-xl [&_pre]:p-5 [&_pre]:overflow-x-auto [&_pre]:text-[13px] [&_pre]:sm:text-[14px] [&_pre]:leading-relaxed [&_pre]:font-mono [&_pre_code]:bg-transparent [&_pre_code]:border-none [&_pre_code]:text-slate-100 [&_pre_code]:p-0 [&_pre_code]:text-[13px] [&_pre_code]:sm:text-[14px] [&_ul]:my-5 [&_ul]:pl-6 [&_ul]:list-disc [&_ol]:my-5 [&_ol]:pl-6 [&_ol]:list-decimal [&_li]:my-2 [&_li]:leading-[1.75] [&_li]:text-slate-700 [&_li]:text-[17px] sm:[&_li]:text-[18px] [&_ul_li]:marker:text-[#6B4A2D] [&_ol_li]:marker:text-[#6B4A2D] [&_ol_li]:marker:font-bold [&_li_ul]:mt-2 [&_li_ul]:mb-1 [&_li_ol]:mt-2 [&_li_ol]:mb-1 [&_hr]:my-10 [&_hr]:border-0 [&_hr]:border-t-2 [&_hr]:border-slate-100 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-6 [&_img]:block [&_img]:mx-auto [&_table]:w-full [&_table]:my-6 [&_table]:border-collapse [&_table]:text-sm [&_table]:sm:text-base [&_th]:bg-slate-50 [&_th]:font-bold [&_th]:text-slate-900 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:border [&_th]:border-slate-200 [&_td]:px-4 [&_td]:py-3 [&_td]:text-slate-700 [&_td]:border [&_td]:border-slate-200 [&_tr:nth-child(even)_td]:bg-slate-50";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/**
- * A complete blog article, rendered on the server: H1, dates, author,
- * featured image, sanitised body, FAQ, key facts, author bio, breadcrumbs and
- * related posts are all in the first HTML response. Only the copy-link buttons
- * and the image fallback hydrate.
- */
 export default function BlogArticle({ blog, related }: { blog: Blog; related: Blog[] }) {
   const canonical = blogCanonical(blog);
   const heroSrc = blog.image || FALLBACK;
@@ -29,15 +22,10 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
   const showUpdated = Boolean(updatedMs && blog.createdAt && updatedMs - blog.createdAt > DAY_MS);
   const faqs = blog.faq_schema.filter((f) => f.question && f.answer);
   const sanitized = DOMPurify.sanitize(blog.description, { ADD_ATTR: ["target", "rel"] });
-  // The template renders the post title as the page's only H1, so any H1 an
-  // editor typed into the body is demoted to H2 (same styling as a section).
   const bodyHtml = sanitized.replace(/<(\/?)h1(\b[^>]*)>/gi, "<$1h2$2>");
 
   return (
     <div className="w-full overflow-x-hidden bg-white">
-      {/* `pt-20` clears the fixed 80px navbar. The image box is 16:9 at every
-          width, matching the upload pipeline, and object-contain letterboxes a
-          cover that is not quite 16:9 instead of cropping its caption. */}
       <section className="w-full bg-stone-100 pt-20">
         <div className="relative mx-auto w-full max-w-[1200px] aspect-[16/9] bg-stone-100">
           <FallbackImg
@@ -54,7 +42,6 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
 
       <article className="py-8 sm:py-12 md:py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Visible breadcrumb trail; the same trail is in the BreadcrumbList JSON-LD. */}
           <nav aria-label="Breadcrumb" className="mb-4 text-xs sm:text-sm text-slate-500">
             <ol className="flex flex-wrap items-center gap-1.5">
               <li>
@@ -79,7 +66,6 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             </ol>
           </nav>
 
-          {/* ── Date + Share row ── */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 pb-4 sm:pb-5 border-b-2 border-slate-100">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[13px] sm:text-sm text-slate-500 font-medium">
               <Calendar className="w-4 h-4 text-[#6B4A2D] flex-shrink-0" strokeWidth={2} />
@@ -117,7 +103,6 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             <ShareButton url={canonical} title={blog.title} />
           </div>
 
-          {/* ── Category ── */}
           {blog.category && (
             <div className="mb-3">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#6B4A2D] text-white text-[11px] sm:text-xs font-semibold rounded-full shadow-sm max-w-full">
@@ -127,7 +112,6 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             </div>
           )}
 
-          {/* ── Title (the page's only H1) ── */}
           <h1 className="text-[26px] leading-[1.2] sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-3 sm:mb-5 sm:leading-tight tracking-tight break-words">
             {blog.title}
           </h1>
@@ -141,10 +125,8 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             </p>
           )}
 
-          {/* ── Blog body (sanitised on the server) ── */}
           <div className={PROSE} dangerouslySetInnerHTML={{ __html: bodyHtml }} />
 
-          {/* KEY FACTS — attributed, extractable claims. */}
           {blog.key_facts.length > 0 && (
             <section className="geo-key-facts mt-10 sm:mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
               <h2 className="flex items-center gap-2 text-lg sm:text-xl font-bold text-slate-900 mb-4">
@@ -175,7 +157,6 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             </section>
           )}
 
-          {/* FAQ — real text, so the FAQPage JSON-LD describes visible content. */}
           {faqs.length > 0 && (
             <section className="mt-10 sm:mt-12">
               <h2 className="flex items-center gap-2 text-xl sm:text-2xl font-bold text-slate-900 mb-5 pb-2 border-b border-slate-100">
@@ -207,7 +188,6 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             </section>
           )}
 
-          {/* Related services: every article points readers to what the team offers. */}
           <section className="mt-10 sm:mt-12 rounded-2xl bg-stone-50 border border-stone-200 p-5 sm:p-6">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-2">Work with Genie Media &amp; Studio</h2>
             <p className="text-sm sm:text-base leading-relaxed text-slate-600">
@@ -275,7 +255,6 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
                       </div>
                     )}
                     <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#6B4A2D] mb-2 line-clamp-2 transition-colors duration-300 leading-snug">
-                      {/* Stretched link: the whole card is clickable, with no JavaScript. */}
                       <a href={blogPath(rb.permalink)} className="after:absolute after:inset-0 after:content-['']">
                         {rb.title}
                       </a>

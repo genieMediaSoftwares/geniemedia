@@ -1,7 +1,6 @@
 import BASE_URL from "@/Api";
 import type { LoginResponse } from "@/types";
 
-/** POST /api/login. Never throws for HTTP errors; returns the parsed body. */
 export async function login(email: string, password: string): Promise<{ ok: boolean; status: number; data: LoginResponse | null }> {
   const res = await fetch(`${BASE_URL}/api/login`, {
     method: "POST",

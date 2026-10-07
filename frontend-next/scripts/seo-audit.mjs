@@ -1,19 +1,4 @@
 #!/usr/bin/env node
-/**
- * SEO audit of the built pages in dist/ (run `npm run build` first).
- *
- *   npm run seo:audit                      all main public pages
- *   npm run seo:audit -- /digital_marketing one page, every check listed
- *   npm run seo:audit -- --url https://geniemedia.in/digital_marketing
- *                                          audit the live page instead
- *   npm run seo:audit -- --coverage        also show where each target term
- *                                          appears (scripts/seo-keywords.mjs)
- *
- * The page HTML is parsed (jsdom) and reduced to what a visitor can read in
- * <main data-seo-content="true">: scripts, styles, JSON-LD, the React payload,
- * hidden elements, class names and URLs are never counted as words. The
- * scoring itself lives in src/utils/pageSeoAudit.ts.
- */
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -36,7 +21,6 @@ if (!SITE) {
   process.exit(1);
 }
 
-/** Topic and minimum length per page. Support pages are shorter by nature. */
 const PAGES = {
   "/": { keyword: "digital marketing", minWords: 600 },
   "/digital_marketing": { keyword: "digital marketing", minWords: 1500 },
@@ -44,6 +28,7 @@ const PAGES = {
   "/production_house": { keyword: "production house", minWords: 400 },
   "/podcast_studio": { keyword: "podcast studio", minWords: 600 },
   "/projects": { keyword: "projects", minWords: 150 },
+  "/case-studies": { keyword: "case studies", minWords: 300 },
   "/blogs": { keyword: "digital marketing", minWords: 150 },
   "/about": { keyword: "Genie Media", minWords: 400 },
   "/contact": { keyword: "contact", minWords: 100 },
@@ -51,16 +36,13 @@ const PAGES = {
 const LOCATIONS = ["Vizag", "Visakhapatnam"];
 const NAP = ["Yendada", "90328 45433"];
 
-// Elements whose text a visitor never reads as content.
 const NON_CONTENT = "script, style, noscript, template, svg, iframe, [hidden], [aria-hidden='true']";
-// Tailwind `hidden` with no breakpoint display class is hidden at every size.
 const isAlwaysHidden = (el) => {
   const cls = (el.getAttribute("class") || "").split(/\s+/);
   return cls.includes("hidden") && !cls.some((c) => /^(sm|md|lg|xl|2xl):(block|flex|grid|inline|inline-block|inline-flex|table)$/.test(c));
 };
 
 const BLOCK = new Set("ADDRESS ARTICLE ASIDE BLOCKQUOTE BR BUTTON DD DIV DL DT FIGCAPTION FIGURE FOOTER FORM H1 H2 H3 H4 H5 H6 HEADER LI MAIN NAV OL P SECTION SPAN TABLE TD TH TR UL A".split(" "));
-/** Visible text with a space between elements, so "<h3>A</h3><p>B" reads "A B", not "AB". */
 const visibleText = (el) => {
   const parts = [];
   const walk = (node) => {
@@ -75,9 +57,6 @@ const visibleText = (el) => {
   return parts.join("").replace(/\s+/g, " ").trim();
 };
 
-// Screen-reader-only text is not prose a visitor reads, but it is part of a
-// link's accessible name ("Learn more about our Shopify work"), so link text
-// is taken from a copy that keeps it.
 const clean = (root, { keepSrOnly = false } = {}) => {
   const copy = root.cloneNode(true);
   copy.querySelectorAll(NON_CONTENT).forEach((el) => el.remove());
@@ -128,7 +107,6 @@ export const buildDocument = (html, url) => {
     images,
     structuredData,
     metadata: {
-      // Only the document title: an <svg><title> just names an icon.
       titles: [...document.querySelectorAll("head > title")].map((t) => t.textContent.trim()),
       descriptions: attr("meta[name='description']", "content"),
       canonicals: attr("link[rel='canonical']", "href"),
@@ -143,7 +121,6 @@ export const buildDocument = (html, url) => {
   };
 };
 
-/** Every page path present in dist/ (for broken-link checks). */
 const knownPaths = () => {
   const out = new Set(["/"]);
   const walk = (dir) => {
@@ -169,7 +146,6 @@ const targets = routes.length ? routes : Object.keys(PAGES);
 const detailed = targets.length === 1;
 const known = liveUrl ? undefined : knownPaths();
 
-// Run the audit only when called as a script, not when buildDocument is imported.
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   let worst = 100;
   for (const route of targets) {
@@ -210,8 +186,6 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
       const mark = (b) => (b ? "✓" : "·");
       console.log(`\n  ${"keyword coverage".padEnd(38)} ${"tier".padEnd(10)}  title desc  H1  H2/3 open  links alt   uses`);
       const rows = keywordCoverage(doc, PAGE_KEYWORDS[route]);
-      // Topic coverage per tier: how many of the planned terms the visible
-      // content actually covers. More repetitions never raise it.
       const tiers = ["primary", "secondary", "semantic", "local", "supporting"].map((tier) => {
         const inTier = rows.filter((r) => r.tier === tier);
         const covered = inTier.filter((r) => r.body > 0 || r.title || r.description);

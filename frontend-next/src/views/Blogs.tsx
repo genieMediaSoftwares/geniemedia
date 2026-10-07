@@ -4,9 +4,6 @@ import { Loader2, FileText, Maximize2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Calendar, Tag } from "lucide-react";
-// Self-hosted copies of the images this page used to pull from
-// images.unsplash.com. Same pictures, but they no longer cost a public page an
-// extra DNS lookup + TLS handshake to a third-party origin.
 import BlogHeroAsset from "@/assets/blog/blog-hero.webp";
 import BlogHero640Asset from "@/assets/blog/blog-hero-640.webp";
 import BlogFallbackAsset from "@/assets/blog/blog-fallback.webp";
@@ -24,13 +21,7 @@ interface Lightbox {
   alt: string;
 }
 
-/**
- * The blog index. Posts are fetched on the server (app/blogs/page.tsx) and
- * arrive as props, so every title, excerpt and link is in the first HTML
- * response. Only the category filter and the image lightbox run in the browser.
- */
 export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
-  // Build-time posts first, then the latest from the API (new posts show without a rebuild).
   const blogs = useLatestBlogCards(initialBlogs);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [lightbox, setLightbox] = useState<Lightbox | null>(null);
@@ -56,8 +47,6 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
       console.error("Missing permalink", blog);
       return;
     }
-    // Full page load: a post published after the last build is served by the
-    // .htaccess fallback, which client-side routing cannot reach.
     window.location.assign(`/blog/${blog.permalink}`);
   };
 
@@ -72,9 +61,6 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
     <div className="w-full overflow-x-hidden">
 
       <section className="relative min-h-[45vh] sm:min-h-[50vh] md:min-h-[60vh] lg:min-h-[55vh] flex items-center text-white overflow-hidden">
-        {/* A real <img> (not a CSS background) so the browser finds it in the
-            HTML and fetches it first: it is this page's largest element.
-            Phones get the 640px version. Decorative: the heading says it all. */}
         <img
           src={BlogHero}
           srcSet={`${BlogHero640} 640w, ${BlogHero} 1400w`}
@@ -87,8 +73,6 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/60" />
-        {/* pt clears the fixed header: on phones the text is taller than the
-            hero's min-height, so centring alone pushed the heading under it. */}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full pt-28 pb-12 sm:pt-28 sm:pb-16">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 drop-shadow-lg">
             Digital Marketing &amp; Creative Blog
@@ -111,8 +95,6 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
 
           {categories.length > 1 && (
             <div className="mb-10 sm:mb-12 md:mb-14 lg:mb-16">
-              {/* Wraps on every screen size: a sideways-scrolling row cut the
-                  last category in half on phones and read as broken text. */}
               <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                 {categories.map((cat) => (
                   <button
@@ -210,10 +192,6 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
                       )}
 
                       <h2 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 group-hover:text-[#6B4A2D] mb-2 sm:mb-3 line-clamp-3 transition-colors duration-300 leading-snug break-words [overflow-wrap:anywhere]">
-                        {/* A real link, so crawlers can reach each post from
-                            this page. A plain click still navigates in-app via
-                            the card's onClick; modified clicks (new tab, etc.)
-                            are left to the browser. */}
                         <a
                           href={`/blog/${blog.permalink}`}
                           onClick={(e) => {
@@ -241,7 +219,6 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
                       </button>
                     </div>
 
-                    {/* Corner shimmer */}
                     <div className="absolute top-0 right-0 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-bl from-[#6B4A2D]/0 group-hover:from-[#6B4A2D]/8 to-transparent rounded-bl-full transition-all duration-500 pointer-events-none" />
                   </article>
                 );

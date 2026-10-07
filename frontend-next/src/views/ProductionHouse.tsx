@@ -50,7 +50,6 @@ export default function ProductionHouse() {
         </div>
       </div>
 
-      {/* What a production house does */}
       <section className="relative bg-[#f9fafc] overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 py-10 md:py-14 text-center">
 
@@ -92,7 +91,6 @@ export default function ProductionHouse() {
         </div>
       </section>
 
-      {/* How we work */}
       <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-8 text-center">How Our Production House Works</h2>
@@ -142,7 +140,6 @@ export default function ProductionHouse() {
         </div>
       </section>
 
-      {/* Why choose us */}
       <section className="bg-gray-100 py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-8 text-center">Why Choose Genie Media & Studio</h2>

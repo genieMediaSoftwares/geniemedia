@@ -11,20 +11,10 @@ const Dm_services = Dm_servicesAsset.src;
 const WebDev_services = WebDev_servicesAsset.src;
 const lamp = lampAsset.src;
 const productionHouse = productionHouseAsset.src;
-/**
- * @param {'h1'|'h2'} headingLevel  This component is both a standalone page
- *   (/services, where its title is the page's h1) and a section embedded in the
- *   home page (where the page already has an h1, so it must be an h2). The
- *   Tailwind classes carry the size, so the rendered design is identical either
- *   way — only the document outline changes.
- */
 export default function TabbedServices({ headingLevel = 'h2' }) {
   const [activeTab, setActiveTab] = useState('dm');
   const Heading = headingLevel === 'h1' ? 'h1' : 'h2';
 
-  // `href` is the service's own page. The tab heading links there, so the
-  // arrow beside it leads somewhere, and the home and /services pages give
-  // crawlers a real <a> to each service page.
   const tabs = [
     { id: 'dm', label: 'Digital Marketing', href: '/digital_marketing' },
     { id: 'webdev', label: 'Web Development', href: '/web_development' },
@@ -166,9 +156,6 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
                   }
                 ]
     }
-    // A fifth 'digital' entry used to live here. No tab in `tabs` has that id,
-    // so it was unreachable, and its mainImage pointed at an unsplash.com URL —
-    // a third-party origin referenced from a component on the home page.
   };
 
   const currentContent = tabContent[activeTab as keyof typeof tabContent];
@@ -179,12 +166,7 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
       <Heading className='text-4xl sm:text-6xl text-center text-orange-600 mb-10 font-bold'> Services We Offer</Heading>
       <div className="max-w-7xl mx-auto">
         
-        {/* Tabs Navigation */}
         <div className="flex flex-wrap justify-center gap-3 mb-12" role="tablist">
-          {/* Each tab is a real link to its service page, so every service URL
-              is in the HTML whichever tab is showing. A plain click switches
-              the tab in place, as the buttons did; a modified click (new tab,
-              new window) follows the link. */}
           {tabs.map((tab) => (
             <a
               key={tab.id}
@@ -207,10 +189,8 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
           ))}
         </div>
 
-        {/* Main Content Area */}
         <div className="space-y-12">
           
-          {/* Header Section */}
           <div className="text-center max-w-4xl mx-auto space-y-4">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 flex items-center justify-center gap-3">
               <a href={currentHref} className="flex items-center justify-center gap-3">
@@ -223,10 +203,8 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
             </p>
           </div>
 
-          {/* Services Grid with Center Image */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            {/* Left Column - First 2 Services */}
             <div className="lg:col-span-4 space-y-10 ">
               {currentContent.services.slice(0, 3).map((service: { title: string; description: string }, index: number) => (
                 <div key={index} className="space-y-3 group cursor-pointer ">
@@ -241,13 +219,10 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
               ))}
             </div>
 
-            {/* Center Column - Image */}
             <div className="lg:col-span-4 lg:sticky lg:top-28 flex justify-center">
               <div className="w-full max-w-sm">
                 <div className="lg:sticky lg:top-24 relative">
-                  
-                  
-                  {/* Main Image Container */}
+
                   <div className="relative p-6">
                     <img 
                       src={currentContent.mainImage}
@@ -258,18 +233,15 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
                       decoding="async"
                       className="w-full h-auto rounded-2xl object-cover shadow-2xl"
                     />
-                    
-                 
+
                     <div className="absolute inset-0 pointer-events-none">
-                     
-                    
+
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Last 2 Services */}
             <div className="lg:col-span-4 space-y-10">
               {currentContent.services.slice(3, 6).map((service: { title: string; description: string }, index: number) => (
                 <div key={index} className="space-y-3 group cursor-pointer">

@@ -4,22 +4,6 @@ import { CONTACT_FORM_URL } from "@/lib/env";
 import { Loader2 } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 import { Mail, Phone, MapPin, Send, Clock, Globe, CheckCircle } from "lucide-react";
-// import emailjs from "@emailjs/browser";
-
-/**
- * @param {boolean} isPage  True when this component *is* the page (the /contact
- *   route) rather than a section near the bottom of another page.
- *
- *   It matters for performance: the scroll reveal renders everything at
- *   `opacity-0` until an IntersectionObserver fires, and Chrome refuses to
- *   accept a fully transparent element as a Largest Contentful Paint candidate.
- *   As a standalone page that meant /contact reported no LCP at all. When it is
- *   the page, the heading block is therefore shown immediately and animated with
- *   transform only. Embedded in another page it is below the fold and keeps the
- *   original scroll-triggered fade, unchanged.
- */
-
-/* ── Tailwind class sets (formerly this component's <style> block) ────── */
 
 const CONTACT_CARD =
   "transition-all duration-[400ms] ease-in-out hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)]";
@@ -27,13 +11,10 @@ const CONTACT_CARD =
 const FORM_INPUT =
   "transition-[border-color,box-shadow] duration-200 ease-[ease] focus:outline-none focus:border-gray-500 focus:shadow-[0_0_0_3px_rgba(107,114,128,0.12)] [&_option]:text-gray-700";
 
-// Orange submit button with an expanding light circle on hover.
 const SUBMIT_BTN =
   "relative overflow-hidden bg-[#e1771f] transition-all duration-[400ms] ease-in-out hover:-translate-y-[3px] hover:shadow-[0_15px_40px_rgba(148,99,238,0.4)] disabled:cursor-not-allowed disabled:opacity-[0.65] disabled:translate-y-0 disabled:shadow-none before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:h-0 before:w-0 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-white/20 before:[transition:width_0.6s_ease,height_0.6s_ease] hover:before:h-[400px] hover:before:w-[400px]";
 
 const ContactSec = ({ isPage = false }) => {
-  // Keeps the outline sequential in both contexts: as a page the title is an h1
-  // and the sub-sections are h2s; embedded, the title is an h2 and they are h3s.
   const SubHeading = isPage ? 'h2' : 'h3';
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
@@ -110,7 +91,6 @@ const ContactSec = ({ isPage = false }) => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // Clear error when user starts typing again
     if (error) setError("");
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -156,47 +136,6 @@ const ContactSec = ({ isPage = false }) => {
     }
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-  //   setError("");
-
-  //   // EmailJS send — make sure your template variables match formData keys:
-  //   // {{name}}, {{email}}, {{phone}}, {{service}}, {{message}}
-  //   emailjs
-  //     .send(
-  //       import.meta.env.VITE_EMAILJS_SERVICE_ID,
-  //       import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-  //       {
-  //         name: formData.name,
-  //         email: formData.email,
-  //         phone: formData.phone,
-  //         service: formData.service,
-  //         message: formData.message,
-  //       },
-  //       import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-  //     )
-  //     .then(() => {
-  //       setIsSuccess(true);
-  //       setFormData({
-  //         name: "",
-  //         email: "",
-  //         phone: "",
-  //         service: "",
-  //         message: "",
-  //       });
-  //       setIsSubmitting(false);
-
-  //       // Auto-hide success message after 6 seconds
-  //       setTimeout(() => setIsSuccess(false), 6000);
-  //     })
-  //     .catch((error) => {
-  //       console.error("EmailJS Error:", error);
-  //       setError("Failed to send message. Please try again or contact us directly.");
-  //       setIsSubmitting(false);
-  //     });
-  // };
-
   return (
     <>
 
@@ -205,7 +144,6 @@ const ContactSec = ({ isPage = false }) => {
         className="relative bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
         id="contact"
       >
-        {/* Background blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-20 right-10 w-96 h-96 bg-orange-200 rounded-full blur-3xl opacity-20"></div>
           <div className="absolute bottom-20 left-10 w-80 h-80 bg-blue-200 rounded-full blur-3xl opacity-20"></div>
@@ -213,7 +151,6 @@ const ContactSec = ({ isPage = false }) => {
 
         <div className="relative max-w-7xl mx-auto">
 
-          {/* Header */}
           <div
             className={`text-center mb-10 ${
               isPage
@@ -227,8 +164,6 @@ const ContactSec = ({ isPage = false }) => {
               <Globe className="text-orange-500" size={16} />
               <span className="text-sm font-semibold text-black">Get In Touch</span>
             </div>
-            {/* On the /contact route this is the page's top-level heading; as a
-                section inside another page it must not be a second h1. */}
             {isPage ? (
               <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-4">
                 Let's Start a{" "}
@@ -245,7 +180,6 @@ const ContactSec = ({ isPage = false }) => {
             </p>
           </div>
 
-          {/* Info Cards */}
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 ${isVisible ? "animate-fade-in-up-slow motion-reduce:animate-none" : "opacity-0"}`}
             style={{ animationDelay: "0.2s" }}
@@ -263,10 +197,8 @@ const ContactSec = ({ isPage = false }) => {
             ))}
           </div>
 
-          {/* Form + Map */}
           <div className="grid lg:grid-cols-2 gap-12">
 
-            {/* Form */}
             <div
               className={`${isVisible ? "animate-slide-in-left motion-reduce:animate-none" : "opacity-0"}`}
               style={{ animationDelay: "0.4s" }}
@@ -276,7 +208,6 @@ const ContactSec = ({ isPage = false }) => {
                   Send us a Message
                 </SubHeading>
 
-                {/* ✅ Success Banner */}
                 {isSuccess && (
                   <div className="animate-success-pop motion-reduce:animate-none flex items-start gap-4 bg-green-50 border border-green-200 rounded-2xl p-5 mb-6">
                     <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -291,7 +222,6 @@ const ContactSec = ({ isPage = false }) => {
                   </div>
                 )}
 
-                {/* ❌ Error Banner */}
                 {error && (
                   <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-2xl p-4 mb-6">
                     <div className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0"></div>
@@ -301,13 +231,6 @@ const ContactSec = ({ isPage = false }) => {
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
 
-                  {/* Every control is bound to its <label> with htmlFor/id.
-                      The labels were previously visual-only, so screen readers
-                      announced the <select> as an unlabelled combobox — the
-                      "Select elements do not have associated label elements"
-                      finding. Markup and styling are otherwise unchanged. */}
-
-                  {/* Name + Email */}
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="contact-name" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -343,7 +266,6 @@ const ContactSec = ({ isPage = false }) => {
                     </div>
                   </div>
 
-                  {/* Phone + Service Dropdown */}
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="contact-phone" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -381,7 +303,6 @@ const ContactSec = ({ isPage = false }) => {
                     </div>
                   </div>
 
-                  {/* Message */}
                   <div>
                     <label htmlFor="contact-message" className="block text-sm font-semibold text-gray-700 mb-2">
                       Your Message <span className="text-red-600">*</span>
@@ -420,7 +341,6 @@ const ContactSec = ({ isPage = false }) => {
               </div>
             </div>
 
-            {/* Map */}
             <div
               className={`${isVisible ? "animate-slide-in-right motion-reduce:animate-none" : "opacity-0"}`}
               style={{ animationDelay: "0.5s" }}

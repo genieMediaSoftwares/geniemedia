@@ -1,8 +1,3 @@
-/**
- * The FAQ shown on /digital_marketing. The page renders this list and the
- * FAQPage JSON-LD (src/lib/seo/routeMeta.ts) is built from the same list, so
- * the structured data always matches what visitors can read.
- */
 export const DIGITAL_MARKETING_FAQS: Array<{ q: string; a: string }> = [
   {
     q: "What does a digital marketing agency in Vizag do?",
@@ -26,11 +21,19 @@ export const DIGITAL_MARKETING_FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "Do you provide social media marketing?",
-    a: "Yes. We plan your social media strategy, design posts, edit Reels and run ads on Instagram and Facebook. The aim is more brand awareness, more engagement and more enquiries.",
+    a: "Yes. We plan your social media strategy, design posts, edit Reels and run Meta Ads on Instagram and Facebook. The aim is more brand awareness, more engagement and more enquiries.",
   },
   {
     q: "Do you provide local SEO for Visakhapatnam businesses?",
     a: "Yes. We improve your Google Business Profile, local listings and location pages. As a result, nearby customers in Yendada, MVP Colony, Gajuwaka and Madhurawada can find you on Google Maps and in local search.",
+  },
+  {
+    q: "How much do digital marketing services cost in Vizag?",
+    a: "It depends on the services you need, how many channels you use, your ad budget and how competitive your market is. For example, local SEO for one location costs less than a combined SEO, Google Ads and social media plan. We share a clear quote after a short consultation.",
+  },
+  {
+    q: "Do you work with small businesses and startups?",
+    a: "Yes. Many small businesses and startups start with one or two channels, such as local SEO and Google Ads, and add more as they grow. We plan around your budget and your goals.",
   },
   {
     q: "Do you build websites?",
@@ -38,7 +41,11 @@ export const DIGITAL_MARKETING_FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "Which industries do you work with?",
-    a: "We work with local businesses, startups and growing firms. This includes healthcare, education, real estate, ecommerce, retail, hospitality, travel and professional services.",
+    a: "We work with local businesses, startups and growing firms. This includes clinics and hospitals, schools and coaching centres, builders and real estate, ecommerce, retail, restaurants, hotels, travel and professional services.",
+  },
+  {
+    q: "Do you work with businesses outside Vizag?",
+    a: "Yes. We are based in Visakhapatnam and work with businesses across Andhra Pradesh. Our portfolio also includes clients in other parts of India and in Australia.",
   },
   {
     q: "How can I contact Genie Media & Studio?",

@@ -5,12 +5,6 @@ export interface FaqItem {
   a: string;
 }
 
-/**
- * A service page's FAQ. Server-rendered with native <details>, so every answer
- * is in the HTML Google receives and nothing needs JavaScript to open. The
- * same list feeds that page's FAQPage JSON-LD (src/lib/seo/routeMeta.ts), so
- * the structured data always matches what visitors can read.
- */
 export default function ServiceFaq({ title, intro, faqs }: { title: string; intro: string; faqs: FaqItem[] }) {
   return (
     <section className="bg-gray-50 py-12 sm:py-20 px-4 sm:px-6 lg:px-8">

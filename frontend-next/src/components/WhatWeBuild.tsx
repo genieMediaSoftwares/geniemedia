@@ -4,15 +4,6 @@ import { siShopify, siWordpress, type SimpleIcon } from "simple-icons";
 
 import { SECTION_CARD, SECTION_HEADING, SECTION_INTRO } from "@/components/PlatformsWeUse";
 
-/**
- * "What We Build for Businesses": five product types in the same card style
- * as the "Platforms we use" sections, followed by the projects page's CTA.
- * Server component: plain HTML and inline SVG, no client JavaScript.
- *
- * A card links only where the site has a page for it. There is no mobile-app
- * or AI page yet, so those two cards are not links (no broken URLs).
- */
-
 const BrandIcon = ({ icon, label }: { icon: SimpleIcon; label: string }) => (
   <svg role="img" viewBox="0 0 24 24" className="w-9 h-9 sm:w-10 sm:h-10" fill={`#${icon.hex}`} xmlns="http://www.w3.org/2000/svg">
     <title>{label}</title>
@@ -41,7 +32,6 @@ export default function WhatWeBuild() {
           From websites and mobile apps to AI-powered solutions and ecommerce platforms, we build modern digital products that help businesses grow.
         </p>
 
-        {/* 2 per row on phones (the fifth card spans the row), 3 on tablets, 5 on desktop. */}
         <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 auto-rows-fr gap-3 sm:gap-4">
           {WHAT_WE_BUILD.map((item) => {
             const body = (

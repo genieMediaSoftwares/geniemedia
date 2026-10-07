@@ -1,17 +1,3 @@
-/**
- * Per-route title, description and canonical URL for the public pages.
- *
- * One table, so the six routes cannot drift apart and nobody has to go hunting
- * through six components to find out what Google is being told about a page.
- *
- * Keys are the exact route paths. Each app/<route>/page.tsx reads this through
- * buildRouteMetadata() (src/lib/seo/metadata.ts) at the route level rather than
- * inside the section components, and that is deliberate: `contactSection` and
- * `AllServices` are each rendered both as their own page AND as a section
- * inside other pages. Declaring the metadata where the route is declared keeps
- * them from retitling the pages that embed them.
- */
-
 import type { JsonLdGraph, JsonLdObject, RouteMeta, RouteMetaEntry } from "@/types";
 import { SITE_ORIGIN, canonicalFor } from "@/lib/site";
 import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
@@ -24,6 +10,7 @@ export type PublicRoute =
   | "/services"
   | "/about"
   | "/projects"
+  | "/case-studies"
   | "/contact"
   | "/web_development"
   | "/production_house"
@@ -55,9 +42,6 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
       "Genie Media & Studio is a digital marketing agency in Visakhapatnam offering SEO, social media marketing, website design, video production and a podcast studio.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
-  // Each page owns one search intent. The home page is the business itself,
-  // each service page its service, and the rest (about, contact, projects,
-  // reviews, blogs) support them without competing for the same terms.
   "/services": {
     breadcrumb: "Services",
     title: "Our Services in Vizag | Marketing, Web & Video | Genie Media",
@@ -70,6 +54,13 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
     title: "About Genie Media & Studio | Visakhapatnam (Vizag)",
     description:
       "Meet Genie Media & Studio, a Visakhapatnam team for digital marketing, websites, video production and podcasting. Our story, vision, mission and approach.",
+    image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
+  },
+  "/case-studies": {
+    breadcrumb: "Case Studies",
+    title: "Case Studies & Client Work | Genie Media & Studio",
+    description:
+      "Case studies of real projects by Genie Media & Studio in Visakhapatnam: what each client needed, how we approached the work and what we delivered.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/projects": {
@@ -115,9 +106,9 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
   "/digital_marketing": {
     breadcrumb: "Digital Marketing",
-    title: "Digital Marketing Agency in Vizag | Genie Media",
+    title: "Digital Marketing Agency in Vizag | Genie Media & Studio",
     description:
-      "Genie Media & Studio offers digital marketing in Vizag: SEO, Google Ads, social media marketing, content, websites and branding for local businesses.",
+      "Digital marketing company in Visakhapatnam (Vizag): SEO, local SEO, Google Ads, social media, Meta Ads, content and lead generation for local businesses.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/podcast_studio": {
@@ -129,22 +120,12 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
 };
 
-/**
- * Podcast studio packages as the booking widget (src/components/StudioBooking.tsx)
- * prices them. Only the one-hour rate of each is listed here; if the widget's
- * prices change, change these with them.
- */
 const PODCAST_PACKAGES = [
   { name: "Podcast studio only", price: "1500" },
   { name: "Podcast studio with team and 2 cameras", price: "3999" },
   { name: "Podcast studio with team and 3 cameras", price: "5000" },
 ];
 
-/**
- * Business facts for structured data. Every value here is shown to visitors in
- * the footer and on the contact page, and matches Backend/config/site.js, so
- * the entity a crawler reads from JSON-LD is the one a visitor reads on screen.
- */
 const ORGANIZATION: JsonLdObject & { "@id": string } = {
   "@type": ["Organization", "ProfessionalService"],
   "@id": `${SITE_ORIGIN}/#organization`,
@@ -171,13 +152,6 @@ const ORGANIZATION: JsonLdObject & { "@id": string } = {
   ],
 };
 
-/**
- * One page's graph: the page itself, optionally the Service it describes, and
- * the business behind both. `type` is the schema.org page type (AboutPage,
- * ContactPage, CollectionPage...). `service` is merged into a Service node
- * whose provider is the business.
- */
-/** Where every service is offered: Visakhapatnam (Vizag), Andhra Pradesh. */
 const VIZAG_AREA: JsonLdObject = {
   "@type": "City",
   name: "Visakhapatnam",
@@ -234,32 +208,19 @@ const pageGraph = (meta: RouteMeta, { type = "WebPage", service, extraNodes = []
   ],
 });
 
-/** A FAQPage node built from the FAQ list the page renders. */
 const faqPage = (meta: RouteMeta, faqs: Array<{ q: string; a: string }>): JsonLdObject => ({
   "@type": "FAQPage",
   "@id": `${meta.canonical}#faq`,
   mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 });
 
-/** An OfferCatalog of named sub-services, exactly as a page lists them. */
 const catalog = (name: string, items: string[]): JsonLdObject => ({
   "@type": "OfferCatalog",
   name,
   itemListElement: items.map((item) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: item } })),
 });
 
-/**
- * JSON-LD per route, for routes that describe something more specific than the
- * site as a whole. Kept out of ROUTE_META so that table stays the flat
- * title/description list Backend/scripts/checkRouteMeta.js compares.
- *
- * Every sub-service list is exactly the service headings rendered on that page
- * (or its tab in components/AllServices.tsx). /reviews carries no Review markup:
- * Google does not show review stars for a business's reviews of itself.
- */
 const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph>> = {
-  // The home page describes the business and points at each service page;
-  // the detailed Service entities live on those pages.
   "/": (meta) => ({
     "@context": "https://schema.org",
     "@graph": [
@@ -306,26 +267,13 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
       service: {
         name: "Digital Marketing Services",
         serviceType: "Digital marketing",
-        description: "SEO, Google Ads and PPC, social media marketing, content marketing, lead generation, website design and branding for businesses in Visakhapatnam (Vizag).",
-        areaServed: [
-          {
-            "@type": "City",
-            name: "Visakhapatnam",
-            alternateName: "Vizag",
-            containedInPlace: {
-              "@type": "State",
-              name: "Andhra Pradesh",
-              containedInPlace: {
-                "@type": "Country",
-                name: "India"
-              }
-            }
-          }
-        ],
+        description: "SEO, local SEO and Google Business Profile, Google Ads and PPC, social media marketing and Meta Ads, content marketing, lead generation, website design and branding for businesses in Visakhapatnam (Vizag) and Andhra Pradesh.",
+        areaServed: [VIZAG_AREA, { "@type": "State", name: "Andhra Pradesh", containedInPlace: { "@type": "Country", name: "India" } }],
         hasOfferCatalog: catalog("Digital marketing services", [
           "SEO Services",
+          "Local SEO & Google Business Profile",
           "Google Ads & PPC Management",
-          "Social Media Marketing",
+          "Social Media Marketing & Meta Ads",
           "Content Marketing",
           "Lead Generation",
           "Conversion Optimization",
@@ -410,6 +358,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
   "/about": (meta) => pageGraph(meta, { type: "AboutPage" }),
   "/contact": (meta) => pageGraph(meta, { type: "ContactPage" }),
   "/projects": (meta) => pageGraph(meta, { type: "CollectionPage" }),
+  "/case-studies": (meta) => pageGraph(meta, { type: "CollectionPage" }),
   "/services": (meta) => pageGraph(meta, { type: "CollectionPage" }),
   "/blogs": (meta) => pageGraph(meta, { type: "CollectionPage" }),
   "/reviews": (meta) => pageGraph(meta),
@@ -417,7 +366,6 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
   "/terms-and-conditions": (meta) => pageGraph(meta),
 };
 
-/** Route metadata with its canonical and JSON-LD graph filled in. */
 export const metaForRoute = (path: PublicRoute): RouteMeta => {
   const entry = ROUTE_META[path];
   const meta: RouteMeta = { ...entry, canonical: canonicalFor(path) };

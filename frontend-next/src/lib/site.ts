@@ -1,16 +1,7 @@
-/**
- * Brand / entity facts, mirrored from Backend/config/site.js. Every value here
- * is shown to visitors in the footer and on the contact page, so the entity a
- * crawler reads from JSON-LD is the one a visitor reads on screen. Keep the two
- * files in step.
- */
-
 import { GA4_ID, GOOGLE_SITE_VERIFICATION, GTM_ID, SITE_URL } from "@/lib/env";
 
-/** Public origin of the site (NEXT_PUBLIC_SITE_URL in .env). */
 export const SITE_ORIGIN = SITE_URL;
 
-/** The bare host name, e.g. for showing the domain in text. */
 export const SITE_HOST = new URL(SITE_URL).host;
 
 export const SITE = {
@@ -54,13 +45,8 @@ export const DEFAULT_AUTHOR = {
   jobTitle: "Editorial Team",
 } as const;
 
-/** Analytics and verification IDs (from .env, via src/lib/env.ts). */
 export { GA4_ID, GOOGLE_SITE_VERIFICATION, GTM_ID };
 
-/**
- * Canonical URL for a path. The root keeps its trailing slash and nothing else
- * gets one, matching the sitemap and the host redirects.
- */
 export const canonicalFor = (path: string): string => {
   const clean = String(path || "/").split("?")[0].split("#")[0];
   if (clean === "/" || clean === "") return `${SITE_ORIGIN}/`;

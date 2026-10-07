@@ -1,11 +1,3 @@
-/**
- * FAQs for /web_development and /production_house. Each page renders its list
- * (components/ServiceFaq.tsx) and its FAQPage JSON-LD is built from the same
- * list, so the structured data always matches the visible answers.
- *
- * Only services Genie Media & Studio actually offers are described here, and
- * no prices, timelines or results are promised that the team has not set.
- */
 import type { FaqItem } from "@/components/ServiceFaq";
 
 export const WEB_DEVELOPMENT_FAQS: FaqItem[] = [

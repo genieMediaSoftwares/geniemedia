@@ -42,7 +42,6 @@ export default function AdminLogin() {
         body: JSON.stringify({ email, password }),
       });
 
-      // Handle non-200 HTTP responses
       if (!res.ok) {
         const errData = await res.json().catch(() => null);
         setError(errData?.message || `Server error (${res.status}). Please try again.`);
@@ -58,7 +57,6 @@ export default function AdminLogin() {
         setError(data.message || "Invalid credentials.");
       }
     } catch (err) {
-      // Network error or CORS block
       if (!navigator.onLine) {
         setError("No internet connection. Please check your network.");
       } else {
@@ -73,7 +71,6 @@ export default function AdminLogin() {
   return (
     <div className="w-full min-h-screen bg-white overflow-x-hidden">
 
-      {/* ── Hero Banner ── */}
       <section className="relative min-h-[50vh] md:min-h-[60vh] lg:min-h-[55vh] xl:min-h-[50vh] text-white overflow-hidden flex items-center">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -93,12 +90,10 @@ export default function AdminLogin() {
         </div>
       </section>
 
-      {/* ── Login Form ── */}
       <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 lg:py-16">
         <div className="w-full max-w-sm md:max-w-md lg:max-w-md">
           <div className="bg-white p-5 sm:p-6 md:p-8 lg:p-10 rounded-2xl shadow-lg md:shadow-xl border border-yellow-100 transition hover:shadow-xl md:hover:shadow-2xl">
 
-            {/* Card Header */}
             <div className="mb-6 md:mb-8">
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-lg sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-500 to-amber-600 bg-clip-text text-transparent">
@@ -114,10 +109,8 @@ export default function AdminLogin() {
               </p>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleLogin} className="space-y-4 md:space-y-5" noValidate>
 
-              {/* Email */}
               <div>
                 <label
                   htmlFor="email"
@@ -145,7 +138,6 @@ export default function AdminLogin() {
                 </div>
               </div>
 
-              {/* Password */}
               <div>
                 <label
                   htmlFor="password"
@@ -180,7 +172,6 @@ export default function AdminLogin() {
                 </div>
               </div>
 
-              {/* Remember me */}
               <div className="flex items-center text-xs sm:text-sm">
                 <label className="flex items-center gap-2 cursor-pointer group select-none">
                   <input
@@ -193,7 +184,6 @@ export default function AdminLogin() {
                 </label>
               </div>
 
-              {/* Error message */}
               {error && (
                 <div
                   role="alert"
@@ -203,7 +193,6 @@ export default function AdminLogin() {
                 </div>
               )}
 
-              {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
@@ -221,7 +210,6 @@ export default function AdminLogin() {
 
             </form>
 
-            {/* Footer */}
             <div className="mt-6 md:mt-8 pt-4 sm:pt-6 border-t-2 border-gray-200 text-center">
               <p className="text-xs text-gray-600 leading-relaxed font-medium">
                 © 2026 Genie Studio Admin.{" "}

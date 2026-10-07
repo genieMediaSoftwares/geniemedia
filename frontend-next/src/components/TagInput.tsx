@@ -3,18 +3,6 @@
 import React, { useState, useRef } from "react";
 import { X } from "lucide-react";
 
-/**
- * The chip/tag input used for keywords and for the areas a post covers.
- *
- * Lifted out of AdminBlogs.jsx unchanged so both fields share one behaviour
- * rather than drifting apart: type and press Enter or comma to add, Backspace
- * on an empty box to remove the last one, click the × to remove any, and a
- * half-typed value is committed on blur instead of being silently thrown away.
- *
- * The value is an array of strings. Callers holding a comma-separated string
- * (the legacy `keywords` column) convert at the call site, which keeps the
- * string-versus-array question out of this component entirely.
- */
 interface TagInputProps {
   tags?: string[];
   onChange: (tags: string[]) => void;
@@ -41,7 +29,6 @@ export default function TagInput({
       .map((t) => t.trim())
       .filter(Boolean);
     if (!incoming.length) return;
-    // Case-insensitive de-duplication, keeping the spelling already entered.
     const seen = new Set(current.map((t) => t.toLowerCase()));
     const merged = [...current];
     for (const tag of incoming) {

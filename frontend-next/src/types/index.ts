@@ -1,12 +1,3 @@
-/**
- * Domain types for the data the Express backend returns.
- *
- * The backend hydrates the JSON columns into real arrays (hydrateSeoRow), but
- * older rows and partial admin payloads can still be missing fields, so the raw
- * shapes are kept loose and every consumer goes through the adapters in
- * src/lib/api/*, which produce the strict types below.
- */
-
 export type BlogStatus = "published" | "draft";
 export type RobotsDirective = "index,follow" | "noindex,follow" | "noindex,nofollow";
 export type BlogSchemaType = "Article" | "BlogPosting" | "FAQPage" | "HowTo" | "NewsArticle";
@@ -36,7 +27,6 @@ export interface SlugHistoryEntry {
   changed_at?: string;
 }
 
-/** The SEO / AEO / GEO columns added by Backend/db/migrateBlogSeo.js. */
 export interface BlogSEO {
   meta_title: string | null;
   focus_keyword: string | null;
@@ -67,31 +57,22 @@ export interface BlogSEO {
 export interface Blog extends BlogSEO {
   id: number;
   title: string;
-  /** Stored without a leading slash, may contain slashes ("category/post"). */
   permalink: string;
   metaDescription: string | null;
-  /** Article body HTML (TipTap output). */
   description: string;
   category: string | null;
   image: string | null;
   keywords: string | null;
   status: BlogStatus;
-  /** Epoch milliseconds. */
   createdAt: number | null;
-  /** Epoch milliseconds. */
   updatedAt: number | null;
 }
 
-/** The subset of a blog the listing pages and cards need. */
 export type BlogSummary = Pick<
   Blog,
   "id" | "title" | "permalink" | "metaDescription" | "description" | "category" | "image" | "createdAt" | "status" | "keywords" | "meta_title"
 >;
 
-/**
- * What a blog card needs, built on the server so the full article HTML is
- * never shipped to the browser just to render a listing.
- */
 export interface BlogCard {
   id: number;
   title: string;
@@ -118,7 +99,6 @@ export interface Project {
   updatedAt: number | null;
 }
 
-/** A project as the public portfolio markup renders it. */
 export interface PortfolioItem {
   id?: number;
   name: string;
@@ -152,7 +132,6 @@ export interface User {
   email: string;
 }
 
-/** Shape every backend error and mutation response shares. */
 export interface ApiResponse {
   success: boolean;
   message?: string;
@@ -187,7 +166,6 @@ export interface RouteMetaEntry {
   title: string;
   description: string;
   image?: string;
-  /** Short page name for the BreadcrumbList (defaults to the title's first part). */
   breadcrumb?: string;
 }
 
@@ -203,4 +181,68 @@ export interface JsonLdObject {
 export interface JsonLdGraph {
   "@context": string;
   "@graph": JsonLdObject[];
+}
+
+export type CaseStudyCategory = "digital-marketing" | "web-development" | "production" | "podcast";
+export type ServicePagePath = "/digital_marketing" | "/web_development" | "/production_house" | "/podcast_studio";
+
+export interface CaseStudyStep {
+  title: string;
+  description: string;
+}
+
+export interface CaseStudyMetric {
+  label: string;
+  value: string;
+  source: string;
+}
+
+export interface CaseStudyImage {
+  url: string;
+  alt: string;
+  caption: string;
+  width: number | null;
+  height: number | null;
+}
+
+export interface CaseStudy {
+  id: number;
+  projectId: number | null;
+  slug: string;
+  title: string;
+  clientName: string;
+  clientLogo: string | null;
+  shortDescription: string;
+  category: CaseStudyCategory;
+  industry: string | null;
+  location: string | null;
+  projectDate: string | null;
+  projectType: string | null;
+  overview: string;
+  challenge: string;
+  goals: string;
+  approach: CaseStudyStep[];
+  services: string[];
+  technologies: string[];
+  deliverables: string[];
+  features: string[];
+  outcomes: string[];
+  metrics: CaseStudyMetric[];
+  cover: CaseStudyImage | null;
+  gallery: CaseStudyImage[];
+  videoUrl: string | null;
+  testimonial: string | null;
+  testimonialAuthor: string | null;
+  testimonialRole: string | null;
+  websiteUrl: string | null;
+  relatedServices: ServicePagePath[];
+  relatedBlogs: string[];
+  seoTitle: string | null;
+  seoDescription: string | null;
+  ogImage: string | null;
+  status: "published" | "draft";
+  displayOrder: number;
+  publishedAt: number | null;
+  createdAt: number | null;
+  updatedAt: number | null;
 }

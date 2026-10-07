@@ -1,6 +1,5 @@
 "use client";
 
-
 import meerabasuAsset from "@/assets/meerabasuWebsite.webp";
 import AvanttaGemsAsset from "@/assets/AvanttaGems.webp";
 import KNSAsset from "@/assets/knsMetals.webp";
@@ -29,9 +28,6 @@ const Vivodyne = VivodyneAsset.src;
 const Decagon = DecagonAsset.src;
 const Freenome = FreenomeAsset.src;
 
-
-// Offline safety net only — rendered if the projects API cannot be reached.
-// The live portfolio comes from the database (fetched on the server, see src/lib/api/projects.ts).
 const FALLBACK_PROJECTS: PortfolioItem[] = [
   {
     name: "Meera Basu",
@@ -90,43 +86,31 @@ const FALLBACK_PROJECTS: PortfolioItem[] = [
   },
 ];
 
+const ProjectsSection = ({ initialProjects, caseStudyLinks = {} }: { initialProjects: PortfolioItem[] | null; caseStudyLinks?: Record<number, string> }) => {
 
-const ProjectsSection = ({ initialProjects }: { initialProjects: PortfolioItem[] | null }) => {
-
-  // Build-time list first, then the latest from the API (new projects show without a rebuild).
   const liveProjects = useLatestProjects(initialProjects);
   const projects = portfolioOrFallback(liveProjects, FALLBACK_PROJECTS);
 
   return (
     <>
 
-
-
      <section className="bg-white py-8 md:py-12" id='projects'>
       <div className="max-w-7xl mx-auto px-4 md:px-2">
 
-       
         <h2 className="text-center text-4xl md:text-5xl font-bold text-gray-700 mb-10">
           Our Portfolio
         </h2>
 
-        {/* Projects Grid */}
         <div className={PROJECT_GRID}>
           {projects.map((project, index) => (
-            <ProjectCard key={project.id ?? index} project={project} />
+            <ProjectCard key={project.id ?? index} project={project} caseStudyHref={project.id !== undefined ? caseStudyLinks[project.id] : undefined} />
           ))}
         </div>
-        
-     
-     
 
       </div>
        
     </section>
 
-    
-
-   
     </>
   );
 };

@@ -15,6 +15,7 @@ const sharp = require("sharp");
 // ---- SEO / AEO / GEO layer ------------------------------------------------
 const { migrateBlogSeo, loadBlogColumns, filterToExistingColumns } = require("./db/migrateBlogSeo");
 const seoRoutes = require("./routes/seoRoutes");
+const caseStudyRoutes = require("./routes/caseStudies");
 const { buildSeoColumns, hydrateSeoRow, clampMetaDescription } = require("./services/blogSeoFields");
 const { validateForPublish, describeBlockers } = require("./services/seoValidation");
 const { invalidateSitemapCache } = require("./services/sitemapService");
@@ -264,10 +265,14 @@ const countUploadReferences = async (fileName) => {
   const like = `%${fileName}%`;
   const blogs = await dbQuery("SELECT COUNT(*) AS n FROM blogs WHERE image LIKE ? OR description LIKE ?", [like, like]);
   const projects = await dbQuery("SELECT COUNT(*) AS n FROM projects WHERE image LIKE ?", [like]);
-  if (!blogs || !projects) return null;
+  const caseStudies = await dbQuery(
+    "SELECT COUNT(*) AS n FROM case_studies WHERE cover_image LIKE ? OR og_image LIKE ? OR client_logo LIKE ? OR CAST(gallery AS CHAR) LIKE ?",
+    [like, like, like, like]
+  );
+  if (!blogs || !projects || !caseStudies) return null;
   // og_image_url only exists once the SEO migration has run; a missing column counts as 0.
   const og = await dbQuery("SELECT COUNT(*) AS n FROM blogs WHERE og_image_url LIKE ?", [like]);
-  return Number(blogs[0].n) + Number(projects[0].n) + (og ? Number(og[0].n) : 0);
+  return Number(blogs[0].n) + Number(projects[0].n) + Number(caseStudies[0].n) + (og ? Number(og[0].n) : 0);
 };
 
 const removeUploadsIfUnused = async (urls) => {
@@ -1116,6 +1121,13 @@ app.use("/share/", (req, res) => {
 // services/sitemapService.js, which serves the same URL with correct lastmod
 // values, image entries and cache invalidation on publish.
 // =========================================================================
+// ================= CASE STUDIES =================
+// Detailed project write-ups (/case-studies). See routes/caseStudies.js.
+app.use(
+  "/",
+  caseStudyRoutes({ db, verifyToken, upload, uploadToHostinger, removeUploadsIfUnused, discardTempFile })
+);
+
 app.use("/", seoRoutes(db, verifyToken));
 
 // ================= SPA FALLBACK (single-origin deployments) ==============

@@ -1,27 +1,17 @@
 import { Quote, Star } from "lucide-react";
 
-/**
- * "What our creators say" block, shared by /podcast_studio and /reviews.
- *
- * Cards and the CTA carry `data-reveal`; the page's IntersectionObserver adds
- * the `animate` class when they scroll into view, and the `[&.animate]:`
- * variants below play the reveal.
- */
-
 const SECTION =
   "relative overflow-hidden bg-[#f8f4fcc5] px-10 py-[60px] max-[1024px]:px-[30px] max-[1024px]:py-[100px] max-[768px]:px-5 max-[768px]:py-20 max-[480px]:px-4 max-[480px]:py-[60px]";
 const ORB = "pointer-events-none absolute z-0 rounded-full opacity-[0.08] blur-[100px]";
 
 const CARD =
   "relative cursor-pointer rounded-[24px] border-2 border-[#f0f0f0] bg-white p-10 opacity-0 shadow-[0_4px_20px_rgba(0,0,0,0.04)] [transform:translateY(40px)_scale(0.95)] [&.animate]:opacity-100 [&.animate]:[transform:translateY(0)_scale(1)] hover:!border-[#e5e5e5] hover:!shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:![transform:translateY(-8px)_scale(1)] max-[768px]:px-6 max-[768px]:py-8 max-[480px]:px-5 max-[480px]:py-7";
-// Staggered reveal, one step per card.
 const CARD_TRANSITION = [
   "[transition:all_0.8s_cubic-bezier(0.16,1,0.3,1)_0.1s]",
   "[transition:all_0.8s_cubic-bezier(0.16,1,0.3,1)_0.2s]",
   "[transition:all_0.8s_cubic-bezier(0.16,1,0.3,1)_0.3s]",
 ];
 
-/** Orange pill CTA (the merged result of the two old `.cta-button` rules). */
 export const PODCAST_CTA_BUTTON =
   "inline-block cursor-pointer rounded-[50px] border-none !bg-[#f97316] px-12 py-[18px] text-[16px] font-bold text-[#0a0a0a] no-underline shadow-[0_10px_30px_rgba(106,0,255,0.3)] [transition:all_0.3s_cubic-bezier(0.34,1.56,0.64,1)] hover:[transform:translateY(-4px)_scale(1.05)] hover:shadow-[0_15px_40px_rgba(157,0,255,0.4)] active:[transform:translateY(-2px)_scale(1.02)] max-[768px]:w-full max-[768px]:max-w-[300px] max-[768px]:px-4 max-[768px]:py-[10px] max-[768px]:text-[12px] max-[480px]:!max-w-[55%]";
 
@@ -51,7 +41,6 @@ export default function StudioReviews({
   orbAnimation,
 }: {
   heading: string;
-  /** The background orbs' animation utility (differs between the two pages). */
   orbAnimation: string;
 }) {
   return (

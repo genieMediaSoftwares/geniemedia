@@ -39,7 +39,7 @@ test("scripts, JSON-LD, the React payload and hidden text are not counted", () =
   const doc = buildDocument(page(visible + noise), "https://geniemedia.in/digital_marketing");
   const result = auditPage(doc, OPTS);
   assert.equal(result.stats.keywordOccurrences, 2);
-  assert.equal(result.stats.wordCount, 12); // 5 heading words + 7 paragraph words
+  assert.equal(result.stats.wordCount, 12);
 });
 
 test("a responsive Tailwind 'hidden md:block' element still counts as visible", () => {

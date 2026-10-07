@@ -25,21 +25,6 @@ import {
   ITEM_SECTION,
 } from "@/utils/seoAnalysis";
 
-/**
- * The panel below the blog editor, written for a non-technical admin.
- *
- * COPY RULE, and it is a hard one: no jargon reaches the screen. The words
- * "meta", "schema", "canonical", "structured data" and the rest appear in this
- * file only in code and comments, never in anything rendered. An editor who has
- * to look up a word before they can fill in a field will skip the field, and a
- * skipped field helps nobody. The data model, the validation rules and the API
- * contract are all unchanged — this is the label layer over them.
- *
- * Sections run in walkthrough order rather than technical grouping, each one
- * opens with a sentence on why it is worth the effort, and every one is
- * optional. Nothing in this panel can stop a draft being saved.
- */
-
 const BRAND = "#6B4A2D";
 
 interface SectionHandle {
@@ -86,8 +71,6 @@ const inputCls =
 const smallInputCls =
   "w-full px-3 py-2.5 bg-white border-2 border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:border-[#6B4A2D] outline-none transition";
 
-/* ── Character counter ──────────────────────────────────────────────────── */
-
 const COUNTER_COLOURS = {
   empty: "text-gray-400",
   short: "text-amber-600",
@@ -120,8 +103,6 @@ function Counter({ value, min, ideal, max, label }: { value: string | null | und
   );
 }
 
-/* ── Check row ──────────────────────────────────────────────────────────── */
-
 function CheckRow({ passed, label, hint, tip, severity = "blocker" }: { passed: boolean; label: string; hint?: string; tip?: string; severity?: string }) {
   const Icon = passed ? CheckCircle2 : severity === "warning" ? AlertTriangle : XCircle;
   const colour = passed ? "#16a34a" : severity === "warning" ? "#d97706" : "#dc2626";
@@ -138,13 +119,6 @@ function CheckRow({ passed, label, hint, tip, severity = "blocker" }: { passed: 
   );
 }
 
-/* ── Section wrapper ────────────────────────────────────────────────────── */
-
-/**
- * Each section collapses on its own, so the panel reads as a list of short
- * openable steps rather than one intimidating wall of fields. The score widget
- * needs to be able to open any of them, hence the ref handle.
- */
 function Section({ id, icon, step, title, subtitle, accent = BRAND, children, badge, registerRef, forceOpen }: SectionProps) {
   const Icon = icon;
   const [open, setOpen] = useState(Boolean(forceOpen));
@@ -189,8 +163,6 @@ function Section({ id, icon, step, title, subtitle, accent = BRAND, children, ba
   );
 }
 
-/* ── Repeatable row list ────────────────────────────────────────────────── */
-
 function RepeatableList<T extends object>({ items, onChange, emptyLabel, addLabel, renderRow, makeEmpty, max = 20 }: RepeatableListProps<T>) {
   const update = (index: number, patch: Partial<T>) =>
     onChange(items.map((item, i) => (i === index ? { ...item, ...patch } : item)));
@@ -231,17 +203,8 @@ function RepeatableList<T extends object>({ items, onChange, emptyLabel, addLabe
   );
 }
 
-/* ── Google result mock ─────────────────────────────────────────────────── */
-
 const truncate = (str: string, max: number) => (str.length > max ? `${str.slice(0, max).trimEnd()}…` : str);
 
-/**
- * Approximates how the result looks in Google.
- *
- * Google truncates by pixel width rather than character count, but character
- * count is close enough to be useful and is the thing an editor can see
- * directly in the box they are typing into.
- */
 function SnippetPreview({ title, description, permalink }: PreviewProps) {
   const shownTitle = title || "Your title will appear here";
   const shownDesc =
@@ -281,15 +244,6 @@ function SnippetPreview({ title, description, permalink }: PreviewProps) {
   );
 }
 
-/* ── Share card mock ────────────────────────────────────────────────────── */
-
-/**
- * What the link looks like pasted into WhatsApp, Facebook or LinkedIn.
- *
- * Mirrors the card the share endpoint on the server produces, at the 1200x630
- * proportions those platforms crop to. Read-only: every value shown is
- * collected elsewhere in this panel, so there is nothing to edit here.
- */
 function SharePreview({ image, title, description, permalink }: PreviewProps & { image: string }) {
   const shownTitle = title || "Your title will appear here";
   const shownDesc = description || "Your description will appear here.";
@@ -331,8 +285,6 @@ function SharePreview({ image, title, description, permalink }: PreviewProps & {
   );
 }
 
-/* ── Full article mock ──────────────────────────────────────────────────── */
-
 const previewReadingTime = (html: string) =>
   Math.max(
     1,
@@ -341,17 +293,6 @@ const previewReadingTime = (html: string) =>
     )
   );
 
-/**
- * A read-only rendering of the finished page from the current form state.
- *
- * The classes mirror Blogdetail.jsx deliberately so this stays a fair likeness
- * if that page's styling changes. It renders from `form` only — nothing is
- * fetched and nothing is saved.
- *
- * Note what is NOT here: the short answer and the keyword list. Neither is
- * shown to readers on the real page, so showing them here would make this
- * preview a lie.
- */
 function ArticlePreview({ form }: { form: BlogForm }) {
   const facts = (form.key_facts || []).filter((f) => f && String(f.fact || "").trim());
   const faqs = (form.faq_schema || []).filter(
@@ -432,8 +373,6 @@ function ArticlePreview({ form }: { form: BlogForm }) {
               [&_strong]:font-bold [&_strong]:text-slate-900
               [&_table]:w-full [&_table]:text-sm
             "
-            // Admin-authored content, shown read-only to the person who just
-            // typed it. The public page sanitises the same HTML before display.
             dangerouslySetInnerHTML={{ __html: form.description || "<p>Your article will appear here.</p>" }}
           />
 
@@ -493,16 +432,6 @@ function ArticlePreview({ form }: { form: BlogForm }) {
   );
 }
 
-/* ── Score widget ───────────────────────────────────────────────────────── */
-
-/**
- * The compact score, pinned so it stays visible while the editor scrolls.
- *
- * Fixed rather than sticky: the form is long and deeply nested, and a sticky
- * element inside it gets clipped by the first ancestor with its own overflow.
- * Hidden entirely until there is a title or some content — showing a hard zero
- * to someone who has typed nothing is discouraging and tells them nothing.
- */
 function ScoreWidget({ score, onOpen }: { score: SeoScore; onOpen: () => void }) {
   if (!score.visible) return null;
 
@@ -558,8 +487,6 @@ function ScoreWidget({ score, onOpen }: { score: SeoScore; onOpen: () => void })
   );
 }
 
-/* ── Main panel ─────────────────────────────────────────────────────────── */
-
 interface SeoPanelProps {
   form: BlogForm;
   onField: SetBlogField;
@@ -568,9 +495,6 @@ interface SeoPanelProps {
 }
 
 export default function SeoPanel({ form, onField, open: openProp, onOpenChange }: SeoPanelProps) {
-  // Works either way: uncontrolled by default, controlled when the parent passes
-  // `open`. The parent needs control so a rejected publish can force the panel
-  // open on the checklist that explains why.
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : internalOpen;
@@ -583,7 +507,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
 
   const [previewTab, setPreviewTab] = useState("google");
 
-  // Section handles, so the score widget can scroll to and open any of them.
   const sectionRefs = useRef<Record<string, SectionHandle>>({});
   const registerRef = useCallback<RegisterRef>((id, handle) => {
     sectionRefs.current[id] = handle;
@@ -591,8 +514,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
 
   const content = form.description || "";
 
-  // Re-running the full analysis on every keystroke of a long post is wasteful,
-  // so each block is memoised against only the inputs it actually reads.
   const keyword = useMemo(
     () =>
       analyseFocusKeyword({
@@ -619,11 +540,8 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
   const stats = validation.stats;
   const blockersLeft = validation.blockers.length;
 
-  /** Opens the panel, then scrolls to and expands the named section. */
   const goToSection = useCallback((id: string) => {
     setOpen(true);
-    // Two frames: one for the panel to mount its children, one for the section
-    // to exist in the layout before anything tries to scroll to it.
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         const handle = sectionRefs.current[id];
@@ -642,7 +560,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
       <ScoreWidget score={score} onOpen={() => goToSection("score")} />
 
       <div className="rounded-2xl border-2 overflow-hidden" style={{ borderColor: open ? BRAND : "#e5e7eb" }}>
-        {/* ── Header / toggle ── */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
@@ -680,7 +597,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
         {open && (
           <div className="p-3 sm:p-5 space-y-3 bg-gray-50/50 border-t-2" style={{ borderColor: `${BRAND}33` }}>
 
-            {/* ══════════ FRAMING COPY — always visible, never collapsed ══════════ */}
             <div className="rounded-xl bg-white border-2 border-dashed border-gray-200 px-3.5 sm:px-4 py-3.5">
               <p className="text-xs sm:text-[13px] leading-relaxed text-gray-600">
                 This is everything below the blog editor that helps people find this post on Google, get quick
@@ -693,7 +609,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               </p>
             </div>
 
-            {/* ══════════ 1. GET FOUND ON GOOGLE ══════════ */}
             <Section
               id="seo"
               step={1}
@@ -798,7 +713,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               </div>
             </Section>
 
-            {/* ══════════ 2. ANSWER QUESTIONS DIRECTLY ══════════ */}
             <Section
               id="aeo"
               step={2}
@@ -894,7 +808,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               </div>
             </Section>
 
-            {/* ══════════ 3. HELP AI TOOLS UNDERSTAND THIS POST ══════════ */}
             <Section
               id="geo"
               step={3}
@@ -1058,7 +971,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               </div>
             </Section>
 
-            {/* ══════════ 4. AREAS COVERED ══════════ */}
             <Section
               id="areas"
               step={4}
@@ -1096,7 +1008,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               )}
             </Section>
 
-            {/* ══════════ 5. WHO WROTE & CHECKED THIS ══════════ */}
             <Section
               id="people"
               step={5}
@@ -1190,7 +1101,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               </div>
             </Section>
 
-            {/* ══════════ 6. DESCRIBE YOUR PHOTO ══════════ */}
             <Section
               id="photo"
               step={6}
@@ -1244,7 +1154,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               </div>
             </Section>
 
-            {/* ══════════ 7. LINK TO OTHER PAGES ══════════ */}
             <Section
               id="links"
               step={7}
@@ -1305,7 +1214,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               </div>
             </Section>
 
-            {/* ══════════ 8. EXTRA INFO FOR GOOGLE ══════════ */}
             <Section
               id="extra"
               step={8}
@@ -1349,7 +1257,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               </div>
             </Section>
 
-            {/* ══════════ 9. HOW IT LOOKS WHEN SHARED ══════════ */}
             <Section
               id="share"
               step={9}
@@ -1373,7 +1280,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               />
             </Section>
 
-            {/* ══════════ 10. PREVIEW BEFORE YOU PUBLISH ══════════ */}
             <Section
               id="preview"
               step={10}
@@ -1412,7 +1318,6 @@ export default function SeoPanel({ form, onField, open: openProp, onOpenChange }
               )}
             </Section>
 
-            {/* ══════════ 11. YOUR SCORE & TIPS ══════════ */}
             <Section
               id="score"
               step={11}

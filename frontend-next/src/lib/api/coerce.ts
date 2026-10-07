@@ -1,7 +1,3 @@
-// ---------------------------------------------------------------------------
-// Small, safe coercions used by the adapters
-// ---------------------------------------------------------------------------
-
 export type RawRecord = Record<string, unknown>;
 
 export const isRecord = (value: unknown): value is RawRecord =>
@@ -19,7 +15,6 @@ export const num = (value: unknown): number | null => {
   return Number.isFinite(n) ? n : null;
 };
 
-/** JSON columns arrive as arrays, or as strings when stored as LONGTEXT. */
 export const arr = (value: unknown): unknown[] => {
   if (Array.isArray(value)) return value;
   if (typeof value === "string" && value.trim()) {

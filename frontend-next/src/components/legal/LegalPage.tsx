@@ -6,10 +6,6 @@ export interface LegalSection {
   body: ReactNode;
 }
 
-/**
- * Shared layout for the privacy policy and terms pages: the site's dark hero,
- * a linked table of contents, then the sections. Fully server-rendered.
- */
 export default function LegalPage({
   title,
   intro,
@@ -69,7 +65,6 @@ export default function LegalPage({
   );
 }
 
-/** The business contact block both documents end with. */
 export function LegalContact() {
   return (
     <address className="not-italic rounded-xl border border-gray-200 p-4 sm:p-5 bg-gray-50">

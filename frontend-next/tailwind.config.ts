@@ -1,14 +1,5 @@
 import type { Config } from "tailwindcss";
 
-/**
- * All of the site's custom styling lives here and in utility classes — there
- * are no hand-written stylesheets (src/app/globals.css only loads Tailwind).
- *
- * The keyframes below replace the ones that used to live in Header.css,
- * HomePage.css, Podcast.css and per-component <style> blocks. Where the old
- * global stylesheets defined the same keyframe name twice, the values here are
- * the ones that actually won in the browser on the page that uses them.
- */
 const EASE_OUT_EXPO = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 const config: Config = {
@@ -16,7 +7,6 @@ const config: Config = {
   theme: {
     extend: {
       keyframes: {
-        // Header
         "slide-in-right-sm": {
           from: { transform: "translateX(30px)", opacity: "0" },
           to: { transform: "translateX(0)", opacity: "1" },
@@ -26,7 +16,6 @@ const config: Config = {
           to: { opacity: "1", transform: "translateY(0)" },
         },
 
-        // Entrances
         "slide-from-left": { from: { transform: "translateX(-60px)" }, to: { transform: "translateX(0)" } },
         "fade-in-right-lg": {
           from: { opacity: "0", transform: "translateX(60px)" },
@@ -40,8 +29,6 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
-        // Moves without ever going transparent, so headline text is an LCP
-        // candidate from the first painted frame.
         "rise-in": { from: { transform: "translateY(24px)" }, to: { transform: "translateY(0)" } },
         "slide-in-left-md": {
           from: { opacity: "0", transform: "translateX(-50px)" },
@@ -69,7 +56,6 @@ const config: Config = {
         },
         "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
 
-        // Admin panel
         "admin-slide-up": {
           from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
@@ -80,7 +66,6 @@ const config: Config = {
           to: { opacity: "1", transform: "translateY(0)" },
         },
 
-        // Loops
         "float-sm": { "0%, 100%": { transform: "translateY(0px)" }, "50%": { transform: "translateY(-10px)" } },
         sparkle: {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
@@ -99,12 +84,10 @@ const config: Config = {
         wave: { "0%, 100%": { transform: "scaleY(1)" }, "50%": { transform: "scaleY(1.5)" } },
       },
       animation: {
-        // Header
         "header-dropdown": `dropdown-slide 0.3s ${EASE_OUT_EXPO}`,
         "header-slide-in": `slide-in-right-sm 0.3s ${EASE_OUT_EXPO}`,
         "header-item": `slide-in-right-sm 0.4s ${EASE_OUT_EXPO} forwards`,
 
-        // Home hero
         "home-content": `slide-from-left 0.5s ${EASE_OUT_EXPO} both`,
         "home-image": `fade-in-right-lg 0.6s ${EASE_OUT_EXPO} 0.1s both`,
         "home-badge": `fade-in-up-lg 0.5s ${EASE_OUT_EXPO} 0.05s both`,
@@ -117,12 +100,10 @@ const config: Config = {
         "home-glow": "spin 20s linear infinite",
         "home-pulse": "home-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
 
-        // Shared section entrances
         rise: `rise-in 0.5s ${EASE_OUT_EXPO} both`,
         "fade-in-up-slow": `fade-in-up-lg 0.8s ${EASE_OUT_EXPO} both`,
         "slide-in-left": `slide-in-left-md 0.8s ${EASE_OUT_EXPO} both`,
         "slide-in-right": `slide-in-right-md 0.8s ${EASE_OUT_EXPO} both`,
-        // Testimonial carousel (phones): the new slide comes from the side you moved to.
         "carousel-from-right": `slide-in-right-md 0.45s ${EASE_OUT_EXPO} both`,
         "carousel-from-left": `slide-in-left-md 0.45s ${EASE_OUT_EXPO} both`,
         "bounce-in": `bounce-in 0.6s ${EASE_OUT_EXPO} both`,
@@ -131,16 +112,13 @@ const config: Config = {
         "float-sm": "float-sm 3s ease-in-out infinite",
         "float-sm-20": "float-sm 20s ease-in-out infinite",
 
-        // Studio booking widget
         "booking-slide-up": "slide-up-30 0.5s ease-out both",
         "booking-fade-in": "fade-in 0.6s ease-out",
 
-        // Admin panel
         "admin-slide-up": "admin-slide-up .35s ease forwards",
         "admin-scale-in": "admin-scale-in .25s ease forwards",
         "admin-fade-in": "admin-fade-in .2s ease forwards",
 
-        // Podcast studio page
         "podcast-hero-rise": "rise-in 0.6s ease both",
         "podcast-desc": "fade-up-20 0.6s ease 0.15s both",
         "podcast-cta": "fade-up-20 0.6s ease 0.25s both",

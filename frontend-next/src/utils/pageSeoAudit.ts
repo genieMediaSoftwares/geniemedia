@@ -1,23 +1,5 @@
-/**
- * Page-level SEO audit for the public pages (/, /digital_marketing, ...).
- *
- * The blog editor has its own analyzer (seoAnalysis.ts). This one scores a
- * whole published page, and it never reads raw HTML: it takes a clean
- * SeoDocument that the caller has already extracted from the visible main
- * content (see scripts/seo-audit.mjs). That separation is the fix for
- * impossible numbers such as "6,879 keyword occurrences in 910 words":
- * a Next.js page carries a second copy of all its text inside <script> tags
- * (the React payload), plus class names, JSON-LD and URLs, and any tool that
- * counts raw HTML counts all of that as prose.
- *
- * Every category is passed checks / total checks, so a score of 100% means
- * every listed check passed, nothing more. Keyword density is reported but is
- * only ever a ceiling: overuse fails a check, more mentions never earn points.
- */
-
 export interface SeoImage {
   src: string;
-  /** null when the alt attribute is missing; "" when marked decorative. */
   alt: string | null;
   hasDimensions: boolean;
 }
@@ -41,33 +23,23 @@ export interface SeoMetadata {
   twitterCard: string;
 }
 
-/** Everything the audit needs, already reduced to what a visitor can read. */
 export interface SeoDocument {
   url: string;
-  /** Visible prose of the main content, one entry per paragraph or list item. */
   paragraphs: string[];
-  /** All visible text of the main content (paragraphs, headings, buttons...). */
   text: string;
-  /** Visible text of the whole page, header and footer included (for NAP). */
   pageText: string;
   headings: Array<{ level: number; text: string }>;
   links: SeoLink[];
   images: SeoImage[];
   metadata: SeoMetadata;
-  /** Parsed JSON-LD blocks; a block that failed to parse is recorded as null. */
   structuredData: Array<Record<string, unknown> | null>;
 }
 
 export interface AuditOptions {
-  /** Main topic phrase, e.g. "digital marketing". */
   keyword: string;
-  /** Location names that count as local relevance. */
   locations: string[];
-  /** Phrases the business's address/phone are recognised by. */
   napPhrases: string[];
-  /** Minimum useful word count for this kind of page. */
   minWords: number;
-  /** Paths that exist on the site (for broken-link checks). */
   knownPaths?: Set<string>;
 }
 
@@ -115,14 +87,11 @@ export const AUDIT_LIMITS = {
   readabilityMin: 50,
   sentenceLengthMax: 20,
   transitionShareMin: 20,
-  /** Above this, the keyword is flagged as overused. */
   densityMax: 3,
   internalLinksMin: 5,
   minProseWords: 100,
   minProseSentences: 3,
 } as const;
-
-/* ── Text helpers ───────────────────────────────────────────────────────── */
 
 const normalise = (s: string): string =>
   s
@@ -137,7 +106,6 @@ export const words = (s: string): string[] => {
   return n ? n.split(" ") : [];
 };
 
-/** Non-overlapping occurrences of a phrase, matched on whole words. */
 export const countPhrase = (text: string, phrase: string): number => {
   const hay = words(text);
   const needle = words(phrase);
@@ -161,7 +129,6 @@ export const countPhrase = (text: string, phrase: string): number => {
   return count;
 };
 
-/** (occurrences / total words) x 100. Bounded at 100 because a phrase cannot occur more often than there are words. */
 export const phraseDensity = (text: string, phrase: string): { occurrences: number; totalWords: number; density: number } => {
   const totalWords = words(text).length;
   const occurrences = countPhrase(text, phrase);
@@ -183,7 +150,6 @@ const syllables = (word: string): number => {
   return Math.max(1, groups ? groups.length : 1);
 };
 
-/** Flesch reading ease of the prose, or null when there is too little prose to measure. */
 export const readability = (paragraphs: string[]): number | null => {
   const sentences = sentencesOf(paragraphs);
   const w = sentences.flatMap(words);
@@ -210,8 +176,6 @@ const STOP = new Set(
   "a an and are as at be by can for from has have in is it its of on or our that the their them they this to we with you your will more into not but all any what how who when which do does".split(" "),
 );
 
-/* ── Audit ──────────────────────────────────────────────────────────────── */
-
 const category = (name: string, weight: number, checks: AuditCheck[]): AuditCategory => ({
   name,
   weight,
@@ -234,10 +198,6 @@ const typesOf = (node: Record<string, unknown>): string[] => {
   return Array.isArray(t) ? t.map(String) : t ? [String(t)] : [];
 };
 
-/**
- * A phone number matches on its digits alone, so "+91 90328 45433" and
- * "+91 9032845433" are the same number; any other phrase matches on words.
- */
 const napVisible = (text: string, phrase: string): boolean =>
   /\d/.test(phrase) ? text.replace(/\D/g, "").includes(phrase.replace(/\D/g, "")) : has(text, phrase);
 
@@ -266,7 +226,6 @@ export const auditPage = (doc: SeoDocument, opts: AuditOptions): AuditResult => 
   const allTypes = nodes.flatMap(typesOf);
   const isHome = new URL(doc.url).pathname === "/";
 
-  // Skipped heading levels (h2 -> h4) make the outline hard to follow.
   let skipped = false;
   doc.headings.reduce((prev, h) => {
     if (h.level > prev + 1) skipped = true;
@@ -378,8 +337,6 @@ export const auditPage = (doc: SeoDocument, opts: AuditOptions): AuditResult => 
   };
 };
 
-/* ── Keyword coverage ───────────────────────────────────────────────────── */
-
 export type KeywordTier = "primary" | "secondary" | "semantic" | "local" | "supporting";
 
 export interface CoverageRow {
@@ -390,18 +347,11 @@ export interface CoverageRow {
   h1: boolean;
   h2: boolean;
   opening: boolean;
-  /** Natural uses in the visible content. */
   body: number;
   linkText: boolean;
   alt: boolean;
 }
 
-/**
- * Where each target term appears on the page. This is a placement report,
- * not a score: nothing here rewards repetition, and a term is never expected
- * in every element. A primary term belongs in the title, H1 and opening; a
- * semantic term only needs to occur naturally in the body.
- */
 export const keywordCoverage = (doc: SeoDocument, terms: Array<{ term: string; tier: KeywordTier }>): CoverageRow[] => {
   const h1 = doc.headings.filter((h) => h.level === 1).map((h) => h.text).join(" ");
   const h2 = doc.headings.filter((h) => h.level === 2 || h.level === 3).map((h) => h.text).join(" | ");

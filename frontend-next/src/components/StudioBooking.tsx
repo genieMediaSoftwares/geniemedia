@@ -18,7 +18,6 @@ interface TimeSlot {
   slots: number;
 }
 
-// Staggered entrance for the package cards (0.05s per card).
 const SERVICE_DELAY = ["![animation-delay:0.00s]", "![animation-delay:0.05s]", "![animation-delay:0.10s]", "![animation-delay:0.15s]", "![animation-delay:0.20s]", "![animation-delay:0.25s]", "![animation-delay:0.30s]", "![animation-delay:0.35s]", "![animation-delay:0.40s]", "![animation-delay:0.45s]", "![animation-delay:0.50s]", "![animation-delay:0.55s]", "![animation-delay:0.60s]", "![animation-delay:0.65s]", "![animation-delay:0.70s]", "![animation-delay:0.75s]"];
 
 export default function PodcastStudioBooking() {
@@ -27,7 +26,7 @@ export default function PodcastStudioBooking() {
   const [selectedService, setSelectedService] = useState<StudioService | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 1)); // February 2026
+  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 1));
   const [isLoading, setIsLoading] = useState(false);
   const [bookingDetails, setBookingDetails] = useState({
     date: '',
@@ -38,7 +37,6 @@ export default function PodcastStudioBooking() {
     notes: ''
   });
 
-  // Time slots data
   const timeSlots: Record<"Morning" | "afternoon" | "evening", TimeSlot[]> = {
     Morning: [
       { id: 1, time: '10:00 am - 11:00 am', slots: 1 },
@@ -56,48 +54,34 @@ export default function PodcastStudioBooking() {
     ]
   };
 
-  // Category options
   const categories = [
     'ALL',
     'Only Podcast Studio',
     'Studio with Team + 2 Cameras',
     'Studio with Team + 3 Cameras'
-    
-    
+
   ];
 
-  // Services data
   const services: StudioService[] = [
     
     { id: 1, name: 'Podcast Shoot (Only Studio)', duration: '1 h', price: '₹1,500', category: 'Only Podcast Studio' },
     { id: 2, name: 'Podcast Shoot (Only Studio)', duration: '2 h', price: '₹3,000', category: 'Only Podcast Studio' },
     { id: 3, name: 'Podcast Shoot (Only Studio)', duration: '3 h', price: '₹4,500', category: 'Only Podcast Studio' },
-   
-  
-   
+
     { id: 4, name: 'Studio with Team + 2 Cameras', duration: '1 h', price: '₹3,999', category: 'Studio with Team + 2 Cameras' },
     { id: 5, name: 'Studio with Team + 2 Cameras', duration: '2 h', price: '₹8,000', category: 'Studio with Team + 2 Cameras' },
     { id: 6, name: 'Studio with Team + 2 Cameras', duration: '3 h', price: '₹10,000', category: 'Studio with Team + 2 Cameras' },
-    
-    
-   
+
     { id: 8, name: 'Studio with Team + 3 Cameras', duration: '1 h', price: '₹5,000', category: 'Studio with Team + 3 Cameras' },
     { id: 9, name: 'Studio with Team + 3 Cameras', duration: '2 h', price: '₹9,000', category: 'Studio with Team + 3 Cameras' },
     { id: 10, name: 'Studio with Team + 3 Cameras', duration: '3 h', price: '₹11,000', category: 'Studio with Team + 3 Cameras' },
-    
-    
-    
-   
-    
-   
+
   ];
 
-  // Filter services based on category
   const filteredServices = selectedCategory === 'ALL' 
     ? services 
     : services.filter(s => s.category === selectedCategory);
 
-  // Step navigation
   const steps = [
     { id: 1, name: 'Service', icon: Mic },
     { id: 2, name: 'Date & Time', icon: CalendarDays },
@@ -147,7 +131,7 @@ export default function PodcastStudioBooking() {
   };
 
   const handleSubmit = () => {
-  const phoneNumber = "919032845433"; // 👈 your WhatsApp number (with country code, no + or spaces)
+  const phoneNumber = "919032845433";
 
   const message = `
     🎙️ *New Booking Confirmed*
@@ -184,8 +168,6 @@ export default function PodcastStudioBooking() {
       alert('Booking confirmed!, Thank you')
     };
 
-
-  // Generate calendar days
   const generateCalendarDays = (month: Date) => {
     const year = month.getFullYear();
     const monthIndex = month.getMonth();
@@ -193,24 +175,20 @@ export default function PodcastStudioBooking() {
     const firstDay = new Date(year, monthIndex, 1);
     const lastDay = new Date(year, monthIndex + 1, 0);
     
-    // Get day of week (0 = Sunday, we want Monday = 0)
     let startDay = firstDay.getDay() - 1;
     if (startDay === -1) startDay = 6;
     
     const days: Date[] = [];
     
-    // Add empty cells for days before month starts
     for (let i = 0; i < startDay; i++) {
       const prevMonthDay = new Date(year, monthIndex, -(startDay - i - 1));
       days.push(prevMonthDay);
     }
     
-    // Add days of current month
     for (let i = 1; i <= lastDay.getDate(); i++) {
       days.push(new Date(year, monthIndex, i));
     }
     
-    // Add empty cells to complete the grid (42 cells = 6 rows)
     const remainingCells = 42 - days.length;
     for (let i = 1; i <= remainingCells; i++) {
       days.push(new Date(year, monthIndex + 1, i));
@@ -222,12 +200,10 @@ export default function PodcastStudioBooking() {
    const isHoliday = (date: Date | null) => {
   if (!date) return false;
 
-  const day = date.getDay(); // 0 = Sun, 6 = Sat
+  const day = date.getDay();
 
-  // Disable all Sundays
   if (day === 0) return true;
 
-  // Disable 2nd Saturday
   if (day === 6) {
     const weekNumber = Math.ceil(date.getDate() / 7);
     if (weekNumber === 2) return true;
@@ -236,18 +212,14 @@ export default function PodcastStudioBooking() {
   return false;
 };
 
-
-
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center pt-12">
           PODCAST STUDIO RENTAL PACKAGES 
         </h2>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Left Sidebar - Steps */}
           <div className="lg:w-64 flex-shrink-0">
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
               {steps.map((step) => (
@@ -270,9 +242,7 @@ export default function PodcastStudioBooking() {
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="flex-1 relative">
-            {/* Loading Overlay - Only for this content area */}
             {isLoading && (
               <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50 rounded-lg">
                 <div className="flex flex-col items-center">
@@ -282,10 +252,8 @@ export default function PodcastStudioBooking() {
               </div>
             )}
 
-            {/* Step 1: Service Selection */}
             {currentStep === 1 && (
               <div>
-                {/* Category Filter */}
                 <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
                   <p className="text-xl font-bold text-gray-800 mb-4">Select Category</p>
                   <div className="flex flex-wrap gap-3">
@@ -306,7 +274,6 @@ export default function PodcastStudioBooking() {
                   </div>
                 </div>
 
-                {/* Service Cards */}
                 <div className="bg-white rounded-lg shadow-sm p-6">
                   <p className="text-xl font-bold text-gray-800 mb-4">Select Service</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-2">
@@ -326,7 +293,6 @@ export default function PodcastStudioBooking() {
                           </div>
                         )}
                         <div className="flex items-start gap-3">
-                          {/* Studio Icon */}
                           <div className="w-12 h-12 bg-gradient-to-br from-amber-700 to-amber-900 rounded-full flex items-center justify-center text-white text-xl flex-shrink-0">
                             <Mic className="w-6 h-6" aria-hidden="true" />
                           </div>
@@ -347,15 +313,12 @@ export default function PodcastStudioBooking() {
               </div>
             )}
 
-            {/* Step 2: Date & Time */}
             {currentStep === 2 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
                 <p className="text-xl font-bold text-gray-800 mb-6">Date & Time</p>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Calendar */}
                   <div>
-                    {/* Month Navigation */}
                     <div className="flex items-center justify-between mb-4">
                       <button
                         onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
@@ -376,9 +339,7 @@ export default function PodcastStudioBooking() {
                       </button>
                     </div>
 
-                    {/* Calendar Grid */}
                     <div className="border border-gray-200 rounded-lg overflow-hidden">
-                      {/* Day Headers */}
                       <div className="grid grid-cols-7 bg-gray-50">
                         {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                           <div key={day} className="p-2 text-center text-sm font-semibold text-gray-600 border-b border-r border-gray-200 last:border-r-0">
@@ -387,7 +348,6 @@ export default function PodcastStudioBooking() {
                         ))}
                       </div>
 
-                      {/* Calendar Dates */}
                       <div className="grid grid-cols-7">
                        {generateCalendarDays(currentMonth).map((day, idx) => {
   const isSelected = selectedDate?.getTime() === day?.getTime();
@@ -395,7 +355,6 @@ export default function PodcastStudioBooking() {
   const isToday = day && day.toDateString() === new Date().toDateString();
   const isPast = day && day < new Date(new Date().setHours(0, 0, 0, 0));
   const isDisabled = !day || !isCurrentMonth || isPast || isHoliday(day);
-
 
   return (
     <div
@@ -420,12 +379,10 @@ export default function PodcastStudioBooking() {
                     </div>
                   </div>
 
-                  {/* Time Slots */}
                   <div>
                     <p className="font-semibold text-gray-800 mb-4">Time Slot</p>
                     <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2">
                       
-                      {/* Morning */}
                       <div>
                         <h4 className="font-semibold text-gray-700 mb-3">Morning</h4>
                         <div className="space-y-2">
@@ -446,7 +403,6 @@ export default function PodcastStudioBooking() {
                         </div>
                       </div>
                         
-                      {/* Afternoon */}
                       <div>
                         <h4 className="font-semibold text-gray-700 mb-3">Afternoon</h4>
                         <div className="space-y-2">
@@ -467,7 +423,6 @@ export default function PodcastStudioBooking() {
                         </div>
                       </div>
 
-                      {/* Evening */}
                       <div>
                         <h4 className="font-semibold text-gray-700 mb-3">Evening</h4>
                         <div className="space-y-2">
@@ -493,7 +448,6 @@ export default function PodcastStudioBooking() {
               </div>
             )}
 
-            {/* Step 3: Basic Details */}
             {currentStep === 3 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
                 <p className="text-xl font-bold text-gray-800 mb-6">Basic Details</p>
@@ -549,12 +503,10 @@ export default function PodcastStudioBooking() {
               </div>
             )}
 
-            {/* Step 4: Summary */}
             {currentStep === 4 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
                 <p className="text-xl font-bold text-gray-800 mb-6">Booking Summary</p>
                 <div className="space-y-6">
-                  {/* Service Info */}
                   <div className="bg-amber-50 border-2 border-gray-200 rounded-lg p-4">
                     <p className="font-semibold text-amber-900 mb-3">Selected Service</p>
                     <div className="flex items-center gap-3 mb-2">
@@ -569,14 +521,12 @@ export default function PodcastStudioBooking() {
                     <p className="text-2xl font-bold text-amber-700 mt-2">{selectedService?.price}</p>
                   </div>
 
-                  {/* Date & Time */}
                   <div>
                     <p className="font-semibold text-gray-800 mb-2">Date & Time</p>
                     <p className="text-gray-600"><CalendarDays className="inline-block w-4 h-4 mr-1.5 -mt-0.5" aria-hidden="true" />{selectedDate ? selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'Not selected'}</p>
                     <p className="text-gray-600"><Clock className="inline-block w-4 h-4 mr-1.5 -mt-0.5" aria-hidden="true" />{selectedTimeSlot ? selectedTimeSlot.time : 'Not selected'}</p>
                   </div>
 
-                  {/* Contact Info */}
                   <div>
                     <p className="font-semibold text-gray-800 mb-2">Contact Information</p>
                     <p className="text-gray-600"><User className="inline-block w-4 h-4 mr-1.5 -mt-0.5" aria-hidden="true" />{bookingDetails.name}</p>
@@ -590,7 +540,6 @@ export default function PodcastStudioBooking() {
               </div>
             )}
 
-            {/* Navigation Buttons */}
             <div className="flex gap-4 mt-6">
               {currentStep > 1 && (
                 <button
@@ -620,7 +569,6 @@ export default function PodcastStudioBooking() {
         </div>
       </div>
 
-      {/* CSS Animations */}
     </div>
   );
 }

@@ -1,30 +1,9 @@
-/**
- * SEO taxonomy for Genie Media & Studio: the services, their sub-topics, the
- * search terms each page should cover, and the blog topics that support them.
- *
- * This is an internal planning file. It is NEVER rendered into the page: no
- * component imports it, and it must not be turned into hidden text, keyword
- * lists or JSON-LD. It is read by `npm run seo:audit -- --coverage`
- * (scripts/seo-keywords.mjs), which reports where each term already appears in
- * the visible content, and it guides what new copy and blog posts should cover.
- *
- * Rules for editing it:
- * - A term belongs to exactly one service page. Pages do not compete for the
- *   same primary topic.
- * - Only list services the business actually provides. If a term describes
- *   something Genie Media & Studio does not offer, put it in REJECTED_TERMS
- *   with the reason, rather than writing copy for it.
- * - Never add competitor names, unrelated cities or scraped navigation text.
- */
-
 export type Tier = "primary" | "secondary" | "semantic" | "local" | "supporting";
 
 export interface ServiceTopic {
   name: string;
   path: "/" | "/digital_marketing" | "/web_development" | "/production_house" | "/podcast_studio";
-  /** The entity tree: sub-services shown on the page. */
   subtopics: string[];
-  /** Terms the page should cover, by where they belong. */
   terms: Record<Tier, string[]>;
 }
 
@@ -47,17 +26,18 @@ export const SEO_TAXONOMY: ServiceTopic[] = [
   {
     name: "Digital Marketing",
     path: "/digital_marketing",
-    subtopics: ["SEO", "Local SEO", "Google Ads / PPC", "Social Media Marketing", "Content Marketing", "Lead Generation", "Conversion Optimization", "Branding"],
+    subtopics: ["SEO", "Local SEO & Google Business Profile", "Google Ads / PPC", "Social Media Marketing & Meta Ads", "Content Marketing", "Lead Generation", "Conversion Optimization", "Branding"],
     terms: {
-      primary: ["digital marketing", "digital marketing services", "digital marketing agency"],
+      primary: ["digital marketing", "digital marketing services", "digital marketing agency", "digital marketing company"],
       secondary: ["SEO services", "Google Ads", "PPC", "social media marketing", "content marketing", "lead generation", "conversion optimization", "branding", "digital marketing strategy"],
       semantic: [
         "search engine optimization", "local SEO", "technical SEO", "on-page SEO", "keyword research", "Google Business Profile",
         "organic traffic", "Google rankings", "conversion tracking", "paid search", "search engine marketing", "performance marketing",
         "social media management", "social media strategy", "brand awareness", "audience engagement", "landing pages",
         "conversion rate optimization", "ROI", "online visibility", "business growth", "analytics",
+        "Google Maps", "Meta Ads", "display ads", "remarketing", "small businesses", "startups",
       ],
-      local: ["digital marketing services in Vizag", "digital marketing agency in Vizag", "SEO services in Vizag", "social media marketing in Vizag", "Visakhapatnam", "Andhra Pradesh", "near me"],
+      local: ["digital marketing services in Vizag", "digital marketing agency in Vizag", "digital marketing company in Vizag", "SEO services in Vizag", "social media marketing in Vizag", "Visakhapatnam", "Andhra Pradesh", "near me"],
       supporting: ["Genie Media & Studio", "website development", "production house"],
     },
   },
@@ -102,21 +82,18 @@ export const SEO_TAXONOMY: ServiceTopic[] = [
   },
 ];
 
-/**
- * Suggested terms deliberately NOT targeted, and why. Add copy for one of
- * these only after the service genuinely exists.
- */
 export const REJECTED_TERMS: Array<{ terms: string[]; reason: string }> = [
   { terms: ["motion graphics", "animation video production"], reason: "Not a listed Genie Media & Studio service." },
-  { terms: ["LinkedIn marketing", "YouTube marketing", "online reputation management", "marketing automation", "inbound marketing"], reason: "Not listed among the digital marketing services; confirm before adding." },
+  { terms: ["LinkedIn marketing", "LinkedIn ads", "YouTube marketing", "YouTube ads", "online reputation management", "marketing automation", "inbound marketing", "influencer marketing", "WhatsApp marketing", "email marketing agency"], reason: "Not listed among the digital marketing services; confirm before adding." },
   { terms: ["podcast streaming setup", "podcast photography"], reason: "Not listed among the podcast studio's services." },
   { terms: ["leadraft digital marketing", "any other agency name"], reason: "Competitor names are never targets." },
   { terms: ["digital marketing digital marketing", "ad in marketing", "digital marketing for", "digital marketing in", "digital marketing in vizagVizag"], reason: "Scraped or run-together fragments, not real search phrases." },
-  { terms: ["best digital marketing agency", "best website design"], reason: "Unverifiable superlatives; the pages describe services instead of claiming to be the best." },
+  { terms: ["best digital marketing agency", "top digital marketing agency", "leading", "expert", "trusted", "best website design"], reason: "Unverifiable superlatives; the pages describe services instead of claiming to be the best." },
+  { terms: ["local local seo services", "near me google ads agency", "roi driven ppc agency", "data driven sem agency", "visakhapatnam ap"], reason: "Generated modifier combinations, not natural phrases; the base service + city terms cover them." },
+  { terms: ["digital marketing packages", "digital marketing pricing"], reason: "No published prices; the cost FAQ answers the question without inventing packages." },
   { terms: ["view project", "book meeting call", "floor kp icon", "kp icon yendada"], reason: "Navigation and address fragments, not search topics." },
 ];
 
-/** Blog topics that support each service page (link the post to that page). */
 export const BLOG_TOPICS: Array<{ title: string; supports: ServiceTopic["path"] }> = [
   { title: "How Local SEO Helps Businesses in Visakhapatnam", supports: "/digital_marketing" },
   { title: "Google Ads vs SEO for Local Businesses in Vizag", supports: "/digital_marketing" },

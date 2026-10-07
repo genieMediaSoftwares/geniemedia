@@ -28,8 +28,6 @@ const laserFold = laserFoldAsset.src;
 const Nuconaerospace = NuconaerospaceAsset.src;
 const Synergene = SynergeneAsset.src;
 
-// Offline safety net only — rendered if the projects API cannot be reached.
-// The live portfolio comes from the database (fetched on the server, see src/lib/api/projects.ts).
 const FALLBACK_PROJECTS: PortfolioItem[] = [
   {
     name: "Meera Basu",
@@ -63,28 +61,15 @@ const FALLBACK_PROJECTS: PortfolioItem[] = [
   },
 ];
 
-// Static presentation data — hoisted out of the component so the arrays are not
-// re-allocated on every render.
-//
-// Every figure here must be checkable against the site itself: the four
-// service pages, the studio's one-hour rate in components/StudioBooking.jsx,
-// and the portfolio's clients in India, Australia and the US. Unverifiable
-// performance claims (success rates, ROI averages) used to sit here.
 const STATS = [
   { icon: Layers, value: "4", label: "Service Lines" },
   { icon: Mic, value: "₹1,500", label: "Podcast Studio / hour" },
   { icon: Globe, value: "3", label: "Countries Served" },
 ];
 
-
-/* ── Tailwind class sets (formerly HomePage.css) ───────────────────────── */
-
-// Gradient CTA: lifts and grows on hover while a soft circle expands inside.
-// (Reproduces the original cascade of the old Header.css + HomePage.css rules.)
 const HOME_BTN_PRIMARY =
   "relative overflow-hidden bg-[linear-gradient(135deg,#FF6B00,#FF8C3A)] transition-all duration-[400ms] ease-in-out hover:[transform:translateY(-4px)_scale(1.05)] hover:shadow-[0_15px_40px_rgba(255,107,0,0.5)] before:content-[''] before:absolute before:left-1/2 before:top-1/2 before:h-0 before:w-0 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-white/30 before:[transition:width_0.6s_ease,height_0.6s_ease] hover:before:left-full hover:before:h-[300px] hover:before:w-[300px]";
 
-// White outlined CTA that fills orange from the top on hover.
 const HOME_BTN_SECONDARY =
   "relative overflow-hidden !border-2 !border-solid !border-black !bg-white !text-black [transition-property:transform,box-shadow,color,background-color] duration-300 ease-in-out hover:!text-white hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(255,107,0,0.3)] before:content-[''] before:absolute before:left-1/2 before:top-0 before:z-[-1] before:h-0 before:w-0 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[linear-gradient(135deg,#FF6B00,#FF8C3A)] before:[transition:width_0.7s_ease,height_0.8s_ease] hover:before:h-[300px] hover:before:w-[300px]";
 
@@ -95,12 +80,6 @@ const heroLink = CONTENT_LINK;
 
 const WHATSAPP_URL = "https://wa.me/919032845433";
 
-/**
- * The home page. A server component: the hero, steps, platforms and copy are
- * plain HTML that React never has to hydrate. Only the interactive sections
- * (about animation, service tabs, project grid, testimonials, contact form)
- * are client components.
- */
 const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null }) => {
   const stats = STATS;
 
@@ -131,7 +110,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
         className="relative min-h-screen bg-white-200 overflow-hidden pt-20 pb-16 px-4 sm:px-6 lg:px-8"
         id="home"
       >
-        {/* Background Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="animate-home-glow motion-reduce:animate-none absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-orange-200 to-orange-100 rounded-full blur-3xl opacity-40"></div>
           <div
@@ -154,7 +132,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
 
         <div className="relative max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left Content */}
             <div className="animate-home-content motion-reduce:animate-none space-y-8 text-center lg:text-left mt-4">
               <div className="animate-home-badge motion-reduce:animate-none inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-100 to-orange-50 rounded-full mt-8">
                 <Sparkles className="text-orange-500" size={16} />
@@ -163,9 +140,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 </span>
               </div>
 
-              {/* The home page names the company, what it does and where. The
-                  service pages each own their specific search terms, so this
-                  deliberately does not target one service. */}
               <h1 className="animate-home-rise motion-reduce:animate-none text-4xl sm:text-5xl lg:text-6xl xl:text-5xl font-extrabold leading-normal ">
                 Digital Marketing, Podcast Studio &amp; Video Production in Vizag
               </h1>
@@ -223,14 +197,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full blur-3xl opacity-20 scale-110"></div>
 
                 <div className="animate-home-float max-[768px]:animate-home-float-slow motion-reduce:animate-none">
-                  {/* This is the Largest Contentful Paint element on desktop.
-                      It must stay eager and high-priority: marking it lazy hid
-                      it from the preload scanner and pushed LCP out by seconds.
-                      It is `hidden` below lg, where a display:none <img> still
-                      downloads. The <source> hands phones and tablets a 1px
-                      inline placeholder instead, so the 42 KiB image is only
-                      fetched on screens that show it — no bytes competing with
-                      the mobile LCP (the headline). */}
                   <picture>
                     <source
                       media="(max-width: 1023.98px)"
@@ -255,7 +221,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
           </div>
         </div>
 
-        {/* Scroll Indicator */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-bounce ">
           <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex items-start justify-center p-2">
             <div className="w-1 h-2 bg-orange-500 rounded-full animate-home-pulse motion-reduce:animate-none"></div>
@@ -274,8 +239,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
             CREATIVE & STRATEGIC DIGITAL MARKETING COMPANY
           </p>
 
-          {/* h2, not h1 — the page already has its h1 in the hero above. The
-              Tailwind classes keep the rendered size identical. */}
           <h2
             className="
             text-2xl md:text-5xl lg:text-5xl
@@ -299,12 +262,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
 
       <AboutUs />
 
-      {/* How It Works.
-          The arrows are their own grid columns (not absolutely positioned),
-          so each one always sits centred in the gap between two cards and can
-          never overlap or be clipped. lg+: card | arrow | card | arrow | card.
-          Below lg: one column with downward arrows. Cards share one structure
-          and stretch to equal height. */}
       <section className="bg-white py-10 md:py-14">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-orange-600 text-center font-medium text-2xl sm:text-4xl uppercase tracking-wide mb-8 md:mb-10">
@@ -349,7 +306,6 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
             Your Digital Presence, Perfected
           </h2>
 
-          {/* Projects Grid: the one client island in this section. */}
           <HomeProjects initialProjects={initialProjects} fallback={FALLBACK_PROJECTS} />
           <div className="flex justify-center mt-6">
             <a

@@ -16,7 +16,6 @@ import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
 
-/* ─── Toolbar icons (lucide-react) ─────────────────────────────────────────── */
 const Icon = ({ d: Glyph, size = 15 }: { d: LucideIcon; size?: number }) => (
   <Glyph size={size} strokeWidth={2} aria-hidden="true" />
 );
@@ -43,7 +42,6 @@ const icons = {
   paragraph: PilcrowIcon,
 };
 
-/* ─── ToolBtn ────────────────────────────────────────────────────────────── */
 interface ToolBtnProps {
   onClick: () => void;
   active?: boolean;
@@ -81,12 +79,10 @@ function ToolBtn({ onClick, active, disabled, title, children }: ToolBtnProps) {
   );
 }
 
-/* ─── Divider ────────────────────────────────────────────────────────────── */
 const Divider = () => (
   <div className="w-px h-5 bg-gray-200 mx-1 self-center flex-shrink-0" aria-hidden="true" />
 );
 
-/* ─── ToolbarRow — always scrollable horizontally ────────────────────────── */
 interface ToolbarButton {
   title: string;
   onClick: () => void;
@@ -121,16 +117,11 @@ function ToolbarRow({ groups }: { groups: ToolbarButton[][] }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   MAIN BlogEditor
-═══════════════════════════════════════════════════════════════════════════ */
 export default function BlogEditor({ value, onChange }: { value: string; onChange: (html: string) => void }) {
   const [isFocused, setIsFocused] = useState(false);
 
   const editor = useEditor({
     extensions: [
-      // StarterKit v3 bundles Link and Underline; they are added below with
-      // their own settings, so the bundled copies are switched off.
       StarterKit.configure({ heading: { levels: [1, 2, 3] }, link: false, underline: false }),
       Link.configure({ openOnClick: false, autolink: true }),
       Underline,
@@ -150,7 +141,6 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
           "px-4 py-3",
           "text-gray-800 text-sm sm:text-[15px]",
           "leading-relaxed",
-          // Content styling for the editable area (formerly a <style> block).
           "[&_p.is-editor-empty:first-child]:before:content-[attr(data-placeholder)] [&_p.is-editor-empty:first-child]:before:float-left [&_p.is-editor-empty:first-child]:before:h-0 [&_p.is-editor-empty:first-child]:before:pointer-events-none [&_p.is-editor-empty:first-child]:before:italic [&_p.is-editor-empty:first-child]:before:text-[#b0b7c0]",
           "[&_p]:my-[0.4em] [&_p]:leading-[1.75]",
           "[&_h1]:text-[clamp(1.3em,4vw,1.75em)] [&_h1]:font-extrabold [&_h1]:mt-[0.8em] [&_h1]:mb-[0.3em] [&_h1]:leading-[1.2]",
@@ -181,7 +171,6 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
 
   if (!editor) return null;
 
-  /* ── Active states ── */
   const a = {
     bold:        editor.isActive("bold"),
     italic:      editor.isActive("italic"),
@@ -202,7 +191,6 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
     alignRight:  editor.isActive({ textAlign: "right" }),
   };
 
-  /* ── Active format pills ── */
   const activeLabels = [
     a.bold && "Bold", a.italic && "Italic", a.underline && "Underline",
     a.strike && "Strike", a.h1 && "H1", a.h2 && "H2", a.h3 && "H3",
@@ -211,20 +199,10 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
     a.alignCenter && "Center", a.alignRight && "Right",
   ].filter((label): label is string => Boolean(label));
 
-  /* ── Word / char count ── */
   const charCount = editor.storage.characterCount?.characters?.() ?? editor.getText().length;
   const wordCount = editor.getText().split(/\s+/).filter(Boolean).length;
 
-  /* ══════════════════════════════════════════════════════════════
-     TOOLBAR GROUPS
-     ALL groups shown on BOTH mobile and desktop.
-     Split into 2 rows (each independently scrollable) so that
-     narrow screens never hide any button — just scroll to see all.
-  ══════════════════════════════════════════════════════════════ */
-
-  /* Row 1: History + Inline marks + Code + Link + Clear */
   const row1Groups = [
-    /* History */
     [
       {
         title: "Undo (Ctrl+Z)",
@@ -241,14 +219,12 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
         icon: <Icon d={icons.redo} />,
       },
     ],
-    /* Inline marks */
     [
       { title: "Bold (Ctrl+B)",   onClick: () => editor.chain().focus().toggleBold().run(),      active: a.bold,      icon: <Icon d={icons.bold} /> },
       { title: "Italic (Ctrl+I)", onClick: () => editor.chain().focus().toggleItalic().run(),    active: a.italic,    icon: <Icon d={icons.italic} /> },
       { title: "Underline",       onClick: () => editor.chain().focus().toggleUnderline().run(), active: a.underline, icon: <Icon d={icons.underline} /> },
       { title: "Strikethrough",   onClick: () => editor.chain().focus().toggleStrike().run(),    active: a.strike,    icon: <Icon d={icons.strike} /> },
     ],
-    /* Code + Link + Clear */
     [
       {
         title: "Inline Code",
@@ -271,9 +247,7 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
     ],
   ];
 
-  /* Row 2: Headings + Lists + Blocks + Alignment */
   const row2Groups = [
-    /* Headings + Paragraph */
     [
       {
         title: "Heading 1",
@@ -300,18 +274,15 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
         icon: <Icon d={icons.paragraph} />,
       },
     ],
-    /* Lists */
     [
       { title: "Bullet List",  onClick: () => editor.chain().focus().toggleBulletList().run(),  active: a.ul, icon: <Icon d={icons.ul} /> },
       { title: "Ordered List", onClick: () => editor.chain().focus().toggleOrderedList().run(), active: a.ol, icon: <Icon d={icons.ol} /> },
     ],
-    /* Block-level */
     [
       { title: "Blockquote",      onClick: () => editor.chain().focus().toggleBlockquote().run(),  active: a.blockquote, icon: <Icon d={icons.quote} /> },
       { title: "Code Block",      onClick: () => editor.chain().focus().toggleCodeBlock().run(),   active: a.codeBlock,  icon: <Icon d={icons.codeblock} /> },
       { title: "Horizontal Rule", onClick: () => editor.chain().focus().setHorizontalRule().run(), active: false,        icon: <Icon d={icons.hr} /> },
     ],
-    /* Text Alignment */
     [
       { title: "Align Left",   onClick: () => editor.chain().focus().setTextAlign("left").run(),   active: a.alignLeft,   icon: <Icon d={icons.alignLeft} /> },
       { title: "Align Center", onClick: () => editor.chain().focus().setTextAlign("center").run(), active: a.alignCenter, icon: <Icon d={icons.alignCenter} /> },
@@ -319,7 +290,6 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
     ],
   ];
 
-  /* ─────────────────────────────────────────────────────────── */
   return (
     <>
       <div
@@ -334,7 +304,6 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
         ].join(" ")}
       >
 
-        {/* ── Sticky Toolbar ── */}
         <div
           className={[
             "sticky top-0 z-20",
@@ -343,20 +312,15 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
             isFocused ? "shadow-[0_1px_12px_rgba(107,74,45,0.10)]" : "",
           ].join(" ")}
         >
-          {/* Focus accent line */}
           <div
             className={`h-[2.5px] w-full transition-opacity duration-300 bg-[linear-gradient(90deg,#6B4A2D,#b07d50_50%,rgba(107,74,45,0.08))] ${isFocused ? "opacity-100" : "opacity-0"}`}
           />
 
-         
           <div className="divide-y divide-gray-100">
-            {/* Row 1: Undo/Redo + Inline marks + Code/Link/Clear */}
             <ToolbarRow groups={row1Groups} />
-            {/* Row 2: Headings + Lists + Blocks + Alignment */}
             <ToolbarRow groups={row2Groups} />
           </div>
 
-          {/* Active format pills */}
           {activeLabels.length > 0 && (
             <div
               className="flex items-center gap-1 px-3 py-1 bg-[#faf9f7] border-t border-gray-100 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -378,10 +342,8 @@ export default function BlogEditor({ value, onChange }: { value: string; onChang
           )}
         </div>
 
-        {/* ── Editor content ── */}
         <EditorContent editor={editor} />
 
-        {/* ── Sticky footer ── */}
         <div className="sticky bottom-0 z-10 flex items-center justify-between gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm border-t border-gray-100">
           <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">
             {charCount} chars · {wordCount} words

@@ -20,18 +20,6 @@ import linkedin from "@/assets/platforms/linkedin.webp";
 import riverside from "@/assets/platforms/riverside.webp";
 import streamyard from "@/assets/platforms/streamyard.webp";
 
-/**
- * The platforms and tools behind each service, in one place. Add or remove a
- * platform here and every page showing that list updates.
- *
- * Logos come from two sources:
- * - `icon`: an official brand mark from the simple-icons package, drawn as
- *   inline SVG on the server (no request, no client JavaScript).
- * - `image`: a 72px WebP in src/assets/platforms/ for brands that are not in
- *   simple-icons (Adobe apps, LinkedIn, Canva, CapCut and others), taken from
- *   each brand's own icon or its Wikimedia Commons logo.
- * React Native uses the React logo, as React Native's own branding does.
- */
 type Logo =
   | { icon: SimpleIcon; color?: string }
   | { image: { src: string } };
@@ -45,7 +33,6 @@ interface Platform {
 const si = (icon: SimpleIcon, color?: string): Logo => ({ icon, color });
 const img = (image: { src: string }): Logo => ({ image });
 
-// Shared entries (same logo and description wherever they appear).
 const YOUTUBE: Platform = { name: "YouTube", alt: "YouTube platform", logo: si(siYoutube) };
 const INSTAGRAM: Platform = { name: "Instagram", alt: "Instagram platform", logo: si(siInstagram) };
 const FACEBOOK: Platform = { name: "Facebook", alt: "Facebook platform", logo: si(siFacebook) };
@@ -90,7 +77,6 @@ export const PLATFORMS = {
     { name: "Semrush", alt: "Semrush SEO platform", logo: si(siSemrush) },
     { name: "Ahrefs", alt: "Ahrefs SEO platform", logo: img(ahrefs) },
     CANVA,
-    // Mailchimp's brand yellow is invisible on white; its dark brand colour is used instead.
     { name: "Mailchimp", alt: "Mailchimp email platform", logo: si(siMailchimp, "#241C15") },
     { name: "HubSpot", alt: "HubSpot platform", logo: si(siHubspot) },
   ],
@@ -125,7 +111,6 @@ export const PLATFORMS = {
 
 export type PlatformsType = keyof typeof PLATFORMS;
 
-/** Default heading and description per list (a page can override either). */
 const COPY: Record<PlatformsType, { title: string; intro: ReactNode }> = {
   webDevelopment: {
     title: "Technologies We Use for Web Development",
@@ -138,7 +123,6 @@ const COPY: Record<PlatformsType, { title: string; intro: ReactNode }> = {
 
 const LOGO_SIZE = "w-8 h-8 sm:w-9 sm:h-9";
 
-/** Shared look of the logo/feature sections (also used by WhatWeBuild). */
 export const SECTION_HEADING = "text-center text-3xl sm:text-4xl font-bold mb-4";
 export const SECTION_INTRO = "max-w-3xl mx-auto text-center text-base sm:text-lg text-gray-600 leading-relaxed mb-8 sm:mb-10";
 export const SECTION_CARD =
@@ -157,14 +141,6 @@ function PlatformLogo({ platform }: { platform: Platform }) {
   return <img src={logo.image.src} alt={alt} width={36} height={36} loading="lazy" decoding="async" className={`${LOGO_SIZE} object-contain`} />;
 }
 
-/**
- * "Platforms we use": heading, description and logo grid. Server component.
- * 3 per row on phones, 4–5 on tablets, 8 on desktop.
- *
- * By default it renders its own <section> (the design used on the service
- * pages); pass `section={false}` to place it inside an existing section, as
- * the home page does.
- */
 export default function PlatformsWeUse({
   type,
   title,

@@ -2,11 +2,6 @@ import type { Metadata } from "next";
 
 import { NOINDEX_METADATA } from "@/lib/seo/metadata";
 
-/**
- * Every unmatched URL, and every missing or unpublished blog post, renders
- * this with a real 404 status — never the home page with a 200, which is the
- * "soft 404" Search Console reported. noindex is belt-and-braces.
- */
 export const metadata: Metadata = {
   title: { absolute: "Page not found | Genie Media & Studio" },
   ...NOINDEX_METADATA,

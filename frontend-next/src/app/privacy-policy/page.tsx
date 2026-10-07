@@ -9,9 +9,6 @@ import { CONTENT_LINK } from "@/lib/linkStyles";
 
 export const metadata: Metadata = buildRouteMetadata("/privacy-policy");
 
-// Describes what the site actually does: the contact form (contact.php), the
-// WhatsApp booking hand-off, GA4/GTM, YouTube-nocookie and Google Maps embeds,
-// and the admin login token. Update this page when any of those change.
 const SECTIONS: LegalSection[] = [
   {
     id: "who-we-are",

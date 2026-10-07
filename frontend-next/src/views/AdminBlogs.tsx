@@ -131,7 +131,7 @@ interface BlogCardProps {
 
 function BlogCard({ blog, onEdit, onDelete, onPublish, onUnpublish, formatDate }: BlogCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [copied, setCopied] = useState(false);   // ✅ NEW: tracks copy-link feedback state
+  const [copied, setCopied] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const isDraft = blog.status === "draft";
 
@@ -143,18 +143,9 @@ function BlogCard({ blog, onEdit, onDelete, onPublish, onUnpublish, formatDate }
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // ✅ NEW: Copies the OG-preview share URL to clipboard.
-  //         Format: <BASE_URL>/share/<permalink>
-  //         When shared on WhatsApp / Twitter / Telegram etc., the platform's
-  //         crawler fetches this URL, reads the OG meta tags, and shows the
-  //         blog title + featured image in the link preview card.
-  //         Real human visitors who click the link get instantly JS-redirected
-  //         to the actual geniestudio.in/blog/<permalink> page.
   const handleCopyShareLink = () => {
     if (!blog.permalink) return;
-    // const shareUrl = `${BASE_URL}/share/${blog.permalink}`;
 const shareUrl = `${SHARE_PREVIEW_URL}?slug=${blog.permalink}`;
-
 
     navigator.clipboard
       .writeText(shareUrl)
@@ -163,7 +154,6 @@ const shareUrl = `${SHARE_PREVIEW_URL}?slug=${blog.permalink}`;
         setTimeout(() => setCopied(false), 2500);
       })
       .catch(() => {
-        // Fallback for browsers that block clipboard API
         const ta = document.createElement("textarea");
         ta.value = shareUrl;
         ta.style.position = "fixed";
@@ -215,7 +205,6 @@ const shareUrl = `${SHARE_PREVIEW_URL}?slug=${blog.permalink}`;
                   <EyeOff size={13} /> Move to Draft
                 </button>
               )}
-              {/* ✅ NEW: Copy share link option in dropdown menu */}
               {!isDraft && (
                 <button
                   onClick={() => { handleCopyShareLink(); setMenuOpen(false); }}
@@ -273,9 +262,6 @@ const shareUrl = `${SHARE_PREVIEW_URL}?slug=${blog.permalink}`;
             </button>
           )}
 
-          {/* ✅ NEW: Copy Share Link button — visible on published blogs only.
-                      Copies BASE_URL/share/<permalink> which serves OG meta tags
-                      so WhatsApp / Twitter / LinkedIn show title + image preview. */}
           {!isDraft && (
             <button
               onClick={handleCopyShareLink}
@@ -295,7 +281,6 @@ const shareUrl = `${SHARE_PREVIEW_URL}?slug=${blog.permalink}`;
           </button>
         </div>
 
-        {/* ✅ NEW: Inline copied confirmation banner — appears briefly after copy */}
         {copied && (
           <div className="mt-2 flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-lg px-3 py-1.5 animate-admin-fade-in">
             <CheckCircle size={11} className="text-green-600 shrink-0" />
@@ -334,13 +319,6 @@ function Field({ label, required, hint, icon: IconComp, children }: FieldProps) 
 const inputCls =
   "w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:border-[#6B4A2D] focus:ring-4 focus:ring-[#6B4A2D]/10 outline-none transition font-medium";
 
-/**
- * Thin adapter over the shared TagInput.
- *
- * The `keywords` column has always stored a comma-separated string, while
- * TagInput works in arrays — so the conversion lives here, at the one place
- * that still needs the string form, instead of inside the shared component.
- */
 function KeywordsInput({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   const tags = value ? value.split(",").map((t) => t.trim()).filter(Boolean) : [];
   return (
@@ -375,43 +353,34 @@ const emptyForm: BlogForm = {
   description: "",
   category: "",
   keywords: "",
-  image: null,          // new File object (only when user picks a new file)
-  imagePreview: "",     // blob URL or existing hosted URL — drives the preview
-  existingImageUrl: "", // ✅ FIX: stores the current saved URL when editing
+  image: null,
+  imagePreview: "",
+  existingImageUrl: "",
 
-  // ── SEO / AEO / GEO ──────────────────────────────────────────────────
-  // Everything below is edited in the SeoPanel under the content editor and
-  // is enforced server-side before a post is allowed to publish.
   meta_title: "",
   focus_keyword: "",
   secondary_keywords: [],
   canonical_url: "",
   robots_directive: "index,follow",
   schema_type: "BlogPosting",
-  direct_answer: "",          // the block answer engines quote
-  faq_schema: [],             // [{ question, answer }] -> FAQPage JSON-LD
-  key_facts: [],              // [{ fact, source }]     -> Claim JSON-LD
-  definitions: [],            // [{ term, definition }] -> DefinedTerm JSON-LD
+  direct_answer: "",
+  faq_schema: [],
+  key_facts: [],
+  definitions: [],
   alt_text: "",
   og_image_url: "",
   author_name: "",
   author_bio: "",
 
-  // Areas this post is written for, e.g. ["Visakhapatnam", "Vizianagaram"].
-  // Emitted as areaServed so a "near me" search in one of them can match.
   areas_covered: [],
 
-  // A named reviewer is a separate trust signal from a named author, and is
-  // modelled separately in the page markup too.
   reviewer_name: "",
   reviewer_role: "",
   reviewed_at: "",
 };
 
-// The SEO fields that travel as JSON rather than as plain strings.
 const JSON_SEO_FIELDS: Array<"secondary_keywords" | "faq_schema" | "key_facts" | "definitions" | "areas_covered"> = ["secondary_keywords", "faq_schema", "key_facts", "definitions", "areas_covered"];
 
-// Plain-text SEO fields, listed once so the submit and edit paths cannot drift.
 const TEXT_SEO_FIELDS: Array<"meta_title" | "focus_keyword" | "canonical_url" | "robots_directive" | "schema_type" | "direct_answer" | "alt_text" | "og_image_url" | "author_name" | "author_bio" | "reviewer_name" | "reviewer_role" | "reviewed_at"> = [
   "meta_title", "focus_keyword", "canonical_url", "robots_directive",
   "schema_type", "direct_answer", "alt_text", "og_image_url",
@@ -450,8 +419,6 @@ export default function AdminBlogs() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [saveAsDraft, setSaveAsDraft] = useState(false);
   const [permalinkManual, setPermalinkManual] = useState(false);
-  // Opened automatically whenever a publish is rejected, so the editor lands on
-  // the checklist that explains why rather than hunting for it.
   const [seoOpen, setSeoOpen] = useState(false);
 
   const fetchBlogs = async () => {
@@ -461,8 +428,6 @@ export default function AdminBlogs() {
         headers: { Authorization: token ?? "" },
       });
 
-      // An expired or invalid login: start a fresh session instead of quietly
-      // showing only published posts (drafts would look as if they vanished).
       if (allRes.status === 401 || allRes.status === 403) {
         clearToken();
         navigate("/admin");
@@ -484,7 +449,6 @@ export default function AdminBlogs() {
     }
   };
 
-  // Fetch-on-mount for a client-only admin screen.
   // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
   useEffect(() => { fetchBlogs(); }, []);
 
@@ -503,7 +467,6 @@ export default function AdminBlogs() {
     return list;
   })();
 
-  // Function declarations, so fetch helpers defined above can call them.
   function showToast(msg: string, type = "success") {
     setToast({ msg, type });
   }
@@ -535,7 +498,6 @@ export default function AdminBlogs() {
     });
   };
 
-  // Single setter for every SEO panel field, including the array-valued ones.
   const handleSeoField: SetBlogField = (name, value) => setForm((prev) => ({ ...prev, [name]: value }));
 
   const handleCategorySelect = (cat: string) => {
@@ -546,12 +508,9 @@ export default function AdminBlogs() {
     }));
   };
 
-  // ✅ FIX: When a new image file is selected, store it in form.image
-  //         AND keep existingImageUrl intact so the backend knows what was there before
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Revoke previous blob URL to avoid memory leaks
     if (form.imagePreview && form.imagePreview.startsWith("blob:")) {
       URL.revokeObjectURL(form.imagePreview);
     }
@@ -559,11 +518,9 @@ export default function AdminBlogs() {
       ...prev,
       image: file,
       imagePreview: URL.createObjectURL(file),
-      // existingImageUrl stays — backend will ignore it when a new file is sent
     }));
   };
 
-  // ✅ FIX: Remove image — clears both new file AND existing URL
   const handleRemoveImage = () => {
     if (form.imagePreview && form.imagePreview.startsWith("blob:")) {
       URL.revokeObjectURL(form.imagePreview);
@@ -572,7 +529,7 @@ export default function AdminBlogs() {
       ...prev,
       image: null,
       imagePreview: "",
-      existingImageUrl: "", // explicitly tell backend to clear the image
+      existingImageUrl: "",
     }));
   };
 
@@ -583,10 +540,6 @@ export default function AdminBlogs() {
       return;
     }
 
-    // Publish gate. Drafts are never blocked — unfinished work has to be
-    // saveable. The server runs this exact same check again and is what
-    // actually decides; this copy exists so the editor finds out before the
-    // upload rather than after it.
     if (!asDraft) {
       const verdict = validateForPublish(form);
       if (!verdict.ok) {
@@ -614,22 +567,16 @@ export default function AdminBlogs() {
       formData.append("keywords",        form.keywords);
       formData.append("status",          asDraft ? "draft" : "published");
 
-      // SEO / AEO / GEO fields. Arrays are JSON-encoded because the request is
-      // multipart/form-data, which has no concept of a structured value.
       TEXT_SEO_FIELDS.forEach((field) => formData.append(field, form[field] ?? ""));
       JSON_SEO_FIELDS.forEach((field) =>
         formData.append(field, JSON.stringify(form[field] ?? []))
       );
 
       if (form.image) {
-        // ✅ User picked a brand-new image file — upload it
         formData.append("image", form.image);
       } else if (form.existingImageUrl) {
-        // ✅ FIX: No new file chosen — tell the backend to keep the existing image
-        //         The backend should read this field and skip overwriting the image column
         formData.append("existingImage", form.existingImageUrl);
       }
-      // If both are empty, no image field is sent → backend sets image to null/empty
 
       let res;
       if (editingId) {
@@ -648,8 +595,6 @@ export default function AdminBlogs() {
 
       const data = await res.json();
 
-      // 422 is the server's publish gate. Its checklist is authoritative, so it
-      // is shown verbatim rather than paraphrased.
       if (res.status === 422) {
         setSeoOpen(true);
         showToast(data.detail || data.message || "This post is not ready to publish yet.", "error");
@@ -692,7 +637,6 @@ export default function AdminBlogs() {
       formData.append("category",        publishTarget.category || "");
       formData.append("keywords",        publishTarget.keywords || "");
       formData.append("status",          "published");
-      // ✅ FIX: preserve the existing image when publishing a draft
       if (publishTarget.image) {
         formData.append("existingImage", publishTarget.image);
       }
@@ -729,7 +673,6 @@ export default function AdminBlogs() {
       formData.append("category",        blog.category || "");
       formData.append("keywords",        blog.keywords || "");
       formData.append("status",          "draft");
-      // ✅ FIX: preserve the existing image when moving to draft
       if (blog.image) {
         formData.append("existingImage", blog.image);
       }
@@ -750,9 +693,6 @@ export default function AdminBlogs() {
   const handleEdit = (blog: Blog) => {
     setPermalinkManual(true);
 
-    // The API returns the JSON columns already parsed into arrays, but a row
-    // saved before the SEO migration has nulls throughout — every field is
-    // defaulted so the panel never receives undefined.
     const asArray = <T,>(value: T[] | null | undefined): T[] => (Array.isArray(value) ? value : []);
 
     setForm({
@@ -762,9 +702,9 @@ export default function AdminBlogs() {
       description:      blog.description || "",
       category:         blog.category || "",
       keywords:         blog.keywords || "",
-      image:            null,            // no new file yet
-      imagePreview:     blog.image || "", // ✅ show existing image in preview
-      existingImageUrl: blog.image || "", // ✅ FIX: remember the current image URL
+      image:            null,
+      imagePreview:     blog.image || "",
+      existingImageUrl: blog.image || "",
 
       meta_title:         blog.meta_title || "",
       focus_keyword:      blog.focus_keyword || "",
@@ -784,8 +724,6 @@ export default function AdminBlogs() {
       areas_covered:      asArray(blog.areas_covered),
       reviewer_name:      blog.reviewer_name || "",
       reviewer_role:      blog.reviewer_role || "",
-      // Stored as a TIMESTAMP and sent back as an ISO string, so it round-trips
-      // through the form untouched rather than being reformatted on the way in.
       reviewed_at:        blog.reviewed_at ? new Date(blog.reviewed_at).toISOString() : "",
     });
     setEditingId(blog.id);
@@ -813,7 +751,6 @@ export default function AdminBlogs() {
   };
 
   const resetForm = () => {
-    // Revoke any pending blob URL
     if (form.imagePreview && form.imagePreview.startsWith("blob:")) {
       URL.revokeObjectURL(form.imagePreview);
     }
@@ -889,13 +826,18 @@ export default function AdminBlogs() {
                 {editingId && <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-bold">Editing</span>}
               </button>
 
-              {/* Navigation only — opens the separate Project Management module.
-                  Does not change any blog behaviour. */}
               <button
                 onClick={() => navigate("/admin/projects")}
                 className="flex items-center gap-1.5 px-3 sm:px-5 py-3.5 sm:py-4 text-xs sm:text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-800 transition-all whitespace-nowrap"
               >
                 <LayoutGrid size={14} /><span>Projects</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/admin/case-studies")}
+                className="flex items-center gap-1.5 px-3 sm:px-5 py-3.5 sm:py-4 text-xs sm:text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-800 transition-all whitespace-nowrap"
+              >
+                <FileText size={14} /><span>Case Studies</span>
               </button>
             </div>
 
@@ -1142,13 +1084,6 @@ export default function AdminBlogs() {
                 </div>
               </Field>
 
-              {/* ══════════════════════════════════════════════════════════
-                  SEO / AEO / GEO
-                  Sits directly below the content editor because almost every
-                  check in it reads the content — keyword placement, heading
-                  structure, internal links and word count are all derived
-                  from what was just typed above.
-              ══════════════════════════════════════════════════════════ */}
               <SeoPanel form={form} onField={handleSeoField} open={seoOpen} onOpenChange={setSeoOpen} />
 
               <div className="rounded-xl border-2 border-dashed border-gray-200 p-4 bg-gray-50 space-y-3">

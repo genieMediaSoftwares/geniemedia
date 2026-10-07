@@ -5,16 +5,6 @@ import { useRouter } from "next/navigation";
 
 import { getToken } from "@/lib/auth";
 
-/**
- * Client-only wrapper for the admin screens.
- *
- * - Renders nothing on the server: the admin views read the JWT from
- *   localStorage while rendering, which does not exist there, and admin markup
- *   has no business in server HTML anyway.
- * - With `requireAuth`, a visitor without a token is sent to the login screen
- *   (the old <ProtectedRoute> behaviour). The backend still verifies the token
- *   on every request, so this is navigation, not security.
- */
 export default function AdminGate({ children, requireAuth = false }: { children: ReactNode; requireAuth?: boolean }) {
   const router = useRouter();
   const [ready, setReady] = useState(false);

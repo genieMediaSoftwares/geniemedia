@@ -1,14 +1,13 @@
 import type { MetadataRoute } from "next";
 
 import { getPublishedBlogsSafe } from "@/lib/api/blogs";
+import { getPublishedCaseStudiesSafe } from "@/lib/api/caseStudies";
+import { caseStudyUrl } from "@/lib/caseStudies";
 import { canonicalFor } from "@/lib/site";
 import { blogCanonical } from "@/lib/seo/metadata";
 
-// Generated at build time from the published posts.
-// A static export needs the sitemap route marked static explicitly.
 export const dynamic = "force-static";
 
-/** Every indexable public route. Admin, API, share and 404 are never listed. */
 const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: "daily" | "weekly" | "monthly" }> = [
   { path: "/", priority: 1.0, changeFrequency: "weekly" },
   { path: "/about", priority: 0.8, changeFrequency: "monthly" },
@@ -35,10 +34,8 @@ const lastModifiedOf = (iso: string | null, ...epochs: Array<number | null>): Da
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const blogs = await getPublishedBlogsSafe();
+  const [blogs, caseStudies] = await Promise.all([getPublishedBlogsSafe(), getPublishedCaseStudiesSafe()]);
 
-  // The static pages have no stored modification date; the latest publish is
-  // the last time anything on the site demonstrably changed.
   const latest = blogs
     .map((b) => lastModifiedOf(b.last_modified_at, b.updatedAt, b.createdAt))
     .filter((d): d is Date => Boolean(d))
@@ -52,10 +49,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const posts: MetadataRoute.Sitemap = blogs
-    // A post marked noindex must not be advertised in the sitemap.
     .filter((b) => !b.robots_directive.startsWith("noindex"))
     .map((b) => ({
-      // Exactly the URL the page declares as its canonical.
       url: blogCanonical(b),
       lastModified: lastModifiedOf(b.last_modified_at, b.updatedAt, b.createdAt),
       changeFrequency: "weekly" as const,
@@ -63,5 +58,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: b.image ? [b.image] : undefined,
     }));
 
-  return [...pages, ...posts];
+  const studies: MetadataRoute.Sitemap = caseStudies.map((cs) => ({
+    url: caseStudyUrl(cs.slug),
+    lastModified: lastModifiedOf(null, cs.updatedAt, cs.publishedAt, cs.createdAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+    images: cs.cover ? [cs.cover.url] : undefined,
+  }));
+
+  const hub: MetadataRoute.Sitemap = caseStudies.length
+    ? [
+        {
+          url: canonicalFor("/case-studies"),
+          lastModified: studies.map((s) => s.lastModified as Date | undefined).filter((d): d is Date => Boolean(d)).sort((a, b) => b.getTime() - a.getTime())[0],
+          changeFrequency: "monthly",
+          priority: 0.8,
+        },
+      ]
+    : [];
+
+  return [...pages, ...hub, ...studies, ...posts];
 }

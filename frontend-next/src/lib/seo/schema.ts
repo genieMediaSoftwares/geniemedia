@@ -1,15 +1,5 @@
-/**
- * Centralised JSON-LD for the blog, ported from Backend/services/structuredData.js
- * so the server-rendered article page emits the same graph the Express
- * renderer did. Everything is one `@graph` with stable `@id`s, so the
- * publisher, the breadcrumb's home and the site Organization resolve to one
- * node.
- *
- * Only facts that are visible on the site are emitted: no ratings, reviews,
- * prices or awards are invented here.
- */
-
-import type { Blog, JsonLdGraph, JsonLdObject, JsonLdValue } from "@/types";
+import type { Blog, CaseStudy, JsonLdGraph, JsonLdObject, JsonLdValue } from "@/types";
+import { caseStudyDescription, caseStudyTitle, caseStudyUrl } from "@/lib/caseStudies";
 import { DEFAULT_AUTHOR, SITE } from "@/lib/site";
 import { blogUrl, stripHtml, toIso } from "@/lib/blog";
 import { blogCanonical, blogDescription } from "@/lib/seo/metadata";
@@ -17,7 +7,6 @@ import { blogCanonical, blogDescription } from "@/lib/seo/metadata";
 export const ORG_ID = `${SITE.url}/#organization`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
 
-/** Drops null/undefined/empty members so the output stays valid and readable. */
 export function compact<T extends JsonLdValue | undefined>(value: T): T {
   if (Array.isArray(value)) {
     return value.map((v) => compact(v)).filter((v) => v !== undefined && v !== null) as T;
@@ -115,7 +104,6 @@ export const breadcrumbNode = (id: string, crumbs: Crumb[]): JsonLdObject => ({
   itemListElement: crumbs.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.name, item: c.item })),
 });
 
-/** Home > Blog > Post. The category has no archive page, so it is not a crumb. */
 export const blogCrumbs = (blog: Blog): Crumb[] => [
   { name: "Home", item: `${SITE.url}/` },
   { name: "Blog", item: `${SITE.url}/blogs` },
@@ -124,7 +112,6 @@ export const blogCrumbs = (blog: Blog): Crumb[] => [
 
 const visibleFaqs = (blog: Blog) => blog.faq_schema.filter((f) => f.question && f.answer);
 
-/** The complete JSON-LD graph for /blog/<permalink>. */
 export function blogPostingGraph(blog: Blog): JsonLdGraph {
   const url = blogCanonical(blog);
   const selfUrl = blogUrl(blog.permalink);
@@ -215,8 +202,6 @@ export function blogPostingGraph(blog: Blog): JsonLdGraph {
 
   if (reviewer) graph.push(reviewer);
 
-  // The FAQ is printed on the page (see BlogArticle), so the markup describes
-  // visible content.
   const faqs = visibleFaqs(blog);
   if (faqs.length) {
     graph.push({
@@ -234,7 +219,6 @@ export function blogPostingGraph(blog: Blog): JsonLdGraph {
   return { "@context": "https://schema.org", "@graph": graph };
 }
 
-/** CollectionPage + ItemList for /blogs, listing the posts actually shown. */
 export function blogListGraph(posts: Blog[], meta: { canonical: string; title: string; description: string }): JsonLdGraph {
   return {
     "@context": "https://schema.org",
@@ -269,6 +253,67 @@ export function blogListGraph(posts: Blog[], meta: { canonical: string; title: s
   };
 }
 
-/** Serialises JSON-LD for a <script> tag; `<` is escaped so no string can close it early. */
 export const serializeJsonLd = (data: JsonLdGraph | JsonLdObject): string =>
   JSON.stringify(data).replace(/</g, "\\u003c");
+
+export function caseStudyGraph(cs: CaseStudy): JsonLdGraph {
+  const url = caseStudyUrl(cs.slug);
+  const image = cs.cover
+    ? compact<JsonLdObject>({
+        "@type": "ImageObject",
+        "@id": `${url}#primaryimage`,
+        url: cs.cover.url,
+        contentUrl: cs.cover.url,
+        width: cs.cover.width ?? undefined,
+        height: cs.cover.height ?? undefined,
+        caption: cs.cover.alt,
+      })
+    : undefined;
+  const published = toIso(cs.publishedAt) || toIso(cs.createdAt);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      compact<JsonLdObject>({
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: caseStudyTitle(cs),
+        description: caseStudyDescription(cs),
+        inLanguage: SITE.language,
+        isPartOf: { "@id": WEBSITE_ID },
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+        primaryImageOfPage: image ? { "@id": `${url}#primaryimage` } : undefined,
+        about: { "@id": `${url}#work` },
+        publisher: { "@id": ORG_ID },
+        datePublished: published ?? undefined,
+        dateModified: toIso(cs.updatedAt) || published || undefined,
+      }),
+      compact<JsonLdObject>({
+        "@type": "CreativeWork",
+        "@id": `${url}#work`,
+        name: cs.title,
+        description: cs.shortDescription,
+        image: image ? { "@id": `${url}#primaryimage` } : undefined,
+        creator: { "@id": ORG_ID },
+        dateCreated: cs.projectDate ?? undefined,
+        mainEntityOfPage: { "@id": `${url}#webpage` },
+      }),
+      ...(image ? [image] : []),
+      breadcrumbNode(`${url}#breadcrumb`, [
+        { name: "Home", item: `${SITE.url}/` },
+        { name: "Case Studies", item: `${SITE.url}/case-studies` },
+        { name: cs.clientName, item: url },
+      ]),
+      webSiteNode(),
+      organizationNode(),
+    ],
+  };
+}
+
+export function caseStudyListNode(items: CaseStudy[]): JsonLdObject {
+  return {
+    "@type": "ItemList",
+    "@id": `${SITE.url}/case-studies#itemlist`,
+    itemListElement: items.map((cs, i) => ({ "@type": "ListItem", position: i + 1, url: caseStudyUrl(cs.slug), name: cs.title })),
+  };
+}

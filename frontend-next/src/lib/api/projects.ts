@@ -6,12 +6,6 @@ import { normalizeProject, toPortfolioItem } from "@/lib/api/normalize";
 
 export { normalizeProject, toPortfolioItem };
 
-/**
- * Published portfolio projects, or null when the API cannot be reached — the
- * caller then renders its offline fallback list, exactly as the Vite hook did.
- * A successful empty response is an empty array, so deleting every project in
- * the admin panel really empties the grid.
- */
 export async function getPublishedPortfolio(): Promise<PortfolioItem[] | null> {
   try {
     const data = await serverGetJson("/api/projects", { tags: [CACHE_TAGS.projects] });

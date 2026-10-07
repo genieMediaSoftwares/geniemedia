@@ -9,9 +9,6 @@ import { CONTENT_LINK } from "@/lib/linkStyles";
 
 export const metadata: Metadata = buildRouteMetadata("/terms-and-conditions");
 
-// General website terms. Commercial terms for a specific engagement (scope,
-// pricing, payment schedule, cancellations) are deliberately left to the
-// written quote or agreement for that job rather than invented here.
 const SECTIONS: LegalSection[] = [
   {
     id: "acceptance",

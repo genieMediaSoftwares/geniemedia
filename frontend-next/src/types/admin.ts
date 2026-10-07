@@ -1,6 +1,5 @@
 import type { DefinitionEntry, FaqPair, KeyFact } from "@/utils/seoAnalysis";
 
-/** The admin blog editor's form state (AdminBlogs + SeoPanel). */
 export interface BlogForm {
   title: string;
   permalink: string;
@@ -8,11 +7,8 @@ export interface BlogForm {
   description: string;
   category: string;
   keywords: string;
-  /** A newly picked file; null when the existing image is kept. */
   image: File | null;
-  /** Blob URL of a new file, or the hosted URL of the saved image. */
   imagePreview: string;
-  /** The saved image URL, so editing without re-uploading keeps it. */
   existingImageUrl: string;
 
   meta_title: string;
@@ -37,7 +33,6 @@ export interface BlogForm {
 
 export type BlogFormField = keyof BlogForm;
 
-/** Typed setter for one field of the form. */
 export type SetBlogField = <K extends BlogFormField>(name: K, value: BlogForm[K]) => void;
 
 export interface ToastState {

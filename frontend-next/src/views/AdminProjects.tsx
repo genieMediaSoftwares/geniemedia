@@ -39,8 +39,6 @@ import {
   LayoutGrid, ExternalLink, ArrowUpDown, BookOpen,
 } from "lucide-react";
 
-/* ─────────────────────────── Shared UI bits ─────────────────────────── */
-
 function Toast({ toast, onClose }: { toast: ToastState | null; onClose: () => void }) {
   useEffect(() => {
     if (!toast) return;
@@ -287,8 +285,6 @@ function Field({ label, required, hint, icon: IconComp, children }: FieldProps) 
 const inputCls =
   "w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:border-[#6B4A2D] focus:ring-4 focus:ring-[#6B4A2D]/10 outline-none transition font-medium";
 
-/* ─────────────────────────── Config ─────────────────────────── */
-
 const CATEGORIES = [
   "Web Development",
   "E-Commerce",
@@ -301,7 +297,7 @@ const CATEGORIES = [
 ];
 
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // must stay in sync with multer's limit
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 const emptyForm: ProjectForm = {
   title: "",
@@ -309,12 +305,10 @@ const emptyForm: ProjectForm = {
   category: "",
   projectUrl: "",
   displayOrder: "",
-  image: null,          // new File object (only when the admin picks a new file)
-  imagePreview: "",     // blob URL or the currently saved hosted URL
-  existingImageUrl: "", // the saved URL, so editing without re-uploading keeps it
+  image: null,
+  imagePreview: "",
+  existingImageUrl: "",
 };
-
-/* ─────────────────────────── Page ─────────────────────────── */
 
 export default function AdminProjects() {
   const router = useRouter();
@@ -336,7 +330,6 @@ export default function AdminProjects() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [saveAsDraft, setSaveAsDraft] = useState(false);
 
-  // Function declarations, so fetch helpers defined above can call them.
   function showToast(msg: string, type = "success") {
     setToast({ msg, type });
   }
@@ -348,8 +341,6 @@ export default function AdminProjects() {
       ? new Date(Number(ts)).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
       : "—";
 
-  /* ── Data ── */
-
   const fetchProjects = async () => {
     setDbLoading(true);
     try {
@@ -357,7 +348,6 @@ export default function AdminProjects() {
         headers: { Authorization: token ?? "" },
       });
 
-      // An expired or invalid login: start a fresh session.
       if (res.status === 401 || res.status === 403) {
         clearToken();
         navigate("/admin");
@@ -376,7 +366,6 @@ export default function AdminProjects() {
     }
   };
 
-  // Fetch-on-mount for a client-only admin screen.
   // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
   useEffect(() => { fetchProjects(); }, []);
 
@@ -395,8 +384,6 @@ export default function AdminProjects() {
     return list;
   })();
 
-  /* ── Form handlers ── */
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -408,7 +395,6 @@ export default function AdminProjects() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    // Allow re-picking the same file after a rejection
     e.target.value = "";
     if (!file) return;
 
@@ -432,7 +418,6 @@ export default function AdminProjects() {
       ...prev,
       image: file,
       imagePreview: URL.createObjectURL(file),
-      // existingImageUrl stays — the backend ignores it when a new file is sent
     }));
   };
 
@@ -481,10 +466,8 @@ export default function AdminProjects() {
       formData.append("status",       asDraft ? "draft" : "published");
 
       if (form.image) {
-        // A brand-new file was picked — upload it
         formData.append("image", form.image);
       } else if (form.existingImageUrl) {
-        // No new file — tell the backend to keep the saved image untouched
         formData.append("existingImage", form.existingImageUrl);
       }
 
@@ -520,7 +503,6 @@ export default function AdminProjects() {
     }
   };
 
-  // Status-only change — the stored image and all other fields stay exactly as they are.
   const changeStatus = async (project: Project, status: Project["status"]) => {
     try {
       const res = await fetch(`${BASE_URL}/api/projects/${project.id}/status`, {
@@ -571,9 +553,9 @@ export default function AdminProjects() {
       category:         project.category || "",
       projectUrl:       project.projectUrl || "",
       displayOrder:     String(project.displayOrder ?? ""),
-      image:            null,                   // no new file yet
-      imagePreview:     project.image || "",    // show the saved image
-      existingImageUrl: project.image || "",    // remember it so it is preserved
+      image:            null,
+      imagePreview:     project.image || "",
+      existingImageUrl: project.image || "",
     });
     setEditingId(project.id);
     setActiveTab("create");
@@ -609,8 +591,6 @@ export default function AdminProjects() {
     localStorage.removeItem("token");
     navigate("/admin");
   };
-
-  /* ── Render ── */
 
   return (
     <div className="w-full min-h-screen bg-[#F7F6F3] overflow-x-hidden font-sans">
@@ -679,6 +659,13 @@ export default function AdminProjects() {
                 className="flex items-center gap-1.5 px-3 sm:px-5 py-3.5 sm:py-4 text-xs sm:text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-800 transition-all whitespace-nowrap"
               >
                 <BookOpen size={14} /><span>Blogs</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/admin/case-studies")}
+                className="flex items-center gap-1.5 px-3 sm:px-5 py-3.5 sm:py-4 text-xs sm:text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-800 transition-all whitespace-nowrap"
+              >
+                <FileText size={14} /><span>Case Studies</span>
               </button>
             </div>
 

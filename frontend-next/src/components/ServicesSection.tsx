@@ -55,7 +55,6 @@ export default function ServicesSection() {
           </p>
         </div>
 
-     
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div
@@ -64,13 +63,11 @@ export default function ServicesSection() {
             >
              
               <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}></div>
-              
-            
+
               <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${service.color} text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
                 {service.icon}
               </div>
 
-        
               <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
                 {service.title}
               </h3>
@@ -78,7 +75,6 @@ export default function ServicesSection() {
                 {service.description}
               </p>
 
-         
               <div className="mt-6 flex items-center text-gray-500 group-hover:text-white transition-colors duration-300">
                 <span className="text-sm font-medium">Learn more</span>
                 <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform duration-300" aria-hidden="true" />
@@ -87,7 +83,6 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        
         <div className="text-center mt-10">
           <a href="https://wa.me/919032845433" className="inline-block bg-orange-400 text-black px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-black-500/50 transform hover:scale-105 transition-all duration-300">
             Start Your Project

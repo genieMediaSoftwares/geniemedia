@@ -1,21 +1,10 @@
 import React from 'react';
 import LogoAsset from "@/assets/GenieMedia-Logo.png";
 import { Mail, Phone, MapPin, Facebook, Instagram, Youtube, Linkedin } from 'lucide-react';
+import { getPublishedCaseStudiesSafe } from "@/lib/api/caseStudies";
 
 const Logo = LogoAsset.src;
 
-/*
- * Layout
- *   mobile (< sm):  brand row across the top, then a compact 2 x 2 grid:
- *                   Services | Company
- *                   Resources | Contact
- *   sm and up:      unchanged — 2 columns on tablet, 4 on desktop. The mobile-only
- *                   Resources column is hidden there, because Privacy Policy and
- *                   Terms sit in the bottom bar instead (and the bottom bar hides
- *                   them on mobile), so no link is ever shown twice.
- */
-
-// Footer link: compact on mobile, the original size and tap target from sm up.
 const FOOTER_LINK =
   "text-sm sm:text-base text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[36px] sm:min-h-[44px] lg:min-h-0 sm:py-1 lg:py-0";
 const FOOTER_HEADING = "text-base sm:text-lg font-bold mb-1 sm:mb-6 text-orange-500";
@@ -23,7 +12,8 @@ const FOOTER_LIST = "sm:space-y-3";
 const SOCIAL_LINK =
   "w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-700 hover:bg-orange-500 flex items-center justify-center transition-colors duration-300";
 
-export default function Footer() {
+export default async function Footer() {
+  const hasCaseStudies = (await getPublishedCaseStudiesSafe()).length > 0;
   const services = [
   { title: "Digital Marketing", link: "/digital_marketing" },
   { title: "Web Development", link: "/web_development" },
@@ -34,11 +24,11 @@ export default function Footer() {
 const company = [
   { title: "About Us", link: "/about" },
   { title: "Projects", link: "/projects" },
+  ...(hasCaseStudies ? [{ title: "Case Studies", link: "/case-studies" }] : []),
   { title: "Testimonials", link: "/reviews" },
   { title: "Contact", link: "/contact" }
 ];
 
-// Mobile only: on larger screens Privacy and Terms are in the bottom bar.
 const resources = [
   { title: "Blogs", link: "/blogs" },
   { title: "Privacy Policy", link: "/privacy-policy" },
@@ -47,11 +37,9 @@ const resources = [
 
   return (
     <footer className="bg-black text-white">
-      {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-8 sm:py-16 lg:py-16">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 sm:gap-8 lg:gap-12">
 
-          {/* Company Info — a full-width brand row on mobile */}
           <div className="col-span-2 sm:col-span-1 space-y-4 sm:space-y-6">
             <div className="flex items-center gap-4 sm:block">
               <img
@@ -68,10 +56,6 @@ const resources = [
               </p>
             </div>
 
-            {/* Social Media Icons.
-                Icon-only links need an accessible name — without one they were
-                announced as just "link" and failed the "Links do not have
-                discernible names" audit. */}
             <div className="flex gap-3 sm:gap-4">
               <a
                 href="https://m.facebook.com/826093997257312/"
@@ -113,7 +97,6 @@ const resources = [
             </div>
           </div>
 
-          {/* Services */}
           <div className="min-w-0">
             <h2 className={FOOTER_HEADING}>Services</h2>
             <ul className={FOOTER_LIST}>
@@ -127,7 +110,6 @@ const resources = [
             </ul>
           </div>
 
-          {/* Company */}
           <div className="min-w-0">
             <h2 className={FOOTER_HEADING}>Company</h2>
             <ul className={FOOTER_LIST}>
@@ -141,7 +123,6 @@ const resources = [
             </ul>
           </div>
 
-          {/* Resources — mobile only (see the layout note above) */}
           <div className="min-w-0 sm:hidden">
             <h2 className={FOOTER_HEADING}>Resources</h2>
             <ul>
@@ -155,7 +136,6 @@ const resources = [
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div className="min-w-0">
             <h2 className={FOOTER_HEADING}>Contact Us</h2>
             <ul className="space-y-1 sm:space-y-4 text-[13px] sm:text-base">
@@ -182,7 +162,6 @@ const resources = [
               <li className="flex items-center gap-2 sm:gap-3">
                 <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 flex-shrink-0" />
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=admin@geniemedia.in" className="min-w-0 break-words text-gray-300 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[36px] sm:min-h-[44px] lg:min-h-0">
-                 {/* On the narrowest phones the address wraps after the "@", not mid-word. */}
                  <span>admin@<wbr />geniemedia.in</span>
                 </a>
               </li>
@@ -191,7 +170,6 @@ const resources = [
         </div>
       </div>
 
-      {/* Bottom Bar */}
       <div className="border-t border-white/10 sm:border-0 sm:-mt-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
@@ -209,7 +187,6 @@ const resources = [
                 </a>
               </p>
             </div>
-            {/* On mobile these two links live in the Resources column instead. */}
             <nav aria-label="Legal" className="hidden sm:flex items-center gap-6 text-sm">
               <a href="/privacy-policy" className="text-gray-400 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] md:min-h-0">
                 Privacy Policy

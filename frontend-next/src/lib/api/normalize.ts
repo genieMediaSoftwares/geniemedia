@@ -16,11 +16,6 @@ import type {
 import { arr, isRecord, num, str } from "@/lib/api/coerce";
 import { cleanSlug, stripHtml, toIso } from "@/lib/blog";
 
-/**
- * Typed adapters for rows of the `blogs` table. Shared by the server pages and
- * the admin panel, so it must stay free of server-only imports.
- */
-
 const ROBOTS: RobotsDirective[] = ["index,follow", "noindex,follow", "noindex,nofollow"];
 const SCHEMA_TYPES: BlogSchemaType[] = ["Article", "BlogPosting", "FAQPage", "HowTo", "NewsArticle"];
 
@@ -58,17 +53,11 @@ const history = (value: unknown): SlugHistoryEntry[] =>
     .map((h) => ({ slug: String(h.slug ?? ""), changed_at: str(h.changed_at) ?? undefined }))
     .filter((h) => h.slug);
 
-/**
- * Typed adapter for one row of the `blogs` table as the API returns it.
- * Returns null for anything that is not a usable post.
- */
 export function normalizeBlog(raw: unknown, { lenient = false }: { lenient?: boolean } = {}): Blog | null {
   if (!isRecord(raw)) return null;
   const id = num(raw.id);
   const title = str(raw.title) ?? (lenient ? "" : null);
   const permalink = cleanSlug(str(raw.permalink));
-  // The admin list keeps half-finished drafts (lenient); public pages need a
-  // title and a permalink to be renderable.
   if (id === null || title === null || (!lenient && (!title || !permalink))) return null;
 
   const robots = str(raw.robots_directive);
@@ -114,8 +103,6 @@ export function normalizeBlog(raw: unknown, { lenient = false }: { lenient?: boo
   };
 }
 
-
-/** The slim card shape the listing pages send to the browser. */
 export const toBlogCard = (blog: Blog): BlogCard => ({
   id: blog.id,
   title: blog.title,
@@ -126,7 +113,6 @@ export const toBlogCard = (blog: Blog): BlogCard => ({
   createdAt: blog.createdAt,
   createdIso: toIso(blog.createdAt),
 });
-
 
 export function normalizeProject(raw: unknown): Project | null {
   if (!isRecord(raw)) return null;
@@ -147,7 +133,6 @@ export function normalizeProject(raw: unknown): Project | null {
   };
 }
 
-/** The shape the existing portfolio markup renders ({ name, image, url }). */
 export const toPortfolioItem = (p: Project): PortfolioItem => ({
   id: p.id,
   name: p.title,

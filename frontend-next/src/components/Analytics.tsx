@@ -2,25 +2,6 @@ import Script from "next/script";
 
 import { GA4_ID, GTM_ID } from "@/lib/site";
 
-/**
- * Google Tag Manager + Google Analytics 4, with the same deferred loading the
- * Vite build's index.html used.
- *
- * As of 2026-09-28 the published GTM container has no tags: page views are sent
- * by the separate GA4 snippet below, which is the site's only analytics. Keep
- * it unless a GA4 tag is added to the GTM container first, or page views stop
- * being recorded. Each script is included exactly once (in the root layout), so
- * nothing is double-counted.
- *
- * The dataLayer, the `gtm.js` start event and the queued gtag() config run
- * immediately; only the third-party downloads wait until the page has loaded,
- * settled for 1.5s and the main thread is idle, so they never compete with the
- * first render.
- *
- * Client-side navigations (router.push) are recorded by GA4 enhanced
- * measurement's "page changes based on browser history events", which is on
- * by default, so no manual page_view is sent — that would double-count.
- */
 export default function Analytics() {
   return (
     <>
@@ -81,7 +62,6 @@ gtag('config', '${GA4_ID}');
   );
 }
 
-/** The GTM <noscript> fallback, placed first in <body> as Google specifies. */
 export function GtmNoScript() {
   if (!GTM_ID) return null;
   return (

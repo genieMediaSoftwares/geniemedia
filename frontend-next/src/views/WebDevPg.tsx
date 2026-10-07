@@ -14,12 +14,9 @@ import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const web_services_hero = web_services_heroAsset.src;
 
-
-
 const inlineLink = CONTENT_LINK;
 
 export default function WebDevPg({ initialProjects }: { initialProjects: PortfolioItem[] | null }) {
-  
 
   const accordionData = [
     {
@@ -64,11 +61,6 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
     }
   ];
 
-
-  // An "industries we serve" carousel (state, data and next/prev handlers) used
-  // to be declared here but was never rendered — roughly 60 lines of unused
-  // JavaScript shipped in this route chunk. Removed; nothing referenced it.
-
   return (
     <>
     <div className="bg-gradient-to-br 
@@ -88,18 +80,12 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
             </div>
 
             <div className="flex justify-center lg:justify-end">
-              {/* The wrapper carries the max-width, not just the <img>. Without it
-                  the wrapper had no resolvable width until the image had loaded,
-                  so the width/height attributes could not reserve any height and
-                  the hero collapsed-then-expanded — a ~0.35 layout shift. */}
               <div className="relative w-full max-w-lg lg:max-w-2xl">
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
                 <img 
                   src= {web_services_hero}
                   alt="Web development concept with icons for code, devices and global websites"
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
-                  // The Largest Contentful Paint element on this route, so it
-                  // is fetched immediately rather than lazily.
                   fetchPriority="high"
                   width="848"
                   height="477"
@@ -111,7 +97,6 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
         </div>
       </div>
 
-      {/* video section */}
             <section className="relative bg-[#f9fafc] overflow-hidden">
                <div className="max-w-6xl mx-auto px-6 py-10 md:py-14 text-center">
          
@@ -123,8 +108,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
                  >
                    CREATIVE & STRATEGIC WEB DESIGN & DEVELOPMENT COMPANY
                  </p>
-         
-               
+
                  <h2
                    className="
                      text-2xl md:text-5xl lg:text-6xl 
@@ -136,8 +120,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
                  Connect, Engage & Convert
                      
                  </h2>
-         
-               
+
                  <p
                    className="
                      max-w-3xl mx-auto text-lg text-gray-600
@@ -150,8 +133,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
                  reflect your brand, attract users, and turn visitors into customers.
          
                  </p>
-         
-                
+
                  <div
                    className="
                      flex flex-col sm:flex-row items-center justify-center gap-4
@@ -177,7 +159,6 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
 
              <ServicesSection2/>
 
-             {/* Technologies: added below the services; nothing else on the page changed. */}
              <PlatformsWeUse
                type="webDevelopment"
                intro={
@@ -191,19 +172,11 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
                }
              />
 
-
-             {/* projcts */}
              <ProjectsSection initialProjects={initialProjects} />
-             
-
-
-
-    {/* why geniemedia */}
 
       <div className="min-h-screen bg-gray-100 py-16 px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-          {/* Left Column - Content */}
           <div className="lg:sticky lg:top-24">
             <h2 className="text-2xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Why Choose Genie Media for Your Website?
@@ -216,7 +189,6 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
             </a>
           </div>
 
-          {/* Right Column - Accordions */}
           <div className="space-y-4">
             {accordionData.map((item) => (
               <details
@@ -250,8 +222,6 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
       </div>
     </div>
 
-
-      {/* Website development for businesses in Vizag: who it is for and how a project runs. */}
       <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
@@ -288,8 +258,6 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
       />
 
      <VideoTestimonials/>
-      
-  
 
       </>
   )

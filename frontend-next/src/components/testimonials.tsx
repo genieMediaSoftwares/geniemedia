@@ -4,8 +4,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState, useEffect, useRef } from 'react';
 import { Star, Quote } from 'lucide-react';
 
-// Each testimonial is a YouTube video. Only the video ID is stored — the embed
-// and thumbnail URLs are derived from it, so they can never end up malformed.
 const testimonials = [
   {
     id: 1,
@@ -49,19 +47,6 @@ const testimonials = [
   }
 ];
 
-/**
- * Click-to-play YouTube facade.
- *
- * Mounting five real <iframe> embeds shipped ~5 MB and several seconds of
- * third-party JavaScript on page load, even for the cards CSS was hiding —
- * `display: none` does not stop an iframe from loading. Instead we render the
- * video's own thumbnail plus a play button, and only swap in the real player
- * once the visitor actually asks for it. The player, its controls and
- * fullscreen all behave exactly as before from that point on.
- *
- * youtube-nocookie.com is used so no tracking cookie is set unless the visitor
- * chooses to play a video.
- */
 const LiteYouTube = ({ videoId, title, onPlay }: { videoId: string; title: string; onPlay?: () => void }) => {
   const [activated, setActivated] = useState(false);
 
@@ -109,9 +94,6 @@ const LiteYouTube = ({ videoId, title, onPlay }: { videoId: string; title: strin
   );
 };
 
-
-/* ── Tailwind class sets (formerly this component's <style> block) ────── */
-
 const CAROUSEL_NAV =
   "z-20 flex h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-full bg-[linear-gradient(135deg,#ff6b00,#ff8c00)] shadow-[0_10px_30px_rgba(255,107,0,0.3)] transition-all duration-300 ease-[ease] hover:scale-110 hover:shadow-[0_15px_40px_rgba(255,107,0,0.5)] active:scale-95 max-[768px]:h-11 max-[768px]:w-11";
 
@@ -121,7 +103,6 @@ const CAROUSEL_POSITION: Record<string, string> = {
   center: "w-[430px] [transform:scale(1)_translateZ(0)] opacity-100 blur-0 z-10 max-[768px]:!w-full max-[768px]:max-w-[480px]",
   hidden: "hidden",
 };
-// Staggered reveal, one step per card.
 const ITEM_DELAY = ["![animation-delay:0s]", "![animation-delay:0.1s]", "![animation-delay:0.2s]", "![animation-delay:0.3s]", "![animation-delay:0.4s]", "![animation-delay:0.5s]"];
 
 const VIDEO_CARD = "cursor-pointer transition-all duration-[400ms] ease-in-out";
@@ -131,10 +112,7 @@ const VIDEO_CARD_CENTER = "shadow-[0_30px_80px_rgba(255,107,0,0.3)] hover:-trans
 const VideoTestimonials = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  // Which way the last move went: the new slide enters from that side on phones.
   const [direction, setDirection] = useState<"next" | "prev">("next");
-  // Auto-advance runs until the visitor takes over (arrow, dot, swipe or play),
-  // so it never moves a slide out from under someone.
   const [autoPlay, setAutoPlay] = useState(true);
   const touchStartX = useRef<number | null>(null);
   const sectionRef = useRef(null);
@@ -163,7 +141,6 @@ const VideoTestimonials = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
   };
 
-  // Every 6 s while the section is on screen, until the visitor interacts.
   useEffect(() => {
     if (!autoPlay || !isVisible) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -188,7 +165,6 @@ const VideoTestimonials = () => {
     setCurrentIndex(index);
   };
 
-  // Swipe left/right on the slide (phones).
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -201,7 +177,6 @@ const VideoTestimonials = () => {
     else prevSlide();
   };
 
-  // Previous / next button.
   const arrow = (dir: "prev" | "next", extra: string) => (
     <button
       type="button"
@@ -220,14 +195,12 @@ const VideoTestimonials = () => {
         ref={sectionRef}
         className="relative bg-gradient-to-br from-white via-orange-50 to-white py-14 px-4 sm:px-6 lg:px-8 overflow-hidden"
       >
-        {/* Background Decorations */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-20 left-10 w-72 h-72 bg-orange-200 rounded-full blur-3xl opacity-20"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-300 rounded-full blur-3xl opacity-20"></div>
         </div>
 
         <div className="relative max-w-8xl mx-auto">
-          {/* Section Header */}
           <div className={`text-center mb-8 ${isVisible ? 'animate-fade-in-up-slow motion-reduce:animate-none' : 'opacity-0'}`}>
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 rounded-full mb-4">
               <Star className="text-orange-500" size={16} fill="currentColor" />
@@ -243,14 +216,10 @@ const VideoTestimonials = () => {
             </p>
           </div>
 
-          {/* Carousel */}
           <div className="relative">
             <div className="relative flex items-center justify-center gap-8 [perspective:1000px] min-h-[580px] max-[768px]:gap-0 max-[768px]:min-h-0">
-              {/* Arrows on both sides: beside the cards on desktop; on phones over the card edges,
-                  level with the middle of the video (card width x 9/32), clear of the text. */}
               {arrow("prev", "max-[768px]:absolute max-[768px]:top-[calc(min(100vw-2rem,480px)*0.28125)] max-[768px]:-translate-y-1/2 max-[768px]:left-2 max-[768px]:shadow-[0_6px_18px_rgba(0,0,0,0.25)]")}
 
-              {/* Carousel Items */}
               <div className="flex-1 flex items-center justify-center gap-8 overflow-hidden max-w-8xl touch-pan-y" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                 {testimonials.map((testimonial, index) => {
                   let position = 'hidden';
@@ -269,9 +238,6 @@ const VideoTestimonials = () => {
                       }`}
                       onClick={() => position !== 'center' && goToSlide(index)}
                     >
-                      {/* Remounts when this card becomes the centre one, so on phones the
-                          slide-in plays from the side the visitor moved to. Desktop keeps
-                          the outer element's position transition. */}
                       <div
                         key={position === "center" ? `active-${currentIndex}` : "idle"}
                         className={position === "center" ? (direction === "next" ? "max-[768px]:animate-carousel-from-right" : "max-[768px]:animate-carousel-from-left") : undefined}
@@ -286,14 +252,12 @@ const VideoTestimonials = () => {
                           />
                         </div>
 
-                       
                         <div className="p-6 max-[768px]:p-4">
                           
                           <div className="w-12 h-12 max-[768px]:w-9 max-[768px]:h-9 max-[768px]:mb-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
                             <Quote className="text-white w-6 h-6 max-[768px]:w-4 max-[768px]:h-4" />
                           </div>
 
-                       
                           <div className="flex gap-1 mb-3">
                             {[...Array(testimonial.rating)].map((_, i) => (
                               <Star 
@@ -305,12 +269,10 @@ const VideoTestimonials = () => {
                             ))}
                           </div>
 
-                         
                           <p className="text-gray-700 text-sm mb-4 max-[768px]:mb-3 italic leading-relaxed">
                             "{testimonial.quote}"
                           </p>
 
-                         
                           <div className="pt-2 border-t border-gray-100">
                             <h3 className="text-lg font-bold text-gray-900">
                               {testimonial.name}
@@ -327,11 +289,9 @@ const VideoTestimonials = () => {
                 })}
               </div>
 
-       
               {arrow("next", "max-[768px]:absolute max-[768px]:top-[calc(min(100vw-2rem,480px)*0.28125)] max-[768px]:-translate-y-1/2 max-[768px]:right-2 max-[768px]:shadow-[0_6px_18px_rgba(0,0,0,0.25)]")}
             </div>
 
-            {/* Indicators */}
             <div className="flex items-center justify-center gap-2 mt-8 max-[768px]:mt-5 max-[768px]:gap-3">
               {testimonials.map((_, index) => (
                 <button
@@ -354,8 +314,6 @@ const VideoTestimonials = () => {
             </div>
           </div>
 
-         
-        
         </div>
       </section>
     </>

@@ -23,8 +23,6 @@ const light = lightAsset.src;
 const set2 = set2Asset.src;
 const nytview = nytviewAsset.src;
 const set = setAsset.src;
-// Intrinsic sizes of the optimised assets, so every <img> can declare
-// width/height and reserve its space before the bytes arrive.
 const LANDSCAPE = { width: 1400, height: 933 };
 const PORTRAIT = { width: 933, height: 1400 };
 const IMG_SIZE = {
@@ -112,7 +110,6 @@ const PODCAST_FAQS = [
   },
 ];
 
-/** <img> with explicit dimensions, lazy loading and async decoding. */
 const StudioImg = ({ src, alt, className = "" }: { src: string; alt: string; className?: string }) => (
   <img
     src={src}
@@ -125,14 +122,9 @@ const StudioImg = ({ src, alt, className = "" }: { src: string; alt: string; cla
   />
 );
 
-/* ── Tailwind class sets (formerly Podcast.css) ────────────────────────── */
-
-// Hero: a dark overlay painted by ::before behind the content.
 const HERO =
   "relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-10 pb-[60px] pt-[120px] text-center text-white before:absolute before:inset-0 before:z-[-1] before:bg-black/80 before:content-[''] max-[768px]:px-5 max-[768px]:pb-10 max-[768px]:pt-[100px]";
 const HERO_GLOW = "absolute z-0 h-[600px] w-[600px] rounded-full opacity-[0.15] blur-[120px] animate-podcast-drift-20";
-// Orange button with a light sweep on hover (the merged look of the old
-// Header.css and Podcast.css `.btn-primary` rules).
 const HERO_BUTTON =
   "relative cursor-pointer overflow-hidden rounded-[25px] border-none bg-[#F97316] px-10 py-4 text-[16px] font-semibold text-black no-underline transition-all duration-300 ease-[ease] before:absolute before:-left-full before:top-0 before:h-full before:w-full before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent)] before:transition-[left] before:duration-500 before:ease-[ease] before:content-[''] hover:-translate-y-0.5 hover:bg-[rgb(7,0,17)] hover:text-white hover:shadow-[0_12px_35px_rgba(255,107,0,0.4)] hover:before:left-full max-[768px]:w-[70%] max-[768px]:text-center max-[768px]:!text-[18px]";
 
@@ -158,7 +150,6 @@ const SBF_IMG =
   "block h-auto w-full rounded-2xl shadow-[0_12px_30px_rgba(0,0,0,0.12)] [transition:transform_.45s_ease,box-shadow_.45s_ease] group-hover/card:scale-[1.03] group-hover/card:shadow-[0_20px_40px_rgba(0,0,0,0.16)]";
 const SBF_CAPTION = "mt-[18px] text-[1.25rem] font-bold italic text-[#111]";
 
-// Sound-wave bars: [height, animation delay] for each of the 20 bars.
 const WAVE_BARS = [
   "h-[40px] ![animation-delay:0s]", "h-[60px] ![animation-delay:0.1s]", "h-[45px] ![animation-delay:0.2s]", "h-[80px] ![animation-delay:0.3s]",
   "h-[55px] ![animation-delay:0.4s]", "h-[70px] ![animation-delay:0.5s]", "h-[50px] ![animation-delay:0.6s]", "h-[65px] ![animation-delay:0.7s]",
@@ -167,13 +158,7 @@ const WAVE_BARS = [
   "h-[68px] ![animation-delay:1.6s]", "h-[72px] ![animation-delay:1.7s]", "h-[58px] ![animation-delay:1.8s]", "h-[65px] ![animation-delay:1.9s]",
 ];
 
-/**
- * `platforms` is the server-rendered "Platforms we use" section, passed in by
- * the route so its logo data never ships to the browser as JavaScript.
- */
 export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) {
-  // Reveal-on-scroll: elements marked `data-reveal` get the `animate` class
-  // when they enter the viewport, which their `[&.animate]:` classes respond to.
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries, obs) => {
@@ -195,15 +180,13 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
   useEffect(() => {
     if (!PODCAST_CLIP_URL) return;
     const t = setTimeout(() => {
-      // play() rejects if autoplay is blocked or the source failed to load.
       videoRef.current?.play?.().catch(() => {});
-    }, 1200); // play AFTER page settles
+    }, 1200);
     return () => clearTimeout(t);
   }, []);
 
   return (
     <div>
-      {/* HERO SECTION */}
       <section className={HERO}>
         {PODCAST_CLIP_URL && (
           <video
@@ -218,7 +201,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
         )}
 
         <div className={`${HERO_GLOW} -left-[200px] -top-[200px] bg-[#FF6B00]`}></div>
-        {/* Over-constrained on purpose: the original rules left this glow pinned top-left. */}
         <div className={`${HERO_GLOW} ![animation-delay:-10s] -bottom-[200px] -right-[200px] left-0 top-0 bg-[#6B4FFF]`}></div>
 
         <h1 className="mb-5 mt-10 text-center text-[clamp(38px,6vw,60px)] font-extrabold leading-[1.1] tracking-[-0.03em]">
@@ -241,7 +223,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
         </div>
       </section>
 
-      {/* NETWORK SECTION */}
       <section className="relative overflow-hidden bg-[linear-gradient(90deg,#f2f2f5,#e8e8ec)] px-10 py-[60px] text-center text-[#222] max-[768px]:px-[10px] max-[768px]:py-10" id="network">
         <div>
           <p className="mb-[15px] text-[16px] uppercase tracking-[3px] text-[#f97316]">OUR SPACE</p>
@@ -259,8 +240,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
             <StudioImg src={light} alt="Studio lighting" className={MARQUEE_IMG} />
             <StudioImg src={cameras} alt="Studio cameras" className={MARQUEE_IMG} />
 
-            {/* The strip repeats itself to loop seamlessly; the duplicates are
-                decorative, so they carry an empty alt. */}
             <StudioImg src={chairs} alt="Studio seating" className={MARQUEE_IMG} />
             <StudioImg src={mics} alt="" className={MARQUEE_IMG} />
             <StudioImg src={set2} alt="" className={MARQUEE_IMG} />
@@ -268,7 +247,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
         </div>
       </section>
 
-      {/* ADVERTISING SECTION */}
       <section className="relative flex min-h-screen items-center overflow-hidden bg-[linear-gradient(135deg,#0a2e2a_0%,#1a1a1a_100%)] p-[60px] max-[768px]:p-5 max-[768px]:!pb-0 max-[480px]:px-5 max-[480px]:pt-[60px]">
         <div className="absolute -left-[100px] -top-[100px] h-[400px] w-[400px] animate-podcast-drift-15 rounded-full bg-[#FFD93D] opacity-[0.15] blur-[80px]"></div>
         <div className="absolute -bottom-[100px] right-[100px] h-[300px] w-[300px] animate-podcast-drift-15 rounded-full bg-[#6B4FFF] opacity-[0.15] blur-[80px] ![animation-delay:-7s]"></div>
@@ -309,7 +287,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
         </div>
       </section>
 
-      {/* STUDIO SECTION */}
       <section className="relative bg-white px-[60px] py-20 max-[1200px]:px-10 max-[1200px]:py-[60px] max-[968px]:px-[30px] max-[968px]:py-[50px] max-[640px]:px-5 max-[640px]:py-10" id="our-studio">
         <div className="mx-auto grid max-w-[1600px] grid-cols-2 items-start gap-[30px] max-[1200px]:gap-6 max-[968px]:grid-cols-1 max-[968px]:gap-[30px] max-[640px]:gap-5">
           <div className={STUDIO_COLUMN}>
@@ -339,7 +316,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
         </div>
       </section>
 
-      {/* WHO CAN USE THE STUDIO */}
       <section className="bg-white text-black px-5 py-16 sm:py-20" id="who-can-use">
         <div className="max-w-6xl mx-auto">
           <h2 className={`${SECTION_TITLE} text-center`}>Who can use our podcast studio?</h2>
@@ -375,7 +351,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
         </div>
       </section>
 
-      {/* EQUIPMENT SECTION */}
       <section className="bg-[#f1f1f1] px-5 pb-20 pt-5 text-center text-black" id="equipment">
         <h2 className={SECTION_TITLE}>
           Equipped with all the <br /> furniture & props you need
@@ -394,7 +369,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
         </div>
       </section>
 
-      {/* Grid section */}
       <section className="-mt-10 bg-[#f1f1f1] pb-[30px]">
         <div className="mx-auto grid max-w-[1360px] grid-cols-2 items-start justify-items-center gap-12 [grid-template-areas:'left_right'_'bottom_bottom'] [grid-template-rows:auto_auto] max-[900px]:gap-[30px] max-[700px]:grid-cols-1 max-[700px]:gap-7 max-[700px]:[grid-template-areas:'left'_'right'_'bottom']">
           <figure data-reveal className={`${SBF_CARD} mr-[140px] max-w-[440px] [grid-area:left] max-[900px]:max-w-[480px] max-[700px]:m-0 max-[700px]:max-w-[92%]`}>
@@ -416,11 +390,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
 
       <PodcastStudioBooking/>
 
-      {/* SERVICES, BOOKING AND FAQ
-          Every fact here comes from the booking widget above (packages, prices,
-          hourly slots, WhatsApp confirmation), the podcast tab of
-          components/AllServices.tsx (editing at extra charge, team support) or
-          the address in the footer. Keep them in step. */}
       <section className="bg-[#f1f1f1] text-black px-5 py-16 sm:py-20">
         <div className="max-w-6xl mx-auto">
           <h2 className={`${SECTION_TITLE} text-center`}>Podcast recording in Visakhapatnam</h2>
@@ -461,7 +430,6 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
 
       {platforms}
 
-      {/* TESTIMONIAL SECTION */}
       <StudioReviews heading="WHAT OUR CREATORS SAY" orbAnimation="animate-podcast-drift-20" />
     </div>
   );

@@ -2,16 +2,6 @@ import type { MetadataRoute } from "next";
 
 import { SITE_ORIGIN } from "@/lib/site";
 
-/**
- * Public pages are open to every crawler. Only infrastructure is closed:
- * /admin (no public value), /api/ (JSON, not pages — Google should index the
- * rendered blog pages, never the API), and /share/ (redirect stubs).
- *
- * AI / answer-engine crawlers are named and allowed explicitly, as the old
- * Express robots.txt did, so a future tightening of the wildcard cannot
- * silently remove the site from AI Overviews, ChatGPT search, Perplexity or
- * Claude.
- */
 const DISALLOW = ["/admin", "/admin/", "/api/", "/share/", "/blog-view"];
 
 const AI_CRAWLERS = [

@@ -1,22 +1,3 @@
-/**
- * Live SEO / AEO / GEO analysis for the blog editor.
- *
- * This runs in the browser on every keystroke so the editor gets instant
- * feedback. It is intentionally a mirror of Backend/services/contentAnalysis.js
- * and Backend/services/seoValidation.js rather than the authority: the server
- * recomputes all of it before anything is stored or published, because a check
- * that only lives in the browser is a suggestion, not a rule.
- *
- * Keeping the two in step matters. If this file says a post is ready and the
- * server disagrees, the editor fixes everything the panel asks for and still
- * cannot publish, which is a worse experience than having no panel at all. The
- * thresholds below are the same constants the server uses.
- *
- * Keyword density is shown as guidance only. It is not a meaningful Google
- * ranking factor; it exists to flag obvious stuffing or a page that never
- * mentions its own topic.
- */
-
 export const LIMITS = {
   metaTitleMin: 30,
   metaTitleIdeal: 50,
@@ -38,10 +19,6 @@ export const LIMITS = {
 
 const WORDS_PER_MINUTE = 225;
 
-/* ────────────────────────────────────────────────────────────────────────
-   Types
-   ──────────────────────────────────────────────────────────────────────── */
-
 export interface FaqPair {
   question: string;
   answer: string;
@@ -58,7 +35,6 @@ export interface DefinitionEntry {
   definition?: string;
 }
 
-/** The editor form fields the analysis reads. Everything is optional. */
 export interface SeoForm {
   title?: string | null;
   description?: string | null;
@@ -159,19 +135,9 @@ export interface SeoScore {
   visible: boolean;
 }
 
-/* ────────────────────────────────────────────────────────────────────────
-   Text extraction
-   ──────────────────────────────────────────────────────────────────────── */
-
 const HIDDEN_ELEMENT_RE =
   /<(\w+)\b[^>]*(?:\shidden(?:\s|=|>|\/)|aria-hidden=["']true["']|data-seo-panel\b|display\s*:\s*none)[^>]*>[\s\S]*?<\/\1>/gi;
 
-/**
- * Visible prose only. Comments, scripts (including JSON-LD), styles,
- * templates, inline SVG and anything hidden or belonging to the SEO panel are
- * removed before counting, so configuration and markup can never inflate the
- * word or keyword counts.
- */
 export const stripHtml = (html: unknown): string =>
   String(html || "")
     .replace(/<!--[\s\S]*?-->/g, " ")
@@ -212,12 +178,6 @@ export const containsKeyword = (haystack: unknown, keyword: unknown): boolean =>
   return countPhrase(words, kw) > 0;
 };
 
-/**
- * Non-overlapping occurrences of a phrase in a token list. Matching whole
- * tokens (not a regex over raw text) means a keyword can never match inside
- * another word, and occurrences x phrase length can never exceed the word
- * count — so density is bounded at 100% by construction.
- */
 const countPhrase = (words: string[], phrase: string[]): number => {
   if (!phrase.length || phrase.length > words.length) return 0;
   let count = 0;
@@ -239,12 +199,6 @@ const countPhrase = (words: string[], phrase: string[]): number => {
   return count;
 };
 
-/**
- * Keyword density as a share of total visible words.
- *
- * Multi-word phrases count their own length, so "digital marketing agency"
- * appearing 4 times in a 600-word post reads as 2%, not 0.67%.
- */
 export const keywordDensity = (html: unknown, keyword: unknown): DensityResult => {
   const words = toWords(stripHtml(html));
   const kw = toWords(String(keyword || "").trim());
@@ -257,10 +211,6 @@ export const keywordDensity = (html: unknown, keyword: unknown): DensityResult =
   return { occurrences, totalWords, density: Number(density.toFixed(2)) };
 };
 
-/* ────────────────────────────────────────────────────────────────────────
-   Structure
-   ──────────────────────────────────────────────────────────────────────── */
-
 export const extractHeadings = (html: unknown): Heading[] => {
   const out: Heading[] = [];
   const re = /<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi;
@@ -271,13 +221,6 @@ export const extractHeadings = (html: unknown): Heading[] => {
   return out;
 };
 
-/**
- * Heading audit: one H1, no skipped levels.
- *
- * The page template renders the post title as the H1, so any H1 inside the body
- * is a second one and is flagged. A jump from H2 to H4 leaves the H4's parent
- * section ambiguous, and an extraction engine will attach it to the wrong topic.
- */
 export const auditHeadings = (html: unknown) => {
   const headings = extractHeadings(html);
   const issues: HeadingIssue[] = [];
@@ -311,7 +254,6 @@ export const auditHeadings = (html: unknown) => {
   };
 };
 
-/** Same-site links only — an outbound link does not satisfy internal linking. */
 export const extractInternalLinks = (html: unknown, siteHost = "geniemedia.in"): LinkInfo[] => {
   const links: LinkInfo[] = [];
   const re = /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
@@ -330,7 +272,6 @@ export const extractInternalLinks = (html: unknown, siteHost = "geniemedia.in"):
           links.push({ anchor_text, target_slug: parsed.pathname });
         }
       } catch {
-        /* malformed href — not a usable link either way */
       }
     } else if (href.startsWith("/")) {
       links.push({ anchor_text, target_slug: href });
@@ -340,15 +281,6 @@ export const extractInternalLinks = (html: unknown, siteHost = "geniemedia.in"):
   return links;
 };
 
-/**
- * Finds terms the post introduces without defining them.
- *
- * Heuristic and deliberately conservative: it looks for capitalised multi-word
- * product-style names and acronyms, then checks whether a definitional pattern
- * ("X is", "X refers to", "X means") appears within roughly a sentence of the
- * first mention. It exists to prompt the editor, not to block them, which is why
- * nothing it reports is ever a publish blocker.
- */
 export const findUndefinedTerms = (html: unknown, declaredTerms: DefinitionEntry[] = []) => {
   const text = stripHtml(html);
   if (!text) return [];
@@ -357,13 +289,11 @@ export const findUndefinedTerms = (html: unknown, declaredTerms: DefinitionEntry
 
   const candidates = new Map<string, number>();
 
-  // Acronyms: 2-6 capitals, optionally with digits.
   for (const match of text.matchAll(/\b([A-Z]{2,6}[0-9]?)\b/g)) {
     const term = match[1];
     if (!candidates.has(term)) candidates.set(term, match.index ?? 0);
   }
 
-  // Capitalised multi-word names, excluding sentence starts where possible.
   for (const match of text.matchAll(/\b([A-Z][a-z]+(?:\s[A-Z][a-z]+){1,3})\b/g)) {
     const term = match[1];
     if (!candidates.has(term)) candidates.set(term, match.index ?? 0);
@@ -374,8 +304,6 @@ export const findUndefinedTerms = (html: unknown, declaredTerms: DefinitionEntry
   for (const [term, index] of candidates) {
     if (declared.has(term.toLowerCase())) continue;
 
-    // A definition counts if it appears in the 200 characters following the
-    // first mention — roughly the same sentence or the next one.
     const window = text.slice(index, index + 220);
     const defined = new RegExp(
       `${escapeRegex(term)}\\s+(is|are|was|were|refers to|means|stands for|describes|denotes)\\b`,
@@ -387,10 +315,6 @@ export const findUndefinedTerms = (html: unknown, declaredTerms: DefinitionEntry
 
   return undefinedTerms.sort((a, b) => a.firstIndex - b.firstIndex).slice(0, 8);
 };
-
-/* ────────────────────────────────────────────────────────────────────────
-   Focus keyword checklist
-   ──────────────────────────────────────────────────────────────────────── */
 
 export interface FocusKeywordInput {
   keyword?: string | null;
@@ -474,19 +398,9 @@ export const analyseFocusKeyword = ({
   };
 };
 
-/* ────────────────────────────────────────────────────────────────────────
-   Publish gate (mirror of the server's)
-   ──────────────────────────────────────────────────────────────────────── */
-
 const txt = (v: unknown): string => String(v === null || v === undefined ? "" : v).trim();
 const wordsIn = (v: unknown): number => txt(v).split(/\s+/).filter(Boolean).length;
 
-/**
- * The red/green checklist shown next to the publish buttons.
- *
- * `severity: "blocker"` entries are the ones that stop a publish. Everything
- * else is advice.
- */
 export const validateForPublish = (form: SeoForm): ValidationResult => {
   const content = form.description || "";
   const wordCount = countWords(content);
@@ -629,7 +543,6 @@ export interface CounterLimits {
 
 export type CounterState = "empty" | "over" | "good" | "short" | "ok";
 
-/** Counter colour band for a length-limited field. */
 export const counterState = (length: number, { min, ideal, max }: CounterLimits): CounterState => {
   if (length === 0) return "empty";
   if (length > max) return "over";
@@ -638,17 +551,6 @@ export const counterState = (length: number, { min, ideal, max }: CounterLimits)
   return "ok";
 };
 
-/* ────────────────────────────────────────────────────────────────────────
-   Outbound links
-   ──────────────────────────────────────────────────────────────────────── */
-
-/**
- * Links pointing at other websites.
- *
- * Citing a credible outside source is a trust signal in its own right, and it
- * is the counterpart to internal linking: one shows the post is connected to
- * the rest of the site, the other shows it is connected to the wider web.
- */
 export const extractExternalLinks = (html: unknown, siteHost = "geniemedia.in"): ExternalLinkInfo[] => {
   const out: ExternalLinkInfo[] = [];
   const re = /<a\b[^>]*href=["'](https?:\/\/[^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
@@ -660,16 +562,11 @@ export const extractExternalLinks = (html: unknown, siteHost = "geniemedia.in"):
       const linkHost = new URL(m[1]).hostname.replace(/^www\./, "").toLowerCase();
       if (linkHost !== host) out.push({ anchor_text: stripHtml(m[2]), url: m[1] });
     } catch {
-      /* malformed href — not a usable link either way */
     }
   }
 
   return out;
 };
-
-/* ────────────────────────────────────────────────────────────────────────
-   Content statistics (sentences, paragraphs, readability)
-   ──────────────────────────────────────────────────────────────────────── */
 
 const countSyllables = (word: string): number => {
   const w = word.toLowerCase().replace(/[^a-z]/g, "");
@@ -688,22 +585,11 @@ export interface ContentStats {
   imagesMissingAlt: number;
   internalLinkCount: number;
   externalLinkCount: number;
-  /**
-   * Flesch reading ease, 0-100 (higher is easier), or null when there is not
-   * enough prose to measure (see READABILITY_MIN_*); show readabilityLabel.
-   */
   readability: number | null;
-  /** "62.4" or "insufficient prose". */
   readabilityLabel: string;
   avgWordsPerSentence: number;
 }
 
-/**
- * Prose statistics for article HTML. Uses the same visible-text extraction as
- * every other check, so scripts, JSON-LD, hidden blocks and the panel itself
- * are never counted.
- */
-/** Below this much prose a Flesch score is noise, not a measurement. */
 const READABILITY_MIN_WORDS = 100;
 const READABILITY_MIN_SENTENCES = 3;
 
@@ -738,23 +624,11 @@ export const contentStats = (html: unknown): ContentStats => {
   };
 };
 
-/**
- * Analyses a rendered page in the browser, counting only what a reader sees.
- *
- * The root is cloned and everything that is not prose is removed first:
- * script/style/noscript/template/svg, JSON-LD, [hidden], [aria-hidden=true],
- * elements hidden by computed style, and the SEO panel ([data-seo-panel]).
- * This is what stops a page-level audit from counting keyword arrays, source
- * code or configuration as body text. When the root contains a
- * <main data-seo-content="true"> container, only that container is measured,
- * so the header, navigation and footer boilerplate are left out.
- */
 export const analyseRenderedPage = (pageRoot: HTMLElement, keyword: string) => {
   const root = pageRoot.querySelector<HTMLElement>("[data-seo-content='true']") ?? pageRoot;
   const clone = root.cloneNode(true) as HTMLElement;
   const live = root.querySelectorAll<HTMLElement>("*");
   const cloned = clone.querySelectorAll<HTMLElement>("*");
-  // Remove elements the browser is not displaying (checked on the live tree).
   for (let i = live.length - 1; i >= 0; i--) {
     const el = live[i];
     const style = typeof window !== "undefined" ? window.getComputedStyle(el) : null;
@@ -768,23 +642,10 @@ export const analyseRenderedPage = (pageRoot: HTMLElement, keyword: string) => {
   return { stats: contentStats(html), density: keywordDensity(html, keyword) };
 };
 
-/* ────────────────────────────────────────────────────────────────────────
-   Score
-   ──────────────────────────────────────────────────────────────────────── */
-
-// The six checks that also block a publish. Each is worth an equal share of the
-// 60% band, scored pass/fail — there is no partial credit for half an alt text.
 const SCORE_REQUIRED_IDS = ["meta-description", "focus-keyword", "featured-image", "alt-text", "direct-answer", "internal-link"];
 
 const SCORE_WEIGHTS = { required: 60, keyword: 25, extras: 15 };
 
-/**
- * Plain-language replacements for the check labels.
- *
- * The stored labels are accurate but written for someone who already knows what
- * a meta description is. These say what to actually go and do instead, which is
- * the only thing a non-technical editor can act on.
- */
 const PLAIN_TIPS: Record<string, string> = {
   "meta-description":
     "Write the one or two sentences that show under your title in Google. Think of it as the reason someone should click.",
@@ -806,14 +667,6 @@ const PLAIN_TIPS: Record<string, string> = {
   reviewer: "Add who checked this post. A second name is a strong trust signal, especially for advice.",
 };
 
-/**
- * Plain-language labels for the checklist.
- *
- * The check objects carry accurate labels written for someone who already knows
- * the vocabulary. These are what a non-technical editor actually reads, so they
- * name the thing on screen rather than the field in the database. Nothing here
- * changes what is checked — only how it is described.
- */
 const PLAIN_LABELS: Record<string, string> = {
   "meta-description": "Description for Google written",
   "focus-keyword": "Main keyword chosen",
@@ -840,17 +693,6 @@ const KEYWORD_TIPS: Record<string, string> = {
   "kw-density": "Use your main keyword naturally — a few more times if it barely appears, fewer if it reads oddly.",
 };
 
-/**
- * One 0-100 number built from the checks that already exist.
- *
- * Deliberately NOT a new scoring engine: every input here is a pass/fail that
- * `validateForPublish` or `analyseFocusKeyword` already computed. The score only
- * decides how much each one is worth, so it can never disagree with the
- * checklist shown right below it.
- *
- * `visible` is false on an untouched form — showing a hard 0 to someone who has
- * typed nothing is discouraging and tells them nothing they do not already know.
- */
 export const computeSeoScore = (form: SeoForm): SeoScore => {
   const validation = validateForPublish(form);
   const keyword = analyseFocusKeyword({
@@ -865,7 +707,6 @@ export const computeSeoScore = (form: SeoForm): SeoScore => {
 
   const byId: Record<string, Check> = Object.fromEntries(validation.checks.map((c) => [c.id, c]));
 
-  // ---- Required band ------------------------------------------------------
   const requiredItems: ScoreItem[] = SCORE_REQUIRED_IDS.map((id) => ({
     id,
     label: PLAIN_LABELS[id] || (byId[id] ? byId[id].label : id),
@@ -877,9 +718,6 @@ export const computeSeoScore = (form: SeoForm): SeoScore => {
   const requiredPassed = requiredItems.filter((i) => i.passed).length;
   const requiredScore = (requiredPassed / SCORE_REQUIRED_IDS.length) * SCORE_WEIGHTS.required;
 
-  // ---- Keyword band -------------------------------------------------------
-  // Worth nothing until a focus keyword exists, because every check inside it is
-  // measured against that keyword and would otherwise all read as failures.
   const hasKeyword = Boolean(String(form.focus_keyword || "").trim());
 
   const keywordItems: ScoreItem[] = keyword.checks.map((c) => ({
@@ -894,7 +732,6 @@ export const computeSeoScore = (form: SeoForm): SeoScore => {
     ? (keyword.checks.filter((c) => c.passed).length / keyword.checks.length) * SCORE_WEIGHTS.keyword
     : 0;
 
-  // ---- Extras band --------------------------------------------------------
   const areas = Array.isArray(form.areas_covered) ? form.areas_covered.filter(Boolean) : [];
   const facts = (form.key_facts || []).filter((f) => f && String(f.fact || "").trim());
   const faqs = (form.faq_schema || []).filter((f) => f && String(f.question || "").trim() && String(f.answer || "").trim());
@@ -935,8 +772,6 @@ export const computeSeoScore = (form: SeoForm): SeoScore => {
   return {
     score,
     band,
-    // "Must fix" comes from the real publish gate rather than from the required
-    // band above, so the count can never promise a publish the server refuses.
     mustFix: validation.blockers.length,
     niceToHave: items.filter((i) => !i.passed && i.group !== "required").length,
     items,
@@ -946,7 +781,6 @@ export const computeSeoScore = (form: SeoForm): SeoScore => {
   };
 };
 
-/** Colours for a score band, shared by the widget and the checklist. */
 export const SCORE_BANDS: Record<ScoreBand, { bg: string; fg: string; bar: string; label: string }> = {
   red: { bg: "#fee2e2", fg: "#b91c1c", bar: "#dc2626", label: "Needs work" },
   amber: { bg: "#fef3c7", fg: "#b45309", bar: "#d97706", label: "Getting there" },
@@ -955,10 +789,6 @@ export const SCORE_BANDS: Record<ScoreBand, { bg: string; fg: string; bar: strin
 
 export type PanelSection = "seo" | "aeo" | "geo" | "areas" | "people" | "photo" | "links";
 
-/**
- * Which panel section a score item belongs to, so clicking it can scroll there.
- * Keys match the section ids rendered by SeoPanel.
- */
 export const ITEM_SECTION: Record<string, PanelSection> = {
   "meta-description": "seo",
   "focus-keyword": "seo",

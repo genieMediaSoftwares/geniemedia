@@ -11,14 +11,6 @@ import { cleanSlug } from "@/lib/blog";
 
 type State = { kind: "loading" } | { kind: "missing" } | { kind: "found"; blog: Blog; related: Blog[] };
 
-/**
- * Renders a blog post that was published after the last build.
- *
- * Posts that existed at build time are static HTML files. For a newer post,
- * .htaccess serves /blog-view.html at the post's own URL; this component reads
- * the slug from the address bar and loads the post from the backend. The page
- * is noindex: search engines get the pre-built version after the next rebuild.
- */
 export default function LiveBlogArticle() {
   const [state, setState] = useState<State>({ kind: "loading" });
 
@@ -46,7 +38,6 @@ export default function LiveBlogArticle() {
             .filter((b): b is Blog => b !== null && b.status === "published" && b.category === blog.category && b.permalink !== blog.permalink)
             .slice(0, 3);
         } catch {
-          /* related posts are optional */
         }
         if (!cancelled) {
           document.title = blog.meta_title || blog.title;

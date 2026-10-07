@@ -1,21 +1,8 @@
 #!/usr/bin/env node
-/**
- * Crawlability / SEO verification against a running deployment.
- *
- *   node scripts/verify-routes.mjs                      # http://localhost:3000
- *   node scripts/verify-routes.mjs http://localhost:3100
- *   node scripts/verify-routes.mjs https://geniemedia.in
- *
- * Fetches each URL exactly as a crawler would (no JavaScript) and asserts on
- * the raw HTML: status, title, description, a single self-referencing
- * canonical, one H1, real body text, parseable JSON-LD, and robots rules.
- * Exits non-zero on any failure.
- */
 
 import fs from "node:fs";
 
 const BASE = (process.argv[2] || "http://localhost:3000").replace(/\/+$/, "");
-// Expected canonical origin, from NEXT_PUBLIC_SITE_URL in .env.
 const readSiteUrl = () => {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
   for (const file of [".env"]) {
@@ -35,7 +22,6 @@ const fail = (msg) => {
   console.log(`  ✗ ${msg}`);
 };
 const check = (cond, msg) => (cond ? ok(msg) : fail(msg));
-// "https://geniemedia.in" and "https://geniemedia.in/" are the same URL.
 const sameUrl = (a, b) => String(a || "").replace(/\/$/, "") === String(b || "").replace(/\/$/, "");
 
 const get = (path, { redirect = "manual" } = {}) =>
@@ -128,7 +114,6 @@ async function main() {
     });
   }
 
-  // Every blog listed in the sitemap must render with its own canonical.
   console.log("\n/sitemap.xml");
   const sm = await get("/sitemap.xml");
   check(sm.status === 200, `status ${sm.status}`);

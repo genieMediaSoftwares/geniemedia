@@ -1,9 +1,9 @@
 import { getPublishedBlogsSafe } from "@/lib/api/blogs";
+import { getPublishedCaseStudiesSafe } from "@/lib/api/caseStudies";
+import { caseStudyUrl } from "@/lib/caseStudies";
 import { SITE, canonicalFor } from "@/lib/site";
 import { blogCanonical } from "@/lib/seo/metadata";
 
-// llms.txt — a plain-Markdown map of the site for retrieval engines. Generated
-// so the article list never goes stale (same content as the Express version).
 export const dynamic = "force-static";
 
 const PAGES: Array<[string, string]> = [
@@ -23,7 +23,7 @@ const PAGES: Array<[string, string]> = [
 ];
 
 export async function GET(): Promise<Response> {
-  const posts = await getPublishedBlogsSafe();
+  const [posts, caseStudies] = await Promise.all([getPublishedBlogsSafe(), getPublishedCaseStudiesSafe()]);
   const lines = [
     `# ${SITE.name}`,
     "",
@@ -37,6 +37,15 @@ export async function GET(): Promise<Response> {
     "",
     ...PAGES.map(([name, path]) => `- [${name}](${canonicalFor(path)})`),
     "",
+    ...(caseStudies.length
+      ? [
+          "## Case studies",
+          "",
+          `- [All case studies](${canonicalFor("/case-studies")})`,
+          ...caseStudies.map((cs) => `- [${cs.title}](${caseStudyUrl(cs.slug)})${cs.shortDescription ? `: ${cs.shortDescription}` : ""}`),
+          "",
+        ]
+      : []),
     "## Articles",
     "",
     ...posts

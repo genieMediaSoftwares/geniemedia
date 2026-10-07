@@ -2,16 +2,9 @@ import type { PortfolioItem } from "@/types";
 import { serviceForCategory } from "@/lib/portfolio";
 import { CONTENT_LINK } from "@/lib/linkStyles";
 
-/**
- * One portfolio project, shared by the home page ("Your Digital Presence,
- * Perfected") and /projects ("Our Portfolio").
- *
- * Phones: a compact two-per-row tile grid (like an Instagram profile).
- * md and up: unchanged — two large cards per row.
- */
 export const PROJECT_GRID = "grid grid-cols-2 gap-x-3 gap-y-6 md:gap-12";
 
-export default function ProjectCard({ project }: { project: PortfolioItem }) {
+export default function ProjectCard({ project, caseStudyHref }: { project: PortfolioItem; caseStudyHref?: string }) {
   const service = serviceForCategory(project.category);
   return (
     <div className="text-center group flex flex-col">
@@ -33,15 +26,18 @@ export default function ProjectCard({ project }: { project: PortfolioItem }) {
         {project.name}
       </h3>
 
-      {/* The service behind the project: plain text that still links to its page. */}
       {service && (
         <a href={service.href} className={`inline-block mb-2 md:mb-5 text-xs md:text-sm ${CONTENT_LINK}`}>
           {service.label}
         </a>
       )}
 
-      {/* A real link so crawlers see which live sites the portfolio points to;
-          it opens in a new tab. mt-auto keeps the buttons in a row on phones. */}
+      {caseStudyHref && (
+        <a href={caseStudyHref} className={`inline-block mb-2 md:mb-4 text-xs md:text-sm font-semibold ${CONTENT_LINK}`}>
+          Read the case study<span className="sr-only"> for {project.name}</span>
+        </a>
+      )}
+
       {project.url && (
         <div className="mt-auto md:mt-0">
           <a

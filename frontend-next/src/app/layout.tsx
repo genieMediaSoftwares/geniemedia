@@ -8,7 +8,6 @@ import { GOOGLE_SITE_VERIFICATION, SITE, SITE_ORIGIN } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN),
-  // Pages set their own absolute titles; this only covers anything that does not.
   title: { default: "Genie Media & Studio", template: "%s | Genie Media & Studio" },
   description: SITE.description,
   applicationName: SITE.name,
@@ -29,18 +28,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // suppressHydrationWarning: browser extensions (ColorZilla's
-    // `cz-shortcut-listen`, Grammarly, password managers…) add attributes to
-    // <html>/<body> before React hydrates. This only ignores attribute
-    // differences on these two elements; mismatches inside the page are
-    // still reported.
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <GtmNoScript />
         <Header />
-        {/* The single <main> landmark for every route. Pages must not render
-            their own <main>. `flow-root` stops a page's first margin collapsing
-            out through <main>, which used to register as a layout shift. */}
         <main id="main-content" data-seo-content="true" className="flow-root">
           {children}
         </main>

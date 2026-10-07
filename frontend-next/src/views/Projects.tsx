@@ -1,15 +1,13 @@
 import React from 'react'
 import type { PortfolioItem } from "@/types";
 
-
 import ContactSec from "@/components/contactSection"
 import ProjectsSection from "@/components/ProjectsSection"
 import WhatWeBuild from "@/components/WhatWeBuild"
 import { CONTENT_LINK } from "@/lib/linkStyles";
 
-export default function Projects({ initialProjects }: { initialProjects: PortfolioItem[] | null }) {
+export default function Projects({ initialProjects, caseStudyLinks = {} }: { initialProjects: PortfolioItem[] | null; caseStudyLinks?: Record<number, string> }) {
 
-   
   return (
    <>
        <div className="bg-gradient-to-br 
@@ -17,8 +15,7 @@ export default function Projects({ initialProjects }: { initialProjects: Portfol
         px-4 sm:px-6 lg:px-16 pt-24 mt-12 sm:pt-24 pb-12 sm:pb-12 lg:pb-18">
 
         <div className="max-w-4xl mx-auto">
-         
-          
+
             <div className="text-white space-y-6">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-center">
                 Our Work
@@ -30,16 +27,21 @@ export default function Projects({ initialProjects }: { initialProjects: Portfol
                <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing and SEO</a>.
                Planning a new site?{" "}
                <a href="/contact" className={CONTENT_LINK}>Talk to our web team</a>.
+              {Object.keys(caseStudyLinks).length > 0 && (
+                <>
+                  {" "}For the full story behind selected projects, read our{" "}
+                  <a href="/case-studies" className={CONTENT_LINK}>case studies</a>.
+                </>
+              )}
               </p>
             </div>
 
         </div>
       </div>
 
-      {/* Replaces the old three-image "Platforms we use" block; same position, above the projects. */}
       <WhatWeBuild />
 
-          <ProjectsSection initialProjects={initialProjects} />
+          <ProjectsSection initialProjects={initialProjects} caseStudyLinks={caseStudyLinks} />
 
     <ContactSec/>
    

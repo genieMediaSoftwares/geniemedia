@@ -11,13 +11,10 @@ const INDEX_ROBOTS: Metadata["robots"] = {
   googleBot: { index: true, follow: true, "max-image-preview": "large" },
 };
 
-/** Metadata for one of the fixed public routes, from the ROUTE_META table. */
 export function buildRouteMetadata(path: PublicRoute): Metadata {
   const meta = metaForRoute(path);
   const image = meta.image || SITE.defaultOgImage;
   return {
-    // `absolute` keeps the hand-written titles exactly as they were; the
-    // layout's title template is only for pages that do not set one.
     title: { absolute: meta.title },
     description: meta.description,
     alternates: { canonical: meta.canonical },
@@ -40,12 +37,6 @@ export function buildRouteMetadata(path: PublicRoute): Metadata {
   };
 }
 
-/**
- * The canonical for a post. Always the post's own URL: an editor-supplied
- * canonical_url is honoured only when it points at a *different article*,
- * never at the site root — a post canonicalised to the home page is exactly
- * the soft-404 Search Console reported.
- */
 export function blogCanonical(blog: Blog): string {
   const self = blogUrl(blog.permalink);
   const custom = (blog.canonical_url || "").trim();
@@ -55,8 +46,6 @@ export function blogCanonical(blog: Blog): string {
     const isRoot = url.pathname === "/" || url.pathname === "";
     const isSameSite = url.origin === new URL(SITE_ORIGIN).origin;
     if (isRoot) return self;
-    // Only same-site article URLs are accepted; anything else is most likely a
-    // paste error and would hand this post's ranking to another site.
     if (isSameSite && url.pathname.startsWith("/blog/")) return custom.replace(/\/+$/, "");
     return self;
   } catch {
@@ -72,7 +61,6 @@ export function blogDescription(blog: Blog): string {
   );
 }
 
-/** Metadata for /blog/<permalink>, built from the post itself. */
 export function buildBlogMetadata(blog: Blog): Metadata {
   const title = blog.meta_title || blog.title;
   const description = blogDescription(blog);
@@ -113,7 +101,6 @@ export function buildBlogMetadata(blog: Blog): Metadata {
   };
 }
 
-/** For pages that must never be indexed (admin, 404). */
 export const NOINDEX_METADATA: Metadata = {
   robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
 };

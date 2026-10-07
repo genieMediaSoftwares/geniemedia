@@ -21,26 +21,35 @@ const services = [
     id: "seo",
     title: "SEO Services in Vizag",
     subtitle: "Search Engine Optimization & Organic Growth",
-    description: "SEO helps people find you on Google without paying for each click. First, we run an SEO audit of your website. Next, we fix technical SEO issues, improve on-page SEO and research the keywords your customers type. We also handle local SEO, Google Business Profile optimization, internal links and structured data. Finally, we report on your rankings and organic traffic every month.",
-    keywords: ["SEO Audit", "Technical SEO", "On-Page SEO", "Local SEO", "Keyword Research"],
+    description: "SEO helps people find you on Google without paying for each click. First, we run an SEO audit of your website. Next, we fix technical SEO issues, improve on-page SEO and research the keywords your customers type. We also handle internal links and structured data. Finally, we report on your rankings and organic traffic every month.",
+    keywords: ["SEO Audit", "Technical SEO", "On-Page SEO", "Keyword Research"],
     link: "/blogs",
     linkLabel: "Read our SEO guides"
+  },
+  {
+    id: "local-seo",
+    title: "Local SEO & Google Business Profile",
+    subtitle: "Google Maps & \"Near Me\" Visibility",
+    description: "When someone nearby searches for what you offer, your Google Business Profile is often the first thing they see. So we set it up or clean it up, pick the right categories and keep your hours, photos and services up to date. We also fix your local listings and build location pages. As a result, more people in Vizag find you on Google Maps and in local search.",
+    keywords: ["Google Business Profile", "Google Maps", "Local Listings", "Location Pages"],
+    link: "/contact",
+    linkLabel: "Get found on Google Maps"
   },
   {
     id: "google-ads",
     title: "Google Ads & PPC Management",
     subtitle: "Paid Search & Performance Campaigns",
-    description: "Google Ads and search engine marketing put you at the top of the page today, not in six months. We plan your PPC campaigns, write the ads and set up conversion tracking. After launch, we watch every search term and every rupee. As a result, your budget moves to the ads that bring calls and leads, and away from the ones that do not.",
-    keywords: ["Google Search Ads", "PPC Management", "Conversion Tracking", "Remarketing"],
+    description: "Google Ads and search engine marketing put you at the top of the page today, not in six months. We plan your PPC campaigns, write the ads and set up conversion tracking. We also run display ads and remarketing to bring back people who visited your site. After launch, we watch every search term and every rupee. As a result, your budget moves to the ads that bring calls and leads, and away from the ones that do not.",
+    keywords: ["Google Search Ads", "PPC Management", "Display Ads", "Remarketing"],
     link: "/contact",
     linkLabel: "Plan a Google Ads campaign"
   },
   {
     id: "social-media",
-    title: "Social Media Marketing",
+    title: "Social Media Marketing & Meta Ads",
     subtitle: "Social Strategy, Creatives & Advertising",
-    description: "We plan your social media strategy around the people you want to reach. Then we design posts, edit Reels and short videos, and keep your pages active. We also run paid social ads on Instagram and Facebook. The goal is simple: more brand awareness, stronger audience engagement and more enquiries, not just likes.",
-    keywords: ["Social Media Management", "Instagram Marketing", "Facebook Ads", "Reels"],
+    description: "We plan your social media strategy around the people you want to reach. Then we design posts, edit Reels and short videos, and keep your pages active. We also run paid social ads on Instagram and Facebook through Meta Ads. The goal is simple: more brand awareness, stronger audience engagement and more enquiries, not just likes.",
+    keywords: ["Social Media Management", "Instagram Marketing", "Facebook & Instagram Ads", "Reels"],
     link: "/contact",
     linkLabel: "Grow your social media"
   },
@@ -96,11 +105,11 @@ const industries = [
   { icon: Dumbbell, title: "Fitness & Wellness", description: "We help gyms and wellness brands win local members and build an active community online." },
   { icon: Factory, title: "Industrial & Manufacturing", description: "We build clear B2B websites and run lead generation campaigns for firms in Visakhapatnam." },
   { icon: GraduationCap, title: "Education & Coaching", description: "We help schools, colleges and coaching centres in Vizag reach more students and parents." },
-  { icon: House, title: "Real Estate & Construction", description: "We build project websites and run local Google and Facebook ads for builders and property agents." },
-  { icon: Stethoscope, title: "Healthcare & Clinics", description: "We help clinics, hospitals and labs in Vizag show up in local search and earn patient trust." },
-  { icon: UtensilsCrossed, title: "Hospitality & Restaurants", description: "We help restaurants, hotels and travel brands attract locals and tourists with social media and local ads." },
+  { icon: House, title: "Real Estate & Builders", description: "We build project websites and run local Google and Facebook ads for builders, developers and property agents." },
+  { icon: Stethoscope, title: "Clinics, Hospitals & Doctors", description: "We help clinics, hospitals, doctors and labs in Vizag show up in local search and earn patient trust." },
+  { icon: UtensilsCrossed, title: "Restaurants, Hotels & Travel", description: "We help restaurants, hotels and travel brands attract locals and tourists with social media and local ads." },
   { icon: Briefcase, title: "Professional Services", description: "We help law firms, consultants and accountants build authority with content, SEO and a strong website." },
-  { icon: Rocket, title: "Startups & Tech", description: "We help new ventures in Andhra Pradesh build a brand, win early users and grow online." }
+  { icon: Rocket, title: "Startups & Small Businesses", description: "We help startups and small businesses in Andhra Pradesh build a brand, win early customers and grow online on a sensible budget." }
 ];
 
 const strategySteps = [
@@ -152,15 +161,40 @@ const whyChooseUs: Array<{ title: string; content: ReactNode }> = [
   }
 ];
 
-/**
- * /digital_marketing. A server component: every word, including the FAQ
- * answers and all nine industries, is in the HTML Google receives. The FAQ
- * uses native <details> so it needs no JavaScript to open.
- */
+const choosingTips: Array<{ title: string; content: ReactNode }> = [
+  {
+    title: "What will you do in the first three months?",
+    content: "A clear plan names the channels, the tasks and the results to watch. Vague answers usually mean vague work."
+  },
+  {
+    title: "How will you measure success?",
+    content: "Look for an agency that tracks calls, form leads and sales, not just likes, clicks and impressions."
+  },
+  {
+    title: "Can I see real work?",
+    content: (
+      <>
+        Ask for live websites and campaigns. You can browse <a href="/projects" className={inlineLink}>our projects</a> and read <a href="/reviews" className={inlineLink}>what clients say</a>.
+      </>
+    )
+  },
+  {
+    title: "Who owns the accounts?",
+    content: "Agree before you start on who owns your website, ad accounts, Google Business Profile and analytics data."
+  },
+  {
+    title: "Can we meet in person?",
+    content: (
+      <>
+        A local team understands your market and is easy to reach. Our office is at KP Icon in Yendada, so you can <a href="/contact" className={inlineLink}>book a meeting</a> and talk to us face to face.
+      </>
+    )
+  }
+];
+
 export default function DigitalMarketting() {
   return (
     <div>
-      {/* Hero Section */}
       <section className="text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 sm:px-6 lg:px-16 pt-24 mt-12 sm:pt-24 pb-12 sm:pb-12 lg:pb-18">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -202,7 +236,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Overview */}
       <section className="bg-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-3xl mx-auto text-center">
@@ -225,7 +258,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Services Overview */}
       <section className="bg-gray-50 py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -263,7 +295,6 @@ export default function DigitalMarketting() {
 
       <PlatformsWeUse type="digitalMarketing" />
 
-      {/* Section: Digital Marketing for Businesses in Vizag */}
       <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -307,7 +338,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Our Process / Strategy */}
       <section className="bg-gray-50 py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -335,7 +365,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Why Choose Us */}
       <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -365,7 +394,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Industries We Serve */}
       <section className="bg-slate-900 py-16 px-6 md:px-12 lg:px-20 text-white">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
@@ -373,7 +401,7 @@ export default function DigitalMarketting() {
               Industries We Serve
             </h2>
             <p className="text-lg text-gray-300 leading-relaxed max-w-3xl">
-              Every industry has its own buyers and its own way of buying. So we shape each digital marketing campaign to fit.
+              We offer digital marketing for small businesses, startups, clinics, restaurants, hotels, builders, schools and online stores. Every industry has its own buyers and its own way of buying. So we shape each campaign to fit.
             </p>
           </div>
 
@@ -391,7 +419,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Portfolio */}
       <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -430,7 +457,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Digital Marketing Services Near Me */}
       <section className="bg-gray-50 py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
@@ -456,7 +482,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Media & Video Production Capabilities */}
       <section className="bg-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl p-8 sm:p-12 text-black shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
@@ -475,7 +500,25 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: FAQ */}
+      <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 text-center">
+            How to Choose a Digital Marketing Company in Vizag
+          </h2>
+          <p className="text-lg text-gray-600 leading-relaxed mb-8 text-center">
+            There are many digital marketing agencies in Visakhapatnam. Instead of picking the one with the biggest promises, ask these questions first. A good partner will answer them clearly.
+          </p>
+          <ul className="space-y-4">
+            {choosingTips.map((tip) => (
+              <li key={tip.title} className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" aria-hidden="true" />
+                <p className="text-gray-700 leading-relaxed"><strong>{tip.title}</strong> {tip.content}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       <section className="bg-gray-50 py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
@@ -503,7 +546,6 @@ export default function DigitalMarketting() {
         </div>
       </section>
 
-      {/* Section: Get Started (CTA) */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">

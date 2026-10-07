@@ -1,24 +1,12 @@
 <?php
-/**
- * Contact form handler for Genie Media & Studio (Hostinger).
- *
- * Receives the JSON the website's contact form posts:
- *   { "name", "email", "phone", "service", "message" }
- * and emails it to the business inbox. Always answers JSON:
- *   { "success": true, "message": "..." }  or  { "success": false, "message": "..." }
- *
- * The __PLACEHOLDERS__ below are filled from frontend-next/.env by
- * `npm run build` (scripts/postbuild.mjs). Edit .env, not this file.
- */
-
 declare(strict_types=1);
 
-const TO_EMAIL   = '__CONTACT_TO_EMAIL__';   // inbox that receives enquiries
-const FROM_EMAIL = '__CONTACT_FROM_EMAIL__'; // must be a mailbox on this domain (Hostinger SPF)
-const SITE_URL   = '__SITE_URL__';           // only this site may post here
+const TO_EMAIL   = '__CONTACT_TO_EMAIL__';
+const FROM_EMAIL = '__CONTACT_FROM_EMAIL__';
+const SITE_URL   = '__SITE_URL__';
 
-const MAX_PER_WINDOW = 5;    // submissions allowed per IP...
-const WINDOW_SECONDS = 600;  // ...per 10 minutes
+const MAX_PER_WINDOW = 5;
+const WINDOW_SECONDS = 600;
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -31,7 +19,6 @@ function respond(int $status, bool $success, string $message): void
     exit;
 }
 
-// Same-site requests only (the form is served from SITE_URL).
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if ($origin !== '' && rtrim($origin, '/') !== rtrim(SITE_URL, '/')) {
     respond(403, false, 'Requests from this origin are not allowed.');
@@ -42,7 +29,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     respond(405, false, 'Method not allowed.');
 }
 
-// Simple per-IP rate limit, stored in the system temp folder.
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $rateFile = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'gm_contact_' . md5($ip);
 $now = time();
@@ -57,14 +43,12 @@ if (count($hits) >= MAX_PER_WINDOW) {
     respond(429, false, 'Too many messages. Please try again in a few minutes.');
 }
 
-// Read the JSON body (fall back to a classic form post).
 $raw = (string) file_get_contents('php://input', false, null, 0, 20000);
 $data = json_decode($raw, true);
 if (!is_array($data)) {
     $data = $_POST;
 }
 
-/** Trimmed single-line text, capped in length. */
 function field(array $data, string $key, int $max): string
 {
     $value = isset($data[$key]) && is_scalar($data[$key]) ? (string) $data[$key] : '';
@@ -90,7 +74,6 @@ if ($phone !== '' && !preg_match('/^[0-9+()\-.\s]{6,30}$/', $phone)) {
     respond(422, false, 'Please enter a valid phone number.');
 }
 
-// Header injection guard: nothing that ends up in a mail header may contain a line break.
 $safeName  = str_replace(["\r", "\n"], ' ', $name);
 $safeEmail = str_replace(["\r", "\n"], '', $email);
 

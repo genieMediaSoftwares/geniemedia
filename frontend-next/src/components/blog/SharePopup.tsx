@@ -4,15 +4,6 @@ import { useEffect, useState } from "react";
 import { Check, Copy, Linkedin, Mail, MoreHorizontal, Share2, X as Close } from "lucide-react";
 import { siFacebook, siInstagram, siTelegram, siWhatsapp, siX, type SimpleIcon } from "simple-icons";
 
-/**
- * Share sheet for an article: a button that opens a panel with the main
- * social apps, a copy-link row, and (on phones) the device's own share menu.
- *
- * It is a fixed overlay rather than a dropdown, so it can never be pushed off
- * the edge of a small screen: a bottom sheet on mobile, a centred card from sm up.
- */
-
-/** Copies text, with a fallback for browsers without the async clipboard API. */
 export async function copyText(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);
@@ -34,7 +25,6 @@ export async function copyText(text: string): Promise<boolean> {
   }
 }
 
-/** True when the browser offers the native share menu (most phones). */
 const canNativeShare = () => typeof navigator !== "undefined" && typeof navigator.share === "function";
 
 const BrandIcon = ({ icon }: { icon: SimpleIcon }) => (
@@ -43,7 +33,6 @@ const BrandIcon = ({ icon }: { icon: SimpleIcon }) => (
   </svg>
 );
 
-/** `bg` is a full Tailwind class, written out so Tailwind can find it. */
 type Target =
   | { name: string; bg: string; icon: React.ReactNode; href: string }
   | { name: string; bg: string; icon: React.ReactNode; action: "instagram" };
@@ -54,7 +43,6 @@ function buildTargets(url: string, title: string): Target[] {
   return [
     { name: "WhatsApp", bg: "bg-[#25D366]", icon: <BrandIcon icon={siWhatsapp} />, href: `https://wa.me/?text=${t}%20${u}` },
     { name: "Facebook", bg: "bg-[#0866FF]", icon: <BrandIcon icon={siFacebook} />, href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
-    // Instagram has no web share link: see shareToInstagram below.
     { name: "Instagram", bg: "bg-[#FF0069]", icon: <BrandIcon icon={siInstagram} />, action: "instagram" },
     { name: "LinkedIn", bg: "bg-[#0A66C2]", icon: <Linkedin className="w-6 h-6" aria-hidden="true" />, href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}` },
     { name: "X", bg: "bg-black", icon: <BrandIcon icon={siX} />, href: `https://twitter.com/intent/tweet?url=${u}&text=${t}` },
@@ -66,7 +54,6 @@ function buildTargets(url: string, title: string): Target[] {
 interface ShareSheetProps {
   url: string;
   title: string;
-  /** Classes for the trigger button. */
   className?: string;
 }
 
@@ -74,10 +61,8 @@ export default function SharePopup({ url, title, className = "" }: ShareSheetPro
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [note, setNote] = useState<string | null>(null);
-  // The sheet only renders after a tap, in the browser, so this is safe to read here.
   const native = open && canNativeShare();
 
-  // Escape closes; the page behind does not scroll while the sheet is open.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -107,13 +92,9 @@ export default function SharePopup({ url, title, className = "" }: ShareSheetPro
       await navigator.share({ title, url });
       setOpen(false);
     } catch {
-      /* the visitor closed the menu */
     }
   };
 
-  // Instagram cannot be shared to from a web link. On phones the device's
-  // share menu lists the Instagram app; elsewhere copy the link and open
-  // Instagram so it can be pasted into a story, post or message.
   const shareToInstagram = async () => {
     if (native) return nativeShare();
     if (await copyText(url)) flash("Link copied. Paste it into your Instagram story, post or message.");
@@ -189,7 +170,6 @@ export default function SharePopup({ url, title, className = "" }: ShareSheetPro
               )}
             </ul>
 
-            {/* Copy link: the icon and text switch the moment the link is copied. */}
             <div className="px-4">
               <button
                 type="button"

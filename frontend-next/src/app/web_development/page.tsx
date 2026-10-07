@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 
 import WebDevPg from "@/views/WebDevPg";
 import JsonLd from "@/components/seo/JsonLd";
+import RelatedCaseStudies from "@/components/caseStudy/RelatedCaseStudies";
 import { getPublishedPortfolio } from "@/lib/api/projects";
 import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
-
-// Portfolio is fetched from the backend at build time (static export).
-// Run `npm run build` and redeploy to publish project changes.
 
 export const metadata: Metadata = buildRouteMetadata("/web_development");
 
@@ -17,6 +15,7 @@ export default async function WebDevelopmentRoute() {
     <>
       <JsonLd data={metaForRoute("/web_development").schema} />
       <WebDevPg initialProjects={projects} />
+      <RelatedCaseStudies service="/web_development" />
     </>
   );
 }

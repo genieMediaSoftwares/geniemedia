@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Video, Wand2, FileText, Camera, Film, Radio, ChevronRight } from 'lucide-react';
 
-
 export default function ProductionHouseServices() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -61,12 +60,9 @@ export default function ProductionHouseServices() {
 
   return (
     <div className="relative bg-gray-200 py-16 sm:py-20 lg:py-18 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      
-     
 
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Header Section */}
         <div className="text-center mb-16 sm:mb-20 space-y-6">
           <div className="inline-block">
             <span className="px-4 py-2 bg-orange-500 bg-opacity-50 text-black rounded-full text-sm font-semibold">
@@ -84,7 +80,6 @@ export default function ProductionHouseServices() {
           </p>
         </div>
 
-        {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service, index) => {
             const Icon = service.icon;
@@ -95,24 +90,18 @@ export default function ProductionHouseServices() {
                 onMouseLeave={() => setHoveredIndex(null)}
                 className="group relative"
               >
-                {/* Card */}
                 <div className={`relative h-full bg-white rounded-2xl p-6 sm:p-8 transition-all duration-500 transform ${
                   hoveredIndex === index 
                     ? 'scale-105 shadow-2xl shadow-orange-500/20' 
                     : 'scale-100 shadow-lg hover:shadow-xl'
                 }`}>
-                  
-                  {/* Gradient Border Effect */}
-                  
-                  
-                  {/* Icon Container */}
+
                   <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl ${service.bgColor} flex items-center justify-center mb-6 transition-transform duration-500 ${
                     hoveredIndex === index ? 'rotate-12 scale-110' : 'rotate-0 scale-100'
                   }`}>
                     <Icon className={`w-8 h-8 sm:w-10 sm:h-10 ${service.iconColor}`} />
                   </div>
 
-                  {/* Content */}
                   <div className="space-y-4">
                     <h3 className="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-pink-500 group-hover:bg-clip-text transition-all duration-300">
                       {service.title}
@@ -122,8 +111,6 @@ export default function ProductionHouseServices() {
                     </p>
                   </div>
 
-                 
-                  {/* Number Badge */}
                   <div className="absolute top-6 right-6 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-600 group-hover:bg-gradient-to-r group-hover:from-orange-500 group-hover:to-pink-500 group-hover:text-white transition-all duration-300">
                     {index + 1}
                   </div>
@@ -133,7 +120,6 @@ export default function ProductionHouseServices() {
           })}
         </div>
 
-        {/* Call to Action */}
         <div className="text-center mt-16">
           <button className="group px-8 py-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold rounded-full shadow-lg hover:shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 transform hover:scale-105" onClick={() => window.location.href="https://wa.me/919032845433"}>
             <span className="flex items-center gap-2">
