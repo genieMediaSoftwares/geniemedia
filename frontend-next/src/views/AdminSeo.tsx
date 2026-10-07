@@ -1,16 +1,29 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   AlertCircle, AlertTriangle, ArrowDown, ArrowLeft, ArrowUp, BookOpen, CheckCircle, Download, Edit2, Eye, FileText, Gauge,
-  Globe, History, KeyRound, LayoutGrid, Loader, LogOut, MapPin, Plus, Save, Search, Trash2, Upload, X,
+  Globe, History, KeyRound, LayoutGrid, Loader, LogOut, MapPin, Plus, RotateCcw, Save, Search, Trash2, Upload, Wrench, X,
 } from "lucide-react";
 
 import BASE_URL from "@/Api";
 import { clearToken, getToken } from "@/lib/auth";
 import { arr, isRecord, num, str, type RawRecord } from "@/lib/api/coerce";
-import { analyzePageHealth, type HealthKeyword, type HealthPage, type HealthReport, type KeywordType, type SearchIntent } from "@/lib/seo/keywordHealth";
+import {
+  analyzePageHealth,
+  type HealthCaseStudy,
+  type HealthConfig,
+  type HealthKeyword,
+  type HealthPage,
+  type HealthReport,
+  type KeywordType,
+  type SearchIntent,
+  type SeoIssue,
+  type Suggestion,
+} from "@/lib/seo/keywordHealth";
+import { caseStudyPath, categoryInfo, normalizeCaseStudy, servicesFor } from "@/lib/caseStudies";
+import { FixCenter, SeoFixPanel, SeverityBadge, WordDiff } from "@/components/admin/seo/SeoFixUi";
 import { applyDraft, snapshotFromHtml } from "@/lib/seo/pageSnapshot";
 import { SEO_TAXONOMY } from "@/content/seoTaxonomy";
 import TagInput from "@/components/TagInput";
@@ -123,7 +136,84 @@ const TIER_MAP: Record<string, { type: KeywordType; intent: SearchIntent; priori
 const csvCell = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
 
 const toHealthKeywords = (ks: Keyword[]): HealthKeyword[] =>
-  ks.map((k) => ({ keyword: k.keyword, type: k.keyword_type, intent: k.search_intent, active: k.status === "ACTIVE" }));
+  ks.map((k) => ({ keyword: k.keyword, type: k.keyword_type, intent: k.search_intent, active: k.status === "ACTIVE", priority: k.priority }));
+
+const healthConfig = (c: SeoConfig): HealthConfig => ({
+  primaryTopic: c.primaryTopic,
+  secondaryTopics: c.secondaryTopics,
+  contentTopics: c.contentTopics,
+  faqTopics: c.faqTopics,
+  robotsIndex: c.robotsIndex,
+  canonicalUrl: c.canonicalUrl,
+});
+
+const SOURCE_FILES: Record<string, string> = {
+  "/digital_marketing": "frontend-next/src/views/DigitalMarketting.tsx",
+  "/web_development": "frontend-next/src/views/WebDevPg.tsx",
+  "/production_house": "frontend-next/src/views/ProductionHouse.tsx",
+  "/podcast_studio": "frontend-next/src/views/PodcastStudio.tsx",
+};
+
+type TabId = "fix" | "config" | "keywords" | "preview" | "history";
+
+const TARGETS: Record<SeoIssue["target"], { tab: TabId; anchor?: string }> = {
+  metadata: { tab: "config", anchor: "seo-title" },
+  title: { tab: "config", anchor: "seo-title" },
+  description: { tab: "config", anchor: "seo-desc" },
+  h1: { tab: "config", anchor: "seo-h1" },
+  sections: { tab: "config", anchor: "seo-sections" },
+  links: { tab: "config", anchor: "seo-links" },
+  topics: { tab: "config", anchor: "seo-primary" },
+  robots: { tab: "config", anchor: "seo-robots" },
+  canonical: { tab: "config", anchor: "seo-canonical" },
+  content: { tab: "fix" },
+  keywords: { tab: "keywords", anchor: "seo-keyword-input" },
+};
+
+const FIELD_ANCHOR: Record<string, string> = {
+  seoTitle: "seo-title",
+  metaDescription: "seo-desc",
+  preferredH1: "seo-h1",
+  robotsIndex: "seo-robots",
+  canonicalUrl: "seo-canonical",
+  primaryTopic: "seo-primary",
+};
+
+const highlightElement = (id: string, focus: boolean) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+  if (focus) el.focus({ preventScroll: true });
+  const prev = el.style.boxShadow;
+  el.style.transition = "box-shadow 0.3s";
+  el.style.boxShadow = "0 0 0 4px #fbbf24";
+  window.setTimeout(() => {
+    el.style.boxShadow = prev;
+  }, 2600);
+};
+
+const readDismissed = (pageId: number): Set<string> => {
+  try {
+    return new Set(JSON.parse(window.localStorage.getItem(`seo-dismissed:${pageId}`) || "[]") as string[]);
+  } catch {
+    return new Set();
+  }
+};
+
+const writeDismissed = (pageId: number, ids: Set<string>) => {
+  try {
+    window.localStorage.setItem(`seo-dismissed:${pageId}`, JSON.stringify([...ids]));
+  } catch {
+  }
+};
+
+interface DashboardWarning {
+  key: string;
+  text: string;
+  severity: SeoIssue["severity"];
+  pageId: number | null;
+  issueId: string;
+}
 
 const scoreColor = (s: number) => (s >= 85 ? "text-green-700 bg-green-50" : s >= 70 ? "text-amber-700 bg-amber-50" : "text-red-700 bg-red-50");
 
@@ -133,9 +223,9 @@ function Counter({ value, min, max }: { value: string; min: number; max: number 
   return <span className={`text-xs ${tone}`}>{n} characters (aim for {min}–{max})</span>;
 }
 
-function Card({ title, icon: Icon, children, action }: { title: string; icon?: React.ElementType; children: React.ReactNode; action?: React.ReactNode }) {
+function Card({ title, icon: Icon, children, action, id }: { title: string; icon?: React.ElementType; children: React.ReactNode; action?: React.ReactNode; id?: string }) {
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 space-y-4">
+    <section id={id} tabIndex={id ? -1 : undefined} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 space-y-4">
       <div className="flex items-center gap-2">
         {Icon && <Icon size={16} style={{ color: BRAND }} aria-hidden="true" />}
         <h3 className="text-base font-extrabold text-gray-900">{title}</h3>
@@ -186,7 +276,11 @@ export default function AdminSeo() {
 
   const [selected, setSelected] = useState<number | null>(null);
   const [detail, setDetail] = useState<PageDetail | null>(null);
-  const [tab, setTab] = useState<"config" | "keywords" | "preview" | "history">("config");
+  const [tab, setTab] = useState<TabId>("fix");
+  const [activeIssueId, setActiveIssueId] = useState<string | null>(null);
+  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+  const [caseStudies, setCaseStudies] = useState<HealthCaseStudy[]>([]);
+  const [reanalyzing, setReanalyzing] = useState(false);
   const [form, setForm] = useState<SeoConfig>(EMPTY);
   const [problems, setProblems] = useState<string[]>([]);
   const [busy, setBusy] = useState("");
@@ -273,6 +367,17 @@ export default function AdminSeo() {
         else if (!(err instanceof Error && err.message === "Session expired")) say("Could not load the SEO manager. Check your connection.", false);
       })
       .finally(() => setLoading(false));
+    fetch(`${BASE_URL}/api/case-studies`, { headers: { Accept: "application/json" } })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: unknown) =>
+        setCaseStudies(
+          arr(data)
+            .map((raw) => normalizeCaseStudy(raw))
+            .filter((cs): cs is NonNullable<typeof cs> => cs !== null && cs.status === "published")
+            .map((cs) => ({ title: cs.title, clientName: cs.clientName, href: caseStudyPath(cs.slug), services: servicesFor(cs), category: categoryInfo(cs.category).label }))
+        )
+      )
+      .catch(() => {});
     fetch("/build-info.json", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((d: unknown) => {
@@ -289,12 +394,29 @@ export default function AdminSeo() {
       if (!snap) return null;
       const cfg = p.published ?? EMPTY;
       const own = allKeywords.filter((k) => k.page_id === p.id);
-      return analyzePageHealth(snap, cfg, toHealthKeywords(own), locationList, {
+      return analyzePageHealth(snap, healthConfig(cfg), toHealthKeywords(own), locationList, {
         cannibalized: clashes.filter((c) => c.pages.includes(p.name)).map((c) => c.keyword),
+        caseStudies,
+        pagePath: p.path,
       });
     },
-    [snapshots, allKeywords, locationList, clashes]
+    [snapshots, allKeywords, locationList, clashes, caseStudies]
   );
+
+  const reports = useMemo(() => Object.fromEntries(pages.map((p) => [p.id, healthFor(p)])), [pages, healthFor]);
+
+  const deferredForm = useDeferredValue(form);
+  const pageReports = useMemo(() => {
+    if (!detail) return null;
+    const snap = snapshots[detail.page.path];
+    if (!snap) return null;
+    const keywordsForPage = toHealthKeywords(detail.keywords);
+    const opts = { cannibalized: detail.warnings.map((w) => w.keyword), caseStudies, pagePath: detail.page.path };
+    const live = analyzePageHealth(snap, healthConfig(detail.published ?? deferredForm), keywordsForPage, locationList, opts);
+    const draftPage = applyDraft(snap, deferredForm, detail.published);
+    const draft = analyzePageHealth(draftPage, healthConfig(deferredForm), keywordsForPage, locationList, opts);
+    return { live, draft, snapshot: snap, draftPage };
+  }, [detail, snapshots, deferredForm, locationList, caseStudies]);
 
   const siteStatus = (p: PageRow): { label: string; tone: string } => {
     if (!p.published) return { label: "Using built-in settings", tone: "bg-gray-100 text-gray-700" };
@@ -303,8 +425,24 @@ export default function AdminSeo() {
     return { label: "Published — goes live after the next build & upload", tone: "bg-amber-100 text-amber-800" };
   };
 
-  const openPage = async (id: number) => {
+  const syncUrl = useCallback((page: number | null, nextTab?: TabId, issue?: string | null) => {
+    try {
+      const url = new URL(window.location.href);
+      url.search = "";
+      if (page) url.searchParams.set("page", String(page));
+      if (page && nextTab) url.searchParams.set("tab", nextTab);
+      if (page && issue) url.searchParams.set("issue", issue);
+      window.history.replaceState(null, "", url.toString());
+    } catch {
+    }
+  }, []);
+
+  const openPage = async (id: number, opts: { tab?: TabId; issueId?: string | null } = {}) => {
     setSelected(id);
+    setTab(opts.tab ?? "fix");
+    setActiveIssueId(opts.issueId ?? null);
+    setDismissed(readDismissed(id));
+    syncUrl(id, opts.tab ?? "fix", opts.issueId ?? null);
     setBusy("page");
     try {
       const { res, data } = await json(`/api/admin/seo/pages/${id}`);
@@ -332,8 +470,95 @@ export default function AdminSeo() {
   };
 
   const reloadDetail = async () => {
-    if (selected) await openPage(selected);
+    if (selected) await openPage(selected, { tab, issueId: activeIssueId });
     await refresh();
+  };
+
+  const goToTab = (next: TabId) => {
+    setTab(next);
+    syncUrl(selected, next, activeIssueId);
+  };
+
+  const navigateTo = (tabId: TabId, anchor: string | undefined, focus: boolean) => {
+    setTab(tabId);
+    if (anchor) window.setTimeout(() => highlightElement(anchor, focus), 80);
+  };
+
+  const fixIssue = (issue: SeoIssue) => {
+    setActiveIssueId(issue.id);
+    const t = TARGETS[issue.target];
+    const nextTab: TabId = issue.target === "content" ? tab : t.tab;
+    syncUrl(selected, nextTab, issue.id);
+    setTab(nextTab);
+    window.setTimeout(() => document.getElementById("seo-fix-panel")?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+  };
+
+  const closeFix = () => {
+    setActiveIssueId(null);
+    syncUrl(selected, tab, null);
+  };
+
+  const applySuggestion = (sg: Suggestion, navigate = true) => {
+    if (sg.kind === "set-field") {
+      setForm((f) => ({ ...f, [sg.field]: sg.value }));
+      if (navigate) navigateTo("config", FIELD_ANCHOR[sg.field], false);
+    } else if (sg.kind === "add-link") {
+      setForm((f) => (f.internalLinks.some((l) => l.href === sg.link.href) ? f : { ...f, internalLinks: [...f.internalLinks, sg.link] }));
+      if (navigate) navigateTo("config", "seo-links", false);
+    } else {
+      setForm((f) => (f.sections.some((x) => x.heading.toLowerCase() === sg.section.heading.toLowerCase()) ? f : { ...f, sections: [...f.sections, sg.section] }));
+      if (navigate) navigateTo("config", "seo-sections", false);
+    }
+    if (navigate) say("Applied to the draft. Review it, then Save Draft or Publish.");
+  };
+
+  const applyMany = (items: Suggestion[]) => {
+    for (const sg of items) applySuggestion(sg, false);
+    say(`${items.length} change${items.length === 1 ? "" : "s"} applied to the draft. Review, then Save Draft or Publish.`);
+  };
+
+  const editManually = (issue: SeoIssue) => {
+    const t = TARGETS[issue.target];
+    navigateTo(t.tab, t.anchor, true);
+  };
+
+  const dismissIssue = (id: string) => {
+    if (!selected) return;
+    const next = new Set(dismissed).add(id);
+    setDismissed(next);
+    writeDismissed(selected, next);
+  };
+
+  const restoreIssue = (id: string) => {
+    if (!selected) return;
+    const next = new Set(dismissed);
+    next.delete(id);
+    setDismissed(next);
+    writeDismissed(selected, next);
+  };
+
+  const openPageRef = useRef(openPage);
+  useEffect(() => {
+    openPageRef.current = openPage;
+  });
+  const deepLinked = useRef(false);
+  useEffect(() => {
+    if (loading || deepLinked.current) return;
+    deepLinked.current = true;
+    const q = new URLSearchParams(window.location.search);
+    const id = Number(q.get("page"));
+    if (!id) return;
+    const t = q.get("tab");
+    const nextTab: TabId = t === "config" || t === "keywords" || t === "preview" || t === "history" ? t : "fix";
+    queueMicrotask(() => openPageRef.current(id, { tab: nextTab, issueId: q.get("issue") }));
+  }, [loading]);
+
+  const reanalyze = async () => {
+    if (!detail) return;
+    setReanalyzing(true);
+    await loadSnapshots([detail.page.path]);
+    setReanalyzing(false);
+    say("Live page re-analyzed.");
   };
 
   const set = <K extends keyof SeoConfig>(k: K, v: SeoConfig[K]) => setForm((f) => ({ ...f, [k]: v }));
@@ -409,10 +634,20 @@ export default function AdminSeo() {
   const publishedCount = pages.filter((p) => p.published).length;
   const activeCount = allKeywords.filter((k) => k.status === "ACTIVE").length;
   const lastUpdated = Math.max(0, ...pages.map((p) => p.lastUpdated || 0));
-  const reports = Object.fromEntries(pages.map((p) => [p.id, healthFor(p)]));
-  const dashboardWarnings = [
-    ...clashes.map((c) => `Keyword overlap: “${c.keyword}” is a ${c.kind} on ${c.pages.join(" and ")}.`),
-    ...pages.flatMap((p) => (reports[p.id]?.warnings || []).slice(0, 3).map((w) => `${p.name}: ${w}`)),
+  const dashboardWarnings: DashboardWarning[] = [
+    ...clashes.map((c) => ({
+      key: `clash:${c.keyword}:${c.kind}`,
+      text: `Keyword overlap: “${c.keyword}” is a ${c.kind} on ${c.pages.join(" and ")}.`,
+      severity: "medium" as const,
+      pageId: pages.find((p) => p.name === c.pages[0])?.id ?? null,
+      issueId: "KEYWORD_CANNIBALIZATION",
+    })),
+    ...pages.flatMap((p) => {
+      const hidden = readDismissed(p.id);
+      return (reports[p.id]?.issues || [])
+        .filter((i) => i.severity !== "info" && !hidden.has(i.id))
+        .map((i) => ({ key: `${p.id}:${i.id}`, text: `${p.name}: ${i.title}`, severity: i.severity, pageId: p.id, issueId: i.id }));
+    }),
   ];
 
   return (
@@ -464,7 +699,10 @@ export default function AdminSeo() {
             warnings={dashboardWarnings}
             buildInfo={buildInfo}
             siteStatus={siteStatus}
-            onOpen={openPage}
+            onOpen={(id) => openPage(id)}
+            onFixWarning={(w) => {
+              if (w.pageId) openPage(w.pageId, { tab: w.issueId === "KEYWORD_CANNIBALIZATION" ? "keywords" : "fix", issueId: w.issueId });
+            }}
             json={json}
             onChanged={refresh}
             locations={locations}
@@ -494,10 +732,57 @@ export default function AdminSeo() {
             )}
 
             <div className="flex gap-1 border-b border-gray-200 overflow-x-auto">
-              {([["config", "Configuration", Edit2], ["keywords", `Keywords (${detail.keywords.length})`, KeyRound], ["preview", "Preview & Health", Eye], ["history", "History", History]] as const).map(([id, label, Icon]) => (
-                <button key={id} type="button" onClick={() => setTab(id)} className={tabBtn(tab === id)}><Icon size={14} /> {label}</button>
+              {([["fix", "Fix Center", Wrench], ["config", "Configuration", Edit2], ["keywords", `Keywords (${detail.keywords.length})`, KeyRound], ["preview", "Preview & Health", Eye], ["history", "History", History]] as const).map(([id, label, Icon]) => (
+                <button key={id} type="button" onClick={() => goToTab(id)} className={tabBtn(tab === id)}><Icon size={14} /> {label}</button>
               ))}
             </div>
+
+            {activeIssueId && pageReports && (() => {
+              const inDraft = pageReports.draft.issues.find((i) => i.id === activeIssueId);
+              const inLive = pageReports.live.issues.find((i) => i.id === activeIssueId);
+              const issue = inDraft || inLive;
+              if (!issue) return null;
+              const field =
+                issue.target === "title" ? form.seoTitle || pageReports.snapshot.title
+                : issue.target === "description" ? form.metaDescription || pageReports.snapshot.description
+                : issue.target === "h1" ? form.preferredH1 || pageReports.snapshot.h1s[0] || ""
+                : undefined;
+              return (
+                <div id="seo-fix-panel" className="scroll-mt-24">
+                  <p role="status" className="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 mb-3 inline-flex items-center gap-1.5">
+                    <Wrench size={12} aria-hidden="true" /> Fixing: {detail.page.name} — {issue.title}
+                  </p>
+                  <SeoFixPanel
+                    key={issue.id}
+                    issue={issue}
+                    resolved={!inDraft}
+                    currentValue={field}
+                    sourceFile={SOURCE_FILES[detail.page.path]}
+                    onApply={(sg) => applySuggestion(sg)}
+                    onEdit={() => editManually(issue)}
+                    onClose={closeFix}
+                  />
+                </div>
+              );
+            })()}
+
+            {tab === "fix" && (
+              pageReports ? (
+                <FixCenter
+                  live={pageReports.live}
+                  draft={pageReports.draft}
+                  dismissed={dismissed}
+                  onFix={fixIssue}
+                  onDismiss={dismissIssue}
+                  onRestore={restoreIssue}
+                  onReanalyze={reanalyze}
+                  reanalyzing={reanalyzing}
+                  onApplyMany={applyMany}
+                />
+              ) : (
+                <p className="text-sm text-gray-500">Reading the live page… If this stays empty, open the admin on geniemedia.in so the page can be read.</p>
+              )
+            )}
 
             {tab === "config" && (
               <ConfigEditor
@@ -515,9 +800,18 @@ export default function AdminSeo() {
             )}
             {tab === "keywords" && <KeywordManager detail={detail} json={json} api={api} onChanged={reloadDetail} say={say} />}
             {tab === "preview" && (
-              <PreviewPanel detail={detail} form={form} snapshot={snapshots[detail.page.path] ?? null} locations={locationList} />
+              <PreviewPanel detail={detail} reports={pageReports} />
             )}
-            {tab === "history" && <HistoryPanel detail={detail} />}
+            {tab === "history" && (
+              <HistoryPanel
+                detail={detail}
+                onRestore={(field, value) => {
+                  setForm((f) => ({ ...f, [field]: value }));
+                  navigateTo("config", FIELD_ANCHOR[field], false);
+                  say("Previous value restored into the draft. Save to keep it.");
+                }}
+              />
+            )}
           </>
         )}
       </main>
@@ -528,15 +822,16 @@ export default function AdminSeo() {
 type JsonFn = (path: string, method?: string, body?: unknown) => Promise<{ res: Response; data: RawRecord | null }>;
 
 function Dashboard({
-  pages, reports, stats, warnings, buildInfo, siteStatus, onOpen, json, onChanged, locations, say,
+  pages, reports, stats, warnings, buildInfo, siteStatus, onOpen, onFixWarning, json, onChanged, locations, say,
 }: {
   pages: PageRow[];
   reports: Record<number, HealthReport | null>;
   stats: { publishedCount: number; activeCount: number; lastUpdated: number; primaryTopics: number };
-  warnings: string[];
+  warnings: DashboardWarning[];
   buildInfo: { builtAt: number } | null;
   siteStatus: (p: PageRow) => { label: string; tone: string };
   onOpen: (id: number) => void;
+  onFixWarning: (w: DashboardWarning) => void;
   json: JsonFn;
   onChanged: () => Promise<void>;
   locations: LocationRow[];
@@ -617,7 +912,20 @@ function Dashboard({
 
       <Card title="Warnings" icon={AlertTriangle}>
         {warnings.length ? (
-          <ul className="space-y-1.5 text-sm text-gray-700">{warnings.map((w) => <li key={w} className="flex gap-2"><AlertTriangle size={14} className="text-amber-500 mt-0.5 shrink-0" aria-hidden="true" />{w}</li>)}</ul>
+          <ul className="divide-y divide-gray-100 text-sm text-gray-700">
+            {[...warnings].sort((a, b) => ["critical", "high", "medium", "low", "info"].indexOf(a.severity) - ["critical", "high", "medium", "low", "info"].indexOf(b.severity)).map((w) => (
+              <li key={w.key} className="flex flex-wrap items-center gap-2 py-2">
+                <AlertTriangle size={14} className="text-amber-500 shrink-0" aria-hidden="true" />
+                <SeverityBadge severity={w.severity} />
+                <span className="flex-1 min-w-0 break-words">{w.text}</span>
+                {w.pageId && (
+                  <button type="button" onClick={() => onFixWarning(w)} aria-label={`Fix: ${w.text}`} className="px-3 py-1 rounded-lg text-white text-xs font-bold flex items-center gap-1 shrink-0" style={{ background: BRAND }}>
+                    <Wrench size={12} aria-hidden="true" /> Fix
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
         ) : (
           <p className="text-sm text-green-700">No warnings.</p>
         )}
@@ -741,13 +1049,13 @@ function ConfigEditor({
             <Label htmlFor="seo-canonical" hint="Leave empty for the page's own URL.">Canonical URL</Label>
             <input id="seo-canonical" className={inputCls} value={form.canonicalUrl} onChange={(e) => set("canonicalUrl", e.target.value)} placeholder="https://geniemedia.in/…" />
           </div>
-          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.robotsIndex} onChange={(e) => set("robotsIndex", e.target.checked)} /> Allow indexing</label>
+          <label className="flex items-center gap-2 text-sm"><input id="seo-robots" type="checkbox" checked={form.robotsIndex} onChange={(e) => set("robotsIndex", e.target.checked)} /> Allow indexing</label>
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.robotsFollow} onChange={(e) => set("robotsFollow", e.target.checked)} /> Allow following links</label>
         </div>
         {!form.robotsIndex && <p className="text-xs font-bold text-red-700">Indexing is off: publishing this removes the page from Google.</p>}
       </Card>
 
-      <Card title="Page sections (visible H2s)" action={<button type="button" onClick={() => set("sections", [...form.sections, { heading: "", body: "" }])} className="flex items-center gap-1 text-sm font-bold" style={{ color: BRAND }}><Plus size={14} /> Add section</button>}>
+      <Card id="seo-sections" title="Page sections (visible H2s)" action={<button type="button" onClick={() => set("sections", [...form.sections, { heading: "", body: "" }])} className="flex items-center gap-1 text-sm font-bold" style={{ color: BRAND }}><Plus size={14} /> Add section</button>}>
         <p className="text-xs text-gray-500">Each section appears on the page as a real heading with your text, below the existing content. Write it for customers; leave a blank line between paragraphs.</p>
         {form.sections.map((s, i) => (
           <div key={i} className="rounded-xl border-2 border-gray-100 p-3 space-y-2">
@@ -765,7 +1073,7 @@ function ConfigEditor({
         ))}
       </Card>
 
-      <Card title="Internal links" action={<button type="button" onClick={() => set("internalLinks", [...form.internalLinks, { label: "", href: "" }])} className="flex items-center gap-1 text-sm font-bold" style={{ color: BRAND }}><Plus size={14} /> Add link</button>}>
+      <Card id="seo-links" title="Internal links" action={<button type="button" onClick={() => set("internalLinks", [...form.internalLinks, { label: "", href: "" }])} className="flex items-center gap-1 text-sm font-bold" style={{ color: BRAND }}><Plus size={14} /> Add link</button>}>
         <p className="text-xs text-gray-500">Shown as “Related Pages” on the page. Only paths on this site (e.g. /case-studies, /blog/…, /contact). Keep it to a few genuinely related pages.</p>
         {form.internalLinks.map((l, i) => (
           <div key={i} className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
@@ -904,7 +1212,7 @@ function KeywordManager({ detail, json, api, onChanged, say }: { detail: PageDet
     <div className="space-y-5">
       <Card title={editing ? "Edit keyword" : "Add keyword"} icon={KeyRound}>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-          <input aria-label="Keyword" className={`${inputCls} lg:col-span-2`} value={draft.keyword} placeholder="digital marketing agency in Vizag" onChange={(e) => setDraft({ ...draft, keyword: e.target.value })} />
+          <input id="seo-keyword-input" aria-label="Keyword" className={`${inputCls} lg:col-span-2`} value={draft.keyword} placeholder="digital marketing agency in Vizag" onChange={(e) => setDraft({ ...draft, keyword: e.target.value })} />
           <select aria-label="Keyword type" className={inputCls} value={draft.keywordType} onChange={(e) => setDraft({ ...draft, keywordType: e.target.value })}>{KEYWORD_TYPES.map((t) => <option key={t}>{t}</option>)}</select>
           <select aria-label="Search intent" className={inputCls} value={draft.searchIntent} onChange={(e) => setDraft({ ...draft, searchIntent: e.target.value })}>{INTENTS.map((t) => <option key={t}>{t}</option>)}</select>
           <select aria-label="Location" className={inputCls} value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })}>
@@ -990,14 +1298,18 @@ function KeywordManager({ detail, json, api, onChanged, say }: { detail: PageDet
   );
 }
 
-function PreviewPanel({ detail, form, snapshot, locations }: { detail: PageDetail; form: SeoConfig; snapshot: HealthPage | null; locations: Array<{ name: string; aliases: string[] }> }) {
-  if (!snapshot) return <p className="text-sm text-gray-500">Reading the live page… If this stays empty, open the admin on geniemedia.in so the page can be read.</p>;
-  const keywords = toHealthKeywords(detail.keywords);
-  const cannibalized = detail.warnings.map((w) => w.keyword);
-  const current = analyzePageHealth(snapshot, detail.published ?? form, keywords, locations, { cannibalized });
-  const draftPage = applyDraft(snapshot, form, detail.published);
-  const draft = analyzePageHealth(draftPage, form, keywords, locations, { cannibalized });
+interface PageReports {
+  live: HealthReport;
+  draft: HealthReport;
+  snapshot: HealthPage;
+  draftPage: HealthPage;
+}
+
+function PreviewPanel({ detail, reports }: { detail: PageDetail; reports: PageReports | null }) {
+  if (!reports) return <p className="text-sm text-gray-500">Reading the live page… If this stays empty, open the admin on geniemedia.in so the page can be read.</p>;
+  const { live: current, draft, snapshot, draftPage } = reports;
   const url = `geniemedia.in${detail.page.path}`;
+  const delta = draft.score - current.score;
 
   const column = (label: string, page: HealthPage, report: HealthReport) => (
     <div className="space-y-4 min-w-0">
@@ -1008,15 +1320,36 @@ function PreviewPanel({ detail, form, snapshot, locations }: { detail: PageDetai
         <p className="font-semibold">H2s:</p>
         <ul className="list-disc pl-5 text-gray-700 max-h-48 overflow-y-auto">{page.h2s.map((h, i) => <li key={i}>{h}</li>)}</ul>
       </div>
-      <ul className="grid grid-cols-2 gap-1 text-xs">
-        {report.categories.map((c) => <li key={c.id} className="flex justify-between bg-gray-50 rounded px-2 py-1"><span>{c.label}</span><span className="font-bold">{c.score}/{c.max}</span></li>)}
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs">
+        {report.categories.map((c) => <li key={c.id} className="flex justify-between gap-2 bg-gray-50 rounded px-2 py-1"><span>{c.label}</span><span className="font-bold">{c.score}/{c.max}</span></li>)}
       </ul>
       <p className="text-xs text-gray-500">{report.wordCount} words · location mentioned {report.locationMentions}×</p>
     </div>
   );
 
+  const changes: Array<[string, string, string]> = [
+    ["SEO title", snapshot.title, draftPage.title],
+    ["Meta description", snapshot.description, draftPage.description],
+    ["H1", snapshot.h1s.join(" / "), draftPage.h1s.join(" / ")],
+  ];
+  const newHeadings = draftPage.h2s.filter((h) => !snapshot.h2s.includes(h));
+  const newLinks = draftPage.links.filter((l) => !snapshot.links.some((x) => x.href === l.href && x.text === l.text));
+
   return (
     <div className="space-y-5">
+      <Card title="What changes in the draft" icon={Edit2}>
+        <p className="text-sm text-gray-600">Draft score {draft.score}/100 vs current {current.score}/100{delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}. An internal quality score, not a ranking prediction.</p>
+        {changes.filter(([, a, b]) => a !== b).map(([label, a, b]) => (
+          <div key={label} className="space-y-1">
+            <p className="text-sm font-semibold text-gray-700">{label}</p>
+            <WordDiff before={a} after={b} />
+          </div>
+        ))}
+        {newHeadings.length > 0 && <p className="text-sm"><span className="font-semibold">New H2 sections:</span> {newHeadings.join(" · ")}</p>}
+        {newLinks.length > 0 && <p className="text-sm"><span className="font-semibold">New links:</span> {newLinks.map((l) => `${l.text} (${l.href})`).join(" · ")}</p>}
+        {!changes.some(([, a, b]) => a !== b) && !newHeadings.length && !newLinks.length && <p className="text-sm text-gray-500">No differences from the live page yet.</p>}
+      </Card>
+
       <Card title="Current version vs draft" icon={Eye}>
         <div className="grid gap-6 lg:grid-cols-2">
           {column(detail.published ? "Current (published)" : "Current (live page)", snapshot, current)}
@@ -1024,15 +1357,10 @@ function PreviewPanel({ detail, form, snapshot, locations }: { detail: PageDetai
         </div>
       </Card>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Card title="Warnings" icon={AlertTriangle}>
-          {draft.warnings.length ? <ul className="space-y-1.5 text-sm">{draft.warnings.map((w) => <li key={w} className="flex gap-2"><AlertTriangle size={14} className="text-amber-500 mt-0.5 shrink-0" aria-hidden="true" />{w}</li>)}</ul> : <p className="text-sm text-green-700">No warnings.</p>}
-        </Card>
-        <Card title="Suggestions" icon={CheckCircle}>
-          <p className="text-xs text-gray-500">Ideas for you to write; nothing here is published automatically.</p>
-          {draft.suggestions.length ? <ul className="space-y-1.5 text-sm list-disc pl-5">{draft.suggestions.map((s) => <li key={s}>{s}</li>)}</ul> : <p className="text-sm text-green-700">No suggestions.</p>}
-        </Card>
-      </div>
+      <Card title="Suggestions" icon={CheckCircle}>
+        <p className="text-xs text-gray-500">Ideas for you to write; nothing here is published automatically. Use the Fix Center to act on them.</p>
+        {draft.suggestions.length ? <ul className="space-y-1.5 text-sm list-disc pl-5">{draft.suggestions.map((s) => <li key={s}>{s}</li>)}</ul> : <p className="text-sm text-green-700">No suggestions.</p>}
+      </Card>
 
       <Card title="Keyword coverage (draft)" icon={KeyRound}>
         <div className="overflow-x-auto">
@@ -1056,7 +1384,10 @@ function PreviewPanel({ detail, form, snapshot, locations }: { detail: PageDetai
   );
 }
 
-function HistoryPanel({ detail }: { detail: PageDetail }) {
+const RESTORABLE = ["seoTitle", "metaDescription", "preferredH1", "primaryTopic", "canonicalUrl"] as const;
+type RestorableField = (typeof RESTORABLE)[number];
+
+function HistoryPanel({ detail, onRestore }: { detail: PageDetail; onRestore: (field: RestorableField, value: string) => void }) {
   const short = (v: unknown) => {
     const s = String(v ?? "");
     return s.length > 160 ? `${s.slice(0, 160)}…` : s;
@@ -1081,6 +1412,11 @@ function HistoryPanel({ detail }: { detail: PageDetail }) {
               <p><span className="font-semibold">{String(a.admin ?? "")}</span> · {String(a.action)}{a.field ? ` · ${String(a.field)}` : ""} · <span className="text-gray-500">{when(num(a.createdAt))}</span></p>
               {Boolean(a.old_value || a.new_value) && (
                 <p className="text-xs text-gray-600 break-words">from <code>{short(a.old_value) || "—"}</code> to <code>{short(a.new_value) || "—"}</code></p>
+              )}
+              {a.action === "draft.update" && (RESTORABLE as readonly string[]).includes(String(a.field)) && typeof a.old_value === "string" && (
+                <button type="button" onClick={() => onRestore(String(a.field) as RestorableField, String(a.old_value))} className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-[#6B4A2D] hover:underline">
+                  <RotateCcw size={12} aria-hidden="true" /> Restore previous value into the draft
+                </button>
               )}
             </li>
           ))}
