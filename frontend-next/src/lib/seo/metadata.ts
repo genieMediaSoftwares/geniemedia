@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import type { Blog } from "@/types";
+import type { Blog, PublishedServiceSeo } from "@/types";
 import { SITE, SITE_ORIGIN } from "@/lib/site";
 import { blogUrl, stripHtml, toIso } from "@/lib/blog";
 import { metaForRoute, type PublicRoute } from "@/lib/seo/routeMeta";
@@ -11,14 +11,17 @@ const INDEX_ROBOTS: Metadata["robots"] = {
   googleBot: { index: true, follow: true, "max-image-preview": "large" },
 };
 
-export function buildRouteMetadata(path: PublicRoute): Metadata {
-  const meta = metaForRoute(path);
+export function buildRouteMetadata(path: PublicRoute, seo?: PublishedServiceSeo | null): Metadata {
+  const meta = metaForRoute(path, seo);
   const image = meta.image || SITE.defaultOgImage;
   return {
     title: { absolute: meta.title },
     description: meta.description,
     alternates: { canonical: meta.canonical },
-    robots: INDEX_ROBOTS,
+    robots:
+      seo && (!seo.robotsIndex || !seo.robotsFollow)
+        ? { index: seo.robotsIndex, follow: seo.robotsFollow, googleBot: { index: seo.robotsIndex, follow: seo.robotsFollow } }
+        : INDEX_ROBOTS,
     openGraph: {
       type: "website",
       url: meta.canonical,

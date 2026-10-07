@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
+
+import BASE_URL from "@/Api";
+import { arr } from "@/lib/api/coerce";
 
 import type { CaseStudy, CaseStudyCategory } from "@/types";
-import { CASE_STUDY_CATEGORIES } from "@/lib/caseStudies";
+import { CASE_STUDY_CATEGORIES, normalizeCaseStudy } from "@/lib/caseStudies";
 import CaseStudyCard from "@/components/caseStudy/CaseStudyCard";
 
 type Filter = "all" | CaseStudyCategory;
@@ -18,7 +21,28 @@ const readFilter = (search: string, available: CaseStudyCategory[]): Filter => {
   return value && (available as string[]).includes(value) ? (value as CaseStudyCategory) : "all";
 };
 
-export default function CaseStudyFilter({ items }: { items: CaseStudy[] }) {
+export default function CaseStudyFilter({ items: initial, empty }: { items: CaseStudy[]; empty: ReactNode }) {
+  const [items, setItems] = useState<CaseStudy[]>(initial);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${BASE_URL}/api/case-studies`, { headers: { Accept: "application/json" } })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+      .then((data: unknown) => {
+        if (cancelled || !Array.isArray(data)) return;
+        setItems(
+          arr(data)
+            .map((raw) => normalizeCaseStudy(raw))
+            .filter((cs): cs is CaseStudy => cs !== null && cs.status === "published")
+            .sort((a, b) => a.displayOrder - b.displayOrder || (b.publishedAt ?? 0) - (a.publishedAt ?? 0))
+        );
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const available = CASE_STUDY_CATEGORIES.filter((c) => items.some((cs) => cs.category === c.id));
   const search = useSyncExternalStore(subscribe, () => window.location.search, () => "");
   const [chosen, setChosen] = useState<Filter | null>(null);
@@ -40,6 +64,8 @@ export default function CaseStudyFilter({ items }: { items: CaseStudy[] }) {
     { id: "all", label: "All", count: items.length },
     ...available.map((c) => ({ id: c.id as Filter, label: c.label, count: items.filter((cs) => cs.category === c.id).length })),
   ];
+
+  if (!items.length) return <>{empty}</>;
 
   return (
     <>

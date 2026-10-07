@@ -158,7 +158,7 @@ const WAVE_BARS = [
   "h-[68px] ![animation-delay:1.6s]", "h-[72px] ![animation-delay:1.7s]", "h-[58px] ![animation-delay:1.8s]", "h-[65px] ![animation-delay:1.9s]",
 ];
 
-export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) {
+export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode; h1?: string }) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries, obs) => {
@@ -204,12 +204,18 @@ export default function PodcastStudio({ platforms }: { platforms?: ReactNode }) 
         <div className={`${HERO_GLOW} ![animation-delay:-10s] -bottom-[200px] -right-[200px] left-0 top-0 bg-[#6B4FFF]`}></div>
 
         <h1 className="mb-5 mt-10 text-center text-[clamp(38px,6vw,60px)] font-extrabold leading-[1.1] tracking-[-0.03em]">
-          <span className="inline-block animate-podcast-hero-rise">PODCAST STUDIO</span>
-          <br />
-          <span className="inline-block animate-podcast-hero-rise ![animation-delay:0.08s]">IN</span>
-          <span className="ml-[1.2rem] inline-block animate-podcast-hero-rise bg-[linear-gradient(135deg,#ffffff,#ffffff)] bg-clip-text [-webkit-text-fill-color:transparent]">
-            VIZAG
-          </span>
+          {h1 ? (
+            <span className="inline-block animate-podcast-hero-rise">{h1}</span>
+          ) : (
+            <>
+              <span className="inline-block animate-podcast-hero-rise">PODCAST STUDIO</span>
+              <br />
+              <span className="inline-block animate-podcast-hero-rise ![animation-delay:0.08s]">IN</span>
+              <span className="ml-[1.2rem] inline-block animate-podcast-hero-rise bg-[linear-gradient(135deg,#ffffff,#ffffff)] bg-clip-text [-webkit-text-fill-color:transparent]">
+                VIZAG
+              </span>
+            </>
+          )}
         </h1>
 
         <p className="mb-10 max-w-[700px] animate-podcast-desc text-center text-[clamp(16px,2vw,18px)] leading-[1.6] text-white">

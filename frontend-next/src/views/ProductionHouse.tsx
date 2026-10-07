@@ -10,7 +10,7 @@ import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const ProdHouseCams = ProdHouseCamsAsset.src;
 const StudioNightView = StudioNightViewAsset.src;
-export default function ProductionHouse() {
+export default function ProductionHouse({ h1 }: { h1?: string }) {
   return (
     <>
       <div className="text-center bg-gradient-to-br
@@ -22,7 +22,7 @@ export default function ProductionHouse() {
 
             <div className="text-white space-y-6">
               <h1 className="text-4xl sm:text-6xl lg:text-6xl font-bold tracking-tight">
-                Production House &amp; Video Production in Vizag
+                {h1 || "Production House & Video Production in Vizag"}
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
                 Genie Media & Studio is a production house in Vizag that creates professional video content for businesses, brands and organisations: corporate videos, commercial and product videos, brand films and short videos for social media. We handle everything from planning and filming to editing and final delivery, so you get polished visual stories that connect with your audience.

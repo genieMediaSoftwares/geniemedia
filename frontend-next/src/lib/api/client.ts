@@ -9,6 +9,7 @@ export const CACHE_TAGS = {
   blogs: "blogs",
   projects: "projects",
   caseStudies: "case-studies",
+  serviceSeo: "service-seo",
 } as const;
 
 export class ApiUnavailableError extends Error {

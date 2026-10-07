@@ -16,6 +16,7 @@ const sharp = require("sharp");
 const { migrateBlogSeo, loadBlogColumns, filterToExistingColumns } = require("./db/migrateBlogSeo");
 const seoRoutes = require("./routes/seoRoutes");
 const caseStudyRoutes = require("./routes/caseStudies");
+const seoManagerRoutes = require("./routes/seoManager");
 const { buildSeoColumns, hydrateSeoRow, clampMetaDescription } = require("./services/blogSeoFields");
 const { validateForPublish, describeBlockers } = require("./services/seoValidation");
 const { invalidateSitemapCache } = require("./services/sitemapService");
@@ -1127,6 +1128,10 @@ app.use(
   "/",
   caseStudyRoutes({ db, verifyToken, upload, uploadToHostinger, removeUploadsIfUnused, discardTempFile })
 );
+
+// ================= SEO KEYWORD MANAGER =================
+// Admin keyword/SEO planning. See routes/seoManager.js.
+app.use("/", seoManagerRoutes({ db, verifyToken, siteUrl: SITE.url }));
 
 app.use("/", seoRoutes(db, verifyToken));
 

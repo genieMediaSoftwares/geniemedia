@@ -1,4 +1,4 @@
-import type { JsonLdGraph, JsonLdObject, RouteMeta, RouteMetaEntry } from "@/types";
+import type { JsonLdGraph, JsonLdObject, PublishedServiceSeo, RouteMeta, RouteMetaEntry } from "@/types";
 import { SITE_ORIGIN, canonicalFor } from "@/lib/site";
 import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
 import { PRODUCTION_HOUSE_FAQS, WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
@@ -366,9 +366,14 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
   "/terms-and-conditions": (meta) => pageGraph(meta),
 };
 
-export const metaForRoute = (path: PublicRoute): RouteMeta => {
+export const metaForRoute = (path: PublicRoute, seo?: PublishedServiceSeo | null): RouteMeta => {
   const entry = ROUTE_META[path];
-  const meta: RouteMeta = { ...entry, canonical: canonicalFor(path) };
+  const meta: RouteMeta = {
+    ...entry,
+    ...(seo?.seoTitle ? { title: seo.seoTitle } : {}),
+    ...(seo?.metaDescription ? { description: seo.metaDescription } : {}),
+    canonical: seo?.canonicalUrl || canonicalFor(path),
+  };
   const schema = ROUTE_SCHEMA[path];
   return schema ? { ...meta, schema: schema(meta) } : meta;
 };

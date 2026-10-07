@@ -81,7 +81,7 @@ const SITEMAP_PHP = path.join(ROOT, "dist", "sitemap.php");
 if (fs.existsSync(SITEMAP) && fs.existsSync(SITEMAP_PHP)) {
   const full = fs.readFileSync(SITEMAP, "utf8");
   fs.writeFileSync(path.join(ROOT, "dist", "sitemap-static.xml"), full);
-  const pagesOnly = full.replace(/<url>\s*<loc>[^<]*\/blog\/[^<]*<\/loc>[\s\S]*?<\/url>\s*/g, "");
+  const pagesOnly = full.replace(/<url>\s*<loc>[^<]*\/(?:blog\/|case-studies(?=\/|<))[^<]*<\/loc>[\s\S]*?<\/url>\s*/g, "");
   fs.writeFileSync(path.join(ROOT, "dist", "sitemap-pages.xml"), pagesOnly);
 
   if (!api) {
@@ -91,6 +91,12 @@ if (fs.existsSync(SITEMAP) && fs.existsSync(SITEMAP_PHP)) {
   let php = fs.readFileSync(SITEMAP_PHP, "utf8");
   php = php.split("__API_BASE_URL__").join(api).split("__SITE_URL__").join(siteUrl);
   fs.writeFileSync(SITEMAP_PHP, php);
+
+  const LIVE_PHP = path.join(ROOT, "dist", "live.php");
+  if (fs.existsSync(LIVE_PHP)) {
+    fs.writeFileSync(LIVE_PHP, fs.readFileSync(LIVE_PHP, "utf8").split("__API_BASE_URL__").join(api).split("__SITE_URL__").join(siteUrl));
+    console.log("postbuild: live.php configured (pages published after this build are served live)");
+  }
   const pageCount = (pagesOnly.match(/<url>/g) || []).length;
   console.log(`postbuild: live sitemap configured (${pageCount} fixed pages + published posts from ${api})`);
 }

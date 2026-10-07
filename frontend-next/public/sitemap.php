@@ -94,9 +94,52 @@ if (is_file($cacheFile) && time() - (int) filemtime($cacheFile) < CACHE_SECONDS)
 
 $pages = is_file($pagesFile) ? (string) file_get_contents($pagesFile) : '';
 $blogs = fetchJson(API_BASE_URL . '/api/blogs');
+$caseStudies = $blogs === null ? null : fetchJson(API_BASE_URL . '/api/case-studies');
 
-if ($pages !== '' && $blogs !== null) {
+if ($pages !== '' && $blogs !== null && $caseStudies !== null) {
     $entries = [];
+    $studyEntries = [];
+    $latestStudy = '';
+    foreach ($caseStudies as $cs) {
+        $slug = is_array($cs) ? (string) ($cs['slug'] ?? '') : '';
+        if (($cs['status'] ?? '') !== 'published' || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug)) {
+            continue;
+        }
+        $lastmod = isoDate($cs['updatedAt'] ?? null) ?: isoDate($cs['published_at'] ?? null) ?: isoDate($cs['createdAt'] ?? null);
+        if ($lastmod > $latestStudy) {
+            $latestStudy = $lastmod;
+        }
+        $entry = "<url>
+<loc>" . esc(SITE_URL . '/case-studies/' . $slug) . "</loc>
+";
+        if ($lastmod !== '') {
+            $entry .= "<lastmod>{$lastmod}</lastmod>
+";
+        }
+        $entry .= "<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+";
+        if (!empty($cs['cover_image'])) {
+            $entry .= "<image:image>
+<image:loc>" . esc((string) $cs['cover_image']) . "</image:loc>
+</image:image>
+";
+        }
+        $studyEntries[] = $entry . "</url>";
+    }
+    if ($studyEntries) {
+        $hub = "<url>
+<loc>" . esc(SITE_URL . '/case-studies') . "</loc>
+";
+        if ($latestStudy !== '') {
+            $hub .= "<lastmod>{$latestStudy}</lastmod>
+";
+        }
+        $entries[] = $hub . "<changefreq>monthly</changefreq>
+<priority>0.8</priority>
+</url>";
+        array_push($entries, ...$studyEntries);
+    }
     foreach ($blogs as $blog) {
         if (!is_array($blog) || ($blog['status'] ?? '') !== 'published' || trim((string) ($blog['permalink'] ?? '')) === '') {
             continue;

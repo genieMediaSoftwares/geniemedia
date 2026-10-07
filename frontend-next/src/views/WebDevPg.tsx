@@ -16,7 +16,7 @@ const web_services_hero = web_services_heroAsset.src;
 
 const inlineLink = CONTENT_LINK;
 
-export default function WebDevPg({ initialProjects }: { initialProjects: PortfolioItem[] | null }) {
+export default function WebDevPg({ initialProjects, h1 }: { initialProjects: PortfolioItem[] | null; h1?: string }) {
 
   const accordionData = [
     {
@@ -72,7 +72,7 @@ export default function WebDevPg({ initialProjects }: { initialProjects: Portfol
           
             <div className="text-white space-y-6">
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-                Web Development Company in Vizag
+                {h1 || "Web Development Company in Vizag"}
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
                 Genie Media & Studio provides professional web development services in Vizag for businesses that need fast, responsive, and SEO-friendly websites. We build business websites, landing pages and ecommerce stores that load fast, are easy to use and help startups and established companies grow.

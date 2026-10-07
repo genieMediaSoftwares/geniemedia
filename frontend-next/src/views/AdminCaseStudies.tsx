@@ -574,7 +574,7 @@ export default function AdminCaseStudies() {
       });
       const data = (await res.json().catch(() => null)) as RawRecord | null;
       if (res.ok && data?.success) {
-        showToast(status === "published" ? "Case study published. Rebuild and upload the site to put it live." : "Draft saved.");
+        showToast(status === "published" ? "Case study published. It is live on the website and in the sitemap." : "Draft saved.");
         const id = num(data.id);
         if (!editingId && id) setEditingId(id);
         await load();
@@ -607,7 +607,7 @@ export default function AdminCaseStudies() {
       });
       const data = (await res.json().catch(() => null)) as RawRecord | null;
       if (res.ok && data?.success) {
-        showToast(status === "published" ? "Published. Rebuild and upload the site to put it live." : "Moved to drafts. Rebuild and upload the site to take it down.");
+        showToast(status === "published" ? "Published. It is live on the website and in the sitemap." : "Moved to drafts. It is out of the sitemap; rebuild and upload to remove its pre-built page.");
         await load();
       } else {
         const list = data ? arr(data.blockers).map((b) => String(b)) : [];
@@ -665,7 +665,7 @@ export default function AdminCaseStudies() {
       <Confirm
         open={confirm?.kind === "publish"}
         title="Publish this case study?"
-        body="It will be listed on the website, in the sitemap and on the related service pages after the next build and upload."
+        body="It goes live on the website and in the sitemap straight away. The next build and upload also adds it to the related service pages."
         confirmLabel="Yes, publish"
         tone="green"
         loading={busy}
@@ -703,6 +703,9 @@ export default function AdminCaseStudies() {
             <button type="button" onClick={() => router.push("/admin/blogs")} className={tabCls(false)}>
               <BookOpen size={14} /> Blogs
             </button>
+            <button type="button" onClick={() => router.push("/admin/seo")} className={tabCls(false)}>
+              <Search size={14} /> SEO
+            </button>
           </div>
           <button type="button" onClick={logout} className="flex items-center gap-2 px-3 sm:px-4 py-2.5 bg-gray-900 hover:bg-red-600 text-white rounded-xl font-semibold text-sm transition-all shrink-0">
             <LogOut size={15} /> <span className="hidden sm:inline">Logout</span>
@@ -723,8 +726,8 @@ export default function AdminCaseStudies() {
           )}
 
           <div className="mb-6 bg-blue-50 border border-blue-200 rounded-2xl px-4 sm:px-5 py-4 text-sm text-blue-900">
-            The website is a static build. A published case study appears on geniemedia.in after the next <strong>npm run build</strong> and upload of <strong>dist/</strong>.
-            Drafts never appear on the website.
+            Publishing puts a case study live on geniemedia.in straight away: it gets its own page, appears on the case studies page and is added to the sitemap.
+            The next <strong>npm run build</strong> and upload turns it into a fully pre-built page and adds it to the service pages. Drafts never appear on the website.
           </div>
 
           <div className="bg-white rounded-2xl p-4 sm:p-5 mb-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-3 sm:items-end">

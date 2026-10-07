@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { SITE_ORIGIN } from "@/lib/site";
 
-const DISALLOW = ["/admin", "/admin/", "/api/", "/share/", "/blog-view"];
+const DISALLOW = ["/admin", "/admin/", "/api/", "/share/", "/blog-view", "/case-study-view", "/live.php"];
 
 const AI_CRAWLERS = [
   "GPTBot",

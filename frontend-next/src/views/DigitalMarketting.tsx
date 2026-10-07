@@ -192,7 +192,7 @@ const choosingTips: Array<{ title: string; content: ReactNode }> = [
   }
 ];
 
-export default function DigitalMarketting() {
+export default function DigitalMarketting({ h1 }: { h1?: string }) {
   return (
     <div>
       <section className="text-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 sm:px-6 lg:px-16 pt-24 mt-12 sm:pt-24 pb-12 sm:pb-12 lg:pb-18">
@@ -203,7 +203,7 @@ export default function DigitalMarketting() {
                 Digital Marketing Agency in Vizag
               </p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-                Digital Marketing Services in Vizag
+                {h1 || "Digital Marketing Services in Vizag"}
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
                 Genie Media & Studio offers digital marketing services that help businesses in Vizag get found, get chosen and grow. We plan SEO, Google Ads, social media, content, websites and branding as one clear plan. As a result, every part of your budget has a job to do.

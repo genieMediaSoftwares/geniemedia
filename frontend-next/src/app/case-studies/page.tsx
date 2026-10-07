@@ -11,11 +11,7 @@ import { metaForRoute } from "@/lib/seo/routeMeta";
 import { caseStudyListNode } from "@/lib/seo/schema";
 import type { ServicePagePath } from "@/types";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const base = buildRouteMetadata("/case-studies");
-  const items = await getPublishedCaseStudiesSafe();
-  return items.length ? base : { ...base, robots: { index: false, follow: true } };
-}
+export const metadata: Metadata = buildRouteMetadata("/case-studies");
 
 export default async function CaseStudiesRoute() {
   const items = await getPublishedCaseStudiesSafe();
@@ -43,20 +39,21 @@ export default async function CaseStudiesRoute() {
 
       <section aria-label="Case studies" className="bg-gray-50 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {items.length > 0 ? (
-            <CaseStudyFilter items={items} />
-          ) : (
-            <div className="max-w-2xl mx-auto text-center bg-white rounded-2xl p-8 sm:p-10 shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Detailed Case Studies Are on Their Way</h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                We are writing up our recent projects with the real story behind each one. Until they are ready, you can see the websites and
-                online stores we have built in our project portfolio.
-              </p>
-              <a href="/projects" className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-full transition-colors">
-                View Our Projects <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-              </a>
-            </div>
-          )}
+          <CaseStudyFilter
+            items={items}
+            empty={
+              <div className="max-w-2xl mx-auto text-center bg-white rounded-2xl p-8 sm:p-10 shadow-sm">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Detailed Case Studies Are on Their Way</h2>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  We are writing up our recent projects with the real story behind each one. Until they are ready, you can see the websites and
+                  online stores we have built in our project portfolio.
+                </p>
+                <a href="/projects" className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-6 py-3 rounded-full transition-colors">
+                  View Our Projects <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </div>
+            }
+          />
         </div>
       </section>
 

@@ -246,3 +246,26 @@ export interface CaseStudy {
   createdAt: number | null;
   updatedAt: number | null;
 }
+
+export interface ServiceSeoSection {
+  heading: string;
+  body: string;
+}
+
+export interface ServiceSeoLink {
+  label: string;
+  href: string;
+}
+
+export interface PublishedServiceSeo {
+  path: string;
+  seoTitle: string;
+  metaDescription: string;
+  preferredH1: string;
+  sections: ServiceSeoSection[];
+  internalLinks: ServiceSeoLink[];
+  canonicalUrl: string;
+  robotsIndex: boolean;
+  robotsFollow: boolean;
+  publishedAt: number | null;
+}

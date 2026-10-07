@@ -839,6 +839,13 @@ export default function AdminBlogs() {
               >
                 <FileText size={14} /><span>Case Studies</span>
               </button>
+
+              <button
+                onClick={() => navigate("/admin/seo")}
+                className="flex items-center gap-1.5 px-3 sm:px-5 py-3.5 sm:py-4 text-xs sm:text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-800 transition-all whitespace-nowrap"
+              >
+                <Search size={14} /><span>SEO</span>
+              </button>
             </div>
 
             <button onClick={handleLogout} className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-red-600 text-white rounded-xl font-semibold text-sm transition-all shrink-0">

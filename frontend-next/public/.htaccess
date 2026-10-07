@@ -34,6 +34,9 @@ DirectoryIndex index.html
   RewriteCond %{REQUEST_URI} !^/$
   RewriteRule ^(.+)/$ __SITE_URL__/$1 [R=301,L]
 
+  RewriteCond %{ENV:REDIRECT_STATUS} ^$
+  RewriteRule ^(blog-view|case-study-view)$ - [R=404,L]
+
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{DOCUMENT_ROOT}/$1.html -f
   RewriteRule ^(.+)$ $1.html [L]
@@ -41,7 +44,12 @@ DirectoryIndex index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_URI} !\.txt$
   RewriteCond %{DOCUMENT_ROOT}/$1.html !-f
-  RewriteRule ^(blog/.+)$ blog-view.html [L]
+  RewriteRule ^(blog/.+)$ live.php?type=blog [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_URI} !\.txt$
+  RewriteCond %{DOCUMENT_ROOT}/$1.html !-f
+  RewriteRule ^(case-studies/[^/]+)$ live.php?type=case-study [L]
 </IfModule>
 
 ErrorDocument 404 /404.html
