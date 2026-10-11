@@ -2,9 +2,11 @@ import type { HealthPage } from "@/lib/seo/keywordHealth";
 
 const textOf = (el: Element | null): string => {
   if (!el) return "";
-  if (!el.querySelector("br")) return (el.textContent || "").replace(/\s+/g, " ").trim();
   const copy = el.cloneNode(true) as Element;
   copy.querySelectorAll("br").forEach((br) => br.replaceWith(" "));
+  copy.querySelectorAll("[class]").forEach((child) => {
+    if (/(^|\s)(inline-block|block|flex|inline-flex|grid)(\s|$)/.test(child.getAttribute("class") || "")) child.after(" ");
+  });
   return (copy.textContent || "").replace(/\s+/g, " ").trim();
 };
 

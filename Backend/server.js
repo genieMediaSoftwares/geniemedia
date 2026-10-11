@@ -17,6 +17,11 @@ const { migrateBlogSeo, loadBlogColumns, filterToExistingColumns } = require("./
 const seoRoutes = require("./routes/seoRoutes");
 const caseStudyRoutes = require("./routes/caseStudies");
 const seoManagerRoutes = require("./routes/seoManager");
+const seoGscRoutes = require("./routes/seoGsc");
+const seoAuditRoutes = require("./routes/seoAudit");
+const seoGrowthRoutes = require("./routes/seoGrowth");
+const seoAiRoutes = require("./routes/seoAi");
+const { createAiProvider } = require("./services/aiProvider");
 const { buildSeoColumns, hydrateSeoRow, clampMetaDescription } = require("./services/blogSeoFields");
 const { validateForPublish, describeBlockers } = require("./services/seoValidation");
 const { invalidateSitemapCache } = require("./services/sitemapService");
@@ -1132,6 +1137,37 @@ app.use(
 // ================= SEO KEYWORD MANAGER =================
 // Admin keyword/SEO planning. See routes/seoManager.js.
 app.use("/", seoManagerRoutes({ db, verifyToken, siteUrl: SITE.url }));
+
+// ================= SEO DATA: SEARCH CONSOLE, AUDITS, GROWTH =================
+// See routes/seoGsc.js, routes/seoAudit.js and routes/seoGrowth.js.
+const seoGsc = seoGscRoutes({ db, verifyToken });
+const seoAudit = seoAuditRoutes({ db, verifyToken, siteUrl: SITE.url, site: SITE });
+app.use("/", seoGsc.router);
+app.use("/", seoAudit.router);
+// Gemini AI assist: GEMINI_API_KEY / GEMINI_MODEL, server-side only. Separate
+// from the Search Console connection and any keyword-volume provider.
+const aiProvider = createAiProvider({ db });
+app.use("/", seoGrowthRoutes({ db, verifyToken, siteUrl: SITE.url, site: SITE, ai: aiProvider }));
+app.use("/", seoAiRoutes({ db, verifyToken, siteUrl: SITE.url, site: SITE, ai: aiProvider }));
+
+// Daily background work while the server is awake: a Search Console sync and
+// a technical audit, each at most once every 24 hours. On hosts that sleep
+// when idle (such as Render's free tier) these run on the next wake-up.
+const DAY = 24 * 60 * 60 * 1000;
+setInterval(async () => {
+  try {
+    const integ = await seoGsc.getIntegration();
+    if (integ && integ.status === "connected" && Date.now() - Number(integ.data.lastSyncAt || 0) > DAY) await seoGsc.syncSearchAnalytics(90);
+  } catch (err) {
+    console.error("Scheduled Search Console sync failed:", err.message);
+  }
+  try {
+    const last = await seoAudit.latestRun();
+    if (!last || Date.now() - Number(last.finishedAt || 0) > DAY) await seoAudit.startAudit("schedule");
+  } catch (err) {
+    console.error("Scheduled audit failed:", err.message);
+  }
+}, 60 * 60 * 1000).unref();
 
 app.use("/", seoRoutes(db, verifyToken));
 

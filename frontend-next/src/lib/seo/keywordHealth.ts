@@ -1,4 +1,4 @@
-export type KeywordType = "PRIMARY" | "SECONDARY" | "RELATED" | "LONG_TAIL" | "LOCAL" | "QUESTION" | "SEMANTIC";
+export type KeywordType = "PRIMARY" | "SECONDARY" | "RELATED" | "LONG_TAIL" | "LOCAL" | "QUESTION" | "SEMANTIC" | "BRANDED" | "SUPPORTING";
 export type SearchIntent = "INFORMATIONAL" | "COMMERCIAL" | "TRANSACTIONAL" | "NAVIGATIONAL" | "LOCAL";
 
 export interface HealthBlock {
@@ -28,6 +28,7 @@ export interface HealthKeyword {
 
 export interface HealthConfig {
   primaryTopic: string;
+  primaryKeyword?: string;
   secondaryTopics: string[];
   contentTopics: string[];
   faqTopics: string[];
@@ -272,10 +273,18 @@ export function analyzePageHealth(
   const warnings: string[] = [];
   const suggestions: string[] = [];
 
+  const seenKeywords = new Set<string>();
   const coverage: CoverageItem[] = [
     ...active.map((k) => ({ keyword: k.keyword, type: k.type as CoverageItem["type"] })),
     ...config.contentTopics.map((t) => ({ keyword: t, type: "TOPIC" as const })),
-  ].map(({ keyword, type }) => {
+  ]
+    .filter(({ keyword }) => {
+      const key = tokenize(keyword).join(" ");
+      if (!key || seenKeywords.has(key)) return false;
+      seenKeywords.add(key);
+      return true;
+    })
+    .map(({ keyword, type }) => {
     const count = countIn(docText, keyword);
     const phraseWords = Math.max(1, tokenize(keyword).length);
     const repetitive = wordCount >= 100 && (count * phraseWords) / wordCount > 0.03 && count >= 5;
@@ -416,8 +425,8 @@ export function analyzePageHealth(
     {
       id: "complete",
       label: "Content completeness",
-      max: 10,
-      score: (wordCount >= 600 ? 5 : 5 * Math.min(1, wordCount / 600)) + 5 * ratio(faqCovered.length, config.faqTopics.length),
+      max: 5,
+      score: (wordCount >= 600 ? 2.5 : 2.5 * Math.min(1, wordCount / 600)) + 2.5 * ratio(faqCovered.length, config.faqTopics.length),
       measured: "At least 600 words of content, and the configured FAQ topics answered.",
       checks: [
         { label: `At least 600 words (now ${wordCount})`, ok: wordCount >= 600 },
@@ -427,8 +436,8 @@ export function analyzePageHealth(
     {
       id: "meta",
       label: "Metadata quality",
-      max: 10,
-      score: (descLen >= 120 && descLen <= 160 ? 4 : 0) + (primaryInDesc ? 3 : 0) + (descLen && !descRepetitive ? 3 : 0),
+      max: 5,
+      score: (descLen >= 120 && descLen <= 160 ? 2 : 0) + (primaryInDesc ? 1.5 : 0) + (descLen && !descRepetitive ? 1.5 : 0),
       measured: "Meta description length, mention of the primary topic and no word repeated more than three times.",
       checks: [
         { label: `Description is 120–160 characters (now ${descLen})`, ok: descLen >= 120 && descLen <= 160 },
@@ -438,7 +447,7 @@ export function analyzePageHealth(
     },
   ];
   const categories: HealthCategory[] = raw.map((c) => {
-    const score = Math.round(c.score * 10) / 10;
+    const score = Math.min(c.max, Math.max(0, Math.round(c.score * 10) / 10));
     return { ...c, score, needsFix: score < c.max * FIX_THRESHOLD };
   });
 
@@ -476,7 +485,10 @@ export function analyzePageHealth(
           (PRIORITY_RANK[a.priority || "MEDIUM"] ?? 1) - (PRIORITY_RANK[b.priority || "MEDIUM"] ?? 1) ||
           a.keyword.length - b.keyword.length
       );
-    const best = candidates[0]?.keyword || primary;
+    const configured = config.primaryKeyword && coversTopic(config.primaryKeyword, primary) && supported(config.primaryKeyword) && tokenize(config.primaryKeyword).length <= 7
+      ? config.primaryKeyword
+      : "";
+    const best = configured || candidates[0]?.keyword || primary;
     const chosen = !hasLocationTerm(best) && preferredLocation && hasLocation ? `${best} in ${preferredLocation}` : best;
     return titleCase(chosen);
   };
@@ -738,6 +750,6 @@ export function analyzePageHealth(
     });
   }
 
-  const score = Math.round(categories.reduce((n, c) => n + c.score, 0));
+  const score = Math.min(100, Math.max(0, Math.round(categories.reduce((n, c) => n + c.score, 0))));
   return { score, categories, warnings, suggestions, coverage, wordCount, locationMentions, primaryTopic: primary, issues };
 }

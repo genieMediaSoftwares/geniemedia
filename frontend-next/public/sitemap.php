@@ -8,6 +8,7 @@ const API_TIMEOUT   = 20;
 
 $pagesFile    = __DIR__ . '/sitemap-pages.xml';
 $fallbackFile = __DIR__ . '/sitemap-static.xml';
+$seoLiveFile  = __DIR__ . '/seo-live/config.json';
 $cacheFile    = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'gm_sitemap_' . md5(__DIR__) . '.xml';
 
 function send(string $xml): void
@@ -88,7 +89,32 @@ function canonicalFor(array $blog): string
     return $self;
 }
 
-if (is_file($cacheFile) && time() - (int) filemtime($cacheFile) < CACHE_SECONDS) {
+function applySeoLastmod(string $xml, string $configFile): string
+{
+    $config = is_file($configFile) ? json_decode((string) file_get_contents($configFile), true) : null;
+    if (!is_array($config) || !is_array($config['pages'] ?? null)) {
+        return $xml;
+    }
+    $base = rtrim(SITE_URL, '/');
+    foreach ($config['pages'] as $path => $page) {
+        $published = is_array($page) ? isoDate($page['publishedAt'] ?? null) : '';
+        if ($published === '' || !preg_match('#^/[a-z0-9_/-]*$#', (string) $path)) {
+            continue;
+        }
+        $loc = preg_quote(esc($base . ($path === '/' ? '/' : $path)), '#');
+        $xml = (string) preg_replace_callback(
+            '#(<url>\s*<loc>' . $loc . '</loc>\s*<lastmod>)([^<]*)(</lastmod>)#',
+            static fn (array $m): string => $m[1] . ($published > $m[2] ? $published : $m[2]) . $m[3],
+            $xml,
+            1
+        );
+    }
+    return $xml;
+}
+
+$cacheFresh = is_file($cacheFile) && time() - (int) filemtime($cacheFile) < CACHE_SECONDS
+    && (!is_file($seoLiveFile) || filemtime($seoLiveFile) <= filemtime($cacheFile));
+if ($cacheFresh) {
     send((string) file_get_contents($cacheFile));
 }
 
@@ -160,7 +186,7 @@ if ($pages !== '' && $blogs !== null && $caseStudies !== null) {
         $entries[] = $entry . "</url>";
     }
 
-    $xml = str_replace('</urlset>', implode("\n", $entries) . "\n</urlset>", $pages);
+    $xml = str_replace('</urlset>', implode("\n", $entries) . "\n</urlset>", applySeoLastmod($pages, $seoLiveFile));
     @file_put_contents($cacheFile, $xml, LOCK_EX);
     send($xml);
 }

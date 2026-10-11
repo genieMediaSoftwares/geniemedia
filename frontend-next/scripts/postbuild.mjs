@@ -131,3 +131,58 @@ if (fs.existsSync(CONTACT_PHP)) {
   fs.writeFileSync(CONTACT_PHP, php);
   console.log(`postbuild: contact.php configured (enquiries go to ${values.__CONTACT_TO_EMAIL__})`);
 }
+
+const SYNC_PHP = path.join(ROOT, "dist", "seo-sync.php");
+if (fs.existsSync(SYNC_PHP)) {
+  const secret = readEnv("SEO_SYNC_SECRET");
+  let php = fs.readFileSync(SYNC_PHP, "utf8").split("__API_BASE_URL__").join(api);
+  if (/^[A-Za-z0-9]{32,}$/.test(secret)) {
+    php = php.split("__SEO_SYNC_SECRET__").join(secret);
+    console.log("postbuild: seo-sync.php configured (live SEO publishing enabled)");
+  } else {
+    console.warn("postbuild: SEO_SYNC_SECRET is not set in .env — live SEO publishing stays disabled until it is.");
+  }
+  fs.writeFileSync(SYNC_PHP, php);
+}
+
+const LIVE_DIR = path.join(ROOT, "dist", "seo-live");
+try {
+  const res = await fetch(`${api}/api/seo/published`, { signal: AbortSignal.timeout(60_000), headers: { Accept: "application/json" } });
+  const list = res.ok ? await res.json() : null;
+  if (!Array.isArray(list)) throw new Error(`HTTP ${res.status}`);
+  const safeText = (s, min, max) => typeof s === "string" && s.length >= min && s.length <= max && !/[<>"\\\x00-\x1F]/.test(s);
+  const safeUrl = (s) => typeof s === "string" && s.length <= 300 && /^https:\/\/[A-Za-z0-9.-]+(\/[A-Za-z0-9._~%/-]*)?$/.test(s);
+  const pages = {};
+  const routes = [];
+  for (const item of list) {
+    const p = String(item?.path || "");
+    if (p !== "/" && !/^\/[a-z0-9_-]+(?:\/[a-z0-9_-]+)*$/.test(p)) continue;
+    const route = p === "/" ? "index" : p.slice(1);
+    if (!fs.existsSync(path.join(ROOT, "dist", `${route}.html`))) continue;
+    const entry = { version: Number(item.version) || 0, publishedAt: Number(item.publishedAt) || 0 };
+    if (safeText(item.seoTitle, 10, 70)) entry.seoTitle = item.seoTitle;
+    if (safeText(item.metaDescription, 50, 200)) entry.metaDescription = item.metaDescription;
+    if (item.canonicalUrl && safeUrl(item.canonicalUrl)) entry.canonicalUrl = item.canonicalUrl;
+    if (item.ogImage && safeUrl(item.ogImage)) entry.ogImage = item.ogImage;
+    if (item.robotsIndex === false || item.robotsFollow === false) {
+      entry.robotsIndex = item.robotsIndex !== false;
+      entry.robotsFollow = item.robotsFollow !== false;
+    }
+    pages[p] = entry;
+    routes.push(route);
+  }
+  fs.rmSync(LIVE_DIR, { recursive: true, force: true });
+  fs.mkdirSync(path.join(LIVE_DIR, "routes"), { recursive: true });
+  fs.writeFileSync(path.join(LIVE_DIR, ".htaccess"), "Require all denied\n");
+  const version = Math.max(0, ...Object.values(pages).map((e) => e.version));
+  fs.writeFileSync(path.join(LIVE_DIR, "config.json"), JSON.stringify({ version, syncedAt: Math.floor(Date.now() / 1000), pages }));
+  for (const route of routes) {
+    const marker = path.join(LIVE_DIR, "routes", `${route}.on`);
+    fs.mkdirSync(path.dirname(marker), { recursive: true });
+    fs.writeFileSync(marker, "");
+  }
+  console.log(`postbuild: seo-live prepared (${routes.length} page${routes.length === 1 ? "" : "s"} with published live SEO)`);
+} catch (err) {
+  fs.rmSync(LIVE_DIR, { recursive: true, force: true });
+  console.warn(`postbuild: could not load published SEO settings (${err.message}); pages are served exactly as built.`);
+}

@@ -13,8 +13,10 @@
 // =========================================================================
 
 const express = require("express");
+const seoLive = require("../services/seoLive");
 
-const KEYWORD_TYPES = ["PRIMARY", "SECONDARY", "RELATED", "LONG_TAIL", "LOCAL", "QUESTION", "SEMANTIC"];
+const KEYWORD_TYPES = ["PRIMARY", "SECONDARY", "RELATED", "LONG_TAIL", "LOCAL", "QUESTION", "SEMANTIC", "BRANDED", "SUPPORTING"];
+const KEYWORD_SOURCES = ["manual", "built_in", "search_console", "client", "competitor", "provider", "ai"];
 const INTENTS = ["INFORMATIONAL", "COMMERCIAL", "TRANSACTIONAL", "NAVIGATIONAL", "LOCAL"];
 const PRIORITIES = ["HIGH", "MEDIUM", "LOW"];
 const KEYWORD_STATUSES = ["ACTIVE", "ARCHIVED"];
@@ -26,6 +28,16 @@ const DEFAULT_PAGES = [
   ["/web_development", "Website Development"],
   ["/production_house", "Production House"],
   ["/podcast_studio", "Podcast Studio"],
+  ["/", "Home"],
+  ["/about", "About"],
+  ["/services", "Services"],
+  ["/projects", "Projects"],
+  ["/case-studies", "Case Studies"],
+  ["/blogs", "Blog"],
+  ["/reviews", "Reviews"],
+  ["/contact", "Contact"],
+  ["/privacy-policy", "Privacy Policy"],
+  ["/terms-and-conditions", "Terms & Conditions"],
 ];
 
 const TABLES = [
@@ -73,6 +85,19 @@ const TABLES = [
     region     VARCHAR(120) NULL,
     is_primary TINYINT(1)   NOT NULL DEFAULT 0,
     UNIQUE KEY uq_seo_locations_name (name)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`,
+  `CREATE TABLE IF NOT EXISTS seo_publications (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    page_id    INT          NULL,
+    config_id  INT          NULL,
+    action     VARCHAR(20)  NOT NULL,
+    status     VARCHAR(20)  NOT NULL,
+    version    INT          NULL,
+    detail     JSON         NULL,
+    admin      VARCHAR(190) NULL,
+    createdAt  BIGINT       NOT NULL,
+    INDEX idx_seo_publications_page (page_id),
+    INDEX idx_seo_publications_created (createdAt)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`,
   `CREATE TABLE IF NOT EXISTS seo_audit_log (
     id         INT AUTO_INCREMENT PRIMARY KEY,
@@ -136,8 +161,15 @@ const keywordWarnings = (keyword) => {
 
 // --------------------------------------------------------- config payload --
 
+const PAGE_TYPES = ["home", "service", "about", "listing", "contact", "legal", "other"];
+const INTENTS_PAGE = ["", "INFORMATIONAL", "COMMERCIAL", "TRANSACTIONAL", "NAVIGATIONAL", "LOCAL"];
+
 const emptyConfig = () => ({
+  pageType: "",
   primaryTopic: "",
+  primaryKeyword: "",
+  searchIntent: "",
+  ogImage: "",
   secondaryTopics: [],
   targetLocations: [],
   seoTitle: "",
@@ -156,7 +188,11 @@ const emptyConfig = () => ({
 const buildConfig = (body) => {
   const b = body && typeof body === "object" ? body : {};
   return {
+    pageType: PAGE_TYPES.includes(clean(b.pageType)) ? clean(b.pageType) : "",
     primaryTopic: clean(b.primaryTopic, 120),
+    primaryKeyword: clean(b.primaryKeyword, 160),
+    searchIntent: INTENTS_PAGE.includes(clean(b.searchIntent).toUpperCase()) ? clean(b.searchIntent).toUpperCase() : "",
+    ogImage: clean(b.ogImage, 300),
     secondaryTopics: list(b.secondaryTopics, { maxItems: 20 }),
     targetLocations: list(b.targetLocations, { maxItems: 5, maxLen: 80 }),
     seoTitle: clean(b.seoTitle, 80),
@@ -215,6 +251,15 @@ const publishProblems = (cfg, { siteHost, locationTerms }) => {
     if (!l.label) problems.push(`Internal link ${i + 1} needs link text.`);
     if (!/^\/(?!\/)[\w\-./#?=&%]*$/.test(l.href)) problems.push(`Internal link ${i + 1} must be a path on this site, starting with “/”.`);
   });
+  if (/[<>"\\]/.test(t) || /[<>"\\]/.test(d)) problems.push("Remove < > \" or \\ from the title and description; use typographic quotes instead.");
+  if (cfg.ogImage) {
+    try {
+      const u = new URL(cfg.ogImage);
+      if (u.protocol !== "https:") problems.push("The social share image must be an https:// URL.");
+    } catch (_) {
+      problems.push("The social share image is not a valid URL.");
+    }
+  }
   if (cfg.canonicalUrl) {
     try {
       const u = new URL(cfg.canonicalUrl);
@@ -296,6 +341,14 @@ module.exports = function seoManagerRoutes({ db, verifyToken, siteUrl }) {
     } catch (err) {
       console.log("❌ SEO MANAGER TABLES ERROR:", err);
     }
+    try {
+      const kwCols = (await query("SHOW COLUMNS FROM seo_keywords")).map((c) => c.Field);
+      if (!kwCols.includes("source")) await query("ALTER TABLE seo_keywords ADD COLUMN source VARCHAR(20) NULL");
+      if (!kwCols.includes("evidence")) await query("ALTER TABLE seo_keywords ADD COLUMN evidence VARCHAR(500) NULL");
+      if (!kwCols.includes("last_reviewed_at")) await query("ALTER TABLE seo_keywords ADD COLUMN last_reviewed_at BIGINT NULL");
+    } catch (err) {
+      console.log("❌ SEO KEYWORD MAPPING COLUMNS ERROR:", err.message);
+    }
   })();
 
   const fail = (res, status, message, extra = {}) => res.status(status).json({ success: false, message, ...extra });
@@ -346,11 +399,53 @@ module.exports = function seoManagerRoutes({ db, verifyToken, siteUrl }) {
     ];
   };
 
+  const BODY_FIELDS = ["preferredH1", "sections", "internalLinks"];
+
+  const recordPublication = async (req, pageId, configId, action, status, version, detail) => {
+    await query(
+      "INSERT INTO seo_publications (page_id, config_id, action, status, version, detail, admin, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [pageId, configId, action, status, version, JSON.stringify(detail), String(adminOf(req)).slice(0, 190), Date.now()]
+    ).catch((err) => console.error("SEO publication log failed:", err.message));
+  };
+
+  // Pushes the published configuration to the live site and verifies it.
+  const pushLive = async (req, page, action, { configId = null, payload = null, previous = null } = {}) => {
+    const needsBuild = BODY_FIELDS.filter((f) => JSON.stringify((payload || {})[f] || "") !== JSON.stringify((previous || {})[f] || ""));
+    if (!seoLive.configured()) {
+      const detail = { message: "Saved. Live publishing is not configured, so the change reaches the website with the next build & upload.", needsBuild };
+      await recordPublication(req, page.id, configId, action, "pending", configId, detail);
+      return { status: "pending", ...detail };
+    }
+    const sync = await seoLive.syncLive({ reason: action });
+    if (!sync.ok) {
+      const detail = { message: `The live site was not updated and keeps its previous version. ${sync.error}`, needsBuild };
+      await recordPublication(req, page.id, configId, action, "failed", configId, detail);
+      return { status: "failed", ...detail };
+    }
+    const verify = await seoLive.verifyPage({ siteUrl, path: page.path, cfg: payload || {}, version: configId || 0 });
+    const message =
+      verify.status === "live"
+        ? "Live — the change is verified on the website."
+        : verify.status === "warning"
+          ? "Published with warnings — some checks did not match yet (a cache may still be serving the old page)."
+          : "Failed — the page did not respond correctly; the live site keeps its previous version.";
+    const detail = { message, needsBuild, verify, sync: { version: sync.data.version, routes: sync.data.routes, skipped: sync.data.skipped, recentGatewayErrors: sync.data.recentGatewayErrors } };
+    await recordPublication(req, page.id, configId, action, verify.status, configId, detail);
+    return { status: verify.status, ...detail };
+  };
+
+  const latestPublications = async () => {
+    const rows = await query(
+      `SELECT p.* FROM seo_publications p JOIN (SELECT page_id, MAX(id) AS id FROM seo_publications GROUP BY page_id) last ON last.id = p.id`
+    );
+    return rows.map((r) => ({ ...r, detail: parseJson(r.detail, {}) }));
+  };
+
   // ---------- PUBLIC: approved, render-ready configuration only ----------
   router.get("/api/seo/published", async (req, res) => {
     try {
       const rows = await query(
-        `SELECT p.path, c.payload, c.publishedAt FROM seo_page_configs c JOIN seo_pages p ON p.id = c.page_id
+        `SELECT p.path, c.id, c.payload, c.publishedAt FROM seo_page_configs c JOIN seo_pages p ON p.id = c.page_id
          WHERE c.status = 'published'`
       );
       res.json(
@@ -366,6 +461,8 @@ module.exports = function seoManagerRoutes({ db, verifyToken, siteUrl }) {
             canonicalUrl: c.canonicalUrl,
             robotsIndex: c.robotsIndex,
             robotsFollow: c.robotsFollow,
+            ogImage: c.ogImage,
+            version: r.id,
             publishedAt: r.publishedAt,
           };
         })
@@ -404,6 +501,8 @@ module.exports = function seoManagerRoutes({ db, verifyToken, siteUrl }) {
           };
         }),
         warnings: await cannibalization(),
+        liveConfigured: seoLive.configured(),
+        live: await latestPublications(),
       });
     } catch (err) {
       console.error("SEO overview failed:", err);
@@ -503,8 +602,13 @@ module.exports = function seoManagerRoutes({ db, verifyToken, siteUrl }) {
         "INSERT INTO seo_page_configs (page_id, status, payload, created_by, createdAt, publishedAt) VALUES (?, 'published', ?, ?, ?, ?)",
         [page.id, JSON.stringify(draft.payload), String(adminOf(req)).slice(0, 190), now, now]
       );
+      const inserted = await query(
+        "SELECT id FROM seo_page_configs WHERE page_id = ? AND status = 'published' ORDER BY id DESC LIMIT 1",
+        [page.id]
+      );
       await log(req, "publish", page.id, "configuration", current ? current.payload : null, draft.payload);
-      res.json({ success: true, message: "Published", publishedAt: now });
+      const live = await pushLive(req, page, "publish", { configId: inserted[0] ? inserted[0].id : null, payload: draft.payload, previous: current ? current.payload : null });
+      res.json({ success: true, message: "Published", publishedAt: now, live });
     } catch (err) {
       console.error("SEO publish failed:", err);
       fail(res, 500, "Failed to publish");
@@ -521,9 +625,11 @@ module.exports = function seoManagerRoutes({ db, verifyToken, siteUrl }) {
       const previous = await configRow(page.id, "superseded");
       if (previous) await query("UPDATE seo_page_configs SET status = 'published' WHERE id = ?", [previous.id]);
       await log(req, "unpublish", page.id, "configuration", current.payload, previous ? previous.payload : "code defaults");
+      const live = await pushLive(req, page, "unpublish", { configId: previous ? previous.id : null, payload: previous ? previous.payload : {}, previous: current.payload });
       res.json({
         success: true,
         message: previous ? "Unpublished. The previous published version is active again." : "Unpublished. The page uses its built-in metadata again.",
+        live,
       });
     } catch (err) {
       console.error("SEO unpublish failed:", err);
@@ -647,6 +753,26 @@ module.exports = function seoManagerRoutes({ db, verifyToken, siteUrl }) {
     }
   });
 
+  // Where a keyword came from and what supports it. "reviewed" stamps the
+  // review date; evidence is free text such as "GSC: 140 impressions, Sep 2026".
+  router.put("/api/admin/seo/keywords/:id/mapping", verifyToken, async (req, res) => {
+    try {
+      const old = (await query("SELECT * FROM seo_keywords WHERE id = ?", [req.params.id]))[0];
+      if (!old) return fail(res, 404, "Keyword not found");
+      const b = req.body || {};
+      const source = b.source === undefined ? old.source : KEYWORD_SOURCES.includes(b.source) ? b.source : null;
+      if (b.source !== undefined && b.source !== null && b.source !== "" && !source) return fail(res, 400, `Source must be one of ${KEYWORD_SOURCES.join(", ")}.`);
+      const evidence = b.evidence === undefined ? old.evidence : clean(b.evidence, 500) || null;
+      const reviewed = b.reviewed ? Date.now() : old.last_reviewed_at || null;
+      await query("UPDATE seo_keywords SET source = ?, evidence = ?, last_reviewed_at = ?, updatedAt = ? WHERE id = ?", [source || null, evidence, reviewed, Date.now(), req.params.id]);
+      await log(req, "keyword.mapping", old.page_id, old.keyword, { source: old.source, evidence: old.evidence, last_reviewed_at: old.last_reviewed_at }, { source, evidence, last_reviewed_at: reviewed });
+      res.json({ success: true, source: source || null, evidence, last_reviewed_at: reviewed });
+    } catch (err) {
+      console.error("SEO keyword mapping failed:", err);
+      fail(res, 500, "Failed to update the keyword mapping");
+    }
+  });
+
   router.delete("/api/admin/seo/keywords/:id", verifyToken, async (req, res) => {
     try {
       const old = (await query("SELECT * FROM seo_keywords WHERE id = ?", [req.params.id]))[0];
@@ -751,6 +877,127 @@ module.exports = function seoManagerRoutes({ db, verifyToken, siteUrl }) {
       res.json({ success: true });
     } catch (err) {
       fail(res, 500, "Failed to delete the location");
+    }
+  });
+
+  // ---------- ADMIN: rollback to an earlier published version ----------
+  router.post("/api/admin/seo/pages/:id/rollback", verifyToken, async (req, res) => {
+    try {
+      const page = await pageById(req.params.id);
+      if (!page) return fail(res, 404, "Page not found");
+      const configId = Number(req.body && req.body.configId);
+      const target = (await query("SELECT * FROM seo_page_configs WHERE id = ? AND page_id = ? AND status IN ('superseded', 'unpublished')", [configId, page.id]))[0];
+      if (!target) return fail(res, 404, "That version is not available for rollback.");
+      const payload = { ...emptyConfig(), ...parseJson(target.payload, {}) };
+      const problems = publishProblems(payload, { siteHost, locationTerms: await locationTerms() });
+      if (problems.length) return fail(res, 422, "That version no longer passes the publishing checks.", { problems });
+      const current = await configRow(page.id, "published");
+      const now = Date.now();
+      await query("UPDATE seo_page_configs SET status = 'superseded' WHERE page_id = ? AND status = 'published'", [page.id]);
+      await query(
+        "INSERT INTO seo_page_configs (page_id, status, payload, created_by, createdAt, publishedAt) VALUES (?, 'published', ?, ?, ?, ?)",
+        [page.id, JSON.stringify(payload), String(adminOf(req)).slice(0, 190), now, now]
+      );
+      const inserted = await query("SELECT id FROM seo_page_configs WHERE page_id = ? AND status = 'published' ORDER BY id DESC LIMIT 1", [page.id]);
+      await log(req, "rollback", page.id, "configuration", current ? current.payload : null, { restoredFrom: configId });
+      const live = await pushLive(req, page, "rollback", { configId: inserted[0] ? inserted[0].id : null, payload, previous: current ? current.payload : null });
+      res.json({ success: true, message: `Rolled back to version ${configId}.`, live });
+    } catch (err) {
+      console.error("SEO rollback failed:", err);
+      fail(res, 500, "Failed to roll back");
+    }
+  });
+
+  // ---------- ADMIN: live publishing status and re-sync ----------
+  router.get("/api/admin/seo/live/status", verifyToken, async (req, res) => {
+    try {
+      res.json({ success: true, configured: seoLive.configured(), latest: await latestPublications() });
+    } catch (err) {
+      fail(res, 500, "Failed to load the live status");
+    }
+  });
+
+  router.post("/api/admin/seo/live/resync", verifyToken, async (req, res) => {
+    try {
+      const published = await query(
+        `SELECT p.id AS page_id, p.path, p.name, c.id AS config_id, c.payload FROM seo_page_configs c JOIN seo_pages p ON p.id = c.page_id WHERE c.status = 'published'`
+      );
+      if (!seoLive.configured()) return fail(res, 400, "Live publishing is not configured (SEO_SYNC_URL / SEO_SYNC_SECRET).");
+      const sync = await seoLive.syncLive({ reason: "resync" });
+      if (!sync.ok) return fail(res, 502, `Re-sync failed: ${sync.error}`);
+      const results = [];
+      for (const row of published) {
+        const verify = await seoLive.verifyPage({ siteUrl, path: row.path, cfg: parseJson(row.payload, {}), version: row.config_id });
+        await recordPublication(req, row.page_id, row.config_id, "resync", verify.status, row.config_id, { message: `Re-sync: ${verify.status}`, verify });
+        results.push({ path: row.path, status: verify.status });
+      }
+      res.json({ success: true, sync: sync.data, results });
+    } catch (err) {
+      console.error("SEO resync failed:", err);
+      fail(res, 500, "Failed to re-sync");
+    }
+  });
+
+  router.get("/api/admin/seo/pages/:id/publications", verifyToken, async (req, res) => {
+    try {
+      const rows = await query("SELECT * FROM seo_publications WHERE page_id = ? ORDER BY id DESC LIMIT 30", [req.params.id]);
+      res.json(rows.map((r) => ({ ...r, detail: parseJson(r.detail, {}) })));
+    } catch (err) {
+      fail(res, 500, "Failed to load publications");
+    }
+  });
+
+  // ---------- ADMIN: configuration export / import (JSON) ----------
+  router.get("/api/admin/seo/configs/export", verifyToken, async (req, res) => {
+    try {
+      const pages = await query("SELECT * FROM seo_pages ORDER BY id ASC");
+      const out = [];
+      for (const page of pages) {
+        const draft = await configRow(page.id, "draft");
+        const published = await configRow(page.id, "published");
+        out.push({ path: page.path, name: page.name, draft: draft ? draft.payload : null, published: published ? published.payload : null });
+      }
+      res.setHeader("Content-Disposition", 'attachment; filename="seo-configurations.json"');
+      res.json({ exportedAt: new Date().toISOString(), pages: out });
+    } catch (err) {
+      fail(res, 500, "Failed to export");
+    }
+  });
+
+  // Imported configurations always become drafts and never overwrite an
+  // existing value with an empty one. Nothing is published automatically.
+  router.post("/api/admin/seo/configs/import", verifyToken, async (req, res) => {
+    try {
+      const items = Array.isArray(req.body && req.body.pages) ? req.body.pages.slice(0, 100) : [];
+      if (!items.length) return fail(res, 400, "The file has no pages to import.");
+      const terms = await locationTerms();
+      const results = [];
+      for (const item of items) {
+        const page = (await query("SELECT * FROM seo_pages WHERE path = ?", [clean(item && item.path, 100)]))[0];
+        if (!page) {
+          results.push({ path: item && item.path, status: "skipped", reason: "Unknown page" });
+          continue;
+        }
+        const incoming = buildConfig((item && (item.draft || item.config || item.published)) || {});
+        const base = (await configRow(page.id, "draft")) || (await configRow(page.id, "published"));
+        const merged = { ...(base ? base.payload : emptyConfig()) };
+        for (const [k, v] of Object.entries(incoming)) {
+          const empty = v === "" || (Array.isArray(v) && v.length === 0);
+          if (!empty || typeof v === "boolean") merged[k] = v;
+        }
+        const existingDraft = await configRow(page.id, "draft");
+        if (existingDraft) {
+          await query("UPDATE seo_page_configs SET payload = ?, created_by = ?, createdAt = ? WHERE id = ?", [JSON.stringify(merged), String(adminOf(req)).slice(0, 190), Date.now(), existingDraft.id]);
+        } else {
+          await query("INSERT INTO seo_page_configs (page_id, status, payload, created_by, createdAt) VALUES (?, 'draft', ?, ?, ?)", [page.id, JSON.stringify(merged), String(adminOf(req)).slice(0, 190), Date.now()]);
+        }
+        await log(req, "config.import", page.id, "configuration", base ? base.payload : null, merged);
+        results.push({ path: page.path, status: "draft saved", problems: publishProblems(merged, { siteHost, locationTerms: terms }) });
+      }
+      res.json({ success: true, results });
+    } catch (err) {
+      console.error("SEO config import failed:", err);
+      fail(res, 500, "Failed to import");
     }
   });
 

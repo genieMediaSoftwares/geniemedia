@@ -34,6 +34,18 @@ DirectoryIndex index.html
   RewriteCond %{REQUEST_URI} !^/$
   RewriteRule ^(.+)/$ __SITE_URL__/$1 [R=301,L]
 
+  RewriteRule ^seo-live(/|$) - [F,L]
+
+  RewriteCond %{DOCUMENT_ROOT}/seo-live/routes/index.on -f
+  RewriteRule ^$ seo.php [L]
+  RewriteCond %{DOCUMENT_ROOT}/seo-live/routes/index.on -f
+  RewriteRule ^(index\.txt|__next\.[^/]+\.txt)$ seo.php [L]
+  RewriteCond %{DOCUMENT_ROOT}/seo-live/routes/$1.on -f
+  RewriteRule ^([a-z0-9_-]+(?:/[a-z0-9_-]+)*)(?:\.txt|/__next\..+\.txt)$ seo.php [L]
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteCond %{DOCUMENT_ROOT}/seo-live/routes/$1.on -f
+  RewriteRule ^([a-z0-9_-]+(?:/[a-z0-9_-]+)*)$ seo.php [L]
+
   RewriteCond %{ENV:REDIRECT_STATUS} ^$
   RewriteRule ^(blog-view|case-study-view)$ - [R=404,L]
 

@@ -184,3 +184,19 @@ test("the draft overlay keeps H3 headings, so topics with an H3 are not re-sugge
   assert.equal(h2.suggestions.length, 0);
   assert.equal(h2.severity, "info");
 });
+
+test("category weights total exactly 100 and every score stays in range", () => {
+  const r = analyzePageHealth(page(), config, keywords, LOCATIONS);
+  assert.equal(r.categories.reduce((n, c) => n + c.max, 0), 100);
+  const weights = Object.fromEntries(r.categories.map((c) => [c.id, c.max]));
+  assert.deepEqual(weights, { topic: 20, semantic: 10, intent: 10, title: 10, h1: 10, h2: 10, links: 10, local: 10, complete: 5, meta: 5 });
+  for (const c of r.categories) assert.ok(c.score >= 0 && c.score <= c.max, `${c.id} ${c.score}/${c.max}`);
+  const perfect = analyzePageHealth(page({ h2s: ["SEO", "Google Ads", "Social media marketing"] }), config, keywords, LOCATIONS);
+  assert.ok(perfect.score <= 100 && perfect.score >= 0);
+});
+
+test("duplicate keyword entries are counted once", () => {
+  const dup = [...keywords, { keyword: "Digital  Marketing", type: "SECONDARY", intent: "COMMERCIAL", active: true }];
+  const r = analyzePageHealth(page(), config, dup, LOCATIONS);
+  assert.equal(r.coverage.filter((c) => c.keyword.toLowerCase().replace(/\s+/g, " ") === "digital marketing").length, 1);
+});
