@@ -88,6 +88,10 @@ ErrorDocument 404 /404.html
     Header set Cache-Control "public, max-age=0, must-revalidate"
   </FilesMatch>
 
+  <FilesMatch "^(favicon\.ico|favicon-[0-9]+\.png|apple-touch-icon\.png|site\.webmanifest)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+
   <FilesMatch "(robots\.txt|llms\.txt|sitemap\.xml)$">
     Header set Cache-Control "public, max-age=3600"
   </FilesMatch>
