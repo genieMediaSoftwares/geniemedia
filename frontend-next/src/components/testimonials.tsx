@@ -3,49 +3,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState, useEffect, useRef } from 'react';
 import { Star, Quote } from 'lucide-react';
+import { VIDEO_TESTIMONIALS as testimonials } from "@/content/testimonials";
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Dr.Sailaja",
-    company: "Lawer",
-    rating: 5,
-    videoId: "gMpv78iIFz0",
-    quote: "Wonderful design and implemenation of my website with thoroughly giving suggestions and clarifying doubts."
-  },
-  {
-    id: 2,
-    name: "Suraj",
-    company: "Communication Coach",
-    rating: 5,
-    videoId: "4xgHJgz_8uY",
-    quote: "Outstanding results! Excellent colors representation and Design i loved the website."
-  },
-  {
-    id: 3,
-    name: "Deepak kumar sharma",
-    company: "Neutritionist",
-    rating: 5,
-    videoId: "mUpfyEFMpeY",
-    quote: "The creativity and professionalism exceeded all our expectations!"
-  },
-  {
-    id: 4,
-    name: "Heena M shrivastava",
-    company: "Book Author & Coach",
-    rating: 5,
-    videoId: "poK_yAMsmUQ",
-    quote: "I'm  worried about my website design & getting no traffic Then karthik came and delivered such a beautiful website for me."
-  },
-  {
-    id: 5,
-    name: "kedhar panda",
-    company: "Book Author & Coach",
-    rating: 5,
-    videoId: "oGxKBpu7x1I",
-    quote: "They truly understood our brand and delivered beyond expectations!"
-  }
-];
 
 const LiteYouTube = ({ videoId, title, onPlay }: { videoId: string; title: string; onPlay?: () => void }) => {
   const [activated, setActivated] = useState(false);

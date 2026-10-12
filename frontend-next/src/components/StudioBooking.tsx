@@ -3,6 +3,7 @@
 import { Mic, CalendarDays, ClipboardList, CheckCircle2, Check, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, Clock, User, Mail, Smartphone, FileText } from "lucide-react";
 import { useState } from 'react';
 import type React from 'react';
+import { STUDIO_PACKAGES, formatInr } from "@/content/podcastStudio";
 
 interface StudioService {
   id: number;
@@ -62,21 +63,20 @@ export default function PodcastStudioBooking() {
 
   ];
 
-  const services: StudioService[] = [
-    
-    { id: 1, name: 'Podcast Shoot (Only Studio)', duration: '1 h', price: '₹1,500', category: 'Only Podcast Studio' },
-    { id: 2, name: 'Podcast Shoot (Only Studio)', duration: '2 h', price: '₹3,000', category: 'Only Podcast Studio' },
-    { id: 3, name: 'Podcast Shoot (Only Studio)', duration: '3 h', price: '₹4,500', category: 'Only Podcast Studio' },
+  const CATEGORY: Record<string, { name: string; category: string }> = {
+    "studio-only": { name: 'Podcast Shoot (Only Studio)', category: 'Only Podcast Studio' },
+    "team-2-cameras": { name: 'Studio with Team + 2 Cameras', category: 'Studio with Team + 2 Cameras' },
+    "team-3-cameras": { name: 'Studio with Team + 3 Cameras', category: 'Studio with Team + 3 Cameras' },
+  };
 
-    { id: 4, name: 'Studio with Team + 2 Cameras', duration: '1 h', price: '₹3,999', category: 'Studio with Team + 2 Cameras' },
-    { id: 5, name: 'Studio with Team + 2 Cameras', duration: '2 h', price: '₹8,000', category: 'Studio with Team + 2 Cameras' },
-    { id: 6, name: 'Studio with Team + 2 Cameras', duration: '3 h', price: '₹10,000', category: 'Studio with Team + 2 Cameras' },
-
-    { id: 8, name: 'Studio with Team + 3 Cameras', duration: '1 h', price: '₹5,000', category: 'Studio with Team + 3 Cameras' },
-    { id: 9, name: 'Studio with Team + 3 Cameras', duration: '2 h', price: '₹9,000', category: 'Studio with Team + 3 Cameras' },
-    { id: 10, name: 'Studio with Team + 3 Cameras', duration: '3 h', price: '₹11,000', category: 'Studio with Team + 3 Cameras' },
-
-  ];
+  const services: StudioService[] = STUDIO_PACKAGES.flatMap((pkg, p) =>
+    pkg.rates.map((rate, h) => ({
+      id: p * 3 + h + 1,
+      ...CATEGORY[pkg.id],
+      duration: `${h + 1} h`,
+      price: formatInr(rate),
+    })),
+  );
 
   const filteredServices = selectedCategory === 'ALL' 
     ? services 
@@ -131,6 +131,8 @@ export default function PodcastStudioBooking() {
   };
 
   const handleSubmit = () => {
+  const gtag = (window as unknown as { gtag?: (c: "event", n: string, p: Record<string, string>) => void }).gtag;
+  if (typeof gtag === "function") gtag("event", "podcast_booking_submit", { package: selectedService?.name ?? "", duration: selectedService?.duration ?? "" });
   const phoneNumber = "919032845433";
 
   const message = `

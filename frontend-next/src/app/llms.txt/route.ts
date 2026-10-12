@@ -3,6 +3,7 @@ import { getPublishedCaseStudiesSafe } from "@/lib/api/caseStudies";
 import { caseStudyUrl } from "@/lib/caseStudies";
 import { SITE, canonicalFor } from "@/lib/site";
 import { blogCanonical } from "@/lib/seo/metadata";
+import { ALL_SUB_PAGES } from "@/content/serviceSubPages";
 
 export const dynamic = "force-static";
 
@@ -14,6 +15,7 @@ const PAGES: Array<[string, string]> = [
   ["Web development", "/web_development"],
   ["Production house", "/production_house"],
   ["Podcast studio", "/podcast_studio"],
+  ...ALL_SUB_PAGES.map((e): [string, string] => [`${e.section.label}: ${e.page.name}`, e.path]),
   ["Projects", "/projects"],
   ["Reviews", "/reviews"],
   ["Blog", "/blogs"],

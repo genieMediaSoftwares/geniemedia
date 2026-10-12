@@ -78,9 +78,9 @@ const ROUTE_META = {
       "Case studies of real projects by Genie Media & Studio in Visakhapatnam: what each client needed, how we approached the work and what we delivered.",
   },
   "/digital_marketing": {
-    title: "Digital Marketing Agency in Vizag | Genie Media & Studio",
+    title: "Digital Marketing Agency in Vizag | SEO, Ads & Social Media",
     description:
-      "Digital marketing company in Visakhapatnam (Vizag): SEO, local SEO, Google Ads, social media, Meta Ads, content and lead generation for local businesses.",
+      "Grow your business with Genie Media's SEO, Google Ads, social media, content marketing and lead-generation services in Vizag and across India.",
   },
   "/podcast_studio": {
     title: "Podcast Studio in Vizag | Genie Media & Studio",

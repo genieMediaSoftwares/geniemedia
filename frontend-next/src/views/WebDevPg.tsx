@@ -11,6 +11,8 @@ import { WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
 import web_services_heroAsset from "@/assets/web_services_hero.jpg";
 import { WEBSITES_VIDEO_URL } from "@/config/media";
 import { CONTENT_LINK } from "@/lib/linkStyles";
+import { WEB_GROUPS, WEB_DEV_PAGES, webDevPath } from "@/content/webDevPages";
+import { ArrowUpRight } from "lucide-react";
 
 const web_services_hero = web_services_heroAsset.src;
 
@@ -158,6 +160,35 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
              </section>
 
              <ServicesSection2/>
+
+             <section aria-labelledby="web-specialist-services" className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
+               <div className="max-w-6xl mx-auto">
+                 <div className="text-center mb-12">
+                   <h2 id="web-specialist-services" className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                     Explore Our Web Development Services
+                   </h2>
+                   <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                     Each page explains what the service includes, who it suits, typical timelines and how we measure success, for businesses in Vizag and across India.
+                   </p>
+                 </div>
+                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                   {WEB_GROUPS.map((group) => (
+                     <div key={group}>
+                       <h3 className="text-sm font-semibold uppercase tracking-wider text-orange-600 mb-4">{group}</h3>
+                       <ul className="space-y-3">
+                         {WEB_DEV_PAGES.filter((p) => p.group === group).map((p) => (
+                           <li key={p.slug}>
+                             <a href={webDevPath(p.slug)} className="group flex items-center justify-between gap-2 rounded-xl border border-gray-200 px-4 py-3 font-semibold text-gray-900 transition-colors hover:border-orange-400">
+                               {p.name} <ArrowUpRight className="w-4 h-4 flex-shrink-0 text-orange-500" aria-hidden="true" />
+                             </a>
+                           </li>
+                         ))}
+                       </ul>
+                     </div>
+                   ))}
+                 </div>
+               </div>
+             </section>
 
              <PlatformsWeUse
                type="webDevelopment"

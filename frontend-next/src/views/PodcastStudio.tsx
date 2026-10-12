@@ -14,6 +14,7 @@ import set2Asset from "@/assets/podcast/studio-set2-min.jpg";
 import nytviewAsset from "@/assets/podcast/StudioNightView-min.jpg";
 import setAsset from "@/assets/podcast/studioSet-min.jpg";
 import { CONTENT_LINK } from "@/lib/linkStyles";
+import { PODCAST_SERVICE_NAV, groupNav } from "@/content/serviceNav";
 
 const cameras = camerasAsset.src;
 const chairs = chairsAsset.src;
@@ -208,10 +209,10 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
             <span className="inline-block animate-podcast-hero-rise">{h1}</span>
           ) : (
             <>
-              <span className="inline-block animate-podcast-hero-rise">PODCAST STUDIO</span>
+              <span className="inline-block animate-podcast-hero-rise">PODCAST STUDIO</span>{" "}
               <br />
-              <span className="inline-block animate-podcast-hero-rise ![animation-delay:0.08s]">IN</span>
-              <span className="ml-[1.2rem] inline-block animate-podcast-hero-rise bg-[linear-gradient(135deg,#ffffff,#ffffff)] bg-clip-text [-webkit-text-fill-color:transparent]">
+              <span className="inline-block animate-podcast-hero-rise ![animation-delay:0.08s]">IN</span>{" "}
+              <span className="inline-block animate-podcast-hero-rise bg-[linear-gradient(135deg,#ffffff,#ffffff)] bg-clip-text [-webkit-text-fill-color:transparent]">
                 VIZAG
               </span>
             </>
@@ -428,6 +429,31 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
               <div key={q}>
                 <h3 className="text-xl font-bold mb-2">{q}</h3>
                 <p className="text-gray-700 text-lg leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="podcast-services" className="bg-white text-black px-5 py-16 sm:py-20">
+        <div className="max-w-5xl mx-auto">
+          <h2 id="podcast-services" className={`${SECTION_TITLE} text-center`}>Explore Our Podcast Services</h2>
+          <p className="max-w-3xl mx-auto text-center text-lg text-gray-700 leading-relaxed -mt-8 mb-12">
+            Record at our studio in Yendada, Visakhapatnam, or work with our editors and producers remotely from anywhere in India.
+          </p>
+          <div className="grid gap-10 sm:grid-cols-2">
+            {groupNav(PODCAST_SERVICE_NAV).map((g) => (
+              <div key={g.group}>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-orange-600 mb-4">{g.group}</h3>
+                <ul className="space-y-3">
+                  {g.items.map((item) => (
+                    <li key={item.href}>
+                      <a href={item.href} className="flex items-center justify-between gap-2 rounded-xl border border-gray-200 px-5 py-4 font-semibold text-gray-900 transition-colors hover:border-orange-400">
+                        {item.name} <span aria-hidden="true" className="text-orange-500">&rarr;</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>

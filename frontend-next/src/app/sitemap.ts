@@ -5,6 +5,7 @@ import { getPublishedCaseStudiesSafe } from "@/lib/api/caseStudies";
 import { caseStudyUrl } from "@/lib/caseStudies";
 import { canonicalFor } from "@/lib/site";
 import { blogCanonical } from "@/lib/seo/metadata";
+import { ALL_SUB_PAGES } from "@/content/serviceSubPages";
 
 export const dynamic = "force-static";
 
@@ -16,6 +17,7 @@ const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: "d
   { path: "/web_development", priority: 0.9, changeFrequency: "monthly" },
   { path: "/production_house", priority: 0.9, changeFrequency: "monthly" },
   { path: "/podcast_studio", priority: 0.9, changeFrequency: "monthly" },
+  ...ALL_SUB_PAGES.map((e) => ({ path: e.path, priority: 0.8, changeFrequency: "monthly" as const })),
   { path: "/projects", priority: 0.7, changeFrequency: "weekly" },
   { path: "/reviews", priority: 0.6, changeFrequency: "monthly" },
   { path: "/blogs", priority: 0.8, changeFrequency: "daily" },

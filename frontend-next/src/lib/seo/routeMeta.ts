@@ -2,6 +2,8 @@ import type { JsonLdGraph, JsonLdObject, PublishedServiceSeo, RouteMeta, RouteMe
 import { SITE_ORIGIN, canonicalFor } from "@/lib/site";
 import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
 import { PRODUCTION_HOUSE_FAQS, WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
+import { DM_SERVICE_PAGES } from "@/content/dmServicePages";
+import { WEB_DEV_PAGES } from "@/content/webDevPages";
 
 export { SITE_ORIGIN, canonicalFor };
 
@@ -106,9 +108,9 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
   "/digital_marketing": {
     breadcrumb: "Digital Marketing",
-    title: "Digital Marketing Agency in Vizag | Genie Media & Studio",
+    title: "Digital Marketing Agency in Vizag | SEO, Ads & Social Media",
     description:
-      "Digital marketing company in Visakhapatnam (Vizag): SEO, local SEO, Google Ads, social media, Meta Ads, content and lead generation for local businesses.",
+      "Grow your business with Genie Media's SEO, Google Ads, social media, content marketing and lead-generation services in Vizag and across India.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/podcast_studio": {
@@ -267,12 +269,10 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
       service: {
         name: "Digital Marketing Services",
         serviceType: "Digital marketing",
-        description: "SEO, local SEO and Google Business Profile, Google Ads and PPC, social media marketing and Meta Ads, content marketing, lead generation, website design and branding for businesses in Visakhapatnam (Vizag) and Andhra Pradesh.",
-        areaServed: [VIZAG_AREA, { "@type": "State", name: "Andhra Pradesh", containedInPlace: { "@type": "Country", name: "India" } }],
+        description: "SEO, local SEO, technical and on-page SEO, ecommerce SEO, SEO audits, answer engine optimization (AEO), generative engine optimization (GEO), Google Ads, social media marketing and Meta Ads, content marketing, lead generation and conversion optimization for businesses across India, from Visakhapatnam (Vizag), Andhra Pradesh.",
+        areaServed: [{ "@type": "Country", name: "India" }, VIZAG_AREA, { "@type": "State", name: "Andhra Pradesh", containedInPlace: { "@type": "Country", name: "India" } }],
         hasOfferCatalog: catalog("Digital marketing services", [
-          "SEO Services",
-          "Local SEO & Google Business Profile",
-          "Google Ads & PPC Management",
+          ...DM_SERVICE_PAGES.map((p) => p.name),
           "Social Media Marketing & Meta Ads",
           "Content Marketing",
           "Lead Generation",
@@ -328,12 +328,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
         name: "Website Development",
         serviceType: "Website design and development",
         hasOfferCatalog: catalog("Website development services", [
-          "UI/UX Design",
-          "Web Development",
-          "Shopify Solutions",
-          "WordPress Development",
-          "Custom Coding",
-          "Maintenance & Support",
+          ...WEB_DEV_PAGES.map((p) => p.name),
           "Hosting & Deployment Solutions",
         ]),
       },

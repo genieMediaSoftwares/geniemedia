@@ -1,4 +1,5 @@
 import { Quote, Star } from "lucide-react";
+import { STUDIO_REVIEWS as REVIEWS } from "@/content/testimonials";
 
 const SECTION =
   "relative overflow-hidden bg-[#f8f4fcc5] px-10 py-[60px] max-[1024px]:px-[30px] max-[1024px]:py-[100px] max-[768px]:px-5 max-[768px]:py-20 max-[480px]:px-4 max-[480px]:py-[60px]";
@@ -15,26 +16,6 @@ const CARD_TRANSITION = [
 export const PODCAST_CTA_BUTTON =
   "inline-block cursor-pointer rounded-[50px] border-none !bg-[#f97316] px-12 py-[18px] text-[16px] font-bold text-[#0a0a0a] no-underline shadow-[0_10px_30px_rgba(106,0,255,0.3)] [transition:all_0.3s_cubic-bezier(0.34,1.56,0.64,1)] hover:[transform:translateY(-4px)_scale(1.05)] hover:shadow-[0_15px_40px_rgba(157,0,255,0.4)] active:[transform:translateY(-2px)_scale(1.02)] max-[768px]:w-full max-[768px]:max-w-[300px] max-[768px]:px-4 max-[768px]:py-[10px] max-[768px]:text-[12px] max-[480px]:!max-w-[55%]";
 
-const REVIEWS = [
-  {
-    quote:
-      "The studio quality is absolutely incredible. The acoustics are perfect, and the equipment is top-notch. Our podcast has never sounded better since we started recording here.",
-    initials: "SP",
-    name: "Sasidhar Pydiraju",
-  },
-  {
-    quote:
-      "Professional setup with amazing support staff. They helped us every step of the way, from setup to post-production. Highly recommend for serious podcasters!",
-    initials: "AS",
-    name: "Aruna Sai Kumar",
-  },
-  {
-    quote:
-      "As a beginner, I was nervous about recording my first podcast. The team made everything so easy and welcoming. The studio space is inspiring and the results are phenomenal!",
-    initials: "S",
-    name: "Shanmuk",
-  },
-];
 
 export default function StudioReviews({
   heading,

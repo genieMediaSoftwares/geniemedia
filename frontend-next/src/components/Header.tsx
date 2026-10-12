@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown, Phone, Mail } from 'lucide-react';
+import { ChevronDown, ChevronRight, Phone, Mail } from 'lucide-react';
 import logoAsset from "@/assets/GenieMedia-Logo-120.webp";
+import { DM_SERVICE_NAV, PODCAST_SERVICE_NAV, WEB_SERVICE_NAV, groupNav } from "@/content/serviceNav";
 import { TrendingUp, Code, Video, Mic } from 'lucide-react';
 
 const logo = logoAsset.src;
@@ -45,10 +46,10 @@ const MENU_ITEMS = [
     name: 'Services',
     href: '/services',
     dropdown: [
-      { name: 'Digital Marketing', href: '/digital_marketing', icon: <TrendingUp /> },
-      { name: 'Website Development', href: '/web_development', icon: <Code /> },
+      { name: 'Digital Marketing', href: '/digital_marketing', icon: <TrendingUp />, children: DM_SERVICE_NAV },
+      { name: 'Website Development', href: '/web_development', icon: <Code />, children: WEB_SERVICE_NAV },
       { name: 'Production House', href: '/production_house', icon: <Video /> },
-      { name: 'Podcast Studio Rentals', href: '/podcast_studio', icon: <Mic /> }
+      { name: 'Podcast Studio Rentals', href: '/podcast_studio', icon: <Mic />, children: PODCAST_SERVICE_NAV }
     ]
   },
   { name: 'Projects', href: '/projects' },
@@ -60,6 +61,7 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [activeMobileDropdown, setActiveMobileDropdown] = useState<string | null>(null);
+  const [activeMobileSub, setActiveMobileSub] = useState<string | null>(null);
 
   const menuItems = MENU_ITEMS;
 
@@ -69,6 +71,7 @@ const Header = () => {
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
     setActiveMobileDropdown(null);
+    setActiveMobileSub(null);
   }, [pathname]);
 
   return (
@@ -120,29 +123,53 @@ const Header = () => {
                         mt-2 w-64
                         bg-white rounded-2xl shadow-2xl
                         border border-gray-100
-                        overflow-hidden z-50
+                        z-50
                         ${activeDropdown === item.name ? '' : 'hidden'}
                       `}
                       onMouseEnter={() => setActiveDropdown(item.name)}     
                       onMouseLeave={() => setActiveDropdown(null)}          
                     >
                       {item.dropdown.map((subItem) => (
-                        <Link prefetch={false}
-                          key={subItem.name}
-                          href={subItem.href}
-                          className={`
-                            ${DROPDOWN_ITEM}
-                            flex items-center gap-3 
-                            px-5 py-3.5 
-                            text-gray-700 
-                            hover:text-orange-600 
-                            border-b border-gray-50 
-                            last:border-0
-                          `}
-                        >
-                          <span className="text-2xl">{subItem.icon}</span>
-                          <span className="text-sm font-medium">{subItem.name}</span>
-                        </Link>
+                        <div key={subItem.name} className="group/sub relative border-b border-gray-50 last:border-0">
+                          <Link prefetch={false}
+                            href={subItem.href}
+                            className={`
+                              ${DROPDOWN_ITEM}
+                              flex items-center gap-3
+                              px-5 py-3.5
+                              text-gray-700
+                              hover:text-orange-600
+                              group-first/sub:rounded-t-2xl group-last/sub:rounded-b-2xl
+                            `}
+                          >
+                            <span className="text-2xl">{subItem.icon}</span>
+                            <span className="text-sm font-medium flex-1">{subItem.name}</span>
+                            {subItem.children && <ChevronRight size={16} className="text-gray-400" aria-hidden="true" />}
+                          </Link>
+                          {subItem.children && (
+                            <div className="invisible opacity-0 group-hover/sub:visible group-hover/sub:opacity-100 group-focus-within/sub:visible group-focus-within/sub:opacity-100 transition-opacity duration-200 absolute left-full top-0 pl-2 z-50">
+                              <div className={`bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 ${subItem.children.some((c) => c.group) ? "w-[34rem] grid grid-cols-2 gap-x-2" : "w-80"}`}>
+                                {groupNav(subItem.children).map((g) => (
+                                  <div key={g.group ?? "all"}>
+                                    {g.group && <p className="px-5 pt-3 pb-1 text-xs font-semibold uppercase tracking-wider text-orange-600">{g.group}</p>}
+                                    <ul>
+                                      {g.items.map((child) => (
+                                        <li key={child.href}>
+                                          <Link prefetch={false}
+                                            href={child.href}
+                                            className={`${DROPDOWN_ITEM} block px-5 py-2 text-sm font-medium text-gray-700 hover:text-orange-600`}
+                                          >
+                                            {child.name}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   )}
@@ -200,15 +227,51 @@ const Header = () => {
                       {activeMobileDropdown === item.name && (
                         <div className="ml-4 mt-1 space-y-1">
                           {item.dropdown.map((subItem) => (
-                            <Link prefetch={false}
-                              key={subItem.name}
-                              href={subItem.href}
-                              className="flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 transition-all"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              <span className="text-xl">{subItem.icon}</span>
-                              <span className="font-medium">{subItem.name}</span>
-                            </Link>
+                            <div key={subItem.name}>
+                              <div className="flex items-center">
+                                <Link prefetch={false}
+                                  href={subItem.href}
+                                  className="flex-1 flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 transition-all"
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                  <span className="text-xl">{subItem.icon}</span>
+                                  <span className="font-medium">{subItem.name}</span>
+                                </Link>
+                                {subItem.children && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setActiveMobileSub(activeMobileSub === subItem.name ? null : subItem.name)}
+                                    aria-expanded={activeMobileSub === subItem.name}
+                                    aria-label={`Show ${subItem.name} services`}
+                                    className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-gray-500 hover:bg-orange-50 hover:text-orange-600"
+                                  >
+                                    <ChevronDown size={18} className={`transition-transform duration-300 ${activeMobileSub === subItem.name ? 'rotate-180' : ''}`} />
+                                  </button>
+                                )}
+                              </div>
+                              {subItem.children && activeMobileSub === subItem.name && (
+                                <div className="ml-12 mt-1 mb-2 border-l-2 border-orange-100">
+                                  {groupNav(subItem.children).map((g) => (
+                                    <div key={g.group ?? "all"}>
+                                      {g.group && <p className="px-4 pt-2 text-xs font-semibold uppercase tracking-wider text-orange-600">{g.group}</p>}
+                                      <ul className="space-y-0.5">
+                                        {g.items.map((child) => (
+                                          <li key={child.href}>
+                                            <Link prefetch={false}
+                                              href={child.href}
+                                              onClick={() => setIsMobileMenuOpen(false)}
+                                              className="block py-2 px-4 text-sm text-gray-600 hover:text-orange-600 transition-colors"
+                                            >
+                                              {child.name}
+                                            </Link>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                           ))}
                         </div>
                       )}
