@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import {
-  ShoppingCart, Dumbbell, Factory, GraduationCap, House, Stethoscope, UtensilsCrossed, Briefcase, Rocket,
-  ArrowUpRight, ChevronDown, CheckCircle, Phone, Calendar, Mail, MapPin, MessageCircle,
+  ShoppingCart, Factory, GraduationCap, House, Stethoscope, Rocket,
+  ArrowUpRight, ChevronDown, CheckCircle, Phone, Calendar, MessageCircle,
 } from "lucide-react";
 import DigitalMarketting1Asset from "@/assets/DigitalMarketting.jpg";
 import DigitalMarketing2Asset from "@/assets/DigitalMarketing2.jpg";
@@ -21,7 +21,7 @@ const inlineLink = CONTENT_LINK;
 const services = [
   {
     id: "seo",
-    title: "SEO Services in Vizag",
+    title: "SEO Services for Search Visibility",
     subtitle: "Search Engine Optimization & Organic Growth",
     description: "SEO helps people find you on Google without paying for each click. First, we run an SEO audit of your website. Next, we fix technical SEO issues, improve on-page SEO and research the keywords your customers type. We also handle internal links and structured data. Finally, we report on your rankings and organic traffic every month.",
     keywords: ["SEO Audit", "Technical SEO", "On-Page SEO", "Keyword Research"],
@@ -30,7 +30,7 @@ const services = [
   },
   {
     id: "local-seo",
-    title: "Local SEO & Google Business Profile",
+    title: "Local SEO and Google Business Profile Optimisation",
     subtitle: "Google Maps & \"Near Me\" Visibility",
     description: "When someone nearby searches for what you offer, your Google Business Profile is often the first thing they see. So we set it up or clean it up, pick the right categories and keep your hours, photos and services up to date. We also fix your local listings and build location pages. As a result, more people in Vizag find you on Google Maps and in local search.",
     keywords: ["Google Business Profile", "Google Maps", "Local Listings", "Location Pages"],
@@ -39,7 +39,7 @@ const services = [
   },
   {
     id: "google-ads",
-    title: "Google Ads & PPC Management",
+    title: "Google Ads Management for Qualified Enquiries",
     subtitle: "Paid Search & Performance Campaigns",
     description: "Google Ads and search engine marketing put you at the top of the page today, not in six months. We plan your PPC campaigns, write the ads and set up conversion tracking. We also run display ads and remarketing to bring back people who visited your site. After launch, we watch every search term and every rupee. As a result, your budget moves to the ads that bring calls and leads, and away from the ones that do not.",
     keywords: ["Google Search Ads", "PPC Management", "Display Ads", "Remarketing"],
@@ -47,17 +47,8 @@ const services = [
     linkLabel: "Explore Google Ads management"
   },
   {
-    id: "social-media",
-    title: "Social Media Marketing & Meta Ads",
-    subtitle: "Social Strategy, Creatives & Advertising",
-    description: "We plan your social media strategy around the people you want to reach. Then we design posts, edit Reels and short videos, and keep your pages active. We also run paid social ads on Instagram and Facebook through Meta Ads. The goal is simple: more brand awareness, stronger audience engagement and more enquiries, not just likes.",
-    keywords: ["Social Media Management", "Instagram Marketing", "Facebook & Instagram Ads", "Reels"],
-    link: "/digital_marketing/social-media-marketing",
-    linkLabel: "Explore social media marketing"
-  },
-  {
     id: "content-marketing",
-    title: "Content Marketing",
+    title: "Content Marketing for Trust and Growth",
     subtitle: "Content Strategy, Blogs & Brand Storytelling",
     description: "Good content answers the questions your customers already ask. So we plan topics around real searches. Then we write clear website copy, blog posts and social captions. Because we have our own studio, we can also shoot the photos and videos that bring your story to life.",
     keywords: ["Content Strategy", "Blog Content", "SEO Content", "Visual Storytelling"],
@@ -65,8 +56,17 @@ const services = [
     linkLabel: "Explore content marketing"
   },
   {
+    id: "social-media",
+    title: "Social Media Marketing and Creative Content",
+    subtitle: "Social Strategy, Creatives & Advertising",
+    description: "We plan your social media strategy around the people you want to reach. Then we design posts, edit Reels and short videos, and keep your pages active. We also run paid social ads on Instagram and Facebook through Meta Ads. The goal is simple: more brand awareness, stronger audience engagement and more enquiries, not just likes.",
+    keywords: ["Social Media Management", "Instagram Marketing", "Facebook & Instagram Ads", "Reels"],
+    link: "/digital_marketing/social-media-marketing",
+    linkLabel: "Explore social media marketing"
+  },
+  {
     id: "lead-generation",
-    title: "Lead Generation",
+    title: "Lead Generation That Brings Qualified Enquiries",
     subtitle: "Campaigns That Bring In Qualified Enquiries",
     description: "Lead generation turns interest into real enquiries. We plan lead generation campaigns on Google and social media, build focused landing pages and keep forms short. Then we follow up leads by email. As a result, your team spends its time on qualified leads, not cold contacts.",
     keywords: ["Lead Generation Campaigns", "Landing Pages", "Qualified Leads", "Email Follow-Up"],
@@ -75,43 +75,22 @@ const services = [
   },
   {
     id: "conversion-optimization",
-    title: "Conversion Optimization",
+    title: "Conversion Optimisation for More Enquiries",
     subtitle: "More Enquiries From the Same Traffic",
     description: "Conversion optimization helps you get more from the visitors you already have. We study how people use your pages. Then we improve headlines, forms, page speed and calls to action. Next, we test each change and keep what works. In short, conversion rate optimization (CRO) lowers your cost per lead.",
     keywords: ["CRO", "A/B Testing", "Page Speed", "Calls to Action"],
     link: "/digital_marketing/conversion-optimization",
     linkLabel: "Explore conversion optimization"
-  },
-  {
-    id: "web-development",
-    title: "Website Design & Development",
-    subtitle: "Responsive, Fast & SEO-Friendly Websites",
-    description: "Most marketing ends on your website, so it has to work well. Our team builds fast, responsive websites, landing pages and online stores. Each site is mobile-friendly, easy to use and SEO-friendly from day one. We also check page speed and Core Web Vitals before launch.",
-    keywords: ["Website Design", "Responsive Website", "Ecommerce Website", "UI/UX"],
-    link: "/web_development",
-    linkLabel: "Explore web development"
-  },
-  {
-    id: "branding",
-    title: "Branding & Creative Services",
-    subtitle: "Brand Identity, Positioning & Creatives",
-    description: "A clear brand makes every campaign work harder. We help you shape your brand strategy, logo, colours and tone of voice. Then we turn them into graphic design, ad creatives and website messaging. When you need video or photos, our production house creates them in-house.",
-    keywords: ["Brand Strategy", "Brand Identity", "Graphic Design", "Ad Creatives"],
-    link: "/production_house",
-    linkLabel: "See our creative production"
   }
 ];
 
 const industries = [
-  { icon: ShoppingCart, title: "E-Commerce & Retail", description: "We build online stores and run campaigns that bring in buyers, cut abandoned carts and grow sales." },
-  { icon: Dumbbell, title: "Fitness & Wellness", description: "We help gyms and wellness brands win local members and build an active community online." },
-  { icon: Factory, title: "Industrial & Manufacturing", description: "We build clear B2B websites and run lead generation campaigns for firms in Visakhapatnam." },
-  { icon: GraduationCap, title: "Education & Coaching", description: "We help schools, colleges and coaching centres in Vizag reach more students and parents." },
-  { icon: House, title: "Real Estate & Builders", description: "We build project websites and run local Google and Facebook ads for builders, developers and property agents." },
-  { icon: Stethoscope, title: "Clinics, Hospitals & Doctors", description: "We help clinics, hospitals, doctors and labs in Vizag show up in local search and earn patient trust." },
-  { icon: UtensilsCrossed, title: "Restaurants, Hotels & Travel", description: "We help restaurants, hotels and travel brands attract locals and tourists with social media and local ads." },
-  { icon: Briefcase, title: "Professional Services", description: "We help law firms, consultants and accountants build authority with content, SEO and a strong website." },
-  { icon: Rocket, title: "Startups & Small Businesses", description: "We help startups and small businesses in Andhra Pradesh build a brand, win early customers and grow online on a sensible budget." }
+  { icon: Rocket, title: "Startups and Small Businesses", description: "We help new and small businesses build a credible online presence, win early customers and grow on a sensible budget." },
+  { icon: ShoppingCart, title: "E-commerce Brands", description: "We run SEO, Google Shopping, Meta Ads and content that bring buyers to your own store, not just marketplaces." },
+  { icon: Stethoscope, title: "Clinics and Professional Services", description: "We help clinics, doctors, consultants and firms show up in local search and earn trust before the first call." },
+  { icon: House, title: "Real Estate and Construction", description: "We build project pages and run location-targeted campaigns for builders, developers and contractors." },
+  { icon: GraduationCap, title: "Education and Coaching", description: "We help schools, colleges and coaching centres reach students and parents during admission seasons." },
+  { icon: Factory, title: "Manufacturers and B2B Companies", description: "We create clear capability pages and lead generation campaigns for buyers searching for suppliers." },
 ];
 
 const strategySteps = [
@@ -188,7 +167,7 @@ const choosingTips: Array<{ title: string; content: ReactNode }> = [
     title: "Can we meet in person?",
     content: (
       <>
-        A local team understands your market and is easy to reach. Our office is at KP Icon in Yendada, so you can <a href="/contact" className={inlineLink}>book a meeting</a> and talk to us face to face.
+        A local team understands your market and is easy to reach. Our office is at KP Icon in Yendada, close to Rushikonda and Madhurawada, so you can <a href="/contact" className={inlineLink}>book a meeting</a> and talk to us face to face.
       </>
     )
   }
@@ -205,7 +184,7 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
                 Digital Marketing Agency in Vizag · Serving India
               </p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-                {h1 || "Digital Marketing Agency for Growing Businesses in India and Vizag"}
+                {h1 || "Digital Marketing Agency for Growing Businesses in Vizag and India"}
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
                 Genie Media & Studio helps startups, local businesses, e-commerce brands and growing companies improve their online visibility, attract relevant audiences and generate more enquiries. Based in Visakhapatnam, we provide SEO, Google Ads, social media, content marketing and lead generation for businesses in Vizag, Andhra Pradesh and across India, with campaign performance measured every month.
@@ -269,21 +248,16 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
 
       <section className="bg-gray-50 py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Our Digital Marketing Services
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Each service works on its own. However, they work best together, because search, ads, content and your website all feed each other.
-            </p>
-          </div>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto text-center mb-12">
+            Each service works on its own. However, they work best together, because search, ads, content and your website all feed each other.
+          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {services.map((service) => (
               <div key={service.id} className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider text-orange-600 mb-1">{service.subtitle}</p>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
+                  <h2 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h2>
                   <p className="text-gray-600 leading-relaxed mb-4">{service.description}</p>
                   <div className="flex flex-wrap gap-2 mb-6">
                     {service.keywords.map((kw) => (
@@ -342,7 +316,7 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700"><strong>Local visibility:</strong> Show up in &quot;near me&quot; searches across Vizag, Yendada, Dwaraka Nagar and MVP Colony.</p>
+                  <p className="text-gray-700"><strong>Local visibility:</strong> Show up in &quot;near me&quot; searches across Visakhapatnam, including the neighbourhoods your customers live in.</p>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
@@ -373,7 +347,7 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              How Our Digital Marketing Process Works
+              Our Digital Marketing Process
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Every engagement follows the same six steps, so you always know what we are doing, why, and what it is achieving.
@@ -400,7 +374,7 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Genie Media & Studio
+              Why Choose Genie Media &amp; Studio?
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               We mix creative work, web skills and data. Here is what that means for you.
@@ -454,7 +428,7 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Our Work and Client Projects
+              Projects and Proof
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               See websites, branding and digital campaigns that Genie Media & Studio has built for clients in India, Australia and other markets.
@@ -493,43 +467,21 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
         </div>
       </section>
 
-      <section className="bg-gray-50 py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
-            Digital Marketing Services Near Me
-          </h2>
-          <p className="text-lg text-gray-600 leading-relaxed mb-6">
-            Searching for a digital marketing agency near me or SEO services near me in Visakhapatnam? Genie Media & Studio is close by and easy to meet. Our office is at KP Icon in Yendada.
-          </p>
-          <p className="text-lg text-gray-600 leading-relaxed mb-8">
-            We work with businesses across Vizag, including Madhurawada, Dwaraka Nagar, MVP Colony and Gajuwaka. Whether you need a website, Google Ads or social media marketing in Vizag, we are happy to talk it through.
-          </p>
-          <div className="inline-flex flex-wrap justify-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-            <div className="flex items-center gap-2 text-gray-700 font-medium">
-              <MapPin className="w-5 h-5 text-orange-500" /> KP Icon, Yendada, Visakhapatnam 530045
-            </div>
-            <div className="flex items-center gap-2 text-gray-700 font-medium">
-              <Phone className="w-5 h-5 text-orange-500" /> +91 90328 45433
-            </div>
-            <div className="flex items-center gap-2 text-gray-700 font-medium">
-              <Mail className="w-5 h-5 text-orange-500" /> admin@geniemedia.in
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="bg-white py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl p-8 sm:p-12 text-black shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
             <div className="lg:col-span-2 space-y-4">
-              <h2 className="text-3xl font-bold">In-House Video Production & Podcast Studio in Vizag</h2>
+              <h2 className="text-3xl font-bold">Website, Video and Podcast Support Under One Team</h2>
               <p className="text-lg opacity-90 leading-relaxed">
-                Beyond digital marketing, we run our own <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio in Visakhapatnam</a> with multi-camera setups and pro audio. We also have a <a href="/production_house" className={CONTENT_LINK}>video production house</a> for brand videos, ad shoots and live streams. So your content can be planned, shot and promoted by one team.
+                Most marketing ends on your website, so our <a href="/web_development" className={CONTENT_LINK}>website development services</a> keep it fast, mobile-friendly and SEO-ready. We also help shape your brand identity, colours and ad creatives.
+              </p>
+              <p className="text-lg opacity-90 leading-relaxed">
+                For video, our <a href="/production_house" className={CONTENT_LINK}>video production services</a> cover brand films, ad shoots and Reels. Our <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio rental in Vizag</a> adds audio and video podcasts. So your content can be planned, shot and promoted by one team.
               </p>
             </div>
             <div className="flex justify-start lg:justify-end">
               <a href="/podcast_studio" className="bg-black hover:bg-slate-900 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300">
-                Book a Studio Slot
+                Visit the Podcast Studio
               </a>
             </div>
           </div>
@@ -585,7 +537,7 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Let&apos;s Build a Clearer Digital Growth Plan
+            Start Your Digital Marketing Conversation
           </h2>
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
             Ready to grow your online visibility and win more leads? Book a meeting or call our team in Visakhapatnam. We will look at where you are today and suggest clear next steps.

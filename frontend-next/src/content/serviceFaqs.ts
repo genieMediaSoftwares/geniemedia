@@ -61,3 +61,34 @@ export const PRODUCTION_HOUSE_FAQS: FaqItem[] = [
     a: "Contact us through the contact page, call +91 90328 45433 or message us on WhatsApp. Tell us what you want to create, and we will suggest a plan for the shoot.",
   },
 ];
+
+export const HOME_FAQS: FaqItem[] = [
+  {
+    q: "What does Genie Media & Studio do?",
+    a: "We help businesses grow online through digital marketing, website development, video production and podcast services. Our team plans and delivers this work from Visakhapatnam.",
+  },
+  {
+    q: "Where is Genie Media & Studio based?",
+    a: "Our office and podcast studio are at 5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam, Andhra Pradesh 530045, close to Rushikonda and Madhurawada.",
+  },
+  {
+    q: "Do you work with businesses outside Vizag?",
+    a: "Yes. Digital marketing, website development, editing and content work can be delivered remotely across India. Studio recording and most video shoots happen in Visakhapatnam.",
+  },
+  {
+    q: "Can one team handle our marketing, website and video?",
+    a: "Yes. Our marketers, developers, writers and production team work together, so your website, campaigns and content follow one plan.",
+  },
+  {
+    q: "How much does the podcast studio cost?",
+    a: "Studio-only hire starts at ₹1,500 an hour. Packages with our team and two or three cameras start at ₹3,999 and ₹5,000 an hour.",
+  },
+  {
+    q: "Do you guarantee rankings or leads?",
+    a: "No. No agency controls Google or ad auctions. We focus on useful content, sound technical work and clear tracking, and we report results honestly every month.",
+  },
+  {
+    q: "How do I start a project?",
+    a: "Call +91 90328 45433, message us on WhatsApp or use the contact form. We will discuss your goals and suggest clear next steps.",
+  },
+];

@@ -13,11 +13,11 @@ export interface VideoTestimonial {
 export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
   {
     id: 1,
-    name: "Dr.Sailaja",
-    company: "Lawer",
+    name: "Dr. Sailaja",
+    company: "Lawyer",
     rating: 5,
     videoId: "gMpv78iIFz0",
-    quote: "Wonderful design and implemenation of my website with thoroughly giving suggestions and clarifying doubts."
+    quote: "Wonderful design and implementation of my website with thoroughly giving suggestions and clarifying doubts."
   },
   {
     id: 2,

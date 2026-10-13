@@ -1,7 +1,7 @@
 import type { JsonLdGraph, JsonLdObject, PublishedServiceSeo, RouteMeta, RouteMetaEntry } from "@/types";
 import { SITE_ORIGIN, canonicalFor } from "@/lib/site";
 import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
-import { PRODUCTION_HOUSE_FAQS, WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
+import { HOME_FAQS, PRODUCTION_HOUSE_FAQS, WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
 import { DM_SERVICE_PAGES } from "@/content/dmServicePages";
 import { WEB_DEV_PAGES } from "@/content/webDevPages";
 
@@ -39,9 +39,9 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/": {
-    title: "Genie Media & Studio | Digital Marketing & Media in Vizag",
+    title: "Genie Media & Studio | Digital Marketing, Web & Media in Vizag",
     description:
-      "Genie Media & Studio is a digital marketing agency in Visakhapatnam offering SEO, social media marketing, website design, video production and a podcast studio.",
+      "Genie Media & Studio helps businesses in Vizag and across India with digital marketing, websites, video production and podcast services.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/services": {
@@ -81,16 +81,16 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
   "/web_development": {
     breadcrumb: "Web Development",
-    title: "Web Development Company in Vizag | Genie Media",
+    title: "Website Development Company in Vizag & India | Genie Media",
     description:
-      "Custom web development in Vizag by Genie Media & Studio: business and ecommerce websites on WordPress, Shopify or React and Next.js, plus UI/UX and upkeep.",
+      "Build a fast, responsive and SEO-friendly website with Genie Media's WordPress, Shopify, React and Next.js development services in Vizag.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/production_house": {
     breadcrumb: "Production House",
-    title: "Production House & Video Production in Vizag | Genie Media",
+    title: "Video Production House in Vizag & India | Genie Media",
     description:
-      "Genie Media & Studio is a production house in Vizag for corporate, commercial and product videos, brand films, events, editing, photography and live streaming.",
+      "Create corporate videos, brand films, product videos and social media content with Genie Media's production house in Vizag.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/reviews": {
@@ -108,16 +108,16 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
   "/digital_marketing": {
     breadcrumb: "Digital Marketing",
-    title: "Digital Marketing Agency in Vizag | SEO, Ads & Social Media",
+    title: "Digital Marketing Agency in Vizag | SEO, Ads & Content",
     description:
-      "Grow your business with Genie Media's SEO, Google Ads, social media, content marketing and lead-generation services in Vizag and across India.",
+      "Grow your business with SEO, Google Ads, local SEO, content marketing and social media services from Genie Media in Vizag and across India.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/podcast_studio": {
     breadcrumb: "Podcast Studio",
-    title: "Podcast Studio in Vizag | Genie Media & Studio",
+    title: "Podcast Studio Rental in Vizag | Genie Media & Studio",
     description:
-      "Book a podcast studio in Vizag from ₹1,500 an hour. Podcast recording, video podcast filming with up to three cameras, and podcast editing by our team.",
+      "Book a professional podcast studio in Vizag for audio and video recording, production, editing and content repurposing.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
 };
@@ -245,6 +245,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
         isPartOf: { "@id": `${SITE_ORIGIN}/#website` },
         about: { "@id": ORGANIZATION["@id"] },
       },
+      faqPage(meta, HOME_FAQS),
       {
         ...ORGANIZATION,
         description: meta.description,
@@ -339,13 +340,13 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
       service: {
         name: "Video Production",
         serviceType: "Video production",
-        hasOfferCatalog: catalog("Production services", [
-          "Video Production",
-          "Wedding & Events",
-          "Scriptwriting & Storyboarding",
-          "Photography & Visual Content",
-          "Post-Production & Editing",
-          "Live Streaming & Event Coverage",
+        hasOfferCatalog: catalog("Video production services", [
+          "Corporate Videos",
+          "Brand Films",
+          "Product Videos",
+          "Social Media Videos",
+          "Video Editing and Post-Production",
+          "Events, Live Streaming and Photography",
         ]),
       },
       extraNodes: [faqPage(meta, PRODUCTION_HOUSE_FAQS)],

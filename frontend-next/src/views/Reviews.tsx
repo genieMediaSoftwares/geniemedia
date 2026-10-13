@@ -28,7 +28,7 @@ export default function Reviews() {
 
             <div className="text-white space-y-6">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-center">
-                Reviews
+                Client Reviews and Testimonials
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
                Clients love our seamless blend of creative{" "}

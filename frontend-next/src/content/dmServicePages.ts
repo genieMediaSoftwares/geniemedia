@@ -110,7 +110,7 @@ export const DM_SERVICE_PAGES: DmServicePage[] = [
         heading: "Why Genie Media for SEO?",
         items: [
           { title: "SEO, web development and content in one team", body: "Our developers can fix technical issues directly, and our writers can create the content SEO needs." },
-          { title: "Local knowledge of Vizag", body: "We are based in Yendada, Visakhapatnam, and understand how local customers search." },
+          { title: "Local knowledge of Vizag", body: "We are based in Visakhapatnam and understand how customers in Vizag and across Andhra Pradesh search." },
           { title: "Video and podcast content", body: "Our production house and podcast studio create content that supports search and trust." },
           { title: "Strategy connected to conversions", body: "We track calls, forms and WhatsApp clicks, not just rankings." },
           { title: "Clear reporting", body: "Monthly reports in plain language, with what changed and what comes next." },
@@ -163,7 +163,7 @@ export const DM_SERVICE_PAGES: DmServicePage[] = [
     whatIs: {
       heading: "What Is Local SEO?",
       paragraphs: [
-        "Local SEO is the part of search engine optimization focused on searches with local intent, such as 'dentist near me' or 'interior designer in Vizag'. Google usually shows a map with three businesses, followed by regular results.",
+        "Local SEO is the part of search engine optimization focused on searches with local intent, such as 'dentist near me' or 'interior designer in Vizag'. In a city like Visakhapatnam, people also search by neighbourhood, for example 'clinic in Madhurawada' or 'restaurant in MVP Colony'. Google usually shows a map with three businesses, followed by regular results.",
         "Google ranks local businesses on relevance, distance and prominence. Prominence comes from reviews, links and mentions; relevance from your profile and website content. Consistent business information across the web helps Google trust what it sees.",
       ],
     },

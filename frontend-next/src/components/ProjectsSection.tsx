@@ -86,7 +86,7 @@ const FALLBACK_PROJECTS: PortfolioItem[] = [
   },
 ];
 
-const ProjectsSection = ({ initialProjects, caseStudyLinks = {} }: { initialProjects: PortfolioItem[] | null; caseStudyLinks?: Record<number, string> }) => {
+const ProjectsSection = ({ initialProjects, caseStudyLinks = {}, title = "Our Portfolio" }: { initialProjects: PortfolioItem[] | null; caseStudyLinks?: Record<number, string>; title?: string }) => {
 
   const liveProjects = useLatestProjects(initialProjects);
   const projects = portfolioOrFallback(liveProjects, FALLBACK_PROJECTS);
@@ -98,7 +98,7 @@ const ProjectsSection = ({ initialProjects, caseStudyLinks = {} }: { initialProj
       <div className="max-w-7xl mx-auto px-4 md:px-2">
 
         <h2 className="text-center text-4xl md:text-5xl font-bold text-gray-700 mb-10">
-          Our Portfolio
+          {title}
         </h2>
 
         <div className={PROJECT_GRID}>

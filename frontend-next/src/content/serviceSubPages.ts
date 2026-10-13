@@ -34,6 +34,7 @@ export const DIGITAL_MARKETING_SECTION: ServiceSection = {
     "We cannot promise specific rankings or results, because no agency controls search engines or ad auctions. Here is what this work is designed to improve.",
   testimonialNames: ["Deepak Kumar Sharma", "Kedhar Panda", "Aruna Sai Kumar"],
   whatsapp: "Message on WhatsApp",
+  ctaLocation: "Based in Visakhapatnam, Andhra Pradesh. Working with businesses in Vizag and across India.",
   pages: DM_SERVICE_PAGES,
 };
 
@@ -43,6 +44,8 @@ export const WEB_DEVELOPMENT_SECTION: ServiceSection = {
   hubLinkText: "web development company page",
   benefitsNote: "Here is what this work is designed to improve for your business and your visitors.",
   testimonialNames: ["Deepak Kumar Sharma", "Kedhar Panda", "Heena M Shrivastava"],
+  industriesIntro: "We build websites for businesses in Vizag and across India, working in person or fully remotely.",
+  ctaLocation: "Our web team is based in Visakhapatnam and builds websites for businesses in Vizag and across India.",
   pages: WEB_DEV_PAGES,
 };
 
@@ -54,8 +57,8 @@ export const PODCAST_SECTION: ServiceSection = {
   testimonialNames: ["Sasidhar Pydiraju", "Aruna Sai Kumar", "Shanmuk"],
   whatsapp: "Book on WhatsApp",
   pricingNote: "Message us on WhatsApp to check availability and get a quote for any editing or add-ons before you book.",
-  industriesIntro: "Recording happens at our studio in Yendada, Visakhapatnam. Planning, editing and repurposing are also available remotely for clients across India.",
-  ctaLocation: "Studio in Yendada, Visakhapatnam. Editing and production support across India.",
+  industriesIntro: "Recording happens at our studio in Yendada, Visakhapatnam, used by creators and businesses from Vizag and across Andhra Pradesh. Editing, production and repurposing are also available remotely across India.",
+  ctaLocation: "Podcast studio in Yendada, Visakhapatnam, Andhra Pradesh. Remote editing and production support across India.",
   pages: PODCAST_PAGES,
 };
 

@@ -1,61 +1,54 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Palette, Code, ShoppingBag, Wrench, Smartphone, Globe, ArrowRight } from 'lucide-react';
+import { Palette, Code, ShoppingBag, Wrench, Globe, ArrowRight } from 'lucide-react';
 
 export default function ServicesSection2() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const services = [
     {
-      icon: <Palette className="w-8 h-8" />,
-      title: "UI/UX Design",
-      description: "UI/UX web design that gives visitors a clear, attractive user experience and guides them to get in touch.",
-      color: "from-purple-500 to-pink-500",
-      bgColor: "bg-purple-500"
-    },
-    {
-      icon: <Code className="w-8 h-8" />,
-      title: "Web Development",
-      description: "Custom web development with modern technologies such as React, Next.js and Node.js, from business websites to web applications.",
-      color: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-500"
+      icon: <Globe className="w-8 h-8" />,
+      title: "Business Websites",
+      description: "Clear service pages, enquiry forms, WhatsApp and Google Maps, built to win trust and generate leads.",
+      href: "/web_development/business-websites",
+      color: "from-indigo-500 to-blue-500",
     },
     {
       icon: <ShoppingBag className="w-8 h-8" />,
-      title: "Shopify Solutions",
-      description: "Ecommerce website development on Shopify, with online stores built to sell and easy for customers to use.",
+      title: "E-commerce Websites",
+      description: "Online stores with Indian payment gateways, shipping and GST set up, ready for marketing.",
+      href: "/web_development/ecommerce-websites",
       color: "from-green-500 to-emerald-500",
-      bgColor: "bg-green-500"
     },
     {
-      icon: <Globe className="w-8 h-8" />,
+      icon: <Palette className="w-8 h-8" />,
       title: "WordPress Development",
-      description: "WordPress website development: custom sites you can update yourself, built to grow with your business.",
-      color: "from-indigo-500 to-blue-500",
-      bgColor: "bg-indigo-500"
+      description: "Lean WordPress sites your team can update easily, without heavy themes or plugin overload.",
+      href: "/web_development/wordpress",
+      color: "from-purple-500 to-pink-500",
     },
     {
-      icon: <Smartphone className="w-8 h-8" />,
-      title: "Custom Coding",
-      description: "Tailored solutions built from scratch to meet your unique business requirements.",
-      color: "from-orange-500 to-red-500",
-      bgColor: "bg-orange-500"
-    },
-    {
-      icon: <Wrench className="w-8 h-8" />,
-      title: "Maintenance & Support",
-      description: "Website maintenance, redesigns and speed optimization to keep your site fast, secure and up to date.",
+      icon: <ShoppingBag className="w-8 h-8" />,
+      title: "Shopify Development",
+      description: "Shopify stores customised for your brand, with Razorpay, COD and the apps you actually need.",
+      href: "/web_development/shopify",
       color: "from-teal-500 to-green-500",
-      bgColor: "bg-teal-500"
+    },
+    {
+      icon: <Code className="w-8 h-8" />,
+      title: "React and Next.js Development",
+      description: "Custom web apps and fast, SEO-friendly websites built with React and Next.js.",
+      href: "/web_development/nextjs-development",
+      color: "from-blue-500 to-cyan-500",
     },
     {
       icon: <Wrench className="w-8 h-8" />,
-      title: "Hosting & Deployment Solutions",
-      description: "Secure, reliable hosting and deployment services for smooth website performance and uptime.",
-      color: "from-pink-500 to-purple-500",
-      bgColor: "bg-teal-500"
-    }
+      title: "Website Redesign and Maintenance",
+      description: "Redesigns that protect your rankings, plus monthly updates, backups and security checks.",
+      href: "/web_development/website-redesign",
+      color: "from-orange-500 to-red-500",
+    },
   ];
 
   return (
@@ -68,12 +61,12 @@ export default function ServicesSection2() {
           <div className="inline-block">
             <span className="text-orange-700 font-semibold text-sm uppercase tracking-wider mb-2 block">What We Offer</span>
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 relative">
-              Our Web Development Services
+              Website Development Services
               <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full"></div>
             </h2>
           </div>
           <p className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto mt-8">
-            Comprehensive digital solutions to elevate your brand and drive results through innovative design and cutting-edge technology
+            From simple business websites to custom web apps, each service is built around what your visitors need to do next.
           </p>
         </div>
 
@@ -84,9 +77,6 @@ export default function ServicesSection2() {
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               className={`group relative bg-white rounded-3xl p-8 transition-all duration-500 cursor-pointer border-2 border-gray-100 hover:border-transparent overflow-hidden
-                ${index === 0 ? 'md:col-span-2 lg:col-span-1' : ''}
-                ${index === 3 ? 'lg:col-span-2' : ''}
-                ${index === 6 ? 'lg:col-span-2' : ''}
                 ${hoveredIndex === index ? 'shadow-2xl scale-105 -translate-y-2' : 'shadow-lg hover:shadow-xl'}
               `}
             >
@@ -111,7 +101,7 @@ export default function ServicesSection2() {
                 </p>
 
                 <div className="flex items-center gap-2 text-orange-700 group-hover:text-white font-semibold transition-colors duration-300">
-                 <a href="/projects"> <span>Learn more</span><span className="sr-only"> about our {service.title} work</span></a>
+                 <a href={service.href}><span>Learn more</span><span className="sr-only"> about {service.title}</span></a>
                   <ArrowRight className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
               </div>
@@ -128,9 +118,9 @@ export default function ServicesSection2() {
           <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-32 translate-y-32"></div>
           
           <div className="relative z-10">
-            <h3 className="text-2xl md:text-4xl font-bold text-white mb-4">
+            <p className="text-2xl md:text-4xl font-bold text-white mb-4">
               Ready to Transform Your Digital Presence?
-            </h3>
+            </p>
             <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
               Let's collaborate to create something extraordinary that drives real results for your business
             </p>
@@ -148,8 +138,8 @@ export default function ServicesSection2() {
           {[
             { number: "10+", label: "Websites Launched" },
             { number: "3", label: "Countries Served" },
-            { number: "3", label: "Platforms: WordPress, Shopify, Custom" },
-            { number: "7", label: "Web Services" }
+            { number: "4", label: "Platforms: WordPress, WooCommerce, Shopify, React/Next.js" },
+            { number: "6", label: "Core Website Services" }
           ].map((stat, index) => (
             <div 
               key={index}

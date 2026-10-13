@@ -168,7 +168,7 @@ const VideoTestimonials = () => {
               </span>
             </div>
             <h2 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-4">
-              Hear From Our <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Happy Clients</span>
+              What Our <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Clients Say</span>
             </h2>
             <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
               Real stories from real people who've experienced the transformation

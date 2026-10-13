@@ -64,10 +64,7 @@ const ContactSec = ({ isPage = false }) => {
     {
       icon: MapPin,
       title: "Office",
-      details: [
-        "5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam,",
-        "near MK Gold Coast, Endada, Andhra Pradesh 530045",
-      ],
+      details: ["KP Icon, Yendada, Visakhapatnam"],
       color: "from-blue-500 to-blue-600",
     },
     {
@@ -166,8 +163,8 @@ const ContactSec = ({ isPage = false }) => {
             </div>
             {isPage ? (
               <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-4">
-                Let's Start a{" "}
-                <span className="text-orange-600">Conversation</span>
+                Contact Genie Media &amp; Studio in{" "}
+                <span className="text-orange-600">Visakhapatnam</span>
               </h1>
             ) : (
               <h2 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-4">
@@ -176,7 +173,7 @@ const ContactSec = ({ isPage = false }) => {
               </h2>
             )}
             <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
-              We'd love to hear from you. Send us a message and we'll respond as soon as possible
+              Call, message or visit us to discuss your website, marketing, video or podcast project. Send us a message and we'll respond as soon as possible.
             </p>
           </div>
 
@@ -370,6 +367,7 @@ const ContactSec = ({ isPage = false }) => {
                         <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
                         <p className="text-gray-600 text-sm">5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam,</p>
                         <p className="text-gray-600 text-sm">near MK Gold Coast, Endada, Andhra Pradesh 530045</p>
+                        <p className="text-gray-600 text-sm mt-1">Close to Rushikonda and Madhurawada</p>
                       </div>
                     </div>
 

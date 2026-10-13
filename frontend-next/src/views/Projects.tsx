@@ -18,7 +18,7 @@ export default function Projects({ initialProjects, caseStudyLinks = {} }: { ini
 
             <div className="text-white space-y-6">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-center">
-                Our Work
+                Our Projects and Client Work
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
                Business websites and online stores we have designed and built for clients in India, Australia and the US. See how we approach{" "}

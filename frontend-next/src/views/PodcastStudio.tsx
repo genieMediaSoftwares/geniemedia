@@ -14,6 +14,7 @@ import set2Asset from "@/assets/podcast/studio-set2-min.jpg";
 import nytviewAsset from "@/assets/podcast/StudioNightView-min.jpg";
 import setAsset from "@/assets/podcast/studioSet-min.jpg";
 import { CONTENT_LINK } from "@/lib/linkStyles";
+import { STUDIO, STUDIO_PACKAGES, formatInr } from "@/content/podcastStudio";
 import { PODCAST_SERVICE_NAV, groupNav } from "@/content/serviceNav";
 
 const cameras = camerasAsset.src;
@@ -41,19 +42,19 @@ const inlineLink = CONTENT_LINK;
 
 const PODCAST_SERVICES = [
   {
-    title: "Studio-only hire",
+    title: "Studio-Only Recording",
     body: "Use the studio and its set on your own, from ₹1,500 for one hour.",
   },
   {
-    title: "Video podcast with our team",
+    title: "Team-Supported Recording",
     body: "For video podcast production, our team handles the podcast filming with two cameras (from ₹3,999 an hour) or three cameras (from ₹5,000 an hour).",
   },
   {
-    title: "Audio podcasts and interviews",
-    body: "Two microphones on boom arms and a Zoom PodTrak P8 recorder, for solo shows and two-person conversations.",
+    title: "Video Podcast Production",
+    body: "Two or three camera angles, studio lighting and a crew, so your episode is ready for YouTube and short clips. Audio-only shows use the two boom microphones and the PodTrak P8 recorder.",
   },
   {
-    title: "Editing and post-production",
+    title: "Podcast Editing and Post-Production",
     body: (
       <>
         Podcast editing for audio and video, including short clips for Reels and
@@ -68,7 +69,7 @@ const PODCAST_SERVICES = [
 const PODCAST_FAQS = [
   {
     q: "Where is the podcast studio?",
-    a: "At Genie Media & Studio, 5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam, near MK Gold Coast, Endada, Andhra Pradesh 530045.",
+    a: "At Genie Media & Studio, 5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam, near MK Gold Coast, Endada, Andhra Pradesh 530045. Yendada is close to Rushikonda and Madhurawada.",
   },
   {
     q: "How much does it cost to record a podcast?",
@@ -208,14 +209,7 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
           {h1 ? (
             <span className="inline-block animate-podcast-hero-rise">{h1}</span>
           ) : (
-            <>
-              <span className="inline-block animate-podcast-hero-rise">PODCAST STUDIO</span>{" "}
-              <br />
-              <span className="inline-block animate-podcast-hero-rise ![animation-delay:0.08s]">IN</span>{" "}
-              <span className="inline-block animate-podcast-hero-rise bg-[linear-gradient(135deg,#ffffff,#ffffff)] bg-clip-text [-webkit-text-fill-color:transparent]">
-                VIZAG
-              </span>
-            </>
+            <span className="inline-block animate-podcast-hero-rise">Professional Podcast Studio Rental in Vizag</span>
           )}
         </h1>
 
@@ -234,9 +228,11 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
         <div>
           <p className="mb-[15px] text-[16px] uppercase tracking-[3px] text-[#f97316]">OUR SPACE</p>
           <h2 className="mb-[25px] text-[38px] font-extrabold leading-[1.3] max-[768px]:text-[24px]">
-            Where voices grow louder, stories find rhythm, <br />
-            and sound becomes legacy.
+            A Professional Space for Audio and Video Podcasts
           </h2>
+          <p className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-700">
+            An acoustically treated room, two lit sets, boom microphones and a dedicated podcast recorder. Everything is ready when you arrive.
+          </p>
         </div>
 
         <div className="mt-[60px] overflow-hidden">
@@ -260,10 +256,10 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
 
         <div className="mx-auto grid w-full max-w-[1400px] grid-cols-2 items-center gap-20 max-[1024px]:gap-[60px] max-[768px]:grid-cols-1 max-[768px]:gap-[30px]">
           <div data-reveal className="-translate-x-[100px] opacity-0 [transition:all_1s_cubic-bezier(0.16,1,0.3,1)] [&.animate]:translate-x-0 [&.animate]:opacity-100">
-            <span className="mb-5 block text-[13px] font-semibold uppercase tracking-[3px] text-white/60">ADVERTISING</span>
-            <h2 className="mb-[30px] text-[clamp(32px,5vw,56px)] font-extrabold leading-[1.2] tracking-[-0.02em] text-white max-[768px]:text-[36px] max-[480px]:text-[28px]">
+            <span className="mb-5 block text-[13px] font-semibold uppercase tracking-[3px] text-white/60">OUR PROMISE</span>
+            <p className="mb-[30px] text-[clamp(32px,5vw,56px)] font-extrabold leading-[1.2] tracking-[-0.02em] text-white max-[768px]:text-[36px] max-[480px]:text-[28px]">
               YOUR VOICE. OUR STUDIO. ONE VISION.
-            </h2>
+            </p>
             <p className="mb-10 max-w-[580px] text-[clamp(16px,1.8vw,18px)] leading-[1.7] text-white/75">
               At Genie Media & Studio, your ideas become sound that connects. We provide
               high-quality acoustics, professional support, and more.
@@ -299,11 +295,19 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
           <div className={STUDIO_COLUMN}>
             <div data-reveal className="-translate-x-[80px] opacity-0 [transition:all_1.2s_cubic-bezier(0.16,1,0.3,1)] [&.animate]:translate-x-0 [&.animate]:opacity-100 max-[640px]:mb-[10px]">
               <h2 className="mb-4 text-[clamp(32px,4vw,56px)] font-black uppercase leading-[1.1] tracking-[-0.5px] text-black max-[968px]:text-[38px] max-[640px]:mb-3 max-[640px]:text-[28px] max-[480px]:text-[24px]">
-                A SPACE DESIGNED FOR EVERY CREATOR
+                Podcast Recording in Visakhapatnam
               </h2>
-              <p className="max-w-[600px] text-[clamp(15px,1.5vw,18px)] font-normal leading-[1.6] text-[#333333] max-[968px]:text-[16px] max-[640px]:text-[14px] max-[640px]:leading-[1.5]">
-                Whether you&apos;re a solo podcaster or an influencer, our podcast studio in Visakhapatnam adapts to you. First, choose a studio-only session. Next, add our team and cameras. Then record your show in comfort. Finally, walk away with a finished episode ready to publish.
-              </p>
+              <div className="max-w-[600px] space-y-3 text-[clamp(15px,1.5vw,18px)] font-normal leading-[1.6] text-[#333333] max-[968px]:text-[16px] max-[640px]:text-[14px] max-[640px]:leading-[1.5]">
+                <p>
+                  The studio is at {STUDIO.address}, close to Rushikonda and Madhurawada. Bookable slots run {STUDIO.hours}, and the studio is closed on {STUDIO.closed}.
+                </p>
+                <p>
+                  Studio-only hire is {formatInr(STUDIO_PACKAGES[0].rates[0])} an hour. With our team, packages start at {formatInr(STUDIO_PACKAGES[1].rates[0])} with two cameras and {formatInr(STUDIO_PACKAGES[2].rates[0])} with three.
+                </p>
+                <p>
+                  Equipment includes two boom-arm microphones, a Zoom PodTrak P8 recorder, studio lighting and up to three cameras. See the <a href="/podcast_studio/pricing" className={inlineLink}>full podcast studio pricing</a> or <a href="/podcast_studio/booking" className={inlineLink}>book a slot</a>.
+                </p>
+              </div>
             </div>
 
             <div data-reveal className={`${STUDIO_IMAGE} ${STUDIO_LARGE} [transition:all_1s_cubic-bezier(0.16,1,0.3,1)_0.15s]`}>
@@ -325,7 +329,7 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
 
       <section className="bg-white text-black px-5 py-16 sm:py-20" id="who-can-use">
         <div className="max-w-6xl mx-auto">
-          <h2 className={`${SECTION_TITLE} text-center`}>Who can use our podcast studio?</h2>
+          <h2 className={`${SECTION_TITLE} text-center`}>Who Can Use the Studio?</h2>
           <p className="max-w-3xl mx-auto text-center text-lg text-gray-700 leading-relaxed -mt-8 mb-12">
             Our podcast studio in Visakhapatnam is built for creators, businesses, entrepreneurs and professionals who want high-quality recordings without the hassle of setting up their own space.
           </p>
@@ -333,7 +337,7 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                title: "Content Creators",
+                title: "Creators",
                 body: <>Record YouTube podcasts and interview episodes with professional cameras and audio. First, book your slot. Then walk in and start recording. Afterwards, share your episode with your audience.</>,
               },
               {
@@ -341,11 +345,11 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
                 body: <>Use the studio for brand podcasts and customer interview series. Our <a href="/digital_marketing" className={inlineLink}>social media marketing</a> team can also help promote each episode across your channels.</>,
               },
               {
-                title: "Entrepreneurs & Professionals",
+                title: "Founders and Professionals",
                 body: <>Build thought leadership through podcasting. Because two microphones and a comfortable set are included, every conversation feels natural and professional.</>,
               },
               {
-                title: "Interview Podcasts",
+                title: "Interview-Based Shows",
                 body: <>This studio is perfect for two-person conversations. Boom microphones, acoustic treatment and a Zoom PodTrak P8 recorder keep both voices crystal clear. Then our <a href="/production_house" className={inlineLink}>video production team</a> can help with the final edit.</>,
               },
             ].map(({ title, body }) => (
@@ -360,18 +364,18 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
 
       <section className="bg-[#f1f1f1] px-5 pb-20 pt-5 text-center text-black" id="equipment">
         <h2 className={SECTION_TITLE}>
-          Equipped with all the <br /> furniture & props you need
+          Studio Equipment and Sets
         </h2>
 
         <div className="flex flex-wrap items-start justify-center gap-[60px] max-[768px]:flex-col max-[768px]:gap-10">
           <div className="group/item flex animate-podcast-item flex-col items-center">
             <StudioImg src={set2} alt="Complete podcast set with seating and microphones" className={FURNITURE_IMG} />
-            <p className="mt-[15px] text-[1.5rem] font-bold italic text-black max-[768px]:text-[1.3rem]">1 x complete podcast setup</p>
+            <p className="mt-[15px] text-[1.5rem] font-bold italic text-black max-[768px]:text-[1.3rem]">Complete two-seat podcast set</p>
           </div>
 
           <div className="group/item flex animate-podcast-item flex-col items-center">
             <StudioImg src={mics} alt="Two podcast microphones" className={FURNITURE_IMG} />
-            <p className="mt-[15px] text-[1.5rem] font-bold italic text-black max-[768px]:text-[1.3rem]">2 x high-quality mic</p>
+            <p className="mt-[15px] text-[1.5rem] font-bold italic text-black max-[768px]:text-[1.3rem]">Two boom-arm microphones</p>
           </div>
         </div>
       </section>
@@ -380,17 +384,17 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
         <div className="mx-auto grid max-w-[1360px] grid-cols-2 items-start justify-items-center gap-12 [grid-template-areas:'left_right'_'bottom_bottom'] [grid-template-rows:auto_auto] max-[900px]:gap-[30px] max-[700px]:grid-cols-1 max-[700px]:gap-7 max-[700px]:[grid-template-areas:'left'_'right'_'bottom']">
           <figure data-reveal className={`${SBF_CARD} mr-[140px] max-w-[440px] [grid-area:left] max-[900px]:max-w-[480px] max-[700px]:m-0 max-[700px]:max-w-[92%]`}>
             <StudioImg src={cameras} alt="Cameras for video podcast recording" className={SBF_IMG} />
-            <figcaption className={SBF_CAPTION}>3 x high-quality camera</figcaption>
+            <figcaption className={SBF_CAPTION}>Up to three cameras</figcaption>
           </figure>
 
           <figure data-reveal className={`${SBF_CARD} ml-[140px] max-w-[440px] [grid-area:right] max-[900px]:max-w-[480px] max-[700px]:m-0 max-[700px]:max-w-[92%]`}>
             <StudioImg src={output} alt="Zoom PodTrak P8 podcast recorder" className={SBF_IMG} />
-            <figcaption className={SBF_CAPTION}>4 x excellent output</figcaption>
+            <figcaption className={SBF_CAPTION}>Zoom PodTrak P8 recorder</figcaption>
           </figure>
 
           <figure data-reveal className={`${SBF_CARD} -mt-[90px] max-w-[420px] [grid-area:bottom] max-[900px]:max-w-[480px] max-[700px]:mt-0 max-[700px]:max-w-[92%]`}>
-            <StudioImg src={nytview} alt="Premium studio set" className={SBF_IMG} />
-            <figcaption className={SBF_CAPTION}>5 x premium look set</figcaption>
+            <StudioImg src={nytview} alt="White panelled podcast set with two boom microphones" className={SBF_IMG} />
+            <figcaption className={SBF_CAPTION}>White panelled set</figcaption>
           </figure>
         </div>
       </section>
@@ -399,11 +403,10 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
 
       <section className="bg-[#f1f1f1] text-black px-5 py-16 sm:py-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className={`${SECTION_TITLE} text-center`}>Podcast recording in Visakhapatnam</h2>
+          <h2 className={`${SECTION_TITLE} text-center`}>Podcast Studio Options</h2>
           <p className="max-w-3xl mx-auto text-center text-lg text-gray-700 leading-relaxed -mt-8 mb-12">
             Book the studio on your own, or with our production team running two or
-            three cameras. It suits video podcasts, interviews and YouTube shows for
-            creators, businesses and professionals.
+            three cameras. It suits video podcasts, interviews and YouTube shows.
           </p>
 
           <div className="grid gap-6 sm:grid-cols-2">
@@ -415,15 +418,14 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
             ))}
           </div>
 
-          <h2 className={`${SECTION_TITLE} text-center mt-20`}>How to book the studio</h2>
-          <ol className="max-w-3xl mx-auto -mt-8 space-y-3 text-lg text-gray-700 list-decimal pl-6">
-            <li>Choose a package above: studio only, or studio with our team and two or three cameras.</li>
-            <li>Pick a date and an hourly slot between 10 am and 7 pm.</li>
-            <li>Add your name, email, phone number and any notes.</li>
-            <li>Send the booking to us on WhatsApp to confirm your slot.</li>
-          </ol>
+          <h2 className={`${SECTION_TITLE} text-center mt-20`}>From One Recording to Many Content Assets</h2>
+          <p className="max-w-3xl mx-auto -mt-8 mb-12 text-center text-lg text-gray-700 leading-relaxed">
+            One episode can become a full YouTube video, an audio episode, Reels and Shorts, a transcript and a blog post. Our editors can handle this for you. Learn about{" "}
+            <a href="/podcast_studio/content-repurposing" className={inlineLink}>podcast content repurposing</a> and{" "}
+            <a href="/podcast_studio/editing" className={inlineLink}>podcast editing services</a>.
+          </p>
 
-          <h2 className={`${SECTION_TITLE} text-center mt-20`}>Podcast studio FAQs</h2>
+          <h2 className={`${SECTION_TITLE} text-center mt-20`}>Frequently Asked Questions</h2>
           <div className="max-w-3xl mx-auto -mt-8 space-y-8">
             {PODCAST_FAQS.map(({ q, a }) => (
               <div key={q}>
@@ -432,6 +434,14 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
               </div>
             ))}
           </div>
+
+          <h2 className={`${SECTION_TITLE} text-center mt-20`}>Book the Studio</h2>
+          <ol className="max-w-3xl mx-auto -mt-8 space-y-3 text-lg text-gray-700 list-decimal pl-6">
+            <li>Choose a package above: studio only, or studio with our team and two or three cameras.</li>
+            <li>Pick a date and an hourly slot between 10 am and 7 pm.</li>
+            <li>Add your name, email, phone number and any notes.</li>
+            <li>Send the booking to us on WhatsApp to confirm your slot.</li>
+          </ol>
         </div>
       </section>
 

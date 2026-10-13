@@ -79,6 +79,7 @@ export function StudioInfo() {
             <MapPin className="w-6 h-6 text-orange-500 mb-3" aria-hidden="true" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Address</h3>
             <p className="text-gray-600 leading-relaxed">{STUDIO.address}</p>
+            <p className="text-gray-600 leading-relaxed mt-2">The studio is in Yendada, close to Rushikonda and Madhurawada.</p>
             <a href={STUDIO.mapsUrl} target="_blank" rel="noopener" data-track="studio_directions_click" className="mt-3 inline-block font-semibold text-orange-600 hover:text-orange-800">
               Get directions
             </a>

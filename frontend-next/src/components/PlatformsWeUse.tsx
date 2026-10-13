@@ -128,17 +128,18 @@ export const SECTION_INTRO = "max-w-3xl mx-auto text-center text-base sm:text-lg
 export const SECTION_CARD =
   "rounded-xl bg-white border border-gray-100 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md";
 
+// Decorative: the platform name is shown as text right below the logo, so the logo carries
+// no alt/title text (otherwise text extractors read "technologyReact", "platformWordPress").
 function PlatformLogo({ platform }: { platform: Platform }) {
-  const { logo, alt } = platform;
+  const { logo } = platform;
   if ("icon" in logo) {
     return (
-      <svg role="img" viewBox="0 0 24 24" className={LOGO_SIZE} fill={logo.color ?? `#${logo.icon.hex}`} xmlns="http://www.w3.org/2000/svg">
-        <title>{alt}</title>
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" className={LOGO_SIZE} fill={logo.color ?? `#${logo.icon.hex}`} xmlns="http://www.w3.org/2000/svg">
         <path d={logo.icon.path} />
       </svg>
     );
   }
-  return <img src={logo.image.src} alt={alt} width={36} height={36} loading="lazy" decoding="async" className={`${LOGO_SIZE} object-contain`} />;
+  return <img src={logo.image.src} alt="" width={36} height={36} loading="lazy" decoding="async" className={`${LOGO_SIZE} object-contain`} />;
 }
 
 export default function PlatformsWeUse({

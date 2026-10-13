@@ -1,10 +1,11 @@
 import { Fragment } from "react";
-import { ArrowDown, ArrowRight, Sparkles, Layers, Mic, Globe } from "lucide-react";
+import { ArrowDown, ArrowRight, Sparkles, Layers, Mic, Globe, CheckCircle, TrendingUp, Code, Video } from "lucide-react";
 
 import AboutUs from "@/components/AboutSection";
 import Contact from "@/components/contactSection";
 import VideoTestimonials2 from "@/components/testimonials";
-import TabbedServices from "@/components/AllServices";
+import ServiceFaq from "@/components/ServiceFaq";
+import { HOME_FAQS } from "@/content/serviceFaqs";
 import GenieImgAsset from "@/assets/genieHeroImg.webp";
 import GenieImg640Asset from "@/assets/genieHeroImg-640.webp";
 import meerabasuAsset from "@/assets/meerabasuWebsite.webp";
@@ -78,6 +79,52 @@ const STAT_CARD =
 
 const heroLink = CONTENT_LINK;
 
+const HOME_SERVICES = [
+  {
+    icon: TrendingUp,
+    heading: "Digital Marketing for Clearer Online Growth",
+    body: "Get found by the right people and turn visits into enquiries. We plan SEO, Google Ads, social media and content as one strategy, with monthly reporting.",
+    points: ["SEO and local SEO in Visakhapatnam", "Google Ads and Meta Ads", "Content and social media marketing"],
+    href: "/digital_marketing",
+    cta: "Explore digital marketing services",
+  },
+  {
+    icon: Code,
+    heading: "Website Development That Supports Business Goals",
+    body: "Your website should explain what you do and make it easy to contact you. We build fast, mobile-friendly and SEO-ready websites and online stores.",
+    points: ["Business and e-commerce websites", "WordPress, Shopify, React and Next.js", "Redesign, maintenance and speed fixes"],
+    href: "/web_development",
+    cta: "See website development services",
+  },
+  {
+    icon: Video,
+    heading: "Video Production for Brands and Businesses",
+    body: "Video helps people understand and trust your business faster. Our production house plans, shoots and edits videos with a clear business purpose.",
+    points: ["Corporate and brand films", "Product and social media videos", "Editing and post-production"],
+    href: "/production_house",
+    cta: "View video production services",
+  },
+  {
+    icon: Mic,
+    heading: "Podcast Studio Rental and Podcast Production in Vizag",
+    body: "Record audio and video podcasts at our studio in Yendada, Visakhapatnam. Hire the studio on your own from ₹1,500 an hour, or add our team and cameras.",
+    points: ["Studio-only and team-supported recording", "Two- and three-camera video podcasts", "Editing and short-form clips"],
+    href: "/podcast_studio",
+    cta: "Book the podcast studio in Vizag",
+  },
+];
+
+const AUDIENCES = [
+  { title: "Startups", body: "A credible website and a clear plan to win early customers." },
+  { title: "Local businesses", body: "Visibility in Vizag searches and on Google Maps." },
+  { title: "Clinics and professional services", body: "Trust-building websites, content and local SEO." },
+  { title: "E-commerce brands", body: "Online stores, ads and content that drive sales." },
+  { title: "Real estate and construction", body: "Project websites, videos and lead campaigns." },
+  { title: "Education and coaching", body: "Course pages, admissions campaigns and video." },
+  { title: "Manufacturers and B2B", body: "Clear capability websites and enquiry generation." },
+  { title: "Creators and personal brands", body: "Podcasts, video and a strong personal website." },
+];
+
 const WHATSAPP_URL = "https://wa.me/919032845433";
 
 const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null }) => {
@@ -87,19 +134,19 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
     {
       step: "Step 01",
       title: "Research & Planning",
-      desc: "First, we study your users, your goals and your industry. Then we plan a clear website that can grow with you.",
+      desc: "First, we learn your goals, your customers and your market. Then we plan the right mix of marketing, website and content work.",
       active: false,
     },
     {
       step: "Step 02",
-      title: "Design & Implementation",
-      desc: "Next, our team designs and builds a fast website with modern tools and a clear structure.",
+      title: "Create & Launch",
+      desc: "Next, our team builds the website, campaigns, videos or content in the plan, with tracking set up from day one.",
       active: true,
     },
     {
       step: "Step 03",
-      title: "Results & Growth",
-      desc: "Finally, we track how the site performs and how people use it. Then we keep improving it for long-term growth.",
+      title: "Measure & Improve",
+      desc: "Finally, we track enquiries, traffic and engagement. Then we keep improving what works and report clearly.",
       active: false,
     },
   ];
@@ -141,16 +188,16 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
               </div>
 
               <h1 className="animate-home-rise motion-reduce:animate-none text-4xl sm:text-5xl lg:text-6xl xl:text-5xl font-extrabold leading-normal ">
-                Digital Marketing, Podcast Studio &amp; Video Production in Vizag
+                Digital Marketing, Website Development and Creative Media in Vizag
               </h1>
               <p className="animate-home-rise motion-reduce:animate-none text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Genie Media &amp; Studio is a digital marketing agency and creative
-                media company in Vizag, Andhra Pradesh. We run{" "}
-                <a href="/digital_marketing" className={heroLink}>SEO, social media marketing and Google Ads campaigns</a>,{" "}
-                <a href="/web_development" className={heroLink}>offer website development</a>,{" "}
-                <a href="/production_house" className={heroLink}>shoot brand videos in our production house</a>{" "}
-                and rent out our{" "}
-                <a href="/podcast_studio" className={heroLink}>podcast studio</a>.
+                Genie Media &amp; Studio helps startups, local businesses and growing brands get found
+                online, look credible and win more enquiries. From our office in Visakhapatnam, we offer{" "}
+                <a href="/digital_marketing" className={heroLink}>digital marketing</a>,{" "}
+                <a href="/web_development" className={heroLink}>website development</a>,{" "}
+                <a href="/production_house" className={heroLink}>video production</a> and a{" "}
+                <a href="/podcast_studio" className={heroLink}>podcast studio</a>. We work with clients in Vizag,
+                across Andhra Pradesh and throughout India.
               </p>
 
               <div className="animate-home-buttons motion-reduce:animate-none flex flex-row sm:flex-row gap-4 w-80% justify-center lg:justify-start ">
@@ -228,35 +275,25 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
         </div>
       </section>
 
-      <section className="relative bg-[#f9fafc] overflow-hidden py-8 md:py-10">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <p
-            className="
-            text-sm tracking-widest text-orange-700 font-semibold mb-6
-           
-          "
-          >
-            CREATIVE & STRATEGIC DIGITAL MARKETING COMPANY
-          </p>
-
-          <h2
-            className="
-            text-2xl md:text-5xl lg:text-5xl
-            font-extrabold leading-tight text-gray-900
-            mb-8
-          "
-          >
-           Digital Marketing That Connects
-            <br />
-           & Grows Brands
-          </h2>
-
-          <p className="max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed mb-0">
-           We create digital marketing that feels natural, human and easy to remember.
-           From SEO and social media to website design, branding and content, we help businesses in Vizag
-           grow their online visibility. As a result, they win more leads and build trust on every platform.
-          </p>
-
+      <section aria-label="Our services" className="bg-[#f9fafc] py-12 md:py-16">
+        <div className="max-w-6xl mx-auto px-6 grid gap-8 md:grid-cols-2">
+          {HOME_SERVICES.map(({ icon: Icon, heading, body, points, href, cta }) => (
+            <div key={href} className="rounded-2xl bg-white border border-gray-100 shadow-sm p-6 sm:p-8 flex flex-col">
+              <Icon className="w-8 h-8 text-orange-500 mb-4" aria-hidden="true" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">{heading}</h2>
+              <p className="text-gray-600 leading-relaxed mb-4">{body}</p>
+              <ul className="space-y-2 mb-6">
+                {points.map((pt) => (
+                  <li key={pt} className="flex gap-2 text-gray-700">
+                    <CheckCircle className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" aria-hidden="true" /> {pt}
+                  </li>
+                ))}
+              </ul>
+              <a href={href} className="mt-auto inline-flex items-center gap-2 font-semibold text-orange-600 hover:text-orange-800">
+                {cta} <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </a>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -265,7 +302,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
       <section className="bg-white py-10 md:py-14">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-orange-600 text-center font-medium text-2xl sm:text-4xl uppercase tracking-wide mb-8 md:mb-10">
-            How It Works
+            How Genie Media Helps Businesses Grow
           </h2>
 
           <ol className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-stretch max-w-xl lg:max-w-none mx-auto">
@@ -298,12 +335,27 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
         </div>
       </section>
 
-      <TabbedServices />
+      <section className="bg-[#f9fafc] py-12 md:py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-center text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Who We Work With</h2>
+          <p className="max-w-3xl mx-auto text-center text-lg text-gray-600 leading-relaxed mb-10">
+            We work with businesses that want clear, measurable growth online, from new startups to established local firms.
+          </p>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {AUDIENCES.map((a) => (
+              <li key={a.title} className="rounded-2xl bg-white border border-gray-100 shadow-sm p-5">
+                <h3 className="font-semibold text-gray-900 mb-1">{a.title}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">{a.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       <section className="bg-white py-8 md:py-12" id="projects">
         <div className="max-w-7xl mx-auto px-4 md:px-2">
           <h2 className="text-center text-4xl md:text-5xl font-bold text-gray-700 mb-10">
-            Your Digital Presence, Perfected
+            Selected Projects
           </h2>
 
           <HomeProjects initialProjects={initialProjects} fallback={FALLBACK_PROJECTS} />
@@ -346,7 +398,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
 
         <div className="max-w-4xl mx-auto text-center px-4">
           <p className="text-xl md:text-2xl font-semibold text-gray-800 leading-relaxed mb-8">
-          If you're looking for a digital marketing agency in Vizag that grows your brand with creativity, strategy, and innovation, then you’re ready for us.
+          Need a website, a campaign or content that works together? Talk to our team in Visakhapatnam.
 
           </p>
 
@@ -371,7 +423,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
               w-full sm:w-auto  
           "
           >
-            Need help to upscale your brand
+            Talk to us on WhatsApp
             <ArrowRight className="w-5 h-7" strokeWidth={2.5} aria-hidden="true" />
           </a>
         </div>
@@ -380,6 +432,11 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
       </section>
 
       <VideoTestimonials2 />
+      <ServiceFaq
+        title="Frequently Asked Questions"
+        intro="Quick answers about our services, location and how to get started."
+        faqs={HOME_FAQS}
+      />
       <Contact />
     </>
   );

@@ -18,6 +18,15 @@ const web_services_hero = web_services_heroAsset.src;
 
 const inlineLink = CONTENT_LINK;
 
+const EFFECTIVE_SITE = [
+  "A clear message above the fold: who you help and what you offer",
+  "One page for each main service, written for your customers",
+  "Proof such as projects, reviews and credentials",
+  "Easy contact options: forms, click-to-call and WhatsApp",
+  "Fast loading on mobile networks",
+  "Content your team can update without a developer",
+];
+
 export default function WebDevPg({ initialProjects, h1 }: { initialProjects: PortfolioItem[] | null; h1?: string }) {
 
   const accordionData = [
@@ -65,26 +74,26 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
 
   return (
     <>
-    <div className="bg-gradient-to-br 
-        from-slate-900 via-slate-800 to-slate-900 
+    <div className="bg-gradient-to-br
+        from-slate-900 via-slate-800 to-slate-900
         px-4 sm:px-6 lg:px-16 pt-28 mt-12 sm:pt-24 pb-12 sm:pb-12 lg:pb-18 text-center">
 
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
+
             <div className="text-white space-y-6">
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-                {h1 || "Web Development Company in Vizag"}
+                {h1 || "Website Development for Businesses in Vizag and Across India"}
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                Genie Media & Studio provides professional web development services in Vizag for businesses that need fast, responsive, and SEO-friendly websites. We build business websites, landing pages and ecommerce stores that load fast, are easy to use and help startups and established companies grow.
+                Genie Media & Studio builds fast, responsive and SEO-friendly websites for businesses in Vizag and across India. We create business websites, online stores and custom web apps that are easy to use and easy to update.
               </p>
             </div>
 
             <div className="flex justify-center lg:justify-end">
               <div className="relative w-full max-w-lg lg:max-w-2xl">
                 <div className="absolute inset-0 bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
-                <img 
+                <img
                   src= {web_services_hero}
                   alt="Web development concept with icons for code, devices and global websites"
                   className="relative rounded-2xl shadow-2xl w-full max-w-lg lg:max-w-2xl object-cover"
@@ -101,11 +110,11 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
 
             <section className="relative bg-[#f9fafc] overflow-hidden">
                <div className="max-w-6xl mx-auto px-6 py-10 md:py-14 text-center">
-         
+
                  <p
                    className="
                      text-sm tracking-widest text-orange-700 font-semibold mb-6
-                    
+
                    "
                  >
                    CREATIVE & STRATEGIC WEB DESIGN & DEVELOPMENT COMPANY
@@ -113,36 +122,34 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
 
                  <h2
                    className="
-                     text-2xl md:text-5xl lg:text-6xl 
+                     text-2xl md:text-5xl lg:text-6xl
                      font-extrabold leading-tight text-gray-900
                      mb-8
                    "
                  >
-                Web Development Services That <br />
-                 Connect, Engage & Convert
-                     
+                Websites Designed Around Your Business Goals
+
                  </h2>
 
                  <p
                    className="
                      max-w-3xl mx-auto text-lg text-gray-600
                      leading-relaxed mb-12
-                    
+
                    "
                  >
-                 We design and develop websites that are fast, modern, and built for growth. 
-                 From UX strategy to development and optimization, we create digital experiences that 
-                 reflect your brand, attract users, and turn visitors into customers.
-         
+                 A good website does a job for your business. It explains what you offer, builds trust and makes it easy to call, book or buy.
+                 So we start with your goals and your customers, then design and build around them.
+
                  </p>
 
                  <div
                    className="
                      flex flex-col sm:flex-row items-center justify-center gap-4
-                    
-                   " 
+
+                   "
                  >
-                  
+
                  </div>
                  {WEBSITES_VIDEO_URL && (
                    <video
@@ -155,7 +162,7 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
                      className='w-full h-auto rounded-xl'
                    />
                  )}
-         
+
                </div>
              </section>
 
@@ -190,8 +197,38 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
                </div>
              </section>
 
+             <section className="bg-white py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
+               <div className="max-w-6xl mx-auto grid gap-12 lg:grid-cols-2">
+                 <div>
+                   <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">What Makes a Business Website Effective?</h2>
+                   <ul className="space-y-3">
+                     {EFFECTIVE_SITE.map((item) => (
+                       <li key={item} className="flex gap-3 text-gray-700">
+                         <Check className="w-5 h-5 text-orange-500 flex-shrink-0 mt-1" aria-hidden="true" /> <span>{item}</span>
+                       </li>
+                     ))}
+                   </ul>
+                 </div>
+                 <div>
+                   <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">SEO, Speed and Mobile Performance</h2>
+                   <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                     Most visitors arrive on a phone, often on mobile data. So we build mobile-first and keep pages light.
+                   </p>
+                   <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                     Every site launches with clean URLs, headings, metadata, structured data and a sitemap. In short, search engines can read it from day one.
+                   </p>
+                   <p className="text-lg text-gray-600 leading-relaxed">
+                     We also check Core Web Vitals, Google&apos;s measures of loading speed, responsiveness and visual stability. Learn more about{" "}
+                     <a href="/web_development/seo-friendly-websites" className={inlineLink}>SEO-friendly websites</a> and{" "}
+                     <a href="/web_development/website-speed-optimization" className={inlineLink}>website speed optimization</a>.
+                   </p>
+                 </div>
+               </div>
+             </section>
+
              <PlatformsWeUse
                type="webDevelopment"
+               title="Technologies We Use"
                intro={
                  <>
                    We use modern web technologies and cloud platforms to build fast, scalable,
@@ -203,7 +240,7 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
                }
              />
 
-             <ProjectsSection initialProjects={initialProjects} />
+             <ProjectsSection initialProjects={initialProjects} title="Website Projects" />
 
       <div className="min-h-screen bg-gray-100 py-16 px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto">
@@ -271,7 +308,7 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
             </p>
           </div>
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">How a Website Project Works</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Our Website Development Process</h2>
             <ol className="space-y-4">
               <li className="bg-gray-50 rounded-xl p-5"><p className="text-gray-700"><strong>1. Discovery:</strong> First, we learn your goals, your customers and the pages you need.</p></li>
               <li className="bg-gray-50 rounded-xl p-5"><p className="text-gray-700"><strong>2. Design:</strong> Next, we design the layout and user experience, and you review it before we build.</p></li>
@@ -283,12 +320,25 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
       </section>
 
       <ServiceFaq
-        title="Web Development FAQs"
-        intro="Answers to common questions about website development in Vizag."
+        title="Frequently Asked Questions"
+        intro="Answers to common questions about our website development services."
         faqs={WEB_DEVELOPMENT_FAQS}
       />
 
      <VideoTestimonials/>
+
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto text-center text-white">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Start Your Website Project</h2>
+          <p className="text-lg text-gray-300 leading-relaxed mb-8">
+            Tell us what your business does and what your website should achieve. We will suggest the right platform and a clear plan.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href="/contact" className="bg-orange-500 hover:bg-orange-600 text-black font-semibold px-8 py-3.5 rounded-full transition-colors">Discuss Your Website</a>
+            <a href="https://wa.me/919032845433" data-track="whatsapp_click" className="border border-white/30 hover:border-white text-white font-semibold px-8 py-3.5 rounded-full transition-colors">Message on WhatsApp</a>
+          </div>
+        </div>
+      </section>
 
       </>
   )
