@@ -2,7 +2,7 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const { chromium } = require("C:/Users/Praveen/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright");
 const browser = await chromium.launch({ executablePath: "C:/Users/Praveen/AppData/Local/ms-playwright/chromium-1248/chrome-win64/chrome.exe", headless: true });
-for (const [route, width] of [["/podcast_studio", 768], ["/podcast_studio", 1024], ["/about", 320], ["/", 1024]]) {
+for (const [route, width] of [["/podcast-studio", 768], ["/podcast-studio", 1024], ["/about", 320], ["/", 1024]]) {
   const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
   await page.route("**/*", (r) => !r.request().url().startsWith("http://127.0.0.1") && ["xhr", "fetch", "script", "media"].includes(r.request().resourceType()) ? r.abort() : r.continue());
   await page.goto(`http://127.0.0.1:5173${route}`);

@@ -15,13 +15,13 @@ const SOCIAL_LINK =
 export default async function Footer() {
   const hasCaseStudies = (await getPublishedCaseStudiesSafe()).length > 0;
   const services = [
-  { title: "Digital Marketing", link: "/digital_marketing" },
-  { title: "Web Development", link: "/web_development" },
-  { title: "Production House", link: "/production_house" },
-  { title: "Podcast Studio", link: "/podcast_studio" },
-  { title: "SEO & Local Search", link: "/digital_marketing/local-seo" },
-  { title: "Answer Engine Optimization", link: "/digital_marketing/aeo" },
-  { title: "Generative Engine Optimization", link: "/digital_marketing/geo" },
+  { title: "Digital Marketing", link: "/digital-marketing" },
+  { title: "Web Development", link: "/web-development" },
+  { title: "Production House", link: "/production-house" },
+  { title: "Podcast Studio", link: "/podcast-studio" },
+  { title: "SEO & Local Search", link: "/digital-marketing/local-seo" },
+  { title: "Answer Engine Optimization", link: "/digital-marketing/aeo" },
+  { title: "Generative Engine Optimization", link: "/digital-marketing/geo" },
 ];
 
 const company = [

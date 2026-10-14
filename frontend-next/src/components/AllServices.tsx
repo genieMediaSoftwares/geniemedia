@@ -16,10 +16,10 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
   const Heading = headingLevel === 'h1' ? 'h1' : 'h2';
 
   const tabs = [
-    { id: 'dm', label: 'Digital Marketing', href: '/digital_marketing' },
-    { id: 'webdev', label: 'Web Development', href: '/web_development' },
-    { id: 'production', label: 'Production House', href: '/production_house' },
-    { id: 'podcast', label: 'Podcast Studio Rentals', href: '/podcast_studio' },
+    { id: 'dm', label: 'Digital Marketing', href: '/digital-marketing' },
+    { id: 'webdev', label: 'Web Development', href: '/web-development' },
+    { id: 'production', label: 'Production House', href: '/production-house' },
+    { id: 'podcast', label: 'Podcast Studio Rentals', href: '/podcast-studio' },
 
   ];
 
@@ -163,7 +163,7 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
 
   return (
     <div className="bg-gray-100 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 mt-14">
-      <Heading className='text-4xl sm:text-6xl text-center text-orange-600 mb-10 font-bold'>{headingLevel === 'h1' ? 'Genie Media: Digital Marketing, Websites and Podcasts in Vizag' : 'Services We Offer'}</Heading>
+      <Heading className='text-4xl sm:text-6xl text-center text-orange-600 mb-10 font-bold'>{headingLevel === 'h1' ? 'Genie Media Services: Digital Marketing, Websites and Podcasts in Vizag' : 'Services We Offer'}</Heading>
       <div className="max-w-7xl mx-auto">
         
         <div className="flex flex-wrap justify-center gap-3 mb-12" role="tablist">

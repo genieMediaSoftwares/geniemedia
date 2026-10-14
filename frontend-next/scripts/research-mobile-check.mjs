@@ -10,7 +10,7 @@ const server=http.createServer((req,res)=>{let name=new URL(req.url,'http://loca
 await new Promise(r=>server.listen(5184,'127.0.0.1',r));
 const browser=await chromium.launch({executablePath:'C:/Users/Praveen/AppData/Local/ms-playwright/chromium-1248/chrome-win64/chrome.exe',headless:true});
 const results=[];
-try {for(const width of [375,1440])for(const route of ['/','/digital_marketing','/web_development/website-design','/production_house','/podcast_studio','/contact']) {
+try {for(const width of [375,1440])for(const route of ['/','/digital-marketing','/web-development/website-design','/production-house','/podcast-studio','/contact']) {
  const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
  await page.goto('http://127.0.0.1:5184'+route,{waitUntil:'networkidle'});
  const state=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth>innerWidth+1,h1:document.querySelector('h1')?.textContent,viewport:!!document.querySelector('meta[name="viewport"]'),forms:document.querySelectorAll('form').length}));

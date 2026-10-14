@@ -62,7 +62,7 @@ const PODCAST_SERVICES = [
         Podcast editing for audio and video, including short clips for Reels and
         Shorts, plus photo editing, is available at an additional charge. For shoots
         beyond the studio, see our{" "}
-        <a href="/production_house" className={inlineLink}>video production services</a>.
+        <a href="/production-house" className={inlineLink}>video production services</a>.
       </>
     ),
   },
@@ -96,7 +96,7 @@ const PODCAST_FAQS = [
       <>
         Yes. Businesses book it for interviews, branded podcasts and corporate
         podcasts, and our{" "}
-        <a href="/digital_marketing" className={inlineLink}>social media marketing team</a>{" "}
+        <a href="/digital-marketing" className={inlineLink}>social media marketing team</a>{" "}
         can help promote the episodes. You can also see{" "}
         <a href="/projects" className={inlineLink}>our client projects</a> or read{" "}
         <a href="/blogs" className={inlineLink}>content and marketing tips on our blog</a>.
@@ -309,7 +309,7 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
                   Studio-only hire is {formatInr(STUDIO_PACKAGES[0].rates[0])} an hour. With our team, packages start at {formatInr(STUDIO_PACKAGES[1].rates[0])} with two cameras and {formatInr(STUDIO_PACKAGES[2].rates[0])} with three.
                 </p>
                 <p>
-                  Equipment includes two boom-arm microphones, a Zoom PodTrak P8 recorder, studio lighting and up to three cameras. See the <a href="/podcast_studio/pricing" className={inlineLink}>full podcast studio pricing</a> or <a href="/podcast_studio/booking" className={inlineLink}>book a slot</a>.
+                  Equipment includes two boom-arm microphones, a Zoom PodTrak P8 recorder, studio lighting and up to three cameras. See the <a href="/podcast-studio/pricing" className={inlineLink}>full podcast studio pricing</a> or <a href="/podcast-studio/booking" className={inlineLink}>book a slot</a>.
                 </p>
               </div>
             </div>
@@ -346,7 +346,7 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
               },
               {
                 title: "Businesses",
-                body: <>Use the studio for brand podcasts and customer interview series. Our <a href="/digital_marketing" className={inlineLink}>social media marketing</a> team can also help promote each episode across your channels.</>,
+                body: <>Use the studio for brand podcasts and customer interview series. Our <a href="/digital-marketing" className={inlineLink}>social media marketing</a> team can also help promote each episode across your channels.</>,
               },
               {
                 title: "Founders and Professionals",
@@ -354,7 +354,7 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
               },
               {
                 title: "Interview-Based Shows",
-                body: <>This studio is perfect for two-person conversations. Boom microphones, acoustic treatment and a Zoom PodTrak P8 recorder keep both voices crystal clear. Then our <a href="/production_house" className={inlineLink}>video production team</a> can help with the final edit.</>,
+                body: <>This studio is perfect for two-person conversations. Boom microphones, acoustic treatment and a Zoom PodTrak P8 recorder keep both voices crystal clear. Then our <a href="/production-house" className={inlineLink}>video production team</a> can help with the final edit.</>,
               },
             ].map(({ title, body }) => (
               <div key={title} className="bg-gray-50 rounded-2xl p-6 shadow-sm">
@@ -425,8 +425,8 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
           <h2 className={`${SECTION_TITLE} text-center mt-20`}>From One Recording to Many Content Assets</h2>
           <p className="max-w-3xl mx-auto -mt-8 mb-12 text-center text-lg text-gray-700 leading-relaxed">
             One episode can become a full YouTube video, an audio episode, Reels and Shorts, a transcript and a blog post. Our editors can handle this for you. Learn about{" "}
-            <a href="/podcast_studio/content-repurposing" className={inlineLink}>podcast content repurposing</a> and{" "}
-            <a href="/podcast_studio/editing" className={inlineLink}>podcast editing services</a>.
+            <a href="/podcast-studio/content-repurposing" className={inlineLink}>podcast content repurposing</a> and{" "}
+            <a href="/podcast-studio/editing" className={inlineLink}>podcast editing services</a>.
           </p>
 
           <h2 className={`${SECTION_TITLE} text-center mt-20`}>Frequently Asked Questions</h2>

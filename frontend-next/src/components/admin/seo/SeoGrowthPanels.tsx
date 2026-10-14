@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { arr, isRecord, num, str, type RawRecord } from "@/lib/api/coerce";
 import { AiLinksAssist, AiPlannerAssist, AiProviderSettings, useAiStatus } from "@/components/admin/seo/SeoAiAssist";
+import { toCmsPath, toPublicPath } from "@/lib/legacyPaths";
 
 const BRAND = "#6B4A2D";
 
@@ -331,7 +332,7 @@ function OpportunitiesPanel({ json, say, pages, onOpenPage }: Common) {
   const [type, setType] = useState("");
   const opp = useLoad(json, `/api/admin/seo/gsc/opportunities?country=${country}&days=${days}`, asRecord);
   const items = recs(opp.data && opp.data.items).filter((i) => !type || i.type === type);
-  const pageFor = (url: unknown) => pages.find((p) => p.path === pathOf(String(url || "")));
+  const pageFor = (url: unknown) => pages.find((p) => p.path === toCmsPath(pathOf(String(url || ""))));
   const saveIdea = async (i: RawRecord) => {
     const { res } = await json("/api/admin/seo/content/ideas", "POST", {
       title: String(i.query || i.title),
@@ -420,7 +421,7 @@ function IndexingPanel({ json, say, pages }: Common) {
         <p className="text-sm text-gray-600">Shows how Google sees a page right now. Requesting indexing is done in Search Console itself; this tool links you there.</p>
         <div className="flex flex-col sm:flex-row gap-2">
           <input aria-label="URL to inspect" className={input} value={url} onChange={(e) => setUrl(e.target.value)} list="seo-index-pages" />
-          <datalist id="seo-index-pages">{pages.map((p) => <option key={p.id} value={`${siteBase}${p.path === "/" ? "/" : p.path}`} />)}</datalist>
+          <datalist id="seo-index-pages">{pages.map((p) => <option key={p.id} value={`${siteBase}${p.path === "/" ? "/" : toPublicPath(p.path)}`} />)}</datalist>
           <button type="button" className={primary} disabled={busy} onClick={() => inspect(false)}>{busy ? <Loader size={14} className="animate-spin" /> : <Search size={14} />} Inspect</button>
         </div>
         {result && (
@@ -591,7 +592,7 @@ function PerformancePanel({ json, say, pages }: Common) {
       <p className="text-sm text-gray-600">Uses Google PageSpeed Insights. Field data is what real Chrome users experienced over 28 days; lab data is a single simulated load. They often differ.</p>
       <div className="flex flex-col sm:flex-row gap-2">
         <input aria-label="URL to test" className={input} value={url} onChange={(e) => setUrl(e.target.value)} list="seo-psi-pages" />
-        <datalist id="seo-psi-pages">{pages.map((p) => <option key={p.id} value={`${siteBase}${p.path === "/" ? "/" : p.path}`} />)}</datalist>
+        <datalist id="seo-psi-pages">{pages.map((p) => <option key={p.id} value={`${siteBase}${p.path === "/" ? "/" : toPublicPath(p.path)}`} />)}</datalist>
         <select aria-label="Device" className={`${input} sm:w-36`} value={strategy} onChange={(e) => setStrategy(e.target.value)}><option value="mobile">Mobile</option><option value="desktop">Desktop</option></select>
         <button type="button" className={primary} disabled={busy} onClick={run}>{busy ? <Loader size={14} className="animate-spin" /> : <Gauge size={14} />} {busy ? "Testing (up to 1 min)…" : "Run test"}</button>
       </div>

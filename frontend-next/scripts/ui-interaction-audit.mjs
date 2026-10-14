@@ -41,7 +41,7 @@ try {
         const nav = page.locator("#mobile-navigation");
         await nav.getByRole("button", { name: "Services", exact: true }).click();
         await nav.getByRole("button", { name: "Show Website Development services" }).click();
-        assert(await nav.locator('a[href="/web_development/react-native"]').isVisible());
+        assert(await nav.locator('a[href="/web-development/react-native"]').isVisible());
         const controls = nav.locator("a,button");
         await controls.last().focus();
         await page.keyboard.press("Tab");
@@ -58,8 +58,8 @@ try {
         const services = page.locator("header").getByRole("link", { name: "Services", exact: true });
         await services.focus();
         assert.equal(await services.getAttribute("aria-expanded"), "true");
-        await page.locator('header a[href="/digital_marketing"]').focus();
-        const child = page.locator('header a[href="/digital_marketing/seo-services"]');
+        await page.locator('header a[href="/digital-marketing"]').focus();
+        const child = page.locator('header a[href="/digital-marketing/seo-services"]');
         await child.waitFor({ state: "visible" });
         const box = await child.boundingBox();
         assert(box.x >= 0 && box.x + box.width <= width, "submenu fits viewport");
@@ -72,7 +72,7 @@ try {
       await goto(page, "/services");
       const tabs = page.getByRole("tab");
       const hrefs = await tabs.evaluateAll((els) => els.map((el) => el.getAttribute("href")));
-      assert.deepEqual(hrefs, ["/digital_marketing", "/web_development", "/production_house", "/podcast_studio"]);
+      assert.deepEqual(hrefs, ["/digital-marketing", "/web-development", "/production-house", "/podcast-studio"]);
       await tabs.first().focus();
       for (let index = 1; index < 4; index += 1) {
         await page.keyboard.press("ArrowRight");
@@ -133,7 +133,7 @@ try {
       await page.unroute("**/contact.php");
     });
     await check("Booking keyboard controls, validation, Back and WhatsApp payload (intercepted)", width, async () => {
-      await goto(page, "/podcast_studio");
+      await goto(page, "/podcast-studio");
       const packageButton = page.locator('button[aria-pressed]').filter({ hasText: "Podcast Shoot (Only Studio)" }).first();
       await packageButton.focus();
       await page.keyboard.press("Enter");

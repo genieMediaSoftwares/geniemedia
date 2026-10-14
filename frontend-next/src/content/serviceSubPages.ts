@@ -27,7 +27,7 @@ export interface ServiceSection {
 }
 
 export const DIGITAL_MARKETING_SECTION: ServiceSection = {
-  path: "/digital_marketing",
+  path: "/digital-marketing",
   label: "Digital Marketing",
   hubLinkText: "digital marketing agency page",
   benefitsNote:
@@ -39,7 +39,7 @@ export const DIGITAL_MARKETING_SECTION: ServiceSection = {
 };
 
 export const WEB_DEVELOPMENT_SECTION: ServiceSection = {
-  path: "/web_development",
+  path: "/web-development",
   label: "Web Development",
   hubLinkText: "web development company page",
   benefitsNote: "Here is what this work is designed to improve for your business and your visitors.",
@@ -50,7 +50,7 @@ export const WEB_DEVELOPMENT_SECTION: ServiceSection = {
 };
 
 export const PODCAST_SECTION: ServiceSection = {
-  path: "/podcast_studio",
+  path: "/podcast-studio",
   label: "Podcast Studio",
   hubLinkText: "podcast studio in Vizag page",
   benefitsNote: "Here is what you get from recording and producing with our team in Visakhapatnam.",

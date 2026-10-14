@@ -72,6 +72,29 @@ if ($code !== 200 || !is_array($list)) {
     reply(502, ['ok' => false, 'error' => "Could not load the published SEO configuration (HTTP $code). The live site keeps its previous version."]);
 }
 
+// The CMS stores the service pages under their pre-2026-10-14 underscore paths; the site uses
+// hyphenated ones. Keep in sync with src/lib/legacyPaths.ts and scripts/postbuild.mjs.
+const LEGACY_SECTION_PATHS = [
+    '/digital_marketing' => '/digital-marketing',
+    '/web_development' => '/web-development',
+    '/production_house' => '/production-house',
+    '/podcast_studio' => '/podcast-studio',
+];
+function public_path(string $path): string
+{
+    foreach (LEGACY_SECTION_PATHS as $from => $to) {
+        if ($path === $from || strpos($path, $from . '/') === 0) return $to . substr($path, strlen($from));
+    }
+    return $path;
+}
+function public_url(string $url): string
+{
+    $parts = parse_url($url);
+    if (!is_array($parts) || !isset($parts['path'])) return $url;
+    $path = public_path($parts['path']);
+    return $path === $parts['path'] ? $url : substr($url, 0, strpos($url, $parts['path'])) . $path . substr($url, strpos($url, $parts['path']) + strlen($parts['path']));
+}
+
 $safeText = fn ($s, $min, $max) => is_string($s) && mb_strlen($s) >= $min && mb_strlen($s) <= $max && !preg_match('/[<>"\\\\\x00-\x1F]/u', $s);
 $safeUrl = fn ($s) => is_string($s) && strlen($s) <= 300 && (bool) preg_match('#^https://[A-Za-z0-9.\-]+(/[A-Za-z0-9._~%/\-]*)?$#', $s);
 
@@ -79,7 +102,7 @@ $pages = [];
 $routes = [];
 $skipped = [];
 foreach ($list as $item) {
-    $path = is_array($item) ? (string) ($item['path'] ?? '') : '';
+    $path = public_path(is_array($item) ? (string) ($item['path'] ?? '') : '');
     if ($path !== '/' && !preg_match('#^/[a-z0-9_-]+(?:/[a-z0-9_-]+)*$#', $path)) {
         $skipped[] = ['path' => $path, 'reason' => 'invalid path'];
         continue;
@@ -92,7 +115,7 @@ foreach ($list as $item) {
     $entry = ['version' => (int) ($item['version'] ?? 0), 'publishedAt' => (int) ($item['publishedAt'] ?? 0)];
     if ($safeText($item['seoTitle'] ?? null, 10, 70)) $entry['seoTitle'] = $item['seoTitle'];
     if ($safeText($item['metaDescription'] ?? null, 50, 200)) $entry['metaDescription'] = $item['metaDescription'];
-    if (($item['canonicalUrl'] ?? '') !== '' && $safeUrl($item['canonicalUrl'])) $entry['canonicalUrl'] = $item['canonicalUrl'];
+    if (($item['canonicalUrl'] ?? '') !== '' && $safeUrl($item['canonicalUrl'])) $entry['canonicalUrl'] = public_url($item['canonicalUrl']);
     if (($item['ogImage'] ?? '') !== '' && $safeUrl($item['ogImage'])) $entry['ogImage'] = $item['ogImage'];
     if (($item['robotsIndex'] ?? true) === false || ($item['robotsFollow'] ?? true) === false) {
         $entry['robotsIndex'] = ($item['robotsIndex'] ?? true) !== false;

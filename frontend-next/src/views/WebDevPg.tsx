@@ -44,9 +44,9 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
       content: (
         <>
           The team that builds your website can also run its{" "}
-          <a href="/digital_marketing" className={inlineLink}>digital marketing: SEO, social media and ads</a>{" "}
+          <a href="/digital-marketing" className={inlineLink}>digital marketing: SEO, social media and ads</a>{" "}
           and shoot its{" "}
-          <a href="/production_house" className={inlineLink}>photos and videos</a>. For practical
+          <a href="/production-house" className={inlineLink}>photos and videos</a>. For practical
           tips, read <a href="/blogs" className={inlineLink}>our website and SEO guides</a>.
           In addition, this means consistent branding and faster turnarounds across every channel.
         </>
@@ -220,8 +220,8 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
                    </p>
                    <p className="text-lg text-gray-600 leading-relaxed">
                      We also check Core Web Vitals, Google&apos;s measures of loading speed, responsiveness and visual stability. Learn more about{" "}
-                     <a href="/web_development/seo-friendly-websites" className={inlineLink}>SEO-friendly websites</a> and{" "}
-                     <a href="/web_development/website-speed-optimization" className={inlineLink}>website speed optimization</a>.
+                     <a href="/web-development/seo-friendly-websites" className={inlineLink}>SEO-friendly websites</a> and{" "}
+                     <a href="/web-development/website-speed-optimization" className={inlineLink}>website speed optimization</a>.
                    </p>
                  </div>
                </div>
@@ -302,10 +302,10 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
             </p>
             <p className="text-lg text-gray-600 leading-relaxed">
               We build business websites, landing pages and ecommerce stores, with a clear user experience and SEO built in. Once the site is live, our{" "}
-              <a href="/digital_marketing" className={inlineLink}>digital marketing team in Vizag</a>{" "}
+              <a href="/digital-marketing" className={inlineLink}>digital marketing team in Vizag</a>{" "}
               can bring in visitors through SEO, Google Ads and social media. You can also browse{" "}
               <a href="/projects" className={inlineLink}>websites we have built for clients</a>. Need video for your new site? Record it in our{" "}
-              <a href="/podcast_studio" className={inlineLink}>podcast studio in Vizag</a>.
+              <a href="/podcast-studio" className={inlineLink}>podcast studio in Vizag</a>.
             </p>
           </div>
           <div>

@@ -1,4 +1,4 @@
-// Shared shape of the service sub-pages (/digital_marketing, /web_development, /podcast_studio).
+// Shared shape of the service sub-pages (/digital-marketing, /web-development, /podcast-studio).
 // Rendered by src/components/serviceSubPage/ServiceSubPage.tsx. The `plan` block on each page is
 // internal SEO planning data (keywords, intent, anchor text, link-back pages, image briefs) and
 // is never rendered.
@@ -69,7 +69,7 @@ export interface ServiceSubPage {
   measurement?: { heading: string; intro: string; items: string[] };
   mistakes?: SubPageCard[];
   faqs: Array<{ q: string; a: string }>;
-  /** Slugs in the same section, or full paths ("/web_development/wordpress", "/contact"). */
+  /** Slugs in the same section, or full paths ("/web-development/wordpress", "/contact"). */
   related: string[];
   cta: { heading: string; body: string; button: string; href?: string };
   extras?: SubPageExtra[];

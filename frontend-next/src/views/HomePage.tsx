@@ -87,7 +87,7 @@ const HOME_SERVICES = [
     heading: "Digital Marketing for Clearer Online Growth",
     body: "Get found by the right people and turn visits into enquiries. We plan SEO, Google Ads, social media and content as one strategy, with monthly reporting.",
     points: ["SEO and local SEO in Visakhapatnam", "Google Ads and Meta Ads", "Content and social media marketing"],
-    href: "/digital_marketing",
+    href: "/digital-marketing",
     cta: "Explore digital marketing services",
   },
   {
@@ -95,7 +95,7 @@ const HOME_SERVICES = [
     heading: "Website Development That Supports Business Goals",
     body: "Your website should explain what you do and make it easy to contact you. We build fast, mobile-friendly and SEO-ready websites and online stores.",
     points: ["Business and e-commerce websites", "WordPress, Shopify, React and Next.js", "Redesign, maintenance and speed fixes"],
-    href: "/web_development",
+    href: "/web-development",
     cta: "See website development services",
   },
   {
@@ -103,7 +103,7 @@ const HOME_SERVICES = [
     heading: "Video Production for Brands and Businesses",
     body: "Video helps people understand and trust your business faster. Our production house plans, shoots and edits videos with a clear business purpose.",
     points: ["Corporate and brand films", "Product and social media videos", "Editing and post-production"],
-    href: "/production_house",
+    href: "/production-house",
     cta: "View video production services",
   },
   {
@@ -111,7 +111,7 @@ const HOME_SERVICES = [
     heading: "Podcast Studio Rental and Podcast Production in Vizag",
     body: "Record audio and video podcasts at our studio in Yendada, Visakhapatnam. Hire the studio on your own from ₹1,500 an hour, or add our team and cameras.",
     points: ["Studio-only and team-supported recording", "Two- and three-camera video podcasts", "Editing and short-form clips"],
-    href: "/podcast_studio",
+    href: "/podcast-studio",
     cta: "Book the podcast studio in Vizag",
   },
 ];
@@ -196,10 +196,10 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 Genie Media &amp; Studio provides digital marketing services in Visakhapatnam.
                 We help startups, local businesses and growing brands get found online and win more enquiries.
                 From our office in Yendada, we offer{" "}
-                <a href="/digital_marketing" className={heroLink}>digital marketing</a>,{" "}
-                <a href="/web_development" className={heroLink}>website development</a>,{" "}
-                <a href="/production_house" className={heroLink}>video production</a> and a{" "}
-                <a href="/podcast_studio" className={heroLink}>podcast studio</a>. We work with clients in Vizag,
+                <a href="/digital-marketing" className={heroLink}>digital marketing</a>,{" "}
+                <a href="/web-development" className={heroLink}>website development</a>,{" "}
+                <a href="/production-house" className={heroLink}>video production</a> and a{" "}
+                <a href="/podcast-studio" className={heroLink}>podcast studio</a>. We work with clients in Vizag,
                 across Andhra Pradesh and throughout India.
               </p>
 
@@ -394,7 +394,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
             intro={
               <>
                 The technologies and platforms behind our{" "}
-                <a href="/web_development" className={heroLink}>web development services</a>.
+                <a href="/web-development" className={heroLink}>web development services</a>.
               </>
             }
           />

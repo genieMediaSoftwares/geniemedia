@@ -1,10 +1,10 @@
-// Content for the /digital_marketing/<slug> service pages. Shape and rules: serviceSubPage.ts.
+// Content for the /digital-marketing/<slug> service pages. Shape and rules: serviceSubPage.ts.
 import type { ServiceSubPage } from "@/content/serviceSubPage";
 import { localiseServicePages } from "@/content/localServicePages";
 
 export type DmServicePage = ServiceSubPage;
 
-const LINK_BACK_CORE = ["/digital_marketing", "/services"];
+const LINK_BACK_CORE = ["/digital-marketing", "/services"];
 
 const DM_SERVICE_CONTENT: DmServicePage[] = [
   {
@@ -130,7 +130,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "Can SEO generate leads?", a: "Yes, when the right pages rank for high-intent searches and those pages make it easy to call, message or fill in a form. We track these conversions, not just traffic." },
       { q: "How do we begin an SEO project?", a: "Contact us with your website and goals. We review the site, suggest priorities and send a written scope and quote." },
     ],
-    related: ["seo-audit", "technical-seo", "on-page-seo", "local-seo", "content-marketing", "/web_development/seo-friendly-websites"],
+    related: ["seo-audit", "technical-seo", "on-page-seo", "local-seo", "content-marketing", "/web-development/seo-friendly-websites"],
     cta: { heading: "Request an SEO Consultation", body: "Tell us about your website and the customers you want to reach. We will suggest where SEO can make the biggest difference first, or you can discuss your organic growth goals with our team.", button: "Request an SEO Audit" },
     plan: {
       primaryKeyword: "SEO services in India",
@@ -140,7 +140,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Indian SMEs, service businesses and growing brands comparing SEO agencies.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["SEO services", "SEO services in India", "our SEO team", "search engine optimization"],
-      linkBackFrom: [...LINK_BACK_CORE, "/", "/blogs", "/digital_marketing/seo-audit", "/digital_marketing/technical-seo", "/digital_marketing/on-page-seo"],
+      linkBackFrom: [...LINK_BACK_CORE, "/", "/blogs", "/digital-marketing/seo-audit", "/digital-marketing/technical-seo", "/digital-marketing/on-page-seo"],
       images: [
         { file: "seo-services-india-genie-media.webp", alt: "SEO specialist reviewing organic search performance for an Indian business website" },
         { file: "seo-keyword-map-example.webp", alt: "Keyword map grouping search terms by page for an SEO project" },
@@ -252,7 +252,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
         intro: "Our office is at KP Icon in Yendada, Visakhapatnam. We work on local search for businesses across Visakhapatnam and Andhra Pradesh.",
         items: [
           { title: "Areas connected to our office", body: "Yendada, wider Visakhapatnam and Andhra Pradesh, where we work with clients face to face." },
-          { title: "Local services connected to Genie Media", body: "Local SEO works best with a strong website, good photos and video, and a clear digital marketing plan.", bullets: ["Digital marketing", "Website development", "Video production", "Podcast studio rental"], href: "/digital_marketing" },
+          { title: "Local services connected to Genie Media", body: "Local SEO works best with a strong website, good photos and video, and a clear digital marketing plan.", bullets: ["Digital marketing", "Website development", "Video production", "Podcast studio rental"], href: "/digital-marketing" },
         ],
       },
       {
@@ -275,7 +275,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "Do you optimize Google Business Profiles?", a: "Yes. Profile setup, clean-up and ongoing management are central to our local SEO work." },
       { q: "How do I start local SEO?", a: "Share your business name and location. We will review your profile and listings and suggest what to fix first." },
     ],
-    related: ["seo-services", "seo-audit", "google-ads", "/web_development", "/contact"],
+    related: ["seo-services", "seo-audit", "google-ads", "/web-development", "/contact"],
     cta: { heading: "Improve Your Local Visibility", body: "Share your business name and location. We will review your Google Business Profile and tell you what to fix first.", button: "Request a Local SEO Consultation" },
     plan: {
       primaryKeyword: "local SEO services in Vizag",
@@ -285,7 +285,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Local and multi-location businesses that depend on calls and walk-ins.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["local SEO services in Vizag", "Google Business Profile optimization", "rank in Google Maps"],
-      linkBackFrom: [...LINK_BACK_CORE, "/contact", "/digital_marketing/seo-services", "/blogs"],
+      linkBackFrom: [...LINK_BACK_CORE, "/contact", "/digital-marketing/seo-services", "/blogs"],
       images: [
         { file: "local-seo-google-business-profile-vizag.webp", alt: "Google Business Profile and map listing being optimised for a local business in Visakhapatnam" },
         { file: "local-seo-review-process.webp", alt: "Customer leaving a Google review for a local business" },
@@ -395,7 +395,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "Can you help with a website migration?", a: "Yes. We plan redirects, check staging before launch and monitor Search Console afterwards to catch problems early." },
       { q: "Do you need access to our server?", a: "Not always. We need Search Console and analytics access at minimum. For fixes, we need CMS or code access, or we work through your developer." },
     ],
-    related: ["seo-audit", "seo-services", "on-page-seo", "ecommerce-seo", "/web_development/website-speed-optimization", "/web_development/website-redesign"],
+    related: ["seo-audit", "seo-services", "on-page-seo", "ecommerce-seo", "/web-development/website-speed-optimization", "/web-development/website-redesign"],
     cta: { heading: "Fix the Foundations First", body: "Share your website and Search Console access. We will tell you which technical issues are actually costing you visibility.", button: "Request a Technical SEO Review" },
     plan: {
       primaryKeyword: "technical SEO services",
@@ -405,7 +405,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Website owners, marketing managers and developers with indexing, speed or migration problems.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["technical SEO services", "technical SEO", "fix indexing issues", "Core Web Vitals optimization"],
-      linkBackFrom: [...LINK_BACK_CORE, "/web_development", "/digital_marketing/seo-services", "/digital_marketing/seo-audit", "/digital_marketing/ecommerce-seo"],
+      linkBackFrom: [...LINK_BACK_CORE, "/web-development", "/digital-marketing/seo-services", "/digital-marketing/seo-audit", "/digital-marketing/ecommerce-seo"],
       images: [
         { file: "technical-seo-site-audit.webp", alt: "Developer fixing technical SEO and page speed issues on a business website" },
         { file: "core-web-vitals-report.webp", alt: "Core Web Vitals report showing page speed metrics for a website" },
@@ -525,7 +525,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Businesses with existing websites whose key pages underperform in search.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["on-page SEO services", "on-page SEO", "optimise your service pages"],
-      linkBackFrom: [...LINK_BACK_CORE, "/digital_marketing/seo-services", "/digital_marketing/content-marketing", "/digital_marketing/technical-seo"],
+      linkBackFrom: [...LINK_BACK_CORE, "/digital-marketing/seo-services", "/digital-marketing/content-marketing", "/digital-marketing/technical-seo"],
       images: [
         { file: "on-page-seo-optimisation.webp", alt: "Marketer optimising page titles, headings and copy for on-page SEO" },
         { file: "on-page-seo-heading-structure.webp", alt: "Example heading structure for an SEO-friendly service page" },
@@ -635,7 +635,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "Do you write product descriptions?", a: "Yes, for priority products, and we create templates your team can follow for the rest of the catalogue." },
       { q: "What tracking do I need for ecommerce SEO?", a: "GA4 with ecommerce events set up correctly, plus Google Search Console. We can check and fix your tracking as part of the project." },
     ],
-    related: ["seo-services", "technical-seo", "google-ads", "content-marketing", "/web_development/ecommerce-websites", "/web_development/shopify"],
+    related: ["seo-services", "technical-seo", "google-ads", "content-marketing", "/web-development/ecommerce-websites", "/web-development/shopify"],
     cta: { heading: "Grow Your Store's Direct Sales", body: "Tell us about your store, platform and catalogue size. We will suggest where ecommerce SEO can make the most difference.", button: "Request an Ecommerce SEO Review" },
     plan: {
       primaryKeyword: "ecommerce SEO services",
@@ -645,7 +645,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Indian D2C brands and online retailers on Shopify, WooCommerce or custom platforms.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["ecommerce SEO services", "Shopify SEO", "SEO for online stores"],
-      linkBackFrom: [...LINK_BACK_CORE, "/web_development", "/digital_marketing/seo-services", "/digital_marketing/technical-seo"],
+      linkBackFrom: [...LINK_BACK_CORE, "/web-development", "/digital-marketing/seo-services", "/digital-marketing/technical-seo"],
       images: [
         { file: "ecommerce-seo-india-online-store.webp", alt: "Online store category and product pages being optimised for ecommerce SEO" },
         { file: "shopify-product-page-seo.webp", alt: "Shopify product page with optimised title, images and description" },
@@ -765,7 +765,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Business owners and marketing managers who need a diagnosis before investing in SEO.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["SEO audit", "request an SEO audit", "website SEO audit"],
-      linkBackFrom: [...LINK_BACK_CORE, "/contact", "/web_development", "/digital_marketing/seo-services", "/digital_marketing/technical-seo"],
+      linkBackFrom: [...LINK_BACK_CORE, "/contact", "/web-development", "/digital-marketing/seo-services", "/digital-marketing/technical-seo"],
       images: [
         { file: "seo-audit-report-genie-media.webp", alt: "SEO audit report with prioritised issues for a business website" },
         { file: "seo-audit-action-plan.webp", alt: "Prioritised SEO action plan ranked by impact and effort" },
@@ -889,7 +889,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Marketing leads and founders preparing their content for conversational and AI-powered search.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["answer engine optimization", "AEO services", "optimise content for answer engines"],
-      linkBackFrom: [...LINK_BACK_CORE, "/blogs", "/digital_marketing/geo", "/digital_marketing/content-marketing", "/digital_marketing/seo-services"],
+      linkBackFrom: [...LINK_BACK_CORE, "/blogs", "/digital-marketing/geo", "/digital-marketing/content-marketing", "/digital-marketing/seo-services"],
       images: [
         { file: "answer-engine-optimization-aeo.webp", alt: "Question-led FAQ content being structured for answer engines and conversational search" },
         { file: "aeo-answer-first-content-structure.webp", alt: "Answer-first content layout with a short definition followed by detail" },
@@ -1012,7 +1012,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Founders and marketing leads concerned about how AI assistants describe their brand.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["generative engine optimization", "GEO services", "AI search visibility"],
-      linkBackFrom: [...LINK_BACK_CORE, "/about", "/digital_marketing/aeo", "/digital_marketing/content-marketing", "/blogs"],
+      linkBackFrom: [...LINK_BACK_CORE, "/about", "/digital-marketing/aeo", "/digital-marketing/content-marketing", "/blogs"],
       images: [
         { file: "generative-engine-optimization-geo.webp", alt: "Brand information and references being organised for generative AI search" },
         { file: "geo-brand-entity-consistency.webp", alt: "Consistent business details across website, profiles and directories" },
@@ -1142,7 +1142,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "What is the difference between SEO and Google Ads?", a: "Google Ads pays for visibility per click; SEO earns visibility through your website and reputation. Ads are fast; SEO is slower but lasts." },
       { q: "How do I start a campaign?", a: "Tell us your goals and budget. We review your current account or plan a new one, set up tracking and launch." },
     ],
-    related: ["seo-services", "conversion-optimization", "lead-generation", "content-marketing", "/web_development/website-design"],
+    related: ["seo-services", "conversion-optimization", "lead-generation", "content-marketing", "/web-development/website-design"],
     cta: { heading: "Plan a Measurable Google Ads Campaign", body: "Tell us your goals and current spend. We will review your account or plan a campaign that is tracked from day one.", button: "Request a Google Ads Consultation" },
     plan: {
       primaryKeyword: "Google Ads agency in India",
@@ -1152,7 +1152,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Businesses that want paid search to bring trackable leads or sales.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["Google Ads management", "Google Ads agency", "PPC management"],
-      linkBackFrom: [...LINK_BACK_CORE, "/", "/web_development", "/digital_marketing/seo-services", "/digital_marketing/lead-generation"],
+      linkBackFrom: [...LINK_BACK_CORE, "/", "/web-development", "/digital-marketing/seo-services", "/digital-marketing/lead-generation"],
       images: [
         { file: "google-ads-management-india.webp", alt: "Google Ads campaign dashboard showing conversions and cost per lead" },
         { file: "google-ads-search-campaign-structure.webp", alt: "Search campaign structure with tightly grouped keywords and ads" },
@@ -1206,7 +1206,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
         { title: "Website content", body: "Clear, specific copy for every key page.", bullets: ["Homepage and service pages", "About and industry pages", "Location pages where genuine", "FAQ sections and conversion copy"] },
         { title: "Case studies", body: "Proof built from real projects, with client approval.", bullets: ["Client challenge and strategy", "Deliverables and verified outcomes", "Visual proof and client quote", "Related services"] },
         { title: "Landing page content", body: "Copy that matches the search or ad that brought the visitor.", bullets: ["Headline and benefits", "Proof and objection handling", "Form copy and CTA", "Message match for paid campaigns"] },
-        { title: "Video and podcast content", body: "Content from our production house and podcast studio.", bullets: ["Video scripts and short-form clips", "Podcast transcripts and show notes", "YouTube descriptions and social captions", "Blog articles from recordings"], href: "/podcast_studio/content-repurposing" },
+        { title: "Video and podcast content", body: "Content from our production house and podcast studio.", bullets: ["Video scripts and short-form clips", "Podcast transcripts and show notes", "YouTube descriptions and social captions", "Blog articles from recordings"], href: "/podcast-studio/content-repurposing" },
       ],
     },
     deliverables: [
@@ -1288,7 +1288,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "How do you measure content performance?", a: "With Search Console and GA4: impressions, clicks, rankings, engagement and conversions from content pages." },
       { q: "Do you create content for e-commerce websites?", a: "Yes, including category descriptions, product copy and buying guides." },
     ],
-    related: ["seo-services", "local-seo", "google-ads", "social-media-marketing", "/production_house", "/podcast_studio"],
+    related: ["seo-services", "local-seo", "google-ads", "social-media-marketing", "/production-house", "/podcast-studio"],
     cta: { heading: "Build a Content System for Your Business", body: "Tell us about your audience and goals, or discuss website, blog or video content with our team.", button: "Plan Your Content Strategy" },
     plan: {
       primaryKeyword: "content marketing agency in India",
@@ -1298,7 +1298,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Brands that want to build trust and search visibility through useful content.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["content marketing services", "content marketing agency", "content strategy"],
-      linkBackFrom: [...LINK_BACK_CORE, "/production_house", "/podcast_studio", "/blogs", "/digital_marketing/aeo", "/digital_marketing/geo"],
+      linkBackFrom: [...LINK_BACK_CORE, "/production-house", "/podcast-studio", "/blogs", "/digital-marketing/aeo", "/digital-marketing/geo"],
       images: [
         { file: "content-marketing-genie-media-vizag.webp", alt: "Content team planning blog, video and podcast content for an Indian brand" },
         { file: "content-repurposing-video-podcast.webp", alt: "One podcast episode repurposed into clips, articles and social posts" },
@@ -1349,7 +1349,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       items: [
         { title: "Content planning", body: "A monthly calendar built around your goals, offers and audience." },
         { title: "Social media creatives", body: "Posts, carousels and stories designed in your brand style." },
-        { title: "Short-form video", body: "Reels shot and edited by our production team, or edited from footage you provide.", href: "/production_house" },
+        { title: "Short-form video", body: "Reels shot and edited by our production team, or edited from footage you provide.", href: "/production-house" },
         { title: "Community engagement", body: "Replying to comments and messages in your brand's voice, as agreed." },
         { title: "Paid social campaigns", body: "Meta Ads on Instagram and Facebook for awareness, leads or sales, with Pixel tracking." },
         { title: "Reporting", body: "Monthly reports on reach, engagement, followers, enquiries and ad results." },
@@ -1411,7 +1411,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "Do you work with businesses outside Vizag?", a: "Yes. Planning, design and ads are managed remotely; filming can happen at our Vizag studio or from footage you send." },
       { q: "How long before I see results?", a: "Engagement and ad performance trends usually become clear within 2 to 3 months of consistent work." },
     ],
-    related: ["content-marketing", "lead-generation", "google-ads", "/production_house", "/podcast_studio/content-repurposing"],
+    related: ["content-marketing", "lead-generation", "google-ads", "/production-house", "/podcast-studio/content-repurposing"],
     cta: { heading: "Plan Your Social Media Growth", body: "Share your profiles and goals. We will suggest a content and ads plan that fits your business.", button: "Discuss Social Media Marketing" },
     plan: {
       primaryKeyword: "social media marketing agency in Vizag",
@@ -1421,7 +1421,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Local businesses and D2C brands that want consistent social content and paid social.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["social media marketing", "social media marketing in Vizag", "Instagram and Facebook marketing"],
-      linkBackFrom: [...LINK_BACK_CORE, "/production_house", "/digital_marketing/content-marketing", "/digital_marketing/lead-generation"],
+      linkBackFrom: [...LINK_BACK_CORE, "/production-house", "/digital-marketing/content-marketing", "/digital-marketing/lead-generation"],
       images: [
         { file: "social-media-marketing-vizag.webp", alt: "Social media content calendar with Reels and posts planned for a brand" },
         { file: "meta-ads-campaign-results.webp", alt: "Meta Ads campaign results for Instagram and Facebook" },
@@ -1533,7 +1533,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "How do you improve lead quality?", a: "By tightening targeting, adjusting form questions, clarifying the offer and excluding poor-fit audiences." },
       { q: "Do you work with businesses outside Vizag?", a: "Yes. We plan and manage lead generation remotely for businesses across India." },
     ],
-    related: ["google-ads", "social-media-marketing", "conversion-optimization", "seo-services", "/web_development/website-design"],
+    related: ["google-ads", "social-media-marketing", "conversion-optimization", "seo-services", "/web-development/website-design"],
     cta: { heading: "Build a Lead Generation System", body: "Tell us about your offer and who you want to reach. We will suggest channels, pages and tracking to start with.", button: "Talk About Lead Generation" },
     plan: {
       primaryKeyword: "lead generation services in India",
@@ -1543,7 +1543,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Service and B2B businesses that need a steady flow of qualified enquiries.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["lead generation services", "lead generation campaigns", "generate qualified enquiries"],
-      linkBackFrom: [...LINK_BACK_CORE, "/digital_marketing/google-ads", "/digital_marketing/social-media-marketing", "/digital_marketing/conversion-optimization"],
+      linkBackFrom: [...LINK_BACK_CORE, "/digital-marketing/google-ads", "/digital-marketing/social-media-marketing", "/digital-marketing/conversion-optimization"],
       images: [
         { file: "lead-generation-services-india.webp", alt: "Lead generation funnel from ads to landing page to enquiry form" },
         { file: "landing-page-lead-form.webp", alt: "Focused landing page with a short lead form" },
@@ -1596,7 +1596,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
         { title: "Behaviour research", body: "Heatmaps and session recordings, with your agreement, to see how people use your pages." },
         { title: "Landing page improvements", body: "Headlines, offers, proof and calls to action rewritten and redesigned." },
         { title: "Form and checkout fixes", body: "Fewer fields, clearer errors and simpler checkout steps." },
-        { title: "Page speed", body: "Faster pages so fewer visitors leave before they load.", href: "/web_development/website-speed-optimization" },
+        { title: "Page speed", body: "Faster pages so fewer visitors leave before they load.", href: "/web-development/website-speed-optimization" },
         { title: "A/B testing", body: "Testing changes against the original and keeping what wins, where traffic allows." },
       ],
     },
@@ -1654,7 +1654,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       { q: "Will CRO help my Google Ads?", a: "Yes. Higher landing page conversion rates lower your cost per lead from the same budget." },
       { q: "Do you use heatmaps?", a: "We can use heatmap and session-recording tools with your agreement, respecting visitor privacy." },
     ],
-    related: ["lead-generation", "google-ads", "seo-services", "/web_development/website-redesign", "/web_development/website-speed-optimization"],
+    related: ["lead-generation", "google-ads", "seo-services", "/web-development/website-redesign", "/web-development/website-speed-optimization"],
     cta: { heading: "Get More From the Traffic You Already Have", body: "Share your website and your main conversion goal. We will show you where visitors drop off.", button: "Request a Conversion Audit" },
     plan: {
       primaryKeyword: "conversion rate optimization services",
@@ -1664,7 +1664,7 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
       audience: "Businesses with traffic but too few enquiries or sales.",
       schema: ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"],
       anchorTexts: ["conversion rate optimization", "conversion optimization", "landing page optimization"],
-      linkBackFrom: [...LINK_BACK_CORE, "/digital_marketing/google-ads", "/digital_marketing/lead-generation", "/web_development/website-redesign"],
+      linkBackFrom: [...LINK_BACK_CORE, "/digital-marketing/google-ads", "/digital-marketing/lead-generation", "/web-development/website-redesign"],
       images: [
         { file: "conversion-rate-optimization-india.webp", alt: "Website analytics showing conversion rate before and after optimization" },
         { file: "landing-page-ab-test.webp", alt: "Two landing page versions compared in an A/B test" },
@@ -1674,4 +1674,4 @@ const DM_SERVICE_CONTENT: DmServicePage[] = [
 ];
 
 export const DM_SERVICE_PAGES = localiseServicePages(DM_SERVICE_CONTENT);
-export const dmServicePath = (slug: string): string => `/digital_marketing/${slug}`;
+export const dmServicePath = (slug: string): string => `/digital-marketing/${slug}`;

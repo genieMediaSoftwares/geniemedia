@@ -46,10 +46,10 @@ const MENU_ITEMS = [
     name: 'Services',
     href: '/services',
     dropdown: [
-      { name: 'Digital Marketing', href: '/digital_marketing', icon: <TrendingUp />, children: DM_SERVICE_NAV },
-      { name: 'Website Development', href: '/web_development', icon: <Code />, children: WEB_SERVICE_NAV },
-      { name: 'Production House', href: '/production_house', icon: <Video /> },
-      { name: 'Podcast Studio Rentals', href: '/podcast_studio', icon: <Mic />, children: PODCAST_SERVICE_NAV }
+      { name: 'Digital Marketing', href: '/digital-marketing', icon: <TrendingUp />, children: DM_SERVICE_NAV },
+      { name: 'Website Development', href: '/web-development', icon: <Code />, children: WEB_SERVICE_NAV },
+      { name: 'Production House', href: '/production-house', icon: <Video /> },
+      { name: 'Podcast Studio Rentals', href: '/podcast-studio', icon: <Mic />, children: PODCAST_SERVICE_NAV }
     ]
   },
   { name: 'Projects', href: '/projects' },

@@ -29,14 +29,14 @@ export function buildSubPageMetadata(section: ServiceSection, page: ServiceSubPa
   };
 }
 
-const STUDIO_ID = `${SITE.url}/podcast_studio#studio`;
+const STUDIO_ID = `${SITE.url}/podcast-studio#studio`;
 
 // The physical podcast studio, used on pages about recording at the Visakhapatnam studio.
 const studioNode = () => ({
   "@type": "LocalBusiness",
   "@id": STUDIO_ID,
   name: "Genie Media & Studio Podcast Studio",
-  url: canonicalFor("/podcast_studio"),
+  url: canonicalFor("/podcast-studio"),
   image: SITE.logo,
   telephone: SITE.contact.telephone,
   email: STUDIO.email,

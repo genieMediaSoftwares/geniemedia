@@ -75,18 +75,18 @@ export default function Blogs({ blogs: initialBlogs }: { blogs: BlogCard[] }) {
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full pt-28 pb-12 sm:pt-28 sm:pb-16">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 drop-shadow-lg">
-            Digital Marketing Blog from Vizag
+            Digital Marketing Blogs from Vizag
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-2xl sm:max-w-3xl mx-auto drop-shadow-md">
             Digital marketing tips from Genie Media &amp; Studio in Visakhapatnam. Read about SEO, social media, website development and podcast content. First, choose a topic that fits your goals. Then explore ways to improve your business online, whether you serve Vizag, Andhra Pradesh or customers across India.
           </p>
           <p className="mt-3 text-sm sm:text-base text-slate-200 max-w-2xl sm:max-w-3xl mx-auto drop-shadow-md">
             Want help putting a tip into practice? Explore our{" "}
-            <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing services</a>,{" "}
-            <a href="/web_development" className={CONTENT_LINK}>web development</a> and{" "}
-            <a href="/podcast_studio" className={CONTENT_LINK}>podcast services</a>. You can also explore{" "}
-            <a href="/digital_marketing/aeo" className={CONTENT_LINK}>answer engine optimization</a> and{" "}
-            <a href="/digital_marketing/geo" className={CONTENT_LINK}>generative engine optimization</a>, or{" "}
+            <a href="/digital-marketing" className={CONTENT_LINK}>digital marketing services</a>,{" "}
+            <a href="/web-development" className={CONTENT_LINK}>web development</a> and{" "}
+            <a href="/podcast-studio" className={CONTENT_LINK}>podcast services</a>. You can also explore{" "}
+            <a href="/digital-marketing/aeo" className={CONTENT_LINK}>answer engine optimization</a> and{" "}
+            <a href="/digital-marketing/geo" className={CONTENT_LINK}>generative engine optimization</a>, or{" "}
             <a href="/contact" className={CONTENT_LINK}>contact our team</a>.
           </p>
         </div>

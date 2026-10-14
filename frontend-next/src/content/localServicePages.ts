@@ -50,13 +50,13 @@ const PROFILES: Record<string, LocalProfile> = {
     next: "Share your website and your main business goals. Search Console access, if available, helps us compare technical findings with search performance.",
   },
   "aeo": {
-    title: "Answer Engine Optimization in Vizag | Genie Media",
+    title: "Answer Engine Optimization (AEO) in Vizag | Genie Media",
     description: "AEO services in Vizag and India from Genie Media. Answer engine optimization with clear FAQs, service facts and structured data that matches your pages.",
     detail: "Answer engine optimization (AEO) starts with clear answers to real customer questions. We make services, location, pricing scope and contact details easy to understand. FAQs and structured data must agree with the visible page; no markup can guarantee an AI answer or citation.",
     next: "Share your service pages and the questions customers ask before buying. We will review answers, page structure and verified business facts.",
   },
   "geo": {
-    title: "Generative Engine Optimization in Vizag | Genie Media",
+    title: "Generative Engine Optimization (GEO) in Vizag | Genie Media",
     description: "Generative engine optimization (GEO) in Vizag and India from Genie Media. Clear brand facts, useful content and technical SEO for AI search discovery.",
     detail: "Generative engine optimization (GEO) helps make your business information clear across the pages you publish. We check service descriptions, business identity and supporting sources. For Google AI search, useful indexed pages and sound SEO remain the foundation; inclusion is not guaranteed.",
     next: "Share your website and official business profiles. We will check whether your published facts, service pages and supporting content are consistent.",

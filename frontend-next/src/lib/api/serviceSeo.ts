@@ -6,16 +6,20 @@ import type { PublishedServiceSeo } from "@/types";
 import { arr, isRecord, num, str } from "@/lib/api/coerce";
 import { CACHE_TAGS, serverGetJson } from "@/lib/api/client";
 import { SITE_ORIGIN } from "@/lib/site";
+import { toPublicPath } from "@/lib/legacyPaths";
 
 const INTERNAL_HREF = /^\/(?!\/)[\w\-./#?=&%]*$/;
 
 const normalize = (raw: unknown): PublishedServiceSeo | null => {
   if (!isRecord(raw)) return null;
-  const path = str(raw.path);
-  if (!path) return null;
+  const cmsPath = str(raw.path);
+  if (!cmsPath) return null;
+  // The CMS keys pages by their pre-2026-10-14 underscore paths; pages are looked up by the public path.
+  const path = toPublicPath(cmsPath);
   const title = str(raw.seoTitle) ?? "";
   const description = str(raw.metaDescription) ?? "";
-  const canonical = str(raw.canonicalUrl) ?? "";
+  const rawCanonical = str(raw.canonicalUrl) ?? "";
+  const canonical = rawCanonical.startsWith(`${SITE_ORIGIN}/`) ? SITE_ORIGIN + toPublicPath(rawCanonical.slice(SITE_ORIGIN.length)) : rawCanonical;
   const h1 = str(raw.preferredH1) ?? "";
   return {
     path,
@@ -29,7 +33,7 @@ const normalize = (raw: unknown): PublishedServiceSeo | null => {
       .slice(0, 8),
     internalLinks: arr(raw.internalLinks)
       .filter(isRecord)
-      .map((l) => ({ label: str(l.label) ?? "", href: str(l.href) ?? "" }))
+      .map((l) => ({ label: str(l.label) ?? "", href: toPublicPath(str(l.href) ?? "") }))
       .filter((l) => l.label && INTERNAL_HREF.test(l.href))
       .slice(0, 8),
     canonicalUrl: canonical.startsWith(`${SITE_ORIGIN}/`) ? canonical : "",

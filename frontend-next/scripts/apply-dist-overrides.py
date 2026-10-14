@@ -17,22 +17,22 @@ DIST = pathlib.Path(__file__).resolve().parent.parent / "dist"
 
 # route -> new values (keep in sync with src/lib/seo/routeMeta.ts and the page H1 defaults)
 OVERRIDES = {
-    "/digital_marketing": {
+    "/digital-marketing": {
         "seoTitle": "Digital Marketing Agency in Vizag | SEO, Ads & Content",
         "metaDescription": "Grow your business with SEO, Google Ads, local SEO, content marketing and social media services from Genie Media in Vizag and across India.",
         "h1": "Digital Marketing Agency for Growing Businesses in Vizag and India",
     },
-    "/web_development": {
+    "/web-development": {
         "seoTitle": "Website Development Company in Vizag & India | Genie Media",
         "metaDescription": "Build a fast, responsive and SEO-friendly website with Genie Media's WordPress, Shopify, React and Next.js development services in Vizag.",
         "h1": "Website Development for Businesses in Vizag and Across India",
     },
-    "/production_house": {
+    "/production-house": {
         "seoTitle": "Video Production House in Vizag & India | Genie Media",
         "metaDescription": "Create corporate videos, brand films, product videos and social media content with Genie Media's production house in Vizag.",
         "h1": "Video Production House for Brands and Businesses",
     },
-    "/podcast_studio": {
+    "/podcast-studio": {
         "seoTitle": "Podcast Studio Rental in Vizag | Genie Media & Studio",
         "metaDescription": "Book a professional podcast studio in Vizag for audio and video recording, production, editing and content repurposing.",
         "h1": "Professional Podcast Studio Rental in Vizag",

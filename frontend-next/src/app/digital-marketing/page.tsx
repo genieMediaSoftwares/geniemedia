@@ -10,18 +10,18 @@ import { buildRouteMetadata } from "@/lib/seo/metadata";
 import { metaForRoute } from "@/lib/seo/routeMeta";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return buildRouteMetadata("/digital_marketing", await getPublishedServiceSeo("/digital_marketing"));
+  return buildRouteMetadata("/digital-marketing", await getPublishedServiceSeo("/digital-marketing"));
 }
 
 export default async function DigitalMarketingRoute() {
-  const seo = await getPublishedServiceSeo("/digital_marketing");
+  const seo = await getPublishedServiceSeo("/digital-marketing");
   return (
     <>
-      <JsonLd data={metaForRoute("/digital_marketing", seo).schema} />
+      <JsonLd data={metaForRoute("/digital-marketing", seo).schema} />
       <DigitalMarketting h1={seo?.preferredH1 || undefined} />
       {seo && <ServiceSeoSections sections={seo.sections} links={seo.internalLinks} />}
-      <RelatedCaseStudies service="/digital_marketing" />
-      <ClickTracker page="/digital_marketing" />
+      <RelatedCaseStudies service="/digital-marketing" />
+      <ClickTracker page="/digital-marketing" />
     </>
   );
 }

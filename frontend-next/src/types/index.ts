@@ -184,7 +184,7 @@ export interface JsonLdGraph {
 }
 
 export type CaseStudyCategory = "digital-marketing" | "web-development" | "production" | "podcast";
-export type ServicePagePath = "/digital_marketing" | "/web_development" | "/production_house" | "/podcast_studio";
+export type ServicePagePath = "/digital-marketing" | "/web-development" | "/production-house" | "/podcast-studio";
 
 export interface CaseStudyStep {
   title: string;

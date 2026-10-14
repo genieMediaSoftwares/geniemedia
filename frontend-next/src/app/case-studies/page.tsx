@@ -29,10 +29,10 @@ export default async function CaseStudiesRoute() {
           <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
             Our case studies each follow one real project from start to finish: who the client is, what they needed, how our team in Visakhapatnam
             approached the work and what we delivered. They cover our{" "}
-            <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing</a>,{" "}
-            <a href="/web_development" className={CONTENT_LINK}>website development</a>,{" "}
-            <a href="/production_house" className={CONTENT_LINK}>video production</a> and{" "}
-            <a href="/podcast_studio" className={CONTENT_LINK}>podcast production</a> work.
+            <a href="/digital-marketing" className={CONTENT_LINK}>digital marketing</a>,{" "}
+            <a href="/web-development" className={CONTENT_LINK}>website development</a>,{" "}
+            <a href="/production-house" className={CONTENT_LINK}>video production</a> and{" "}
+            <a href="/podcast-studio" className={CONTENT_LINK}>podcast production</a> work.
           </p>
         </div>
       </section>

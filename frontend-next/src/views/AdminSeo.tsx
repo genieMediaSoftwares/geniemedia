@@ -29,6 +29,7 @@ import { AiConfigAssist, AiFixAssist, AiKeywordAssist, type AiDraftInput, type A
 import { builtinFor, type BuiltinPageSeo } from "@/lib/seo/builtinSeo";
 import { applyDraft, snapshotFromHtml } from "@/lib/seo/pageSnapshot";
 import { SEO_TAXONOMY } from "@/content/seoTaxonomy";
+import { toPublicPath } from "@/lib/legacyPaths";
 import TagInput from "@/components/TagInput";
 
 const BRAND = "#6B4A2D";
@@ -179,6 +180,7 @@ const healthConfig = (c: SeoConfig, path?: string): HealthConfig => ({
   canonicalUrl: c.canonicalUrl,
 });
 
+// Keyed by CMS page path (the backend still stores the pre-2026-10-14 underscore paths).
 const SOURCE_FILES: Record<string, string> = {
   "/digital_marketing": "frontend-next/src/views/DigitalMarketting.tsx",
   "/web_development": "frontend-next/src/views/WebDevPg.tsx",
@@ -379,7 +381,7 @@ export default function AdminSeo() {
     const entries = await Promise.all(
       paths.map(async (p) => {
         try {
-          const res = await fetch(p, { headers: { Accept: "text/html" }, cache: "no-store" });
+          const res = await fetch(toPublicPath(p), { headers: { Accept: "text/html" }, cache: "no-store" });
           return [p, res.ok ? snapshotFromHtml(await res.text()) : null] as const;
         } catch {
           return [p, null] as const;
@@ -438,7 +440,7 @@ export default function AdminSeo() {
       return analyzePageHealth(snap, healthConfig(cfg, p.path), toHealthKeywords(own), locationList, {
         cannibalized: clashes.filter((c) => c.pages.includes(p.name)).map((c) => c.keyword),
         caseStudies,
-        pagePath: p.path,
+        pagePath: toPublicPath(p.path),
       });
     },
     [snapshots, allKeywords, locationList, clashes, caseStudies]
@@ -452,7 +454,7 @@ export default function AdminSeo() {
     const snap = snapshots[detail.page.path];
     if (!snap) return null;
     const keywordsForPage = toHealthKeywords(detail.keywords);
-    const opts = { cannibalized: detail.warnings.map((w) => w.keyword), caseStudies, pagePath: detail.page.path };
+    const opts = { cannibalized: detail.warnings.map((w) => w.keyword), caseStudies, pagePath: toPublicPath(detail.page.path) };
     const live = analyzePageHealth(snap, healthConfig(detail.published ?? deferredForm, detail.page.path), keywordsForPage, locationList, opts);
     const draftPage = applyDraft(snap, deferredForm, detail.published);
     const draft = analyzePageHealth(draftPage, healthConfig(deferredForm, detail.page.path), keywordsForPage, locationList, opts);
@@ -468,7 +470,7 @@ export default function AdminSeo() {
       if (pub.status === "failed") return { label: "Publish failed — the live site is on the previous version", tone: "bg-red-100 text-red-800" };
       if (pub.status === "pending") return { label: "Published — not live yet (live publishing not configured)", tone: "bg-amber-100 text-amber-800" };
     }
-    const built = buildInfo?.serviceSeo?.[p.path];
+    const built = buildInfo?.serviceSeo?.[toPublicPath(p.path)];
     if (buildInfo && built && p.publishedAt && built >= p.publishedAt) return { label: "Live in the current build", tone: "bg-green-100 text-green-800" };
     return { label: "Published — not verified live", tone: "bg-amber-100 text-amber-800" };
   };
@@ -1412,7 +1414,7 @@ function KeywordManager({ detail, json, api, onChanged, say }: { detail: PageDet
   };
 
   const siteKeywordsCsv = () => {
-    const topic = SEO_TAXONOMY.find((t) => t.path === detail.page.path);
+    const topic = SEO_TAXONOMY.find((t) => t.path === toPublicPath(detail.page.path));
     if (!topic) return null;
     const lines = ["keyword,keywordType,searchIntent,location,priority,notes"];
     for (const [tier, terms] of Object.entries(topic.terms)) {
@@ -1552,7 +1554,7 @@ interface PageReports {
 function PreviewPanel({ detail, reports }: { detail: PageDetail; reports: PageReports | null }) {
   if (!reports) return <p className="text-sm text-gray-500">Reading the live page… If this stays empty, open the admin on geniemedia.in so the page can be read.</p>;
   const { live: current, draft, snapshot, draftPage } = reports;
-  const url = `geniemedia.in${detail.page.path}`;
+  const url = `geniemedia.in${toPublicPath(detail.page.path)}`;
   const delta = draft.score - current.score;
 
   const column = (label: string, page: HealthPage, report: HealthReport) => (

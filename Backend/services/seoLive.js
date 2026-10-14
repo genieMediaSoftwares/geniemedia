@@ -78,9 +78,24 @@ const robotsFor = (cfg) => {
   return index && follow ? null : `${index ? "index" : "noindex"}, ${follow ? "follow" : "nofollow"}`;
 };
 
+// Page configs are keyed by the pre-2026-10-14 underscore paths, but the public site moved to
+// hyphenated URLs and 301s the old ones. Keep in sync with frontend-next/src/lib/legacyPaths.ts.
+const LEGACY_SECTION_PATHS = {
+  "/digital_marketing": "/digital-marketing",
+  "/web_development": "/web-development",
+  "/production_house": "/production-house",
+  "/podcast_studio": "/podcast-studio",
+};
+const publicPath = (path) => {
+  for (const [from, to] of Object.entries(LEGACY_SECTION_PATHS)) {
+    if (path === from || path.startsWith(`${from}/`)) return to + path.slice(from.length);
+  }
+  return path;
+};
+
 // Fetches the public page and compares the head with the published config.
 async function verifyPage({ siteUrl, path, cfg, version }) {
-  const url = `${siteUrl.replace(/\/+$/, "")}${path === "/" ? "/" : path}`;
+  const url = `${siteUrl.replace(/\/+$/, "")}${path === "/" ? "/" : publicPath(path)}`;
   const checks = [];
   let res;
   try {
@@ -99,7 +114,7 @@ async function verifyPage({ siteUrl, path, cfg, version }) {
   const want = [
     ["title", cfg.seoTitle],
     ["description", cfg.metaDescription],
-    ["canonical", cfg.canonicalUrl],
+    ["canonical", cfg.canonicalUrl && cfg.canonicalUrl.replace(/^(https?:\/\/[^/]+)(\/[^?#]*)/, (_, origin, p) => origin + publicPath(p))],
     ["ogImage", cfg.ogImage],
     ["robots", robotsFor(cfg)],
   ];
@@ -119,4 +134,4 @@ async function verifyPage({ siteUrl, path, cfg, version }) {
   return { status, url, checks, liveHeader };
 }
 
-module.exports = { configured, syncLive, verifyPage, readHead };
+module.exports = { configured, syncLive, verifyPage, readHead, publicPath };

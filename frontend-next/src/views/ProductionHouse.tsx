@@ -185,7 +185,7 @@ export default function ProductionHouse({ h1 }: { h1?: string }) {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-8 text-center">Why Choose Genie Media &amp; Studio?</h2>
           <p className="max-w-3xl mx-auto text-center text-lg text-gray-600 leading-relaxed mb-12">
-            We also run a <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio in Vizag</a> for audio and video recording. Our <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing services</a> can promote your videos, and our <a href="/web_development" className={CONTENT_LINK}>website development team</a> can give them a home.
+            We also run a <a href="/podcast-studio" className={CONTENT_LINK}>podcast studio in Vizag</a> for audio and video recording. Our <a href="/digital-marketing" className={CONTENT_LINK}>digital marketing services</a> can promote your videos, and our <a href="/web-development" className={CONTENT_LINK}>website development team</a> can give them a home.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {WHY.map(({ title, body }) => (
@@ -218,9 +218,9 @@ export default function ProductionHouse({ h1 }: { h1?: string }) {
           </p>
           <p className="text-lg text-gray-600 leading-relaxed">
             If you already have footage, ask about our video editing services. For an interview-led series, explore our{" "}
-            <a href="/podcast_studio/video-podcast" className={CONTENT_LINK}>video podcast production options</a>.
+            <a href="/podcast-studio/video-podcast" className={CONTENT_LINK}>video podcast production options</a>.
             To use short edits in a campaign, see our{" "}
-            <a href="/digital_marketing/social-media-marketing" className={CONTENT_LINK}>social media marketing services</a>.
+            <a href="/digital-marketing/social-media-marketing" className={CONTENT_LINK}>social media marketing services</a>.
           </p>
         </div>
       </section>

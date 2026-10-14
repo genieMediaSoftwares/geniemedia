@@ -42,10 +42,10 @@ const HERO_IMAGES: Record<SubPageHeroImage, StaticImage> = {
 };
 
 const MAIN_PAGES: Record<string, { label: string; body: string }> = {
-  "/digital_marketing": { label: "Digital Marketing", body: "SEO, Google Ads, content and social media planned as one connected strategy." },
-  "/web_development": { label: "Website Development", body: "Fast, SEO-friendly websites and online stores built by our in-house team." },
-  "/production_house": { label: "Video Production", body: "Brand films, product videos, photography and short-form content from our production house." },
-  "/podcast_studio": { label: "Podcast Studio in Vizag", body: "Record audio and video podcasts in our fully equipped studio." },
+  "/digital-marketing": { label: "Digital Marketing", body: "SEO, Google Ads, content and social media planned as one connected strategy." },
+  "/web-development": { label: "Website Development", body: "Fast, SEO-friendly websites and online stores built by our in-house team." },
+  "/production-house": { label: "Video Production", body: "Brand films, product videos, photography and short-form content from our production house." },
+  "/podcast-studio": { label: "Podcast Studio in Vizag", body: "Record audio and video podcasts in our fully equipped studio." },
   "/case-studies": { label: "Case Studies", body: "How we have approached real client projects, step by step." },
   "/contact": { label: "Contact Our Team", body: "Talk to us about your goals, project and budget." },
   "/reviews": { label: "Client Reviews", body: "Video and written feedback from our clients and studio users." },

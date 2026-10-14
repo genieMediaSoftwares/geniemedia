@@ -2,7 +2,7 @@ import type { PortfolioItem } from "@/types";
 import { serviceForCategory } from "@/lib/portfolio";
 import { CONTENT_LINK } from "@/lib/linkStyles";
 
-// Shared layout for every portfolio grid (home, /projects, /web_development) so they stay identical.
+// Shared layout for every portfolio grid (home, /projects, /web-development) so they stay identical.
 export const PROJECT_SECTION = "bg-white py-12 md:py-16";
 export const PROJECT_CONTAINER = "max-w-5xl mx-auto px-4 sm:px-6 lg:px-8";
 export const PROJECT_HEADING = "text-center text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-8 md:mb-10";

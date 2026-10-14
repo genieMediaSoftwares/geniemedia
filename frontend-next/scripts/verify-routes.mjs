@@ -76,10 +76,10 @@ const PAGES = [
   ["/", `${SITE}/`],
   ["/about", `${SITE}/about`],
   ["/services", `${SITE}/services`],
-  ["/digital_marketing", `${SITE}/digital_marketing`],
-  ["/web_development", `${SITE}/web_development`],
-  ["/production_house", `${SITE}/production_house`],
-  ["/podcast_studio", `${SITE}/podcast_studio`],
+  ["/digital-marketing", `${SITE}/digital-marketing`],
+  ["/web-development", `${SITE}/web-development`],
+  ["/production-house", `${SITE}/production-house`],
+  ["/podcast-studio", `${SITE}/podcast-studio`],
   ["/projects", `${SITE}/projects`],
   ["/reviews", `${SITE}/reviews`],
   ["/blogs", `${SITE}/blogs`],
@@ -110,7 +110,7 @@ async function main() {
 
   for (const [path, canonical] of PAGES) {
     await verifyPage(path, canonical, {
-      schemaType: path === "/digital_marketing" ? "FAQPage" : path === "/blogs" ? "CollectionPage" : undefined,
+      schemaType: path === "/digital-marketing" ? "FAQPage" : path === "/blogs" ? "CollectionPage" : undefined,
     });
   }
 
@@ -149,10 +149,16 @@ async function main() {
 
   console.log("\nRedirects");
   for (const [from, to] of [
-    ["/web-development", "/web_development"],
-    ["/digital-marketing", "/digital_marketing"],
-    ["/production-house", "/production_house"],
-    ["/podcast-studio", "/podcast_studio"],
+    // Retired underscore URLs (2026-10-14) -> hyphenated, in one hop, query string kept.
+    ["/web_development", "/web-development"],
+    ["/digital_marketing", "/digital-marketing"],
+    ["/production_house", "/production-house"],
+    ["/podcast_studio", "/podcast-studio"],
+    ["/digital_marketing/", "/digital-marketing"],
+    ["/digital_marketing.html", "/digital-marketing"],
+    ["/digital_marketing/aeo", "/digital-marketing/aeo"],
+    ["/web_development/shopify/", "/web-development/shopify"],
+    ["/podcast_studio/rental?utm_source=test", "/podcast-studio/rental?utm_source=test"],
     ["/about.html", "/about"],
     ["/blog", "/blogs"],
     ["/admin/login", "/admin"],
@@ -170,7 +176,7 @@ async function main() {
   for (const rule of ["Disallow: /admin", "Disallow: /api/", "Disallow: /share/", `Sitemap: ${SITE}/sitemap.xml`]) {
     check(robots.includes(rule), rule);
   }
-  for (const open of ["/digital_marketing", "/blog", "/blogs", "/projects", "/web_development", "/podcast_studio"]) {
+  for (const open of ["/digital-marketing", "/blog", "/blogs", "/projects", "/web-development", "/podcast-studio"]) {
     check(!new RegExp(`^Disallow: ${open}$`, "m").test(robots), `${open} not blocked`);
   }
 

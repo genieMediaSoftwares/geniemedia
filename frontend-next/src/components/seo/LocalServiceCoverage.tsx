@@ -4,19 +4,19 @@ export default function LocalServiceCoverage({ service }: { service: "web" | "po
   const web = service === "web";
   const title = web ? "Website Development in Yendada, Rushikonda and MVP Colony" : "Podcast Recording in Yendada, Visakhapatnam";
   const links = web ? [
-    ["SEO-friendly website development", "/web_development/seo-friendly-websites"],
-    ["WordPress website development", "/web_development/wordpress"],
-    ["Shopify and online store development", "/web_development/shopify"],
-    ["SEO and digital marketing", "/digital_marketing/seo-services"],
-    ["Answer engine optimization (AEO)", "/digital_marketing/aeo"],
-    ["Generative engine optimization (GEO)", "/digital_marketing/geo"],
+    ["SEO-friendly website development", "/web-development/seo-friendly-websites"],
+    ["WordPress website development", "/web-development/wordpress"],
+    ["Shopify and online store development", "/web-development/shopify"],
+    ["SEO and digital marketing", "/digital-marketing/seo-services"],
+    ["Answer engine optimization (AEO)", "/digital-marketing/aeo"],
+    ["Generative engine optimization (GEO)", "/digital-marketing/geo"],
   ] : [
-    ["Podcast studio rental in Vizag", "/podcast_studio/rental"],
-    ["Video podcast recording", "/podcast_studio/video-podcast"],
-    ["Podcast production services", "/podcast_studio/production"],
-    ["Remote podcast editing", "/podcast_studio/editing"],
-    ["Podcast Reels and Shorts", "/podcast_studio/content-repurposing"],
-    ["Content marketing for your episodes", "/digital_marketing/content-marketing"],
+    ["Podcast studio rental in Vizag", "/podcast-studio/rental"],
+    ["Video podcast recording", "/podcast-studio/video-podcast"],
+    ["Podcast production services", "/podcast-studio/production"],
+    ["Remote podcast editing", "/podcast-studio/editing"],
+    ["Podcast Reels and Shorts", "/podcast-studio/content-repurposing"],
+    ["Content marketing for your episodes", "/digital-marketing/content-marketing"],
   ];
   return (
     <section aria-label={title} className="bg-gray-50 py-12 sm:py-16 px-4 sm:px-6 lg:px-8">

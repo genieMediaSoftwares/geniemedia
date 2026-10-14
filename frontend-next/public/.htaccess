@@ -7,6 +7,18 @@ DirectoryIndex index.html
   RewriteEngine On
   RewriteBase /
 
+  # Retired underscore URLs (renamed 2026-10-14). These run before the HTTPS/www rules so every
+  # variant (http, www, trailing slash, .html) reaches the final URL in one 301; the query string
+  # is kept. Keep in sync with src/lib/legacyPaths.ts.
+  RewriteRule ^digital_marketing(?:\.html)?/*$ __SITE_URL__/digital-marketing [R=301,L]
+  RewriteRule ^digital_marketing/+(.+?)(?:\.html)?/*$ __SITE_URL__/digital-marketing/$1 [R=301,L]
+  RewriteRule ^web_development(?:\.html)?/*$ __SITE_URL__/web-development [R=301,L]
+  RewriteRule ^web_development/+(.+?)(?:\.html)?/*$ __SITE_URL__/web-development/$1 [R=301,L]
+  RewriteRule ^production_house(?:\.html)?/*$ __SITE_URL__/production-house [R=301,L]
+  RewriteRule ^production_house/+(.+?)(?:\.html)?/*$ __SITE_URL__/production-house/$1 [R=301,L]
+  RewriteRule ^podcast_studio(?:\.html)?/*$ __SITE_URL__/podcast-studio [R=301,L]
+  RewriteRule ^podcast_studio/+(.+?)(?:\.html)?/*$ __SITE_URL__/podcast-studio/$1 [R=301,L]
+
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
@@ -19,10 +31,6 @@ DirectoryIndex index.html
   # BEGIN GENIE SLUG REDIRECTS
   # END GENIE SLUG REDIRECTS
 
-  RewriteRule ^digital-marketing/?$ __SITE_URL__/digital_marketing [R=301,L]
-  RewriteRule ^web-development/?$ __SITE_URL__/web_development [R=301,L]
-  RewriteRule ^production-house/?$ __SITE_URL__/production_house [R=301,L]
-  RewriteRule ^podcast-studio/?$ __SITE_URL__/podcast_studio [R=301,L]
   RewriteRule ^blog/?$ __SITE_URL__/blogs [R=301,L]
   RewriteRule ^admin/login/?$ __SITE_URL__/admin [R=301,L]
 

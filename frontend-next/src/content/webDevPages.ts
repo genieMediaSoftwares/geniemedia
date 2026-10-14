@@ -1,8 +1,8 @@
-// Content for the /web_development/<slug> service pages. Shape and rules: serviceSubPage.ts.
+// Content for the /web-development/<slug> service pages. Shape and rules: serviceSubPage.ts.
 import type { ServiceSubPage } from "@/content/serviceSubPage";
 import { localiseServicePages } from "@/content/localServicePages";
 
-const LINK_BACK_CORE = ["/web_development", "/services"];
+const LINK_BACK_CORE = ["/web-development", "/services"];
 const WEB_SCHEMA = ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"];
 
 export const WEB_GROUPS = ["Website Services", "Platforms", "Custom & App Development", "Care & Performance"] as const;
@@ -112,7 +112,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Do you work with businesses outside Visakhapatnam?", a: "Yes. We build websites for clients across India remotely, using video calls, shared design files and staging links for review." },
       { q: "Will I be able to update the website myself?", a: "Yes. We set up an easy-to-use admin and train your team. We also offer maintenance plans if you prefer us to handle updates." },
     ],
-    related: ["website-design", "business-websites", "ecommerce-websites", "seo-friendly-websites", "website-maintenance", "/digital_marketing/seo-services"],
+    related: ["website-design", "business-websites", "ecommerce-websites", "seo-friendly-websites", "website-maintenance", "/digital-marketing/seo-services"],
     cta: { heading: "Plan Your New Website", body: "Tell us what your business does and what you want your website to achieve. We will suggest the right approach and platform.", button: "Discuss Your Website" },
     plan: {
       primaryKeyword: "website development company India",
@@ -122,7 +122,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Indian SMEs, startups and growing brands choosing a website partner.",
       schema: WEB_SCHEMA,
       anchorTexts: ["website development services", "website development company", "build a new website"],
-      linkBackFrom: [...LINK_BACK_CORE, "/", "/digital_marketing", "/web_development/website-design", "/web_development/business-websites"],
+      linkBackFrom: [...LINK_BACK_CORE, "/", "/digital-marketing", "/web-development/website-design", "/web-development/business-websites"],
       images: [
         { file: "website-development-company-india.webp", alt: "Website development concept with code, devices and responsive web pages" },
         { file: "website-development-process-genie-media.webp", alt: "Website development process from sitemap to launch" },
@@ -233,7 +233,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Do you use templates?", a: "For tight budgets we can customise a quality theme. For most projects we design custom layouts so your site does not look like everyone else's." },
       { q: "Can you shoot photos and videos for the website?", a: "Yes. Our production house in Visakhapatnam can create real photos and videos for your site." },
     ],
-    related: ["website-development", "website-redesign", "business-websites", "seo-friendly-websites", "/production_house"],
+    related: ["website-development", "website-redesign", "business-websites", "seo-friendly-websites", "/production-house"],
     cta: { heading: "Design a Website People Trust", body: "Share your current site or your brand. We will suggest how design can make your website work harder.", button: "Discuss Website Design" },
     plan: {
       primaryKeyword: "website design company India",
@@ -243,7 +243,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Businesses and personal brands that want a credible, conversion-focused design.",
       schema: WEB_SCHEMA,
       anchorTexts: ["website design", "website design services", "UI/UX design"],
-      linkBackFrom: [...LINK_BACK_CORE, "/web_development/website-development", "/web_development/website-redesign", "/digital_marketing/google-ads"],
+      linkBackFrom: [...LINK_BACK_CORE, "/web-development/website-development", "/web-development/website-redesign", "/digital-marketing/google-ads"],
       images: [
         { file: "website-design-company-india.webp", alt: "Custom website design for a personal brand, shown on desktop" },
         { file: "website-design-wireframe-to-final.webp", alt: "Website wireframe beside the final visual design" },
@@ -354,7 +354,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Will my website show up on Google?", a: "We build it with SEO foundations so Google can crawl and understand it. Ranking for competitive terms usually also needs ongoing SEO." },
       { q: "Can you link the website to my Google Business Profile?", a: "Yes. We keep your details consistent and link your website and profile, which supports local search." },
     ],
-    related: ["website-development", "website-design", "seo-friendly-websites", "wordpress", "/digital_marketing/local-seo"],
+    related: ["website-development", "website-design", "seo-friendly-websites", "wordpress", "/digital-marketing/local-seo"],
     cta: { heading: "Get a Website That Brings Enquiries", body: "Tell us about your business and services. We will suggest the pages and features your website needs.", button: "Plan a Business Website" },
     plan: {
       primaryKeyword: "business website development",
@@ -364,7 +364,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Indian SMEs and service businesses that need a lead-generating website.",
       schema: WEB_SCHEMA,
       anchorTexts: ["business website development", "business website", "company website"],
-      linkBackFrom: [...LINK_BACK_CORE, "/digital_marketing/local-seo", "/web_development/website-development", "/web_development/wordpress"],
+      linkBackFrom: [...LINK_BACK_CORE, "/digital-marketing/local-seo", "/web-development/website-development", "/web-development/wordpress"],
       images: [
         { file: "business-website-development-india.webp", alt: "Business website with service pages and an enquiry form on laptop and mobile" },
         { file: "business-website-whatsapp-enquiry.webp", alt: "Business website with WhatsApp chat and click-to-call buttons on mobile" },
@@ -475,7 +475,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Will my store be ready for Google Shopping and Meta ads?", a: "Yes. We set up tracking and product feeds so your marketing team or ours can run campaigns." },
       { q: "Do you provide support after launch?", a: "Yes. We include a post-launch support period and offer ongoing maintenance plans." },
     ],
-    related: ["shopify", "woocommerce", "nextjs-development", "website-speed-optimization", "/digital_marketing/ecommerce-seo", "/digital_marketing/google-ads"],
+    related: ["shopify", "woocommerce", "nextjs-development", "website-speed-optimization", "/digital-marketing/ecommerce-seo", "/digital-marketing/google-ads"],
     cta: { heading: "Launch Your Online Store", body: "Tell us what you sell and how you sell it today. We will recommend a platform and plan for your store.", button: "Plan an E-commerce Website" },
     plan: {
       primaryKeyword: "e-commerce website development",
@@ -485,7 +485,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "D2C brands, retailers and manufacturers launching or rebuilding an online store.",
       schema: WEB_SCHEMA,
       anchorTexts: ["e-commerce website development", "online store development", "build an online store"],
-      linkBackFrom: [...LINK_BACK_CORE, "/digital_marketing/ecommerce-seo", "/web_development/shopify", "/web_development/woocommerce"],
+      linkBackFrom: [...LINK_BACK_CORE, "/digital-marketing/ecommerce-seo", "/web-development/shopify", "/web-development/woocommerce"],
       images: [
         { file: "ecommerce-website-development-india.webp", alt: "Avantta Gems online store built on Shopify by Genie Media & Studio" },
         { file: "ecommerce-checkout-razorpay-upi.webp", alt: "Mobile checkout with UPI and card payment options" },
@@ -596,7 +596,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Can my team edit SEO titles and descriptions?", a: "Yes. We add editable SEO fields to your CMS so you can update them without a developer." },
       { q: "What happens after launch?", a: "We monitor Search Console for errors. If you want ongoing growth, our SEO services take it from there." },
     ],
-    related: ["website-development", "website-redesign", "nextjs-development", "website-speed-optimization", "/digital_marketing/seo-services", "/digital_marketing/technical-seo"],
+    related: ["website-development", "website-redesign", "nextjs-development", "website-speed-optimization", "/digital-marketing/seo-services", "/digital-marketing/technical-seo"],
     cta: { heading: "Build Your Website Ready to Rank", body: "Planning a new site or a redesign? We will make sure search foundations are part of the plan from the start.", button: "Plan an SEO-Friendly Website" },
     plan: {
       primaryKeyword: "SEO-friendly website development",
@@ -606,7 +606,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Businesses building or rebuilding a site that must perform in organic search.",
       schema: WEB_SCHEMA,
       anchorTexts: ["SEO-friendly website development", "SEO-friendly websites", "build SEO into your website"],
-      linkBackFrom: [...LINK_BACK_CORE, "/digital_marketing/seo-services", "/digital_marketing/technical-seo", "/web_development/website-redesign"],
+      linkBackFrom: [...LINK_BACK_CORE, "/digital-marketing/seo-services", "/digital-marketing/technical-seo", "/web-development/website-redesign"],
       images: [
         { file: "seo-friendly-website-development.webp", alt: "SEO-friendly website structure with clean URLs, headings and schema" },
         { file: "website-migration-redirect-map.webp", alt: "Redirect map from old URLs to new URLs for a website migration" },
@@ -727,7 +727,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Businesses wanting an editable, content-led website, or owners of struggling WordPress sites.",
       schema: WEB_SCHEMA,
       anchorTexts: ["WordPress development", "WordPress website development", "WordPress developers"],
-      linkBackFrom: [...LINK_BACK_CORE, "/web_development/woocommerce", "/web_development/business-websites", "/web_development/website-maintenance"],
+      linkBackFrom: [...LINK_BACK_CORE, "/web-development/woocommerce", "/web-development/business-websites", "/web-development/website-maintenance"],
       images: [
         { file: "wordpress-development-india.webp", alt: "WordPress website being customised in the block editor" },
         { file: "wordpress-custom-blocks.webp", alt: "Reusable custom Gutenberg blocks for a business website" },
@@ -838,7 +838,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "What are the ongoing costs of Shopify?", a: "There is a monthly plan fee, and some apps and themes have their own fees. We help you choose a setup that fits your budget." },
       { q: "Can you help market the store after launch?", a: "Yes. Our digital marketing team runs ecommerce SEO, Google Ads and Meta Ads." },
     ],
-    related: ["ecommerce-websites", "woocommerce", "website-speed-optimization", "/digital_marketing/ecommerce-seo", "/digital_marketing/google-ads"],
+    related: ["ecommerce-websites", "woocommerce", "website-speed-optimization", "/digital-marketing/ecommerce-seo", "/digital-marketing/google-ads"],
     cta: { heading: "Build a Shopify Store That Sells", body: "Tell us about your products and brand. We will plan a Shopify store around them.", button: "Discuss Your Shopify Store" },
     plan: {
       primaryKeyword: "Shopify development company",
@@ -848,7 +848,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "D2C brands and retailers launching or improving a Shopify store.",
       schema: WEB_SCHEMA,
       anchorTexts: ["Shopify development", "Shopify developers", "Shopify store setup"],
-      linkBackFrom: [...LINK_BACK_CORE, "/projects", "/digital_marketing/ecommerce-seo", "/web_development/ecommerce-websites"],
+      linkBackFrom: [...LINK_BACK_CORE, "/projects", "/digital-marketing/ecommerce-seo", "/web-development/ecommerce-websites"],
       images: [
         { file: "shopify-development-india.webp", alt: "Avantta Gems Shopify store designed and developed by Genie Media & Studio" },
         { file: "shopify-product-page-design.webp", alt: "Customised Shopify product page on mobile" },
@@ -959,7 +959,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Can you add Razorpay to WooCommerce?", a: "Yes. We integrate Razorpay or other Indian gateways and test payments end to end." },
       { q: "Do you maintain WooCommerce stores?", a: "Yes. Our maintenance plans cover updates, backups, security monitoring and fixes." },
     ],
-    related: ["wordpress", "ecommerce-websites", "shopify", "website-maintenance", "/digital_marketing/ecommerce-seo"],
+    related: ["wordpress", "ecommerce-websites", "shopify", "website-maintenance", "/digital-marketing/ecommerce-seo"],
     cta: { heading: "Sell From Your WordPress Site", body: "Tell us about your products and current website. We will plan a WooCommerce store that fits.", button: "Discuss WooCommerce" },
     plan: {
       primaryKeyword: "WooCommerce development",
@@ -969,7 +969,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "WordPress users and brands wanting a flexible, self-hosted store.",
       schema: WEB_SCHEMA,
       anchorTexts: ["WooCommerce development", "WooCommerce store", "WordPress e-commerce"],
-      linkBackFrom: [...LINK_BACK_CORE, "/web_development/wordpress", "/web_development/ecommerce-websites", "/web_development/shopify"],
+      linkBackFrom: [...LINK_BACK_CORE, "/web-development/wordpress", "/web-development/ecommerce-websites", "/web-development/shopify"],
       images: [
         { file: "woocommerce-development-india.webp", alt: "WooCommerce store on WordPress with product grid and cart" },
         { file: "woocommerce-checkout-upi.webp", alt: "WooCommerce checkout with UPI payment option" },
@@ -1090,7 +1090,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Startups and businesses needing custom web applications.",
       schema: WEB_SCHEMA,
       anchorTexts: ["React development", "React developers", "custom web app development"],
-      linkBackFrom: [...LINK_BACK_CORE, "/web_development/nextjs-development", "/web_development/react-native"],
+      linkBackFrom: [...LINK_BACK_CORE, "/web-development/nextjs-development", "/web-development/react-native"],
       images: [
         { file: "react-development-india.webp", alt: "React component code for a custom web application" },
         { file: "react-dashboard-interface.webp", alt: "Custom React dashboard with charts and data tables" },
@@ -1201,7 +1201,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Should I move from WordPress to Next.js?", a: "Only if you need the speed, flexibility or custom features. For many content sites, a well-built WordPress site is enough. We will advise honestly." },
       { q: "Do you build headless Shopify stores?", a: "Yes. For brands that need a custom front end, we build Next.js storefronts connected to Shopify." },
     ],
-    related: ["react-development", "seo-friendly-websites", "website-speed-optimization", "website-development", "/digital_marketing/technical-seo"],
+    related: ["react-development", "seo-friendly-websites", "website-speed-optimization", "website-development", "/digital-marketing/technical-seo"],
     cta: { heading: "Build a Faster Website With Next.js", body: "Tell us about your site and goals. We will tell you whether Next.js is the right fit.", button: "Discuss a Next.js Project" },
     plan: {
       primaryKeyword: "Next.js development company",
@@ -1211,7 +1211,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Businesses wanting high-performance, SEO-friendly sites or headless builds.",
       schema: WEB_SCHEMA,
       anchorTexts: ["Next.js development", "Next.js developers", "Next.js websites"],
-      linkBackFrom: [...LINK_BACK_CORE, "/web_development/react-development", "/web_development/seo-friendly-websites", "/digital_marketing/technical-seo"],
+      linkBackFrom: [...LINK_BACK_CORE, "/web-development/react-development", "/web-development/seo-friendly-websites", "/digital-marketing/technical-seo"],
       images: [
         { file: "nextjs-development-india.webp", alt: "Next.js website code with fast page load performance" },
         { file: "nextjs-headless-cms-architecture.webp", alt: "Headless CMS connected to a Next.js front end" },
@@ -1332,7 +1332,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Startups and businesses planning an Android and iOS app.",
       schema: WEB_SCHEMA,
       anchorTexts: ["React Native app development", "mobile app development", "Android and iOS apps"],
-      linkBackFrom: [...LINK_BACK_CORE, "/", "/web_development/react-development"],
+      linkBackFrom: [...LINK_BACK_CORE, "/", "/web-development/react-development"],
       images: [
         { file: "react-native-app-development-india.webp", alt: "Cross-platform mobile app built with React Native on Android and iPhone" },
         { file: "react-native-app-screens.webp", alt: "Mobile app screen designs for a booking app" },
@@ -1443,7 +1443,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Can you reuse my existing content?", a: "Yes. We review it and keep, improve or merge content based on how it performs." },
       { q: "Will my site be down during the redesign?", a: "No. We build on a staging site and switch over at launch." },
     ],
-    related: ["website-design", "seo-friendly-websites", "website-speed-optimization", "website-development", "/digital_marketing/seo-audit"],
+    related: ["website-design", "seo-friendly-websites", "website-speed-optimization", "website-development", "/digital-marketing/seo-audit"],
     cta: { heading: "Redesign Without Losing What Works", body: "Share your current website. We will tell you what to keep, what to change and why.", button: "Request a Redesign Review" },
     plan: {
       primaryKeyword: "website redesign services",
@@ -1453,7 +1453,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Businesses with outdated or underperforming websites.",
       schema: WEB_SCHEMA,
       anchorTexts: ["website redesign services", "redesign your website", "website revamp"],
-      linkBackFrom: [...LINK_BACK_CORE, "/digital_marketing/seo-audit", "/digital_marketing/technical-seo", "/web_development/website-design"],
+      linkBackFrom: [...LINK_BACK_CORE, "/digital-marketing/seo-audit", "/digital-marketing/technical-seo", "/web-development/website-design"],
       images: [
         { file: "website-redesign-services-india.webp", alt: "Redesigned business website with a modern, clean layout" },
         { file: "website-redesign-before-after.webp", alt: "Website before and after redesign comparison" },
@@ -1564,7 +1564,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "Is hosting included?", a: "Hosting can be included or kept separate. We can also help you move to better hosting." },
       { q: "Can I cancel the plan?", a: "Plans run month to month or on agreed terms, set out in writing before we begin." },
     ],
-    related: ["website-speed-optimization", "wordpress", "woocommerce", "website-redesign", "/digital_marketing/technical-seo"],
+    related: ["website-speed-optimization", "wordpress", "woocommerce", "website-redesign", "/digital-marketing/technical-seo"],
     cta: { heading: "Keep Your Website Safe and Up to Date", body: "Tell us about your website and platform. We will suggest a maintenance plan that fits.", button: "Ask About Maintenance Plans" },
     plan: {
       primaryKeyword: "website maintenance services",
@@ -1574,7 +1574,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Businesses without in-house developers that need reliable website upkeep.",
       schema: WEB_SCHEMA,
       anchorTexts: ["website maintenance services", "website maintenance and support", "maintenance plans"],
-      linkBackFrom: [...LINK_BACK_CORE, "/web_development/wordpress", "/web_development/woocommerce", "/web_development/website-development"],
+      linkBackFrom: [...LINK_BACK_CORE, "/web-development/wordpress", "/web-development/woocommerce", "/web-development/website-development"],
       images: [
         { file: "website-maintenance-services-india.webp", alt: "Website maintenance dashboard with updates, backups and uptime status" },
         { file: "website-backup-security-monitoring.webp", alt: "Website backup and security monitoring report" },
@@ -1685,7 +1685,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       { q: "How long until Search Console shows improvement?", a: "Core Web Vitals use a rolling 28-day window of real-user data, so changes appear gradually." },
       { q: "Will optimisation break my website?", a: "We test changes on staging where possible and check every key template after deployment." },
     ],
-    related: ["website-maintenance", "website-redesign", "nextjs-development", "seo-friendly-websites", "/digital_marketing/technical-seo"],
+    related: ["website-maintenance", "website-redesign", "nextjs-development", "seo-friendly-websites", "/digital-marketing/technical-seo"],
     cta: { heading: "Make Your Website Faster", body: "Send us your website address. We will identify what is slowing it down.", button: "Request a Speed Review" },
     plan: {
       primaryKeyword: "website speed optimization",
@@ -1695,7 +1695,7 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
       audience: "Owners of slow websites or stores, and advertisers with slow landing pages.",
       schema: WEB_SCHEMA,
       anchorTexts: ["website speed optimization", "Core Web Vitals optimization", "speed up your website"],
-      linkBackFrom: [...LINK_BACK_CORE, "/digital_marketing/technical-seo", "/web_development/website-maintenance", "/web_development/wordpress"],
+      linkBackFrom: [...LINK_BACK_CORE, "/digital-marketing/technical-seo", "/web-development/website-maintenance", "/web-development/wordpress"],
       images: [
         { file: "website-speed-optimization-core-web-vitals.webp", alt: "Website speed test showing improved Core Web Vitals scores" },
         { file: "image-optimisation-webp-avif.webp", alt: "Image compression comparison for faster page loading" },
@@ -1705,4 +1705,4 @@ const WEB_DEV_CONTENT: ServiceSubPage[] = [
 ];
 
 export const WEB_DEV_PAGES = localiseServicePages(WEB_DEV_CONTENT);
-export const webDevPath = (slug: string): string => `/web_development/${slug}`;
+export const webDevPath = (slug: string): string => `/web-development/${slug}`;

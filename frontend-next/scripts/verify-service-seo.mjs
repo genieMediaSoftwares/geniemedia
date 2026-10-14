@@ -6,7 +6,7 @@ import { JSDOM } from "jsdom";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
-const groups = ["digital_marketing", "web_development", "podcast_studio"];
+const groups = ["digital-marketing", "web-development", "podcast-studio"];
 const routes = groups.flatMap((group) => fs.readdirSync(path.join(dist, group))
   .filter((file) => file.endsWith(".html"))
   .map((file) => `/${group}/${file.slice(0, -5)}`));
@@ -49,7 +49,7 @@ for (const route of routes) {
   });
   const service = graphs.find((node) => node["@type"] === "Service");
   assert(service?.areaServed?.length, `${route}: missing structured service areas`);
-  const physical = ["rental", "video-podcast", "pricing", "booking"].some((slug) => route === `/podcast_studio/${slug}`);
+  const physical = ["rental", "video-podcast", "pricing", "booking"].some((slug) => route === `/podcast-studio/${slug}`);
   assert.equal(service.areaServed.some((area) => area["@type"] === "Country"), !physical, `${route}: recording vs remote service scope`);
   const faq = graphs.find((node) => node["@type"] === "FAQPage");
   assert(faq?.mainEntity?.length, `${route}: missing FAQs`);

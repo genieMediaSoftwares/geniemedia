@@ -18,7 +18,7 @@ const page = (overrides = {}) => ({
   links: [
     { href: "/contact", text: "Contact" },
     { href: "/case-studies", text: "Case studies" },
-    { href: "/web_development", text: "Web" },
+    { href: "/web-development", text: "Web" },
   ],
   ...overrides,
 });
@@ -125,16 +125,16 @@ test("meta description repetition gets a natural deduplicated rewrite", () => {
 
 test("case-study suggestions use only published case studies for the same service", () => {
   const caseStudies = [
-    { title: "Shopify store", clientName: "A", href: "/case-studies/a", services: ["/web_development"], category: "Website Development" },
-    { title: "Local SEO", clientName: "B", href: "/case-studies/b", services: ["/digital_marketing"], category: "Digital Marketing" },
+    { title: "Shopify store", clientName: "A", href: "/case-studies/a", services: ["/web-development"], category: "Website Development" },
+    { title: "Local SEO", clientName: "B", href: "/case-studies/b", services: ["/digital-marketing"], category: "Digital Marketing" },
   ];
   const noLink = page({ links: [{ href: "/contact", text: "c" }] });
-  const r = analyzePageHealth(noLink, config, keywords, LOCATIONS, { caseStudies, pagePath: "/digital_marketing" });
+  const r = analyzePageHealth(noLink, config, keywords, LOCATIONS, { caseStudies, pagePath: "/digital-marketing" });
   const issue = r.issues.find((i) => i.id === "MISSING_CASE_STUDY_LINK");
   assert.deepEqual(issue.suggestions.map((s) => s.link.href), ["/case-studies/b"]);
-  const none = analyzePageHealth(noLink, config, keywords, LOCATIONS, { caseStudies: [], pagePath: "/digital_marketing" });
+  const none = analyzePageHealth(noLink, config, keywords, LOCATIONS, { caseStudies: [], pagePath: "/digital-marketing" });
   assert.equal(none.issues.find((i) => i.id === "MISSING_CASE_STUDY_LINK").suggestions.length, 0, "never invents a case study");
-  const linked = analyzePageHealth({ ...noLink, links: [...noLink.links, { href: "/case-studies/b", text: "B" }] }, config, keywords, LOCATIONS, { caseStudies, pagePath: "/digital_marketing" });
+  const linked = analyzePageHealth({ ...noLink, links: [...noLink.links, { href: "/case-studies/b", text: "B" }] }, config, keywords, LOCATIONS, { caseStudies, pagePath: "/digital-marketing" });
   assert.ok(!ids(linked).includes("MISSING_CASE_STUDY_LINK"));
 });
 
@@ -154,7 +154,7 @@ test("location repetition lists the paragraphs instead of rewriting them", () =>
 });
 
 test("noindex and off-page canonical are critical", () => {
-  const r = analyzePageHealth(page(), { ...config, robotsIndex: false, canonicalUrl: "https://geniemedia.in/other" }, keywords, LOCATIONS, { pagePath: "/digital_marketing" });
+  const r = analyzePageHealth(page(), { ...config, robotsIndex: false, canonicalUrl: "https://geniemedia.in/other" }, keywords, LOCATIONS, { pagePath: "/digital-marketing" });
   assert.equal(r.issues.find((i) => i.id === "ROBOTS_NOINDEX").severity, "critical");
   assert.equal(r.issues.find((i) => i.id === "CANONICAL_EXTERNAL").severity, "critical");
 });

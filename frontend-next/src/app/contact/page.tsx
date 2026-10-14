@@ -25,12 +25,12 @@ export default function ContactRoute() {
           <p className="text-gray-700 leading-relaxed mb-6">Before you contact us, you can review the service scope and common questions on these pages. For studio work, tell us your preferred date and package so we can check availability.</p>
           <ul className="grid gap-3 sm:grid-cols-2">
             {[
-              ["Digital marketing services", "/digital_marketing"],
-              ["Website development", "/web_development"],
-              ["Podcast studio and editing", "/podcast_studio"],
-              ["SEO services", "/digital_marketing/seo-services"],
-              ["AEO services", "/digital_marketing/aeo"],
-              ["GEO services", "/digital_marketing/geo"],
+              ["Digital marketing services", "/digital-marketing"],
+              ["Website development", "/web-development"],
+              ["Podcast studio and editing", "/podcast-studio"],
+              ["SEO services", "/digital-marketing/seo-services"],
+              ["AEO services", "/digital-marketing/aeo"],
+              ["GEO services", "/digital-marketing/geo"],
             ].map(([label, href]) => <li key={href}><a href={href} className={CONTENT_LINK}>{label}</a></li>)}
           </ul>
         </div>

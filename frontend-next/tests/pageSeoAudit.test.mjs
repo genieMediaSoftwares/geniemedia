@@ -9,7 +9,7 @@ const OPTS = { keyword: "digital marketing", locations: ["Vizag", "Visakhapatnam
 const page = (main, extraBody = "", head = "") => `<!doctype html><html lang="en"><head>
 <title>Digital Marketing Agency in Vizag | Genie Media</title>
 <meta name="description" content="Genie Media & Studio offers digital marketing in Vizag: SEO, Google Ads, social media marketing, content, websites and branding for local businesses.">
-<link rel="canonical" href="https://geniemedia.in/digital_marketing">
+<link rel="canonical" href="https://geniemedia.in/digital-marketing">
 <meta name="viewport" content="width=device-width">${head}
 </head><body><header><nav><a href="/">Home</a></nav></header>
 <main data-seo-content="true">${main}</main>
@@ -36,32 +36,32 @@ test("scripts, JSON-LD, the React payload and hidden text are not counted", () =
     `<div class="hidden">${"digital marketing ".repeat(200)}</div>`,
     `<style>.digital-marketing{color:red}</style>`,
   ].join("");
-  const doc = buildDocument(page(visible + noise), "https://geniemedia.in/digital_marketing");
+  const doc = buildDocument(page(visible + noise), "https://geniemedia.in/digital-marketing");
   const result = auditPage(doc, OPTS);
   assert.equal(result.stats.keywordOccurrences, 2);
   assert.equal(result.stats.wordCount, 12);
 });
 
 test("a responsive Tailwind 'hidden md:block' element still counts as visible", () => {
-  const doc = buildDocument(page('<p class="hidden md:block">Digital marketing in Vizag for local shops.</p>'), "https://geniemedia.in/digital_marketing");
+  const doc = buildDocument(page('<p class="hidden md:block">Digital marketing in Vizag for local shops.</p>'), "https://geniemedia.in/digital-marketing");
   assert.equal(countPhrase(doc.text, "digital marketing"), 1);
 });
 
 test("keyword stuffing fails the overuse check instead of earning points", () => {
-  const stuffed = buildDocument(page(`<h1>Digital Marketing in Vizag</h1><p>${"Digital marketing. ".repeat(60)}</p>`), "https://geniemedia.in/digital_marketing");
+  const stuffed = buildDocument(page(`<h1>Digital Marketing in Vizag</h1><p>${"Digital marketing. ".repeat(60)}</p>`), "https://geniemedia.in/digital-marketing");
   const check = auditPage(stuffed, OPTS).categories.find((c) => c.name === "Content Quality").checks.find((c) => c.id === "kw-overuse");
   assert.equal(check.passed, false);
   assert.match(check.detail, /Potential keyword overuse/);
 });
 
 test("metadata is read once per tag and title length is checked", () => {
-  const doc = buildDocument(page("<h1>Digital Marketing in Vizag</h1>", "", "<title>Second title</title>"), "https://geniemedia.in/digital_marketing");
+  const doc = buildDocument(page("<h1>Digital Marketing in Vizag</h1>", "", "<title>Second title</title>"), "https://geniemedia.in/digital-marketing");
   const tech = auditPage(doc, OPTS).categories.find((c) => c.name === "Technical SEO");
   assert.equal(tech.checks.find((c) => c.id === "one-title").passed, false);
 });
 
 test("phone numbers match whatever their spacing", () => {
-  const doc = buildDocument(page("<h1>Digital Marketing in Vizag</h1>"), "https://geniemedia.in/digital_marketing");
+  const doc = buildDocument(page("<h1>Digital Marketing in Vizag</h1>"), "https://geniemedia.in/digital-marketing");
   const local = auditPage(doc, OPTS).categories.find((c) => c.name === "Local SEO");
   assert.equal(local.checks.find((c) => c.id === "nap").passed, true);
 });

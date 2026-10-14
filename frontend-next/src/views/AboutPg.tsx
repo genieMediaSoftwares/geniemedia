@@ -82,10 +82,10 @@ export default function AboutPage() {
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
                 Genie Media &amp; Studio is based in Yendada, Visakhapatnam (Vizag). We help local businesses and startups with{" "}
-                <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing</a>,{" "}
-                <a href="/web_development" className={CONTENT_LINK}>website development</a>, a{" "}
-                <a href="/production_house" className={CONTENT_LINK}>production house</a> and a{" "}
-                <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio</a>.{" "}
+                <a href="/digital-marketing" className={CONTENT_LINK}>digital marketing</a>,{" "}
+                <a href="/web-development" className={CONTENT_LINK}>website development</a>, a{" "}
+                <a href="/production-house" className={CONTENT_LINK}>production house</a> and a{" "}
+                <a href="/podcast-studio" className={CONTENT_LINK}>podcast studio</a>.{" "}
                 We serve Rushikonda, MVP Colony, Madhurawada and wider Andhra Pradesh. Marketing, website work and podcast editing are also available remotely across India. First, tell us what you need. Then we can plan the work together. <a href="/contact" className={CONTENT_LINK}>Get in touch</a> to start a project.
               </p>
             </div>
@@ -180,7 +180,7 @@ We blend design, storytelling, and technology to build meaningful brand experien
         </p>
 
         <p className="text-gray-700 text-lg leading-relaxed">
-         Our vision is to become a trusted growth partner for businesses by delivering impactful <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing solutions</a>{" "} that drive measurable results. 
+         Our vision is to become a trusted growth partner for businesses by delivering impactful <a href="/digital-marketing" className={CONTENT_LINK}>digital marketing solutions</a>{" "} that drive measurable results. 
           
         </p>
       </div>

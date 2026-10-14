@@ -25,7 +25,7 @@ const services = [
     subtitle: "Search Engine Optimization & Organic Growth",
     description: "SEO helps people find you on Google without paying for each click. First, we run an SEO audit of your website. Next, we fix technical SEO issues, improve on-page SEO and research the keywords your customers type. We also handle internal links and structured data. Finally, we report on your rankings and organic traffic every month.",
     keywords: ["SEO Audit", "Technical SEO", "On-Page SEO", "Keyword Research"],
-    link: "/digital_marketing/seo-services",
+    link: "/digital-marketing/seo-services",
     linkLabel: "Explore SEO services"
   },
   {
@@ -34,7 +34,7 @@ const services = [
     subtitle: "Google Maps & \"Near Me\" Visibility",
     description: "When someone nearby searches for what you offer, your Google Business Profile is often the first thing they see. So we set it up or clean it up, pick the right categories and keep your hours, photos and services up to date. We also fix your local listings and build location pages. As a result, more people in Vizag find you on Google Maps and in local search.",
     keywords: ["Google Business Profile", "Google Maps", "Local Listings", "Location Pages"],
-    link: "/digital_marketing/local-seo",
+    link: "/digital-marketing/local-seo",
     linkLabel: "Explore local SEO"
   },
   {
@@ -43,7 +43,7 @@ const services = [
     subtitle: "Paid Search & Performance Campaigns",
     description: "Google Ads and search engine marketing put you at the top of the page today, not in six months. We plan your PPC campaigns, write the ads and set up conversion tracking. We also run display ads and remarketing to bring back people who visited your site. After launch, we watch every search term and every rupee. As a result, your budget moves to the ads that bring calls and leads, and away from the ones that do not.",
     keywords: ["Google Search Ads", "PPC Management", "Display Ads", "Remarketing"],
-    link: "/digital_marketing/google-ads",
+    link: "/digital-marketing/google-ads",
     linkLabel: "Explore Google Ads management"
   },
   {
@@ -52,7 +52,7 @@ const services = [
     subtitle: "Content Strategy, Blogs & Brand Storytelling",
     description: "Good content answers the questions your customers already ask. So we plan topics around real searches. Then we write clear website copy, blog posts and social captions. Because we have our own studio, we can also shoot the photos and videos that bring your story to life.",
     keywords: ["Content Strategy", "Blog Content", "SEO Content", "Visual Storytelling"],
-    link: "/digital_marketing/content-marketing",
+    link: "/digital-marketing/content-marketing",
     linkLabel: "Explore content marketing"
   },
   {
@@ -61,7 +61,7 @@ const services = [
     subtitle: "Social Strategy, Creatives & Advertising",
     description: "We plan your social media strategy around the people you want to reach. Then we design posts, edit Reels and short videos, and keep your pages active. We also run paid social ads on Instagram and Facebook through Meta Ads. The goal is simple: more brand awareness, stronger audience engagement and more enquiries, not just likes.",
     keywords: ["Social Media Management", "Instagram Marketing", "Facebook & Instagram Ads", "Reels"],
-    link: "/digital_marketing/social-media-marketing",
+    link: "/digital-marketing/social-media-marketing",
     linkLabel: "Explore social media marketing"
   },
   {
@@ -70,7 +70,7 @@ const services = [
     subtitle: "Campaigns That Bring In Qualified Enquiries",
     description: "Lead generation turns interest into real enquiries. We plan lead generation campaigns on Google and social media, build focused landing pages and keep forms short. Then we follow up leads by email. As a result, your team spends its time on qualified leads, not cold contacts.",
     keywords: ["Lead Generation Campaigns", "Landing Pages", "Qualified Leads", "Email Follow-Up"],
-    link: "/digital_marketing/lead-generation",
+    link: "/digital-marketing/lead-generation",
     linkLabel: "Explore lead generation"
   },
   {
@@ -79,7 +79,7 @@ const services = [
     subtitle: "More Enquiries From the Same Traffic",
     description: "Conversion optimization helps you get more from the visitors you already have. We study how people use your pages. Then we improve headlines, forms, page speed and calls to action. Next, we test each change and keep what works. In short, conversion rate optimization (CRO) lowers your cost per lead.",
     keywords: ["CRO", "A/B Testing", "Page Speed", "Calls to Action"],
-    link: "/digital_marketing/conversion-optimization",
+    link: "/digital-marketing/conversion-optimization",
     linkLabel: "Explore conversion optimization"
   }
 ];
@@ -120,8 +120,8 @@ const whyChooseUs: Array<{ title: string; content: ReactNode }> = [
     content: (
       <>
         Your SEO, ads, website and videos come from one place. Explore our{" "}
-        <a href="/web_development" className={inlineLink}>website development services</a>, visit our{" "}
-        <a href="/podcast_studio" className={inlineLink}>podcast studio</a>, or learn more{" "}
+        <a href="/web-development" className={inlineLink}>website development services</a>, visit our{" "}
+        <a href="/podcast-studio" className={inlineLink}>podcast studio</a>, or learn more{" "}
         <a href="/about" className={inlineLink}>about Genie Media & Studio</a>.
       </>
     )
@@ -473,14 +473,14 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
             <div className="lg:col-span-2 space-y-4">
               <h2 className="text-3xl font-bold">Website, Video and Podcast Support Under One Team</h2>
               <p className="text-lg opacity-90 leading-relaxed">
-                Most marketing ends on your website, so our <a href="/web_development" className={CONTENT_LINK}>website development services</a> keep it fast, mobile-friendly and SEO-ready. We also help shape your brand identity, colours and ad creatives.
+                Most marketing ends on your website, so our <a href="/web-development" className={CONTENT_LINK}>website development services</a> keep it fast, mobile-friendly and SEO-ready. We also help shape your brand identity, colours and ad creatives.
               </p>
               <p className="text-lg opacity-90 leading-relaxed">
-                For video, our <a href="/production_house" className={CONTENT_LINK}>video production services</a> cover brand films, ad shoots and Reels. Our <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio rental in Vizag</a> adds audio and video podcasts. So your content can be planned, shot and promoted by one team.
+                For video, our <a href="/production-house" className={CONTENT_LINK}>video production services</a> cover brand films, ad shoots and Reels. Our <a href="/podcast-studio" className={CONTENT_LINK}>podcast studio rental in Vizag</a> adds audio and video podcasts. So your content can be planned, shot and promoted by one team.
               </p>
             </div>
             <div className="flex justify-start lg:justify-end">
-              <a href="/podcast_studio" className="bg-black hover:bg-slate-900 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300">
+              <a href="/podcast-studio" className="bg-black hover:bg-slate-900 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300">
                 Visit the Podcast Studio
               </a>
             </div>

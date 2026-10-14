@@ -1,12 +1,12 @@
 import { CONTENT_LINK } from "@/lib/linkStyles";
 
 const services = [
-  { title: "SEO services in Vizag", href: "/digital_marketing/seo-services", body: "First, we check how people search for your business. Then we improve page titles, content and site structure. Our SEO services help search engines find and understand your pages." },
-  { title: "Local SEO and Google Maps", href: "/digital_marketing/local-seo", body: "Local SEO helps nearby customers find you. We review your Google Business Profile, business details and local pages. As a result, your digital marketing plan connects search visits with calls, directions and enquiries." },
-  { title: "Google Ads and PPC management", href: "/digital_marketing/google-ads", body: "For paid search, we choose keywords that match what you sell. Next, we create ads and track enquiries from each landing page. You can see where your budget goes and which searches bring leads." },
-  { title: "Social media marketing", href: "/digital_marketing/social-media-marketing", body: "We plan posts, Reels and Meta Ads for Instagram and Facebook. Our social media management keeps your message clear. Meanwhile, our creative team makes content that supports your digital marketing goals." },
-  { title: "Content marketing", href: "/digital_marketing/content-marketing", body: "Useful content answers customer questions before they call. We write website copy and blog posts, then create supporting photos and videos. Content marketing gives your digital marketing campaigns clear, helpful pages to share." },
-  { title: "Lead generation and performance marketing", href: "/digital_marketing/lead-generation", body: "We build campaigns around a clear offer and a simple enquiry form. Then we track calls, form leads and WhatsApp clicks. This helps us improve your digital marketing based on real enquiries." },
+  { title: "SEO services in Vizag", href: "/digital-marketing/seo-services", body: "First, we check how people search for your business. Then we improve page titles, content and site structure. Our SEO services help search engines find and understand your pages." },
+  { title: "Local SEO and Google Maps", href: "/digital-marketing/local-seo", body: "Local SEO helps nearby customers find you. We review your Google Business Profile, business details and local pages. As a result, your digital marketing plan connects search visits with calls, directions and enquiries." },
+  { title: "Google Ads and PPC management", href: "/digital-marketing/google-ads", body: "For paid search, we choose keywords that match what you sell. Next, we create ads and track enquiries from each landing page. You can see where your budget goes and which searches bring leads." },
+  { title: "Social media marketing", href: "/digital-marketing/social-media-marketing", body: "We plan posts, Reels and Meta Ads for Instagram and Facebook. Our social media management keeps your message clear. Meanwhile, our creative team makes content that supports your digital marketing goals." },
+  { title: "Content marketing", href: "/digital-marketing/content-marketing", body: "Useful content answers customer questions before they call. We write website copy and blog posts, then create supporting photos and videos. Content marketing gives your digital marketing campaigns clear, helpful pages to share." },
+  { title: "Lead generation and performance marketing", href: "/digital-marketing/lead-generation", body: "We build campaigns around a clear offer and a simple enquiry form. Then we track calls, form leads and WhatsApp clicks. This helps us improve your digital marketing based on real enquiries." },
 ];
 
 export default function DigitalMarketingOverview() {
@@ -39,7 +39,7 @@ export default function DigitalMarketingOverview() {
           and shared reports. Whether you run a startup or an online store, you get a plan with a clear
           scope. Finally, we review traffic, enquiries and campaign costs so you can decide what to do next.
         </p>
-        <a href="/digital_marketing" className={CONTENT_LINK}>Explore our digital marketing services</a>
+        <a href="/digital-marketing" className={CONTENT_LINK}>Explore our digital marketing services</a>
         <span className="mx-3 text-gray-400" aria-hidden="true">·</span>
         <a href="/contact" className={CONTENT_LINK}>Discuss your business goals with Genie Media</a>
       </div>

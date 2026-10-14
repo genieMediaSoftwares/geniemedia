@@ -20,6 +20,7 @@ import {
   publishReadiness,
 } from "@/lib/caseStudies";
 import type { CaseStudy, CaseStudyCategory, ServicePagePath } from "@/types";
+import { toCmsPath } from "@/lib/legacyPaths";
 import TagInput from "@/components/TagInput";
 import CaseStudyArticle from "@/components/caseStudy/CaseStudyArticle";
 
@@ -215,7 +216,8 @@ const toPayload = (f: FormState, status: "published" | "draft"): RawRecord => ({
   testimonial_author: f.testimonial_author.trim(),
   testimonial_role: f.testimonial_role.trim(),
   website_url: f.website_url.trim(),
-  related_services: f.related_services,
+  // The backend validates against the CMS (underscore) service paths.
+  related_services: f.related_services.map(toCmsPath),
   related_blogs: f.related_blogs,
   seo_title: f.seo_title.trim(),
   seo_description: f.seo_description.trim(),

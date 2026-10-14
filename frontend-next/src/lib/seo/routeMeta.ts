@@ -15,12 +15,12 @@ export type PublicRoute =
   | "/projects"
   | "/case-studies"
   | "/contact"
-  | "/web_development"
-  | "/production_house"
+  | "/web-development"
+  | "/production-house"
   | "/reviews"
   | "/blogs"
-  | "/digital_marketing"
-  | "/podcast_studio"
+  | "/digital-marketing"
+  | "/podcast-studio"
   | "/privacy-policy"
   | "/terms-and-conditions";
 
@@ -47,9 +47,9 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
   "/services": {
     breadcrumb: "Services",
-    title: "Digital Marketing, Web & Podcast in Vizag | Genie Media",
+    title: "Genie Media Services | Marketing, Web, Video & Podcast",
     description:
-      "Genie Media services in Vizag: digital marketing, SEO, AEO, GEO, website development and podcasts. Serving Visakhapatnam and remote clients across India.",
+      "Genie Media services in Vizag: digital marketing, SEO, website development, video production and podcast studio hire for Visakhapatnam and clients across India.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/about": {
@@ -80,14 +80,14 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
       "Contact Genie Media & Studio at KP Icon, Yendada, Visakhapatnam 530045. Call +91 90328 45433 or email admin@geniemedia.in to discuss your project.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
-  "/web_development": {
+  "/web-development": {
     breadcrumb: "Web Development",
     title: "Website Development Company in Vizag & India | Genie Media",
     description:
       "Website development in Vizag and India from Genie Media. Responsive WordPress, Shopify and custom websites for businesses in Visakhapatnam, Andhra Pradesh.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
-  "/production_house": {
+  "/production-house": {
     breadcrumb: "Production House",
     title: "Video Production House in Vizag & India | Genie Media",
     description:
@@ -103,18 +103,18 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
   "/blogs": {
     breadcrumb: "Blogs",
-    title: "Digital Marketing Blog | Genie Media, Vizag",
+    title: "Digital Marketing Blogs | Genie Media, Vizag",
     description:
       "Digital marketing tips from Genie Media & Studio in Vizag: SEO, Google Ads, social media marketing, websites and online growth for local businesses.",
   },
-  "/digital_marketing": {
+  "/digital-marketing": {
     breadcrumb: "Digital Marketing",
     title: "Digital Marketing Agency in Vizag | Genie Media",
     description:
       "Digital marketing agency in Vizag for SEO, Google Ads and social media. Based in Yendada, serving Visakhapatnam businesses and remote clients across India.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
-  "/podcast_studio": {
+  "/podcast-studio": {
     breadcrumb: "Podcast Studio",
     title: "Podcast Recording Studio in Vizag | Genie Media",
     description:
@@ -248,10 +248,10 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
           "@type": "OfferCatalog",
           name: "Services",
           itemListElement: [
-            ["Digital Marketing", "/digital_marketing"],
-            ["Website Development", "/web_development"],
-            ["Video Production", "/production_house"],
-            ["Podcast Studio Rental", "/podcast_studio"],
+            ["Digital Marketing", "/digital-marketing"],
+            ["Website Development", "/web-development"],
+            ["Video Production", "/production-house"],
+            ["Podcast Studio Rental", "/podcast-studio"],
           ].map(([name, path]) => ({
             "@type": "Offer",
             itemOffered: { "@type": "Service", name, url: canonicalFor(path) },
@@ -260,7 +260,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
       },
     ],
   }),
-  "/digital_marketing": (meta) =>
+  "/digital-marketing": (meta) =>
     pageGraph(meta, {
       service: {
         name: "Digital Marketing Services",
@@ -292,7 +292,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
         },
       ],
     }),
-  "/podcast_studio": (meta) =>
+  "/podcast-studio": (meta) =>
     pageGraph(meta, {
       service: {
         name: "Podcast Studio Rental",
@@ -319,7 +319,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
       },
       extraNodes: [faqPage(meta, PODCAST_LOCAL_FAQS)],
     }),
-  "/web_development": (meta) =>
+  "/web-development": (meta) =>
     pageGraph(meta, {
       service: {
         name: "Website Development",
@@ -332,7 +332,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
       },
       extraNodes: [faqPage(meta, WEB_DEVELOPMENT_FAQS)],
     }),
-  "/production_house": (meta) =>
+  "/production-house": (meta) =>
     pageGraph(meta, {
       service: {
         name: "Video Production",

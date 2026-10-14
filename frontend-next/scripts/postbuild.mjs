@@ -17,6 +17,30 @@ const readEnv = (name) => {
 };
 
 const DIST = path.join(ROOT, "dist");
+
+// The CMS stores the service pages under their pre-2026-10-14 underscore paths.
+// Keep in sync with src/lib/legacyPaths.ts and public/seo-sync.php.
+const LEGACY_SECTION_PATHS = {
+  "/digital_marketing": "/digital-marketing",
+  "/web_development": "/web-development",
+  "/production_house": "/production-house",
+  "/podcast_studio": "/podcast-studio",
+};
+const toPublicPath = (p) => {
+  for (const [from, to] of Object.entries(LEGACY_SECTION_PATHS)) {
+    if (p === from || p.startsWith(`${from}/`)) return to + p.slice(from.length);
+  }
+  return p;
+};
+const toPublicUrl = (u) => {
+  try {
+    const url = new URL(u);
+    url.pathname = toPublicPath(url.pathname);
+    return url.toString();
+  } catch {
+    return u;
+  }
+};
 const walk = (dir) =>
   fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
     const p = path.join(dir, e.name);
@@ -155,14 +179,14 @@ try {
   const pages = {};
   const routes = [];
   for (const item of list) {
-    const p = String(item?.path || "");
+    const p = toPublicPath(String(item?.path || ""));
     if (p !== "/" && !/^\/[a-z0-9_-]+(?:\/[a-z0-9_-]+)*$/.test(p)) continue;
     const route = p === "/" ? "index" : p.slice(1);
     if (!fs.existsSync(path.join(ROOT, "dist", `${route}.html`))) continue;
     const entry = { version: Number(item.version) || 0, publishedAt: Number(item.publishedAt) || 0 };
     if (safeText(item.seoTitle, 10, 70)) entry.seoTitle = item.seoTitle;
     if (safeText(item.metaDescription, 50, 200)) entry.metaDescription = item.metaDescription;
-    if (item.canonicalUrl && safeUrl(item.canonicalUrl)) entry.canonicalUrl = item.canonicalUrl;
+    if (item.canonicalUrl && safeUrl(item.canonicalUrl)) entry.canonicalUrl = toPublicUrl(item.canonicalUrl);
     if (item.ogImage && safeUrl(item.ogImage)) entry.ogImage = item.ogImage;
     if (item.robotsIndex === false || item.robotsFollow === false) {
       entry.robotsIndex = item.robotsIndex !== false;

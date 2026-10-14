@@ -1,28 +1,29 @@
 import type { CaseStudy, CaseStudyCategory, CaseStudyImage, CaseStudyMetric, CaseStudyStep, ServicePagePath } from "@/types";
 import { arr, isRecord, num, str } from "@/lib/api/coerce";
 import { SITE_ORIGIN } from "@/lib/site";
+import { toPublicPath } from "@/lib/legacyPaths";
 
 export const CASE_STUDY_CATEGORIES: Array<{ id: CaseStudyCategory; label: string; short: string; service: ServicePagePath }> = [
-  { id: "digital-marketing", label: "Digital Marketing", short: "Digital Marketing", service: "/digital_marketing" },
-  { id: "web-development", label: "Website Development", short: "Website", service: "/web_development" },
-  { id: "production", label: "Video Production", short: "Video Production", service: "/production_house" },
-  { id: "podcast", label: "Podcast Production", short: "Podcast", service: "/podcast_studio" },
+  { id: "digital-marketing", label: "Digital Marketing", short: "Digital Marketing", service: "/digital-marketing" },
+  { id: "web-development", label: "Website Development", short: "Website", service: "/web-development" },
+  { id: "production", label: "Video Production", short: "Video Production", service: "/production-house" },
+  { id: "podcast", label: "Podcast Production", short: "Podcast", service: "/podcast-studio" },
 ];
 
 export const SERVICE_PAGES: Record<ServicePagePath, { name: string; summary: string }> = {
-  "/digital_marketing": {
+  "/digital-marketing": {
     name: "Digital Marketing",
     summary: "SEO, Google Ads, social media and content that bring in enquiries.",
   },
-  "/web_development": {
+  "/web-development": {
     name: "Website Development",
     summary: "Fast, mobile-friendly business websites and online stores.",
   },
-  "/production_house": {
+  "/production-house": {
     name: "Video Production",
     summary: "Brand films, ad shoots, event coverage and photography.",
   },
-  "/podcast_studio": {
+  "/podcast-studio": {
     name: "Podcast Studio",
     summary: "Studio hire, multi-camera video podcasts and editing.",
   },
@@ -100,7 +101,7 @@ export function normalizeCaseStudy(raw: unknown, { lenient = false }: { lenient?
     testimonialAuthor: str(raw.testimonial_author),
     testimonialRole: str(raw.testimonial_role),
     websiteUrl: str(raw.website_url),
-    relatedServices: strings(raw.related_services).filter((p): p is ServicePagePath => SERVICE_PATHS.includes(p)),
+    relatedServices: strings(raw.related_services).map(toPublicPath).filter((p): p is ServicePagePath => SERVICE_PATHS.includes(p)),
     relatedBlogs: strings(raw.related_blogs),
     seoTitle: str(raw.seo_title),
     seoDescription: str(raw.seo_description),

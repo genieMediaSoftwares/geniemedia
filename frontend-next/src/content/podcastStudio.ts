@@ -1,5 +1,5 @@
 // Verified podcast studio facts (prices, hours, equipment, address). Single source for the
-// booking widget, the /podcast_studio sub-pages and schema. Change prices here only.
+// booking widget, the /podcast-studio sub-pages and schema. Change prices here only.
 
 export interface StudioPackage {
   id: string;

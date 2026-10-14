@@ -32,9 +32,9 @@ export default function Reviews() {
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
                Clients love our seamless blend of creative{" "}
-               <a href="/podcast_studio" className={CONTENT_LINK}>studio production</a>{" "}
+               <a href="/podcast-studio" className={CONTENT_LINK}>studio production</a>{" "}
                and powerful{" "}
-               <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing support</a>, helping them record, create, and grow their brand all in one place.
+               <a href="/digital-marketing" className={CONTENT_LINK}>digital marketing support</a>, helping them record, create, and grow their brand all in one place.
               </p>
             </div>
 

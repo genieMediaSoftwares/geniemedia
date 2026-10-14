@@ -2,7 +2,7 @@ export type Tier = "primary" | "secondary" | "semantic" | "local" | "supporting"
 
 export interface ServiceTopic {
   name: string;
-  path: "/" | "/digital_marketing" | "/web_development" | "/production_house" | "/podcast_studio";
+  path: "/" | "/digital-marketing" | "/web-development" | "/production-house" | "/podcast-studio";
   subtopics: string[];
   terms: Record<Tier, string[]>;
 }
@@ -25,7 +25,7 @@ export const SEO_TAXONOMY: ServiceTopic[] = [
   },
   {
     name: "Digital Marketing",
-    path: "/digital_marketing",
+    path: "/digital-marketing",
     subtopics: ["SEO", "Local SEO & Google Business Profile", "Google Ads / PPC", "Social Media Marketing & Meta Ads", "Content Marketing", "Lead Generation", "Conversion Optimization", "Branding"],
     terms: {
       primary: ["digital marketing", "digital marketing services", "digital marketing agency", "digital marketing company"],
@@ -43,7 +43,7 @@ export const SEO_TAXONOMY: ServiceTopic[] = [
   },
   {
     name: "Website Development",
-    path: "/web_development",
+    path: "/web-development",
     subtopics: ["Web Design / UI/UX", "Custom Web Development (React, Next.js, Node.js)", "Ecommerce Development (Shopify, WooCommerce)", "WordPress Development", "Website Maintenance & Optimization", "Hosting & Deployment"],
     terms: {
       primary: ["web development", "web development company"],
@@ -58,7 +58,7 @@ export const SEO_TAXONOMY: ServiceTopic[] = [
   },
   {
     name: "Production House",
-    path: "/production_house",
+    path: "/production-house",
     subtopics: ["Video Production", "Corporate Videos", "Commercial & Product Videos", "Brand & Promotional Videos", "Events, Weddings & Live Streaming", "Post-Production & Editing", "Photography"],
     terms: {
       primary: ["production house", "video production"],
@@ -70,7 +70,7 @@ export const SEO_TAXONOMY: ServiceTopic[] = [
   },
   {
     name: "Podcast Studio",
-    path: "/podcast_studio",
+    path: "/podcast-studio",
     subtopics: ["Podcast Studio Rental", "Podcast Recording", "Video Podcast Production", "Podcast Filming", "Podcast Editing", "Podcast Content (clips for social media)"],
     terms: {
       primary: ["podcast studio", "podcast recording"],
@@ -95,16 +95,16 @@ export const REJECTED_TERMS: Array<{ terms: string[]; reason: string }> = [
 ];
 
 export const BLOG_TOPICS: Array<{ title: string; supports: ServiceTopic["path"] }> = [
-  { title: "How Local SEO Helps Businesses in Visakhapatnam", supports: "/digital_marketing" },
-  { title: "Google Ads vs SEO for Local Businesses in Vizag", supports: "/digital_marketing" },
-  { title: "Social Media Marketing for Small Businesses: Where to Start", supports: "/digital_marketing" },
-  { title: "Web Development Company in Vizag: What Businesses Should Look For", supports: "/web_development" },
-  { title: "What Makes a High-Converting Business Website", supports: "/web_development" },
-  { title: "How Website Speed Affects User Experience and SEO", supports: "/web_development" },
-  { title: "WordPress, Shopify or Custom Code: Choosing a Platform", supports: "/web_development" },
-  { title: "Corporate Video Production for Businesses in Vizag", supports: "/production_house" },
-  { title: "How Businesses Can Use Video Content for Marketing", supports: "/production_house" },
-  { title: "How to Start a Professional Video Podcast", supports: "/podcast_studio" },
-  { title: "Podcast Production vs Podcast Recording: What You Need", supports: "/podcast_studio" },
-  { title: "How Podcast Content Can Support a Brand", supports: "/podcast_studio" },
+  { title: "How Local SEO Helps Businesses in Visakhapatnam", supports: "/digital-marketing" },
+  { title: "Google Ads vs SEO for Local Businesses in Vizag", supports: "/digital-marketing" },
+  { title: "Social Media Marketing for Small Businesses: Where to Start", supports: "/digital-marketing" },
+  { title: "Web Development Company in Vizag: What Businesses Should Look For", supports: "/web-development" },
+  { title: "What Makes a High-Converting Business Website", supports: "/web-development" },
+  { title: "How Website Speed Affects User Experience and SEO", supports: "/web-development" },
+  { title: "WordPress, Shopify or Custom Code: Choosing a Platform", supports: "/web-development" },
+  { title: "Corporate Video Production for Businesses in Vizag", supports: "/production-house" },
+  { title: "How Businesses Can Use Video Content for Marketing", supports: "/production-house" },
+  { title: "How to Start a Professional Video Podcast", supports: "/podcast-studio" },
+  { title: "Podcast Production vs Podcast Recording: What You Need", supports: "/podcast-studio" },
+  { title: "How Podcast Content Can Support a Brand", supports: "/podcast-studio" },
 ];

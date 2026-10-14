@@ -8,6 +8,7 @@ import { blogPath, formatDate, toIso } from "@/lib/blog";
 import { blogCanonical } from "@/lib/seo/metadata";
 import { CopyLinkCta, FallbackImg, ShareButton } from "@/components/blog/BlogClientParts";
 import { CONTENT_LINK } from "@/lib/linkStyles";
+import { rewriteLegacyHrefs } from "@/lib/legacyPaths";
 
 const FALLBACK = BlogFallbackAsset.src;
 
@@ -22,7 +23,7 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
   const showUpdated = Boolean(updatedMs && blog.createdAt && updatedMs - blog.createdAt > DAY_MS);
   const faqs = blog.faq_schema.filter((f) => f.question && f.answer);
   const sanitized = DOMPurify.sanitize(blog.description, { ADD_ATTR: ["target", "rel"] });
-  const bodyHtml = sanitized.replace(/<(\/?)h1(\b[^>]*)>/gi, "<$1h2$2>");
+  const bodyHtml = rewriteLegacyHrefs(sanitized.replace(/<(\/?)h1(\b[^>]*)>/gi, "<$1h2$2>"));
 
   return (
     <div className="w-full overflow-x-hidden bg-white">
@@ -192,11 +193,11 @@ export default function BlogArticle({ blog, related }: { blog: Blog; related: Bl
             <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-2">Work with Genie Media &amp; Studio</h2>
             <p className="text-sm sm:text-base leading-relaxed text-slate-600">
               Want help putting this into practice? Our team in Visakhapatnam offers{" "}
-              <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing and SEO services</a>,{" "}
-              <a href="/web_development" className={CONTENT_LINK}>website design and development</a>,{" "}
-              <a href="/production_house" className={CONTENT_LINK}>video production</a>{" "}
+              <a href="/digital-marketing" className={CONTENT_LINK}>digital marketing and SEO services</a>,{" "}
+              <a href="/web-development" className={CONTENT_LINK}>website design and development</a>,{" "}
+              <a href="/production-house" className={CONTENT_LINK}>video production</a>{" "}
               and a{" "}
-              <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio</a>.{" "}
+              <a href="/podcast-studio" className={CONTENT_LINK}>podcast studio</a>.{" "}
               <a href="/contact" className={CONTENT_LINK}>Contact us</a> to talk about your goals.
             </p>
           </section>

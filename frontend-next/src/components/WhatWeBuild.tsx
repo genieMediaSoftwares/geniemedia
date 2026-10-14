@@ -14,11 +14,11 @@ const BrandIcon = ({ icon, label }: { icon: SimpleIcon; label: string }) => (
 const LINE_ICON = "w-9 h-9 sm:w-10 sm:h-10 text-orange-500";
 
 export const WHAT_WE_BUILD: Array<{ name: string; detail: string; icon: ReactNode; href?: string }> = [
-  { name: "Web Development", detail: "Websites & Web Applications", icon: <CodeXml className={LINE_ICON} strokeWidth={1.75} aria-hidden="true" />, href: "/web_development" },
+  { name: "Web Development", detail: "Websites & Web Applications", icon: <CodeXml className={LINE_ICON} strokeWidth={1.75} aria-hidden="true" />, href: "/web-development" },
   { name: "Mobile Apps", detail: "Android & iOS Applications", icon: <Smartphone className={LINE_ICON} strokeWidth={1.75} aria-hidden="true" /> },
   { name: "AI Agents", detail: "AI Automation & Intelligent Solutions", icon: <Bot className={LINE_ICON} strokeWidth={1.75} aria-hidden="true" /> },
-  { name: "WordPress", detail: "Business & CMS Websites", icon: <BrandIcon icon={siWordpress} label="WordPress logo" />, href: "/web_development" },
-  { name: "Shopify", detail: "Ecommerce Websites & Stores", icon: <BrandIcon icon={siShopify} label="Shopify logo" />, href: "/web_development" },
+  { name: "WordPress", detail: "Business & CMS Websites", icon: <BrandIcon icon={siWordpress} label="WordPress logo" />, href: "/web-development" },
+  { name: "Shopify", detail: "Ecommerce Websites & Stores", icon: <BrandIcon icon={siShopify} label="Shopify logo" />, href: "/web-development" },
 ];
 
 const CARD_BODY = "h-full flex flex-col items-center justify-center gap-2 px-3 py-5 sm:py-6 text-center";

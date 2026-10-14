@@ -13,9 +13,9 @@ const baseline = JSON.parse(fs.readFileSync(path.join(output, "preservation-base
 const routes = Object.entries(baseline.pages)
   .filter(([file]) => !/^(admin(?:\/|\.)|404\.|_not-found\.|blog-view\.|case-study-view\.)/.test(file))
   .map(([file]) => file === "index.html" ? "/" : `/${file.slice(0, -5)}`)
-  .filter((route) => !motion || ["/", "/about", "/podcast_studio", "/services", "/contact", "/web_development"].includes(route));
+  .filter((route) => !motion || ["/", "/about", "/podcast-studio", "/services", "/contact", "/web-development"].includes(route));
 const widths = [320, 375, 425, 768, 1024, 1440, 1920];
-const selected = new Set(["/", "/services", "/about", "/contact", "/web_development", "/podcast_studio", "/digital_marketing", "/production_house", "/projects", "/blogs", "/digital_marketing/aeo", "/web_development/react-native"]);
+const selected = new Set(["/", "/services", "/about", "/contact", "/web-development", "/podcast-studio", "/digital-marketing", "/production-house", "/projects", "/blogs", "/digital-marketing/aeo", "/web-development/react-native"]);
 fs.mkdirSync(path.join(output, label), { recursive: true });
 const browser = await chromium.launch({ executablePath: "C:/Users/Praveen/AppData/Local/ms-playwright/chromium-1248/chrome-win64/chrome.exe", headless: true });
 const results = [];

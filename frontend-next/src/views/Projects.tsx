@@ -22,9 +22,9 @@ export default function Projects({ initialProjects, caseStudyLinks = {} }: { ini
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-4xl text-center">
                Business websites and online stores we have designed and built for clients in India, Australia and the US. See how we approach{" "}
-               <a href="/web_development" className={CONTENT_LINK}>website development</a>{" "}
+               <a href="/web-development" className={CONTENT_LINK}>website development</a>{" "}
                and how we help those websites grow with{" "}
-               <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing and SEO</a>.
+               <a href="/digital-marketing" className={CONTENT_LINK}>digital marketing and SEO</a>.
                Planning a new site?{" "}
                <a href="/contact" className={CONTENT_LINK}>Talk to our web team</a>.
               {Object.keys(caseStudyLinks).length > 0 && (

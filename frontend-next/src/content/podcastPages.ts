@@ -1,4 +1,4 @@
-// Content for the /podcast_studio/<slug> pages. Shape and rules: serviceSubPage.ts.
+// Content for the /podcast-studio/<slug> pages. Shape and rules: serviceSubPage.ts.
 // Prices, hours and equipment come from podcastStudio.ts; never type them by hand here.
 // The physical studio is only in Visakhapatnam. India-wide wording is used only for services
 // the owner confirmed can be delivered remotely (production, editing, repurposing).
@@ -9,7 +9,7 @@ import { STUDIO, STUDIO_PACKAGES, formatInr } from "@/content/podcastStudio";
 const [STUDIO_ONLY, TWO_CAM, THREE_CAM] = STUDIO_PACKAGES;
 const from = (pkg: (typeof STUDIO_PACKAGES)[number]) => `${formatInr(pkg.rates[0])} an hour`;
 
-const LINK_BACK_CORE = ["/podcast_studio", "/services"];
+const LINK_BACK_CORE = ["/podcast-studio", "/services"];
 const LOCAL_SCHEMA = ["WebPage", "Service", "LocalBusiness", "BreadcrumbList", "FAQPage", "Organization"];
 const REMOTE_SCHEMA = ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"];
 
@@ -96,7 +96,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       { q: "Where is the studio?", a: `${STUDIO.address}. Yendada is close to Rushikonda and Madhurawada, so the studio is easy to reach from both.` },
     ],
     related: ["pricing", "booking", "video-podcast", "editing", "/reviews", "/contact"],
-    cta: { heading: "Book Your Studio Hour", body: "Pick a package and a slot. We confirm every booking on WhatsApp.", button: "Check Availability", href: "/podcast_studio/booking" },
+    cta: { heading: "Book Your Studio Hour", body: "Pick a package and a slot. We confirm every booking on WhatsApp.", button: "Check Availability", href: "/podcast-studio/booking" },
     extras: ["packages", "equipment", "studioInfo"],
     plan: {
       primaryKeyword: "hourly podcast studio hire in Vizag",
@@ -106,7 +106,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       audience: "Creators, professionals and businesses in and around Visakhapatnam who want to hire a studio.",
       schema: LOCAL_SCHEMA,
       anchorTexts: ["podcast studio rental in Vizag", "rent the podcast studio", "hourly studio hire"],
-      linkBackFrom: [...LINK_BACK_CORE, "/podcast_studio/pricing", "/podcast_studio/booking", "/podcast_studio/video-podcast"],
+      linkBackFrom: [...LINK_BACK_CORE, "/podcast-studio/pricing", "/podcast-studio/booking", "/podcast-studio/video-podcast"],
       images: [
         { file: "podcast-studio-rental-vizag.webp", alt: "Blue podcast set with two armchairs, boom microphones and studio lights in Vizag" },
         { file: "podcast-studio-white-set-visakhapatnam.webp", alt: "White panelled podcast set with two boom microphones" },
@@ -200,7 +200,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       { q: "What should I wear?", a: "Plain, solid colours work best on camera. Avoid fine stripes, small checks and large logos." },
     ],
     related: ["rental", "editing", "content-repurposing", "booking", "pricing", "/contact"],
-    cta: { heading: "Record Your Video Podcast", body: "Choose two or three cameras and book a slot at our Yendada studio.", button: "Book a Video Podcast Session", href: "/podcast_studio/booking" },
+    cta: { heading: "Record Your Video Podcast", body: "Choose two or three cameras and book a slot at our Yendada studio.", button: "Book a Video Podcast Session", href: "/podcast-studio/booking" },
     extras: ["packages", "equipment"],
     plan: {
       primaryKeyword: "video podcast studio in Vizag",
@@ -210,7 +210,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       audience: "Creators, founders and brands who want a finished video podcast.",
       schema: LOCAL_SCHEMA,
       anchorTexts: ["video podcast studio in Vizag", "book a video podcast studio", "multicamera podcast recording"],
-      linkBackFrom: [...LINK_BACK_CORE, "/podcast_studio/rental", "/podcast_studio/editing", "/production_house"],
+      linkBackFrom: [...LINK_BACK_CORE, "/podcast-studio/rental", "/podcast-studio/editing", "/production-house"],
       images: [
         { file: "video-podcast-studio-vizag-cameras.webp", alt: "Cameras set up for multicamera video podcast recording in Vizag" },
         { file: "video-podcast-three-camera-setup.webp", alt: "Three-camera video podcast setup with two speakers" },
@@ -314,7 +314,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       { q: "Will you upload the episodes?", a: "We prepare the files, titles, descriptions and thumbnails. We can upload them if you give us access to your channels." },
       { q: "How much does podcast production cost?", a: "It depends on the number of episodes, recording package and editing needs. We send a written quote after a short consultation." },
     ],
-    related: ["video-podcast", "editing", "content-repurposing", "rental", "/digital_marketing/content-marketing"],
+    related: ["video-podcast", "editing", "content-repurposing", "rental", "/digital-marketing/content-marketing"],
     cta: { heading: "Plan Your Podcast With Us", body: "Tell us about your idea, audience and goals. We will suggest a format and production plan.", button: "Start a Podcast Project", href: "/contact" },
     plan: {
       primaryKeyword: "podcast production services in India",
@@ -324,7 +324,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       audience: "Businesses, founders, creators and institutions that want a podcast produced for them.",
       schema: REMOTE_SCHEMA,
       anchorTexts: ["podcast production services", "explore podcast production", "end-to-end podcast production"],
-      linkBackFrom: [...LINK_BACK_CORE, "/podcast_studio/video-podcast", "/podcast_studio/editing", "/digital_marketing/content-marketing", "/production_house"],
+      linkBackFrom: [...LINK_BACK_CORE, "/podcast-studio/video-podcast", "/podcast-studio/editing", "/digital-marketing/content-marketing", "/production-house"],
       images: [
         { file: "podcast-production-services-india.webp", alt: "Two-seat podcast set with boom microphones, ready for a production session" },
         { file: "podcast-episode-planning-run-sheet.webp", alt: "Podcast episode run sheet with topics and timings" },
@@ -428,7 +428,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       { q: "How many revisions are included?", a: "We agree the number of revision rounds in your quote before we start." },
       { q: "Can you make Reels and Shorts from my episode?", a: "Yes. We pick strong moments and edit them into captioned vertical clips." },
     ],
-    related: ["production", "video-podcast", "content-repurposing", "rental", "/production_house"],
+    related: ["production", "video-podcast", "content-repurposing", "rental", "/production-house"],
     cta: { heading: "Send Us Your Episode", body: "Tell us about your show and share a sample episode. We will suggest an editing style and quote.", button: "Submit Your Episode", href: "/contact" },
     plan: {
       primaryKeyword: "podcast editing services in India",
@@ -438,7 +438,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       audience: "Creators and businesses across India with recorded episodes that need editing.",
       schema: REMOTE_SCHEMA,
       anchorTexts: ["podcast editing services", "professional podcast editing", "edit your podcast"],
-      linkBackFrom: [...LINK_BACK_CORE, "/podcast_studio/production", "/podcast_studio/video-podcast", "/production_house"],
+      linkBackFrom: [...LINK_BACK_CORE, "/podcast-studio/production", "/podcast-studio/video-podcast", "/production-house"],
       images: [
         { file: "podcast-editing-services-india.webp", alt: "Podcast episode being edited on a multicamera video timeline" },
         { file: "podcast-audio-cleanup-waveform.webp", alt: "Podcast audio waveform before and after noise reduction" },
@@ -510,7 +510,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       { q: "What is your cancellation or rescheduling policy?", a: "Please confirm the terms with our team on WhatsApp when you book. We confirm them in writing with your booking." },
     ],
     related: ["rental", "booking", "video-podcast", "editing", "/reviews", "/contact"],
-    cta: { heading: "Choose a Package and Book", body: "Pick the package and session length that suit your show, then send us your preferred slot.", button: "Check Availability", href: "/podcast_studio/booking" },
+    cta: { heading: "Choose a Package and Book", body: "Pick the package and session length that suit your show, then send us your preferred slot.", button: "Check Availability", href: "/podcast-studio/booking" },
     extras: ["packages", "studioInfo"],
     plan: {
       primaryKeyword: "podcast studio pricing in Vizag",
@@ -520,7 +520,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       audience: "People comparing studio costs before booking.",
       schema: LOCAL_SCHEMA,
       anchorTexts: ["view podcast studio packages", "podcast studio pricing", "compare studio prices"],
-      linkBackFrom: [...LINK_BACK_CORE, "/podcast_studio/rental", "/podcast_studio/booking", "/podcast_studio/video-podcast"],
+      linkBackFrom: [...LINK_BACK_CORE, "/podcast-studio/rental", "/podcast-studio/booking", "/podcast-studio/video-podcast"],
       images: [
         { file: "podcast-studio-pricing-vizag.webp", alt: "Podcast studio set in Vizag available on hourly packages" },
       ],
@@ -598,7 +598,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       audience: "People ready to book a studio session.",
       schema: LOCAL_SCHEMA,
       anchorTexts: ["book the podcast studio", "check studio availability", "book a session"],
-      linkBackFrom: [...LINK_BACK_CORE, "/podcast_studio/rental", "/podcast_studio/pricing", "/podcast_studio/video-podcast", "/contact"],
+      linkBackFrom: [...LINK_BACK_CORE, "/podcast-studio/rental", "/podcast-studio/pricing", "/podcast-studio/video-podcast", "/contact"],
       images: [
         { file: "book-podcast-studio-vizag.webp", alt: "Podcast studio in Yendada, Visakhapatnam ready for a booked session" },
       ],
@@ -701,7 +701,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       { q: "Will the blog articles be good for SEO?", a: "We rewrite them for reading and search, with headings and internal links, as part of our content marketing approach." },
       { q: "Which platforms do you support?", a: "YouTube, Instagram, Facebook, LinkedIn and your website, plus podcast platforms for audio." },
     ],
-    related: ["editing", "production", "video-podcast", "/digital_marketing/content-marketing", "/production_house"],
+    related: ["editing", "production", "video-podcast", "/digital-marketing/content-marketing", "/production-house"],
     cta: { heading: "Get More From Every Episode", body: "Share a recent episode and your channels. We will show you what it could become.", button: "Discuss Repurposing", href: "/contact" },
     plan: {
       primaryKeyword: "podcast content repurposing services",
@@ -711,7 +711,7 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
       audience: "Brands and creators who want more reach from existing episodes.",
       schema: REMOTE_SCHEMA,
       anchorTexts: ["turn your podcast into social media content", "podcast content repurposing", "podcast clips and Shorts"],
-      linkBackFrom: [...LINK_BACK_CORE, "/podcast_studio/editing", "/podcast_studio/production", "/digital_marketing/content-marketing"],
+      linkBackFrom: [...LINK_BACK_CORE, "/podcast-studio/editing", "/podcast-studio/production", "/digital-marketing/content-marketing"],
       images: [
         { file: "podcast-content-repurposing-reels-shorts.webp", alt: "One podcast episode turned into Reels, Shorts and quote graphics" },
         { file: "podcast-transcript-to-blog.webp", alt: "Podcast transcript rewritten as a blog article" },
@@ -721,4 +721,4 @@ const PODCAST_CONTENT: ServiceSubPage[] = [
 ];
 
 export const PODCAST_PAGES = localiseServicePages(PODCAST_CONTENT);
-export const podcastPath = (slug: string): string => `/podcast_studio/${slug}`;
+export const podcastPath = (slug: string): string => `/podcast-studio/${slug}`;
