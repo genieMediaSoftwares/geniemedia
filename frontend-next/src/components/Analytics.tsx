@@ -1,10 +1,31 @@
 import Script from "next/script";
 
 import { GA4_ID, GTM_ID } from "@/lib/site";
+import { CONSENT_KEY } from "@/lib/consent";
 
 export default function Analytics() {
   return (
     <>
+      {/* Consent Mode v2 default: analytics cookies stay off until the visitor accepts in CookieConsent.
+          Rendered first so it runs before GTM and GA4. No ads are run, so ad storage is always denied. */}
+      {(GTM_ID || GA4_ID) && (
+      <Script id="consent-default" strategy="afterInteractive">
+        {`window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+window.gtag = gtag;
+var analyticsGranted = false;
+try { analyticsGranted = JSON.parse(localStorage.getItem('${CONSENT_KEY}') || 'null').analytics === true; } catch (e) {}
+if (!analyticsGranted && /(?:^|;\\s*)${CONSENT_KEY}=1/.test(document.cookie)) analyticsGranted = true;
+gtag('consent', 'default', {
+  analytics_storage: analyticsGranted ? 'granted' : 'denied',
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  functionality_storage: 'granted',
+  security_storage: 'granted'
+});`}
+      </Script>
+      )}
       {GTM_ID && (
       <Script id="gtm-init" strategy="afterInteractive">
         {`window.dataLayer = window.dataLayer || [];

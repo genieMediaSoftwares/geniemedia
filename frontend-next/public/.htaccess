@@ -19,6 +19,9 @@ DirectoryIndex index.html
   RewriteRule ^podcast_studio(?:\.html)?/*$ __SITE_URL__/podcast-studio [R=301,L]
   RewriteRule ^podcast_studio/+(.+?)(?:\.html)?/*$ __SITE_URL__/podcast-studio/$1 [R=301,L]
 
+  # /home (also //home, /home/, /home.html) is the homepage; send it to the canonical "/" in one hop.
+  RewriteRule ^/*home(?:\.html)?/*$ __SITE_URL__/ [R=301,L]
+
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]

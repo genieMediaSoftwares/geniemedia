@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Analytics, { GtmNoScript } from "@/components/Analytics";
+import CookieConsent from "@/components/CookieConsent";
 import { GOOGLE_SITE_VERIFICATION, SITE, SITE_ORIGIN } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </main>
         <Footer />
         <Analytics />
+        <CookieConsent />
       </body>
     </html>
   );

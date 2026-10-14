@@ -2,6 +2,7 @@ import React from 'react';
 import LogoAsset from "@/assets/GenieMedia-Logo.png";
 import { Mail, Phone, MapPin, Facebook, Instagram, Youtube, Linkedin } from 'lucide-react';
 import { getPublishedCaseStudiesSafe } from "@/lib/api/caseStudies";
+import { CookieSettingsLink } from "@/components/CookieConsent";
 
 const Logo = LogoAsset.src;
 
@@ -183,6 +184,17 @@ const resources = [
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-xs sm:text-sm text-center md:text-left space-y-1">
               <p>© {new Date().getFullYear()} Genie Media &amp; Studio. All rights reserved.</p>
+              <p>
+                Developed by{" "}
+                <a
+                  href="https://www.kkdigitalgrowth.com/"
+                  target="_blank"
+                  rel="noopener"
+                  className="font-semibold text-gray-300 hover:text-orange-500 transition-colors duration-200"
+                >
+                  KK Digital Growth
+                </a>
+              </p>
             </div>
             <nav aria-label="Legal" className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-sm">
               <a href="/privacy-policy" className="text-gray-400 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] md:min-h-0">
@@ -191,6 +203,7 @@ const resources = [
               <a href="/terms-and-conditions" className="text-gray-400 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] md:min-h-0">
                 Terms &amp; Conditions
               </a>
+              <CookieSettingsLink className="text-gray-400 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] md:min-h-0" />
             </nav>
           </div>
         </div>
