@@ -50,6 +50,8 @@ export interface ServiceSubPage {
   group?: string;
   title: string;
   description: string;
+  /** Short service explanation for the visible service directory. */
+  directorySummary?: string;
   h1: string;
   eyebrow: string;
   intro: string[];

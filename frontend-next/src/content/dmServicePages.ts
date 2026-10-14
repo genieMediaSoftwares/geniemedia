@@ -1,11 +1,12 @@
 // Content for the /digital_marketing/<slug> service pages. Shape and rules: serviceSubPage.ts.
 import type { ServiceSubPage } from "@/content/serviceSubPage";
+import { localiseServicePages } from "@/content/localServicePages";
 
 export type DmServicePage = ServiceSubPage;
 
 const LINK_BACK_CORE = ["/digital_marketing", "/services"];
 
-export const DM_SERVICE_PAGES: DmServicePage[] = [
+const DM_SERVICE_CONTENT: DmServicePage[] = [
   {
     slug: "seo-services",
     name: "SEO Services",
@@ -905,15 +906,15 @@ export const DM_SERVICE_PAGES: DmServicePage[] = [
     h1: "Generative Engine Optimization (GEO) for Accurate AI Brand Understanding",
     eyebrow: "Generative Engine Optimization",
     intro: [
-      "When someone asks an AI assistant about your category, it builds an answer from what it has learned and retrieved about the brands involved. Generative engine optimization (GEO) improves the chances that your brand is understood accurately and referenced where relevant.",
-      "GEO cannot guarantee that any AI system will mention you. It focuses on what you can influence: how clearly your business is described, how consistent that information is, and how much credible evidence about you exists on the web.",
+      "Generative engine optimization (GEO) helps AI tools understand your business. First, we check how you describe your brand, services and location online. Then we improve unclear or outdated pages and add useful facts. This work can support discovery, but no one can promise an AI mention.",
+      "We focus on facts you can check: what your business does, where it works and how customers can contact you. Next, we review whether those details agree across your website and public profiles.",
     ],
     hero: { image: "dm1", alt: "Brand information and references being organised for generative AI search" },
     whatIs: {
       heading: "What Is Generative Engine Optimization?",
       paragraphs: [
-        "Generative engine optimization is the practice of improving how generative AI systems, such as AI chat assistants and AI-generated search summaries, understand, describe and reference a brand. It looks beyond your own website to the wider set of sources these systems draw on.",
-        "Where AEO asks 'is this question answered clearly on our page?', GEO asks 'does the web as a whole describe our business clearly, consistently and credibly?' Both depend on strong SEO foundations.",
+        "GEO is work that makes brand facts easier for AI tools to find and understand. It covers your website and other public sources. Clear service pages, contact details and useful evidence help people check what your business does.",
+        "SEO helps search engines find your pages. AEO focuses on clear answers to questions. GEO also reviews how public sources describe your brand. These tasks share the same need for useful, accurate content.",
       ],
     },
     whoNeeds: {
@@ -1672,4 +1673,5 @@ export const DM_SERVICE_PAGES: DmServicePage[] = [
   },
 ];
 
+export const DM_SERVICE_PAGES = localiseServicePages(DM_SERVICE_CONTENT);
 export const dmServicePath = (slug: string): string => `/digital_marketing/${slug}`;

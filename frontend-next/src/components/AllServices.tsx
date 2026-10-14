@@ -26,7 +26,7 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
   const tabContent = {
     'dm': {
       mainTitle: 'Digital Marketing Services',
-      mainDescription: 'We plan digital marketing in Vizag around one goal: real business growth. First, we learn who your customers are. Then we bring together brand strategy, content, SEO, social media and paid ads. As a result, the right people find you, trust you and get in touch.',
+      mainDescription: 'Genie Media plans digital marketing in Vizag around your business goals. First, we learn who your customers are. Then we bring together content, SEO, social media and paid ads. You can see the scope of each service below and choose the support your business needs.',
       mainImage: Dm_services,
       mainImageWidth: 600,
       mainImageHeight: 700,
@@ -163,16 +163,28 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
 
   return (
     <div className="bg-gray-100 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 mt-14">
-      <Heading className='text-4xl sm:text-6xl text-center text-orange-600 mb-10 font-bold'> Services We Offer</Heading>
+      <Heading className='text-4xl sm:text-6xl text-center text-orange-600 mb-10 font-bold'>{headingLevel === 'h1' ? 'Genie Media: Digital Marketing, Websites and Podcasts in Vizag' : 'Services We Offer'}</Heading>
       <div className="max-w-7xl mx-auto">
         
         <div className="flex flex-wrap justify-center gap-3 mb-12" role="tablist">
           {tabs.map((tab) => (
             <a
               key={tab.id}
+              id={`service-tab-${tab.id}`}
               href={tab.href}
               role="tab"
               aria-selected={activeTab === tab.id}
+              aria-controls="service-tab-panel"
+              tabIndex={activeTab === tab.id ? 0 : -1}
+              onKeyDown={(event) => {
+                if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+                event.preventDefault();
+                const index = tabs.findIndex((entry) => entry.id === tab.id);
+                const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+                const next = tabs[nextIndex];
+                setActiveTab(next.id);
+                document.getElementById(`service-tab-${next.id}`)?.focus();
+              }}
               onClick={(e) => {
                 if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
                 e.preventDefault();
@@ -189,7 +201,7 @@ export default function TabbedServices({ headingLevel = 'h2' }) {
           ))}
         </div>
 
-        <div className="space-y-12">
+        <div id="service-tab-panel" role="tabpanel" aria-labelledby={`service-tab-${activeTab}`} className="space-y-12">
           
           <div className="text-center max-w-4xl mx-auto space-y-4">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 flex items-center justify-center gap-3">

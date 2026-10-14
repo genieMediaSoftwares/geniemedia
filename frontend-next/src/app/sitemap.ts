@@ -45,7 +45,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const pages: MetadataRoute.Sitemap = STATIC_ROUTES.map((r) => ({
     url: canonicalFor(r.path),
-    lastModified: latest,
+    // A new blog post does not change the service, company or legal pages.
+    lastModified: r.path === "/blogs" ? latest : undefined,
     changeFrequency: r.changeFrequency,
     priority: r.priority,
   }));

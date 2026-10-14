@@ -8,6 +8,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import VideoTestimonials from "@/components/testimonials";
 import ServiceFaq from "@/components/ServiceFaq";
 import { WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
+import LocalServiceCoverage from "@/components/seo/LocalServiceCoverage";
 import web_services_heroAsset from "@/assets/web_services_hero.jpg";
 import { WEBSITES_VIDEO_URL } from "@/config/media";
 import { CONTENT_LINK } from "@/lib/linkStyles";
@@ -86,7 +87,7 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
                 {h1 || "Website Development for Businesses in Vizag and Across India"}
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                Genie Media & Studio builds fast, responsive and SEO-friendly websites for businesses in Vizag and across India. We create business websites, online stores and custom web apps that are easy to use and easy to update.
+                Genie Media & Studio provides website development in Vizag and across India. We build fast, responsive business websites, online stores and custom web apps. First, we plan the pages around your customers. Then we design and build a site that is easy to use and update.
               </p>
             </div>
 
@@ -319,6 +320,7 @@ export default function WebDevPg({ initialProjects, h1 }: { initialProjects: Por
         </div>
       </section>
 
+      <LocalServiceCoverage service="web" />
       <ServiceFaq
         title="Frequently Asked Questions"
         intro="Answers to common questions about our website development services."

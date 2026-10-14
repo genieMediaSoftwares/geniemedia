@@ -184,10 +184,10 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
                 Digital Marketing Agency in Vizag · Serving India
               </p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-                {h1 || "Digital Marketing Agency for Growing Businesses in Vizag and India"}
+                {h1 || "Digital Marketing Agency in Vizag and Visakhapatnam"}
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                Genie Media & Studio helps startups, local businesses, e-commerce brands and growing companies improve their online visibility, attract relevant audiences and generate more enquiries. Based in Visakhapatnam, we provide SEO, Google Ads, social media, content marketing and lead generation for businesses in Vizag, Andhra Pradesh and across India, with campaign performance measured every month.
+                Genie Media & Studio provides digital marketing services in Vizag and across India. We help local businesses, startups and online stores reach customers and get more enquiries. Our team in Visakhapatnam plans SEO, Google Ads, social media marketing and content. Then we track results each month so you can see what works.
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <a href="/contact" className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-black font-semibold px-8 py-3.5 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
@@ -227,7 +227,7 @@ export default function DigitalMarketting({ h1 }: { h1?: string }) {
               Genie Media & Studio is a digital marketing agency in Visakhapatnam, Andhra Pradesh. Our team works from KP Icon in Yendada. We help local shops, clinics, schools, startups and growing brands reach more of the right people online.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
-              Most businesses do not need more noise. Instead, they need a plan that brings in real enquiries. So we start with your goals, your customers and your budget. Then we pick the channels that will drive real business growth for you.
+              Our digital marketing services cover Rushikonda, MVP Colony, Yendada and Madhurawada, as well as businesses across Andhra Pradesh and India. We work from our Yendada office and meet remotely when needed. First, we review your goals and budget. Then we choose local SEO, paid ads or content to reach the people you want to serve.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
               For some brands, that means SEO and better Google rankings. For others, it means Google Ads, social media marketing or a faster website. In most cases, it is a mix. Either way, you get one team, one plan and one clear report.

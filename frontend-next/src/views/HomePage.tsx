@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { ArrowDown, ArrowRight, Sparkles, Layers, Mic, Globe, CheckCircle, TrendingUp, Code, Video } from "lucide-react";
 
 import AboutUs from "@/components/AboutSection";
+import DigitalMarketingOverview from "@/components/home/DigitalMarketingOverview";
 import Contact from "@/components/contactSection";
 import VideoTestimonials2 from "@/components/testimonials";
 import ServiceFaq from "@/components/ServiceFaq";
@@ -15,6 +16,7 @@ import laserFoldAsset from "@/assets/LaserFold.webp";
 import NuconaerospaceAsset from "@/assets/nuconaerospace.webp";
 import SynergeneAsset from "@/assets/synergeneapi.webp";
 import HomeProjects from "@/components/home/HomeProjects";
+import { PROJECT_CONTAINER, PROJECT_HEADING, PROJECT_SECTION } from "@/components/ProjectCard";
 import PlatformsWeUse from "@/components/PlatformsWeUse";
 import WhatsAppContactLink from "@/components/home/WhatsAppContactLink";
 import type { PortfolioItem } from "@/types";
@@ -51,12 +53,12 @@ const FALLBACK_PROJECTS: PortfolioItem[] = [
     url: "https://laserfold.com.au/",
   },
   {
-    name: "Nucon Aerospace - by Snapbrio",
+    name: "Nucon Aerospace",
     image: Nuconaerospace,
     url: "https://www.nuconaerospace.com/",
   },
   {
-    name: "Synergene - by Snapbrio",
+    name: "Synergene",
     image: Synergene,
     url: "https://synergeneapi.com/",
   },
@@ -187,12 +189,13 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 </span>
               </div>
 
-              <h1 className="animate-home-rise motion-reduce:animate-none text-4xl sm:text-5xl lg:text-6xl xl:text-5xl font-extrabold leading-normal ">
-                Digital Marketing, Website Development and Creative Media in Vizag
+              <h1 className="animate-home-rise motion-reduce:animate-none text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-extrabold leading-tight text-balance">
+                Marketing, Websites & Media Production in Vizag
               </h1>
               <p className="animate-home-rise motion-reduce:animate-none text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Genie Media &amp; Studio helps startups, local businesses and growing brands get found
-                online, look credible and win more enquiries. From our office in Visakhapatnam, we offer{" "}
+                Genie Media &amp; Studio provides digital marketing services in Visakhapatnam.
+                We help startups, local businesses and growing brands get found online and win more enquiries.
+                From our office in Yendada, we offer{" "}
                 <a href="/digital_marketing" className={heroLink}>digital marketing</a>,{" "}
                 <a href="/web_development" className={heroLink}>website development</a>,{" "}
                 <a href="/production_house" className={heroLink}>video production</a> and a{" "}
@@ -200,9 +203,9 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 across Andhra Pradesh and throughout India.
               </p>
 
-              <div className="animate-home-buttons motion-reduce:animate-none flex flex-row sm:flex-row gap-4 w-80% justify-center lg:justify-start ">
+              <div className="animate-home-buttons motion-reduce:animate-none grid grid-cols-1 min-[375px]:grid-cols-2 sm:flex sm:flex-wrap gap-3 sm:gap-4 w-full max-w-md mx-auto lg:mx-0 justify-center lg:justify-start">
                 <WhatsAppContactLink
-                  className={`w-42 sm:w-56 ${HOME_BTN_PRIMARY} group px-5 py-4 text-black font-bold rounded-full text-base shadow-xl flex items-center justify-center gap-2 z-10`}
+                  className={`w-full sm:w-56 ${HOME_BTN_PRIMARY} group min-h-12 whitespace-nowrap px-5 py-4 text-black font-bold rounded-full text-base shadow-xl flex items-center justify-center gap-2 z-10`}
                 >
                   Get Started
                   <ArrowRight
@@ -212,23 +215,23 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
                 </WhatsAppContactLink>
                 <a
                   href="/projects"
-                  className={`w-42 sm:w-50 ${HOME_BTN_SECONDARY} px-6 py-4 font-bold rounded-full text-base flex items-center justify-center gap-2 z-10`}
+                  className={`w-full sm:w-auto ${HOME_BTN_SECONDARY} min-h-12 whitespace-nowrap px-6 py-4 font-bold rounded-full text-base flex items-center justify-center gap-2 z-10`}
                 >
                   See Portfolio
                 </a>
               </div>
 
-              <div className="animate-home-stats motion-reduce:animate-none grid grid-cols-3 gap-4 pt-4">
+              <div className="animate-home-stats motion-reduce:animate-none grid grid-cols-3 gap-3 sm:gap-4 pt-4">
                 {stats.map((stat, index) => (
                   <div
                     key={index}
-                    className={`${STAT_CARD} bg-white/80 backdrop-blur-sm rounded-2xl p-4 border border-gray-100 shadow-lg`}
+                    className={`${STAT_CARD} min-w-0 bg-white/80 backdrop-blur-sm rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-lg`}
                   >
                     <stat.icon
                       className="text-orange-500 mb-2 mx-auto lg:mx-0"
                       size={24}
                     />
-                    <div className="font-bold text-2xl text-gray-800">
+                    <div className="font-bold text-xl sm:text-2xl text-gray-800">
                       {stat.value}
                     </div>
                     <div className="text-xs text-gray-600 font-medium">
@@ -239,7 +242,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
               </div>
             </div>
 
-            <div className="animate-home-image motion-reduce:animate-none relative">
+            <div className="hidden lg:block animate-home-image motion-reduce:animate-none relative min-w-0">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full blur-3xl opacity-20 scale-110"></div>
 
@@ -297,6 +300,7 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
         </div>
       </section>
 
+      <DigitalMarketingOverview />
       <AboutUs />
 
       <section className="bg-white py-10 md:py-14">
@@ -352,14 +356,14 @@ const HomePage = ({ initialProjects }: { initialProjects: PortfolioItem[] | null
         </div>
       </section>
 
-      <section className="bg-white py-8 md:py-12" id="projects">
-        <div className="max-w-7xl mx-auto px-4 md:px-2">
-          <h2 className="text-center text-4xl md:text-5xl font-bold text-gray-700 mb-10">
+      <section className={PROJECT_SECTION} id="projects">
+        <div className={PROJECT_CONTAINER}>
+          <h2 className={PROJECT_HEADING}>
             Selected Projects
           </h2>
 
           <HomeProjects initialProjects={initialProjects} fallback={FALLBACK_PROJECTS} />
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center mt-10">
             <a
               href="/projects"
               className="

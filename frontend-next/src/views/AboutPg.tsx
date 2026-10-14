@@ -17,12 +17,12 @@ const OurMission = OurMissionAsset.src;
 const OurVission = OurVissionAsset.src;
 export default function AboutPage() {
   const benefits = [
-    'Reducing risk',
-    'Controlling expenses',
-    'Increasing compliance',
-    'Attracting top personnel',
-    'Retaining loyal consumers',
-    'Other essential tasks'
+    'SEO and local search',
+    'Google Ads and social media marketing',
+    'Website design and development',
+    'Podcast recording and editing',
+    'Clear content and customer answers',
+    'Campaign tracking and reporting'
   ];
 
   const values = [
@@ -78,15 +78,15 @@ export default function AboutPage() {
           
             <div className="text-center text-white space-y-6">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-                About Us
+                About Genie Media in Vizag
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-xl">
-                Genie Media &amp; Studio is a creative and digital team in Vizag. We help companies and startups grow with{" "}
+                Genie Media &amp; Studio is based in Yendada, Visakhapatnam (Vizag). We help local businesses and startups with{" "}
                 <a href="/digital_marketing" className={CONTENT_LINK}>digital marketing</a>,{" "}
                 <a href="/web_development" className={CONTENT_LINK}>website development</a>, a{" "}
                 <a href="/production_house" className={CONTENT_LINK}>production house</a> and a{" "}
                 <a href="/podcast_studio" className={CONTENT_LINK}>podcast studio</a>.{" "}
-                <a href="/contact" className={CONTENT_LINK}>Get in touch</a> to start a project.
+                We serve Rushikonda, MVP Colony, Madhurawada and wider Andhra Pradesh. Marketing, website work and podcast editing are also available remotely across India. First, tell us what you need. Then we can plan the work together. <a href="/contact" className={CONTENT_LINK}>Get in touch</a> to start a project.
               </p>
             </div>
 
@@ -116,7 +116,7 @@ export default function AboutPage() {
              
               <div className="lg:col-span-5">
                 <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
-                  We Assist Businesses In
+                  How Genie Media Helps Businesses
                 </h2>
               </div>
 
@@ -146,21 +146,18 @@ export default function AboutPage() {
 
     <section
       ref={sectionRef}
-      className=" w-full 
-    bg-gray-200 max-w-8xl mx-auto
-    px-6 sm:px-22 pt-60 -mt-60 md:px-6 py-8 
-    flex flex-col md:flex-row gap:20
-    items-center justify-center "
+      className="w-full bg-gray-200 px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
     >
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
      
       <div
-        className={`w-full md:w-1/2 transition-all duration-[1000ms] ease-out sm:ml-14
+        className={`w-full min-w-0 transition-all duration-[1000ms] ease-out
         `}
       >
         <img
           src={OurVission}
           alt="Our vision"
-          className="w-{350px} h-auto rounded-2xl"
+          className="w-full h-auto rounded-2xl"
           loading='lazy'
                   width="556"
                   height="360"
@@ -169,7 +166,7 @@ export default function AboutPage() {
       </div>
 
       <div
-        className={`text-center mt-8 lg:-mt-4 w-full md:w-[70%] transition-all duration-[800ms] delay-100 ease-out sm:mr-14 sm:ml-14 
+        className={`text-center md:text-left w-full min-w-0 transition-all duration-[800ms] delay-100 ease-out
        `}
       >
         <h2 className="text-4xl md:text-5xl font-bold text-orange-700 mb-6">
@@ -187,25 +184,23 @@ We blend design, storytelling, and technology to build meaningful brand experien
           
         </p>
       </div>
+      </div>
     </section>
 
    <section
       ref={sectionRef}
-      className=" w-full 
-    bg-gray-50 max-w-8xl
-    px-6 sm:px-22 pt-12  md:px-6 py-14 
-    flex flex-col md:flex-row-reverse gap-20
-    items-center justify-center "
+      className="w-full bg-gray-50 px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
     >
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
      
       <div
-        className={`w-full md:w-1/2 transition-all duration-[1000ms] ease-out sm:mr-12
-        ${visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
+        className={`w-full min-w-0 md:order-2 transition-all duration-[1000ms] ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100
+        ${visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"}`}
       >
         <img
           src={OurMission}
           alt="Our mission"
-          className="w-{350px} h-auto rounded-2xl "
+          className="w-full h-auto rounded-2xl"
           loading='lazy'
                   width="905"
                   height="615"
@@ -214,10 +209,10 @@ We blend design, storytelling, and technology to build meaningful brand experien
       </div>
 
       <div
-        className={`text-center w-full md:w-1/2 transition-all duration-[800ms] delay-100 ease-out ml-0 md:ml-20
-        ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
+        className={`text-center md:text-left w-full min-w-0 transition-all duration-[800ms] delay-100 ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100
+        ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-3"}`}
       >
-        <h2 className="-mt-10 text-4xl md:text-5xl font-bold text-orange-700 mb-6">
+        <h2 className="text-4xl md:text-5xl font-bold text-orange-700 mb-6">
           Our Mission
         </h2>
 
@@ -231,6 +226,7 @@ We combine creative thinking, data-driven insights, and cutting-edge marketing t
          <span className={CONTENT_LINK}>collaboration</span>,{" "} and
          <span className={CONTENT_LINK}>continuous optimization</span>{" "}we turn ideas into powerful digital experiences that fuel long-term growth.
         </p>
+      </div>
       </div>
     </section>
 

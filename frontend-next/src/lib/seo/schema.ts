@@ -3,6 +3,7 @@ import { caseStudyDescription, caseStudyTitle, caseStudyUrl } from "@/lib/caseSt
 import { DEFAULT_AUTHOR, SITE } from "@/lib/site";
 import { blogUrl, stripHtml, toIso } from "@/lib/blog";
 import { blogCanonical, blogDescription } from "@/lib/seo/metadata";
+import { INDIA_SERVICE_AREAS } from "@/content/serviceAreas";
 
 export const ORG_ID = `${SITE.url}/#organization`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
@@ -44,6 +45,7 @@ export const organizationNode = (): JsonLdObject =>
     email: SITE.contact.email,
     telephone: SITE.contact.telephone,
     address: { "@type": "PostalAddress", ...SITE.address },
+    areaServed: INDIA_SERVICE_AREAS,
     contactPoint: [
       {
         "@type": "ContactPoint",

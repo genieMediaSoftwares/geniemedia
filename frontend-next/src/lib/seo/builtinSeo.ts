@@ -13,11 +13,11 @@ export interface BuiltinPageSeo {
 export const BUILTIN_PAGE_SEO: Record<string, BuiltinPageSeo> = {
   "/": {
     pageType: "home",
-    primaryTopic: "digital marketing",
-    primaryKeyword: "Genie Media & Studio",
-    searchIntent: "NAVIGATIONAL",
-    secondaryTopics: ["website development", "video production", "podcast studio"],
-    note: "Introduces the business and links to each specialist service page.",
+    primaryTopic: "Genie Media & Studio",
+    primaryKeyword: "Genie Media & Studio Vizag",
+    searchIntent: "LOCAL",
+    secondaryTopics: ["SEO", "Google Ads", "social media marketing", "website development", "video production", "podcast studio"],
+    note: "Introduces Genie Media's digital marketing services and links to each specialist service page.",
   },
   "/digital_marketing": {
     pageType: "service",

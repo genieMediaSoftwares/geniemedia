@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+    @apply outline outline-2 outline-offset-2;
+  }
+
+  html {
+    @apply scroll-pt-24;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    @apply !opacity-100 !transform-none;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

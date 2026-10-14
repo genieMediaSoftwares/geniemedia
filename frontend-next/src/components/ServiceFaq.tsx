@@ -16,11 +16,11 @@ export default function ServiceFaq({ title, intro, faqs }: { title: string; intr
         <div className="space-y-4">
           {faqs.map((faq) => (
             <details key={faq.q} className="group bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-              <summary className="w-full flex items-center justify-between p-6 text-left cursor-pointer list-none [&::-webkit-details-marker]:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-inset">
+              <summary className="w-full flex items-center justify-between gap-2 p-4 sm:p-6 text-left cursor-pointer list-none [&::-webkit-details-marker]:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-inset">
                 <h3 className="text-lg font-semibold text-gray-900 pr-4">{faq.q}</h3>
                 <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
               </summary>
-              <p className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-100 pt-4">{faq.a}</p>
+              <p className="px-4 sm:px-6 pb-4 sm:pb-6 text-gray-600 leading-relaxed border-t border-gray-100 pt-4">{faq.a}</p>
             </details>
           ))}
         </div>

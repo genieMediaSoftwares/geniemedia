@@ -13,7 +13,7 @@ import DecagonAsset from "@/assets/decagon.webp";
 import FreenomeAsset from "@/assets/freenome.webp";
 import type { PortfolioItem } from "@/types";
 import { portfolioOrFallback } from "@/lib/portfolio";
-import ProjectCard, { PROJECT_GRID } from "@/components/ProjectCard";
+import ProjectCard, { PROJECT_CONTAINER, PROJECT_GRID, PROJECT_HEADING, PROJECT_SECTION } from "@/components/ProjectCard";
 import { useLatestProjects } from "@/lib/liveData";
 
 const meerabasu = meerabasuAsset.src;
@@ -60,27 +60,27 @@ const FALLBACK_PROJECTS: PortfolioItem[] = [
       url: "https://www.buildzonprojects.com/"
   },
   {
-    name: "Nucon Aerospace - by Snapbrio",
+    name: "Nucon Aerospace",
     image: Nuconaerospace,
     url:"https://www.nuconaerospace.com/"
   },
   {
-    name: "Synergene - by Snapbrio",
+    name: "Synergene",
     image: Synergene,
     url:"https://synergeneapi.com/"
   },
   {
-    name: "Vivodyne - by Snapbrio",
+    name: "Vivodyne",
     image: Vivodyne,
     url:"https://www.vivodyne.com//"
   },
   {
-    name: "Decagon - by Snapbrio",
+    name: "Decagon",
     image: Decagon,
     url:"https://decagon.ai/"
   },
   {
-    name: "Freenome - by Snapbrio",
+    name: "Freenome",
     image: Freenome,
     url:"https://www.freenome.com/"
   },
@@ -94,10 +94,10 @@ const ProjectsSection = ({ initialProjects, caseStudyLinks = {}, title = "Our Po
   return (
     <>
 
-     <section className="bg-white py-8 md:py-12" id='projects'>
-      <div className="max-w-7xl mx-auto px-4 md:px-2">
+     <section className={PROJECT_SECTION} id='projects'>
+      <div className={PROJECT_CONTAINER}>
 
-        <h2 className="text-center text-4xl md:text-5xl font-bold text-gray-700 mb-10">
+        <h2 className={PROJECT_HEADING}>
           {title}
         </h2>
 

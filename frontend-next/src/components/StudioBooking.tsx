@@ -1,7 +1,7 @@
 "use client";
 
 import { Mic, CalendarDays, ClipboardList, CheckCircle2, Check, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, Clock, User, Mail, Smartphone, FileText } from "lucide-react";
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type React from 'react';
 import { STUDIO_PACKAGES, formatInr } from "@/content/podcastStudio";
 
@@ -27,7 +27,7 @@ export default function PodcastStudioBooking() {
   const [selectedService, setSelectedService] = useState<StudioService | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 1));
+  const [currentMonth, setCurrentMonth] = useState(() => new Date());
   const [isLoading, setIsLoading] = useState(false);
   const [bookingDetails, setBookingDetails] = useState({
     date: '',
@@ -93,6 +93,14 @@ export default function PodcastStudioBooking() {
     setSelectedService(service);
   };
 
+  const bookingRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (currentStep === 1) return;
+    bookingRef.current?.querySelector<HTMLElement>('[data-step-title]')?.focus({ preventScroll: true });
+    bookingRef.current?.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  }, [currentStep]);
+
   const handleNextStep = () => {
     if (currentStep === 1 && !selectedService) {
       alert('Please select a service');
@@ -101,6 +109,10 @@ export default function PodcastStudioBooking() {
     if (currentStep === 2 && (!selectedDate || !selectedTimeSlot)) {
       alert('Please select both date and time slot');
       return;
+    }
+    if (currentStep === 3) {
+      const invalid = Array.from(bookingRef.current?.querySelectorAll<HTMLInputElement>('input[required]') ?? []).find((input) => !input.checkValidity());
+      if (invalid) { invalid.reportValidity(); return; }
     }
     if (currentStep < 4) {
       setIsLoading(true);
@@ -118,7 +130,7 @@ export default function PodcastStudioBooking() {
       setTimeout(() => {
         setCurrentStep(currentStep - 1);
         setIsLoading(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        bookingRef.current?.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
       }, 800);
     }
   };
@@ -215,19 +227,22 @@ export default function PodcastStudioBooking() {
 };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div ref={bookingRef} className="min-h-screen scroll-mt-24 bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center pt-12">
           PODCAST STUDIO RENTAL PACKAGES 
         </h2>
 
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="lg:w-64 flex-shrink-0">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
+        <div className="flex flex-col xl:flex-row gap-6">
+          <div className="xl:w-64 flex-shrink-0">
+            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 xl:sticky xl:top-24">
               {steps.map((step) => (
-                <div
+                <button
                   key={step.id}
-                  className={`flex items-center gap-3 p-3 mb-3 rounded-lg cursor-pointer transition-all ${
+                  type="button"
+                  aria-current={currentStep === step.id ? 'step' : undefined}
+                  disabled={currentStep <= step.id}
+                  className={`w-full text-left flex items-center gap-3 p-3 mb-3 rounded-lg cursor-pointer transition-all ${
                     currentStep === step.id
                       ? 'bg-amber-100 text-amber-800 font-semibold'
                       : currentStep > step.id
@@ -239,12 +254,12 @@ export default function PodcastStudioBooking() {
                   <span className="text-2xl"><step.icon className="w-6 h-8" aria-hidden="true" /></span>
                   <span>{step.name}</span>
                   {currentStep > step.id && <span className="ml-auto text-green-600"><Check className="w-5 h-5" aria-hidden="true" /></span>}
-                </div>
+                </button>
               ))}
             </div>
           </div>
 
-          <div className="flex-1 relative">
+          <div className="min-w-0 flex-1 relative">
             {isLoading && (
               <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50 rounded-lg">
                 <div className="flex flex-col items-center">
@@ -280,10 +295,12 @@ export default function PodcastStudioBooking() {
                   <p className="text-xl font-bold text-gray-800 mb-4">Select Service</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-2">
                     {filteredServices.map((service, index) => (
-                      <div
+                      <button
                         key={service.id}
+                        type="button"
+                        aria-pressed={selectedService?.id === service.id}
                         onClick={() => handleServiceSelect(service)}
-                        className={`relative border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md animate-booking-slide-up motion-reduce:animate-none ${SERVICE_DELAY[index] ?? ''} ${
+                        className={`w-full text-left relative border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md animate-booking-slide-up motion-reduce:animate-none ${SERVICE_DELAY[index] ?? ''} ${
                           selectedService?.id === service.id
                             ? 'border-gray-900 bg-amber-50'
                             : 'border-gray-200 hover:border-gray-300'
@@ -308,7 +325,7 @@ export default function PodcastStudioBooking() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -317,7 +334,7 @@ export default function PodcastStudioBooking() {
 
             {currentStep === 2 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
-                <p className="text-xl font-bold text-gray-800 mb-6">Date & Time</p>
+                <p data-step-title tabIndex={-1} className="text-xl font-bold text-gray-800 mb-6">Date & Time</p>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   <div>
@@ -359,8 +376,12 @@ export default function PodcastStudioBooking() {
   const isDisabled = !day || !isCurrentMonth || isPast || isHoliday(day);
 
   return (
-    <div
+    <button
       key={idx}
+      type="button"
+      disabled={Boolean(isDisabled)}
+      aria-pressed={Boolean(isSelected)}
+      aria-label={day ? day.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : 'Empty day'}
       onClick={() => !isDisabled && setSelectedDate(day)}
       className={`aspect-square p-2 border-b border-r border-gray-200 last:border-r-0 flex items-center justify-center text-sm transition-colors ${
         isDisabled
@@ -373,7 +394,7 @@ export default function PodcastStudioBooking() {
       }`}
     >
       {day?.getDate()}
-    </div>
+    </button>
   );
 })}
 
@@ -389,10 +410,12 @@ export default function PodcastStudioBooking() {
                         <h4 className="font-semibold text-gray-700 mb-3">Morning</h4>
                         <div className="space-y-2">
                           {timeSlots.Morning.map(slot => (
-                            <div
+                            <button
                               key={slot.id}
+                              type="button"
+                              aria-pressed={selectedTimeSlot?.id === slot.id}
                               onClick={() => setSelectedTimeSlot(slot)}
-                              className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                              className={`w-full text-left p-4 border-2 rounded-lg cursor-pointer transition-all ${
                                 selectedTimeSlot?.id === slot.id
                                   ? 'border-gray-900 bg-amber-50'
                                   : 'border-gray-200 hover:border-gray-300'
@@ -400,7 +423,7 @@ export default function PodcastStudioBooking() {
                             >
                               <div className="font-semibold text-gray-800">{slot.time}</div>
                               <div className="text-sm text-gray-600">{slot.slots} Slots left</div>
-                            </div>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -409,10 +432,12 @@ export default function PodcastStudioBooking() {
                         <h4 className="font-semibold text-gray-700 mb-3">Afternoon</h4>
                         <div className="space-y-2">
                           {timeSlots.afternoon.map(slot => (
-                            <div
+                            <button
                               key={slot.id}
+                              type="button"
+                              aria-pressed={selectedTimeSlot?.id === slot.id}
                               onClick={() => setSelectedTimeSlot(slot)}
-                              className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                              className={`w-full text-left p-4 border-2 rounded-lg cursor-pointer transition-all ${
                                 selectedTimeSlot?.id === slot.id
                                   ? 'border-gray-900 bg-amber-50'
                                   : 'border-gray-200 hover:border-gray-300'
@@ -420,7 +445,7 @@ export default function PodcastStudioBooking() {
                             >
                               <div className="font-semibold text-gray-800">{slot.time}</div>
                               <div className="text-sm text-gray-600">{slot.slots} Slots left</div>
-                            </div>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -429,10 +454,12 @@ export default function PodcastStudioBooking() {
                         <h4 className="font-semibold text-gray-700 mb-3">Evening</h4>
                         <div className="space-y-2">
                           {timeSlots.evening.map(slot => (
-                            <div
+                            <button
                               key={slot.id}
+                              type="button"
+                              aria-pressed={selectedTimeSlot?.id === slot.id}
                               onClick={() => setSelectedTimeSlot(slot)}
-                              className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                              className={`w-full text-left p-4 border-2 rounded-lg cursor-pointer transition-all ${
                                 selectedTimeSlot?.id === slot.id
                                   ? 'border-gray-900 bg-amber-50'
                                   : 'border-gray-200 hover:border-gray-300'
@@ -440,7 +467,7 @@ export default function PodcastStudioBooking() {
                             >
                               <div className="font-semibold text-gray-800">{slot.time}</div>
                               <div className="text-sm text-gray-600">{slot.slots} Slots left</div>
-                            </div>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -452,11 +479,12 @@ export default function PodcastStudioBooking() {
 
             {currentStep === 3 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
-                <p className="text-xl font-bold text-gray-800 mb-6">Basic Details</p>
+                <p data-step-title tabIndex={-1} className="text-xl font-bold text-gray-800 mb-6">Basic Details</p>
                 <div className="space-y-4 max-w-md">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                    <label htmlFor="booking-name" className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
                     <input
+                      id="booking-name"
                       type="text"
                       name="name"
                       value={bookingDetails.name}
@@ -467,20 +495,22 @@ export default function PodcastStudioBooking() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                    <label htmlFor="booking-email" className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
                     <input
+                      id="booking-email"
                       type="email"
                       name="email"
                       value={bookingDetails.email}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-gray-900 focus:outline-none"
-                      placeholder="your@email.com"
+                      placeholder="Your email address"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
+                    <label htmlFor="booking-phone" className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
                     <input
+                      id="booking-phone"
                       type="tel"
                       name="phone"
                       value={bookingDetails.phone}
@@ -491,8 +521,9 @@ export default function PodcastStudioBooking() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Additional Notes (Optional)</label>
+                    <label htmlFor="booking-notes" className="block text-sm font-semibold text-gray-700 mb-2">Additional Notes (Optional)</label>
                     <textarea
+                      id="booking-notes"
                       name="notes"
                       value={bookingDetails.notes}
                       onChange={handleInputChange}
@@ -507,7 +538,7 @@ export default function PodcastStudioBooking() {
 
             {currentStep === 4 && (
               <div className="bg-white rounded-lg shadow-sm p-6 animate-booking-fade-in motion-reduce:animate-none">
-                <p className="text-xl font-bold text-gray-800 mb-6">Booking Summary</p>
+                <p data-step-title tabIndex={-1} className="text-xl font-bold text-gray-800 mb-6">Booking Summary</p>
                 <div className="space-y-6">
                   <div className="bg-amber-50 border-2 border-gray-200 rounded-lg p-4">
                     <p className="font-semibold text-amber-900 mb-3">Selected Service</p>

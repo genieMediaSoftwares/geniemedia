@@ -173,7 +173,7 @@ const ContactSec = ({ isPage = false }) => {
               </h2>
             )}
             <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
-              Call, message or visit us to discuss your website, marketing, video or podcast project. Send us a message and we'll respond as soon as possible.
+              Contact Genie Media &amp; Studio to discuss digital marketing, website development or a podcast project. First, tell us your goals and the areas you serve. Then our team can suggest a scope and next steps. Call, message or visit our office in Yendada, Visakhapatnam.
             </p>
           </div>
 
@@ -258,7 +258,7 @@ const ContactSec = ({ isPage = false }) => {
                         value={formData.email}
                         onChange={handleChange}
                         className={`${FORM_INPUT} w-full px-4 py-3 rounded-xl border-2 border-gray-200`}
-                        placeholder="john@example.com"
+                        placeholder="Your email address"
                       />
                     </div>
                   </div>

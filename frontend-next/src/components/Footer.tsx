@@ -18,7 +18,10 @@ export default async function Footer() {
   { title: "Digital Marketing", link: "/digital_marketing" },
   { title: "Web Development", link: "/web_development" },
   { title: "Production House", link: "/production_house" },
-  { title: "Podcast Studio", link: "/podcast_studio" }
+  { title: "Podcast Studio", link: "/podcast_studio" },
+  { title: "SEO & Local Search", link: "/digital_marketing/local-seo" },
+  { title: "Answer Engine Optimization", link: "/digital_marketing/aeo" },
+  { title: "Generative Engine Optimization", link: "/digital_marketing/geo" },
 ];
 
 const company = [
@@ -37,8 +40,8 @@ const resources = [
 
   return (
     <footer className="bg-black text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-8 sm:py-16 lg:py-16">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 sm:gap-8 lg:gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 lg:py-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-8 lg:gap-10 [&>div]:min-w-0">
 
           <div className="col-span-2 sm:col-span-1 space-y-4 sm:space-y-6">
             <div className="flex items-center gap-4 sm:block">
@@ -52,7 +55,7 @@ const resources = [
                 className='h-16 sm:h-32 w-auto shrink-0 sm:mb-6 sm:-mt-8'
               />
               <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-               Digital marketing, websites, video production and a podcast studio in Visakhapatnam, helping businesses grow with strategy and innovation.
+               Genie Media &amp; Studio provides digital marketing, website development and podcast services in Visakhapatnam (Vizag), Andhra Pradesh.
               </p>
             </div>
 
@@ -171,23 +174,17 @@ const resources = [
       </div>
 
       <div className="border-t border-white/10 sm:border-0 sm:-mt-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-6">
+        <p className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-gray-300 leading-relaxed">
+          Based in Yendada, serving businesses in Rushikonda, MVP Colony, Madhurawada and across
+          Visakhapatnam. Digital marketing, website development and remote podcast editing are
+          available across Andhra Pradesh and India. Podcast recording takes place at our Vizag studio.
+        </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-xs sm:text-sm text-center md:text-left space-y-1">
-              <p>© 2025 Genie Media & Studio. All rights reserved.</p>
-              <p>
-                Powered by{" "}
-                <a
-                  href="https://www.kkdigitalgrowth.com/"
-                  target="_blank"
-                  rel="noopener"
-                  className="text-gray-300 hover:text-orange-500 transition-colors duration-200"
-                >
-                  KKDigitalGrowth
-                </a>
-              </p>
+              <p>© {new Date().getFullYear()} Genie Media &amp; Studio. All rights reserved.</p>
             </div>
-            <nav aria-label="Legal" className="hidden sm:flex items-center gap-6 text-sm">
+            <nav aria-label="Legal" className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-sm">
               <a href="/privacy-policy" className="text-gray-400 hover:text-orange-500 transition-colors duration-200 inline-flex items-center min-h-[44px] md:min-h-0">
                 Privacy Policy
               </a>

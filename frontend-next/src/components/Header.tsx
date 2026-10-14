@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, ChevronRight, Phone, Mail } from 'lucide-react';
@@ -29,7 +29,7 @@ const HAMBURGER_OPEN = [
   "[transform:rotate(-45deg)_translate(7px,-7px)]",
 ];
 
-const MOBILE_ITEM = "opacity-0 animate-header-item";
+const MOBILE_ITEM = "opacity-0 animate-header-item motion-reduce:opacity-100";
 const MOBILE_ITEM_DELAY = [
   "![animation-delay:50ms]",
   "![animation-delay:100ms]",
@@ -62,6 +62,8 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [activeMobileDropdown, setActiveMobileDropdown] = useState<string | null>(null);
   const [activeMobileSub, setActiveMobileSub] = useState<string | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
 
   const menuItems = MENU_ITEMS;
 
@@ -74,15 +76,42 @@ const Header = () => {
     setActiveMobileSub(null);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    mobileNavRef.current?.querySelector<HTMLElement>('a, button')?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+      if (event.key !== 'Tab') return;
+      const controls = [menuButtonRef.current, ...Array.from(mobileNavRef.current?.querySelectorAll<HTMLElement>('a, button') ?? [])].filter((el): el is HTMLElement => Boolean(el));
+      const first = controls[0], last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    const desktop = window.matchMedia('(min-width: 1280px)');
+    const onResize = () => { if (desktop.matches) setIsMobileMenuOpen(false); };
+    window.addEventListener('keydown', onKeyDown);
+    desktop.addEventListener('change', onResize);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+      desktop.removeEventListener('change', onResize);
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <>
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-black/95"
       >
-        <div className="max-w-8xl mx-auto px-0 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 ">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between gap-6 h-20">
             
-            <Link prefetch={false} href="/" className="flex items-center cursor-pointer" aria-label="Genie Media & Studio — home">
+            <Link prefetch={false} href="/" className="flex shrink-0 items-center cursor-pointer" aria-label="Genie Media & Studio — home">
               <img
                 src={logo}
                 alt="Genie Media & Studio"
@@ -92,17 +121,21 @@ const Header = () => {
               />
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-12">
+            <nav aria-label="Main navigation" className="hidden xl:flex items-center gap-6">
               {menuItems.map((item) => (
                 <div
                   key={item.name}
                   className="relative"
                   onMouseEnter={() => item.dropdown && setActiveDropdown(item.name)}
                   onMouseLeave={() => setActiveDropdown(null)}
+                  onFocusCapture={() => setActiveDropdown(item.dropdown ? item.name : null)}
+                  onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setActiveDropdown(null); }}
+                  onKeyDown={(event) => { if (event.key === 'Escape') { event.currentTarget.querySelector('a')?.focus(); setActiveDropdown(null); } }}
                 >
                   <Link prefetch={false}
                     href={item.href}
-                    className={`${NAV_LINK} flex items-center gap-1 text-m font-semibold text-gray-100 py-1`}
+                    className={`${NAV_LINK} flex items-center gap-1 whitespace-nowrap text-base font-semibold text-gray-100 py-2`}
+                    aria-expanded={item.dropdown ? activeDropdown === item.name : undefined}
                   >
                     {item.name}
                     {item.dropdown && (
@@ -178,21 +211,25 @@ const Header = () => {
               ))}
             </nav>
 
-            <div className="hidden lg:flex items-center gap-3">
-              <a href='tel:+919032845433' className={`${BTN_SECONDARY} px-5 py-2.5 font-semibold rounded-full text-sm flex items-center gap-2 z-10`} onClick={() => window.location.href="https://wa.me/919032845433"}>
+            <div className="hidden xl:flex shrink-0 items-center gap-3">
+              <a href='tel:+919032845433' className={`${BTN_SECONDARY} min-h-11 whitespace-nowrap px-5 py-2.5 font-semibold rounded-full text-sm flex items-center gap-2 z-10`} onClick={() => window.location.href="https://wa.me/919032845433"}>
                 <Phone size={16} />
                 Book a Call
               </a>
-              <Link prefetch={false} href="/contact" className={`${BTN_PRIMARY} px-6 py-2.5 text-black font-semibold rounded-full text-sm flex items-center gap-2 shadow-lg z-10`}>
+              <Link prefetch={false} href="/contact" className={`${BTN_PRIMARY} min-h-11 whitespace-nowrap px-6 py-2.5 text-black font-semibold rounded-full text-sm flex items-center gap-2 shadow-lg z-10`}>
                 <Mail size={16} />
                 Contact Us
               </Link>
             </div>
 
             <button
+              ref={menuButtonRef}
+              type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`lg:hidden flex items-center justify-center min-w-[44px] min-h-[44px] p-2 mr-8 rounded-lg hover:bg-gray-100 transition-colors`}
+              className={`xl:hidden text-gray-400 flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-lg hover:bg-gray-100 transition-colors`}
               aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               <div className="w-6 h-5 flex flex-col justify-between">
                 <span className={`${HAMBURGER_LINE} ${isMobileMenuOpen ? HAMBURGER_OPEN[0] : ""}`}></span>
@@ -204,13 +241,15 @@ const Header = () => {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="lg:hidden animate-header-slide-in bg-white border-t border-gray-100 shadow-2xl max-h-[calc(100vh-80px)] overflow-y-auto">
-            <nav className="px-4 py-6 flex flex-col gap-1">
+          <div className="xl:hidden animate-header-slide-in bg-white border-t border-gray-100 shadow-2xl max-h-[calc(100dvh-80px)] overflow-y-auto overscroll-contain">
+            <nav ref={mobileNavRef} id="mobile-navigation" aria-label="Mobile navigation" className="px-4 py-6 flex flex-col gap-1">
               {menuItems.map((item, index) => (
                 <div key={item.name} className={`${MOBILE_ITEM} ${MOBILE_ITEM_DELAY[index] ?? ""}`}>
                   {item.dropdown ? (
                     <div>
                       <button
+                        type="button"
+                        aria-expanded={activeMobileDropdown === item.name}
                         onClick={() => setActiveMobileDropdown(
                           activeMobileDropdown === item.name ? null : item.name
                         )}
@@ -231,7 +270,7 @@ const Header = () => {
                               <div className="flex items-center">
                                 <Link prefetch={false}
                                   href={subItem.href}
-                                  className="flex-1 flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 transition-all"
+                                  className="min-w-0 flex-1 flex items-center gap-3 py-2.5 px-4 rounded-lg text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-600 transition-all"
                                   onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                   <span className="text-xl">{subItem.icon}</span>
@@ -250,7 +289,7 @@ const Header = () => {
                                 )}
                               </div>
                               {subItem.children && activeMobileSub === subItem.name && (
-                                <div className="ml-12 mt-1 mb-2 border-l-2 border-orange-100">
+                                <div className="ml-4 sm:ml-12 mt-1 mb-2 border-l-2 border-orange-100">
                                   {groupNav(subItem.children).map((g) => (
                                     <div key={g.group ?? "all"}>
                                       {g.group && <p className="px-4 pt-2 text-xs font-semibold uppercase tracking-wider text-orange-600">{g.group}</p>}
@@ -292,7 +331,7 @@ const Header = () => {
                 <a
                   href="https://wa.me/919032845433"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`w-80% ${BTN_SECONDARY} px-5 py-3 font-semibold rounded-full flex items-center justify-center gap-2 z-10`}
+                  className={`w-full ${BTN_SECONDARY} min-h-11 px-5 py-3 font-semibold rounded-full flex items-center justify-center gap-2 z-10`}
                 >
                   <Phone size={18} />
                   Book a Call
@@ -300,7 +339,7 @@ const Header = () => {
                 <Link prefetch={false}
                   href="/contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`w-80% ${BTN_PRIMARY} px-6 py-3 text-black font-semibold rounded-full flex items-center justify-center gap-2 shadow-lg z-10`}
+                  className={`w-full ${BTN_PRIMARY} min-h-11 px-6 py-3 text-black font-semibold rounded-full flex items-center justify-center gap-2 shadow-lg z-10`}
                 >
                   <Mail size={18} />
                   Contact Us

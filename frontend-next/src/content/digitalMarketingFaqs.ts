@@ -1,5 +1,13 @@
 export const DIGITAL_MARKETING_FAQS: Array<{ q: string; a: string }> = [
   {
+    q: "Do you provide AEO and GEO services as part of digital marketing?",
+    a: "Yes. Genie Media & Studio offers answer engine optimization (AEO) and generative engine optimization (GEO) from Vizag for businesses across India. We review clear customer answers, accurate brand facts and technical SEO. These services support content discovery, but cannot guarantee Google rankings, AI Overviews or citations from an AI system.",
+  },
+  {
+    q: "Do you offer digital marketing services in Rushikonda and MVP Colony?",
+    a: "Yes. Our digital marketing team serves Rushikonda, MVP Colony, Yendada, Madhurawada and the wider Visakhapatnam area from our office at KP Icon in Yendada. We plan local SEO and location-based ad campaigns around the areas your business serves.",
+  },
+  {
     q: "What does a digital marketing agency do?",
     a: "A digital marketing agency helps businesses get found and chosen online. At Genie Media & Studio, that means SEO, Google Ads, social media marketing, content marketing, lead generation and conversion optimization, planned as one strategy and measured against your business goals.",
   },

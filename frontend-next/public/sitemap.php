@@ -103,8 +103,8 @@ function applySeoLastmod(string $xml, string $configFile): string
         }
         $loc = preg_quote(esc($base . ($path === '/' ? '/' : $path)), '#');
         $xml = (string) preg_replace_callback(
-            '#(<url>\s*<loc>' . $loc . '</loc>\s*<lastmod>)([^<]*)(</lastmod>)#',
-            static fn (array $m): string => $m[1] . ($published > $m[2] ? $published : $m[2]) . $m[3],
+            '#(<url>\s*<loc>' . $loc . '</loc>)(?:\s*<lastmod>([^<]*)</lastmod>)?#',
+            static fn (array $m): string => $m[1] . '<lastmod>' . max($published, $m[2] ?? '') . '</lastmod>',
             $xml,
             1
         );

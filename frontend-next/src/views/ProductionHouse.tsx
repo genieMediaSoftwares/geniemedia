@@ -11,7 +11,7 @@ const StudioNightView = StudioNightViewAsset.src;
 
 const SERVICES = [
   {
-    title: "Corporate Videos",
+    title: "Corporate Video Production",
     body: "Company profiles, training videos, internal updates and client presentations. We keep the message clear, professional and in line with your brand.",
   },
   {
@@ -19,7 +19,7 @@ const SERVICES = [
     body: "A short film that tells your story. We combine interviews, behind-the-scenes footage and cinematic shots to build trust in your brand.",
   },
   {
-    title: "Product Videos",
+    title: "Product Video Production",
     body: "Show how your product looks, works and helps. These videos suit your website, online store, ads and sales presentations.",
   },
   {
@@ -27,7 +27,7 @@ const SERVICES = [
     body: "Reels and short vertical videos planned for Instagram and Facebook. We shoot with the edit and the platform in mind.",
   },
   {
-    title: "Video Editing and Post-Production",
+    title: "Video Editing Services and Post-Production",
     body: "Editing, colour grading, graphics, subtitles and sound clean-up. We also cut long videos into short clips and vertical versions.",
   },
   {
@@ -92,7 +92,7 @@ export default function ProductionHouse({ h1 }: { h1?: string }) {
                 Genie Media &amp; Studio is a video production house in Vizag. We create corporate videos, brand films, product videos and social media content for businesses and brands.
               </p>
               <p className="text-base text-gray-400 leading-relaxed">
-                We handle the full process, from planning and scripting to filming, editing and delivery. So you get one team and one clear plan.
+                Our video production services cover planning, scripting, filming, editing and delivery. We agree the audience, shooting requirements and final formats before production starts.
               </p>
               <a href="/contact" className="inline-block bg-orange-500 hover:bg-orange-600 text-black font-semibold px-8 py-3.5 rounded-full transition-colors">
                 Discuss Your Video Project
@@ -208,6 +208,22 @@ export default function ProductionHouse({ h1 }: { h1?: string }) {
       </section>
 
       <PlatformsWeUse type="productionHouse" />
+      <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-5">Plan Your Video Production Brief</h2>
+          <p className="text-lg text-gray-600 leading-relaxed mb-5">
+            For corporate video production, tell us who will watch the video and what they should understand or do next.
+            For product video production, share the product, its key features and where the finished video will appear.
+            Your brief helps us scope filming, editing, subtitles and the formats you need without guessing at a package.
+          </p>
+          <p className="text-lg text-gray-600 leading-relaxed">
+            If you already have footage, ask about our video editing services. For an interview-led series, explore our{" "}
+            <a href="/podcast_studio/video-podcast" className={CONTENT_LINK}>video podcast production options</a>.
+            To use short edits in a campaign, see our{" "}
+            <a href="/digital_marketing/social-media-marketing" className={CONTENT_LINK}>social media marketing services</a>.
+          </p>
+        </div>
+      </section>
       <ServiceFaq
         title="Frequently Asked Questions"
         intro="Answers to common questions about our video production services."

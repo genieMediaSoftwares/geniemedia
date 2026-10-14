@@ -34,9 +34,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:px-4 focus:py-3 focus:bg-white focus:text-black">Skip to main content</a>
         <GtmNoScript />
         <Header />
-        <main id="main-content" data-seo-content="true" className="flow-root">
+        <main id="main-content" tabIndex={-1} data-seo-content="true" className="flow-root min-w-0">
           {children}
         </main>
         <Footer />

@@ -16,6 +16,8 @@ import setAsset from "@/assets/podcast/studioSet-min.jpg";
 import { CONTENT_LINK } from "@/lib/linkStyles";
 import { STUDIO, STUDIO_PACKAGES, formatInr } from "@/content/podcastStudio";
 import { PODCAST_SERVICE_NAV, groupNav } from "@/content/serviceNav";
+import { PODCAST_LOCAL_FAQS } from "@/content/serviceFaqs";
+import LocalServiceCoverage from "@/components/seo/LocalServiceCoverage";
 
 const cameras = camerasAsset.src;
 const chairs = chairsAsset.src;
@@ -67,6 +69,7 @@ const PODCAST_SERVICES = [
 ];
 
 const PODCAST_FAQS = [
+  ...PODCAST_LOCAL_FAQS,
   {
     q: "Where is the podcast studio?",
     a: "At Genie Media & Studio, 5A-2, 4th Floor, KP Icon, Yendada, Visakhapatnam, near MK Gold Coast, Endada, Andhra Pradesh 530045. Yendada is close to Rushikonda and Madhurawada.",
@@ -181,6 +184,7 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
 
   useEffect(() => {
     if (!PODCAST_CLIP_URL) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const t = setTimeout(() => {
       videoRef.current?.play?.().catch(() => {});
     }, 1200);
@@ -380,19 +384,19 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
         </div>
       </section>
 
-      <section className="-mt-10 bg-[#f1f1f1] pb-[30px]">
-        <div className="mx-auto grid max-w-[1360px] grid-cols-2 items-start justify-items-center gap-12 [grid-template-areas:'left_right'_'bottom_bottom'] [grid-template-rows:auto_auto] max-[900px]:gap-[30px] max-[700px]:grid-cols-1 max-[700px]:gap-7 max-[700px]:[grid-template-areas:'left'_'right'_'bottom']">
-          <figure data-reveal className={`${SBF_CARD} mr-[140px] max-w-[440px] [grid-area:left] max-[900px]:max-w-[480px] max-[700px]:m-0 max-[700px]:max-w-[92%]`}>
+      <section className="bg-[#f1f1f1] px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 md:grid-cols-2 items-start justify-items-center gap-8 lg:gap-12">
+          <figure data-reveal className={`${SBF_CARD} min-w-0 max-w-[440px]`}>
             <StudioImg src={cameras} alt="Cameras for video podcast recording" className={SBF_IMG} />
             <figcaption className={SBF_CAPTION}>Up to three cameras</figcaption>
           </figure>
 
-          <figure data-reveal className={`${SBF_CARD} ml-[140px] max-w-[440px] [grid-area:right] max-[900px]:max-w-[480px] max-[700px]:m-0 max-[700px]:max-w-[92%]`}>
+          <figure data-reveal className={`${SBF_CARD} min-w-0 max-w-[440px]`}>
             <StudioImg src={output} alt="Zoom PodTrak P8 podcast recorder" className={SBF_IMG} />
             <figcaption className={SBF_CAPTION}>Zoom PodTrak P8 recorder</figcaption>
           </figure>
 
-          <figure data-reveal className={`${SBF_CARD} -mt-[90px] max-w-[420px] [grid-area:bottom] max-[900px]:max-w-[480px] max-[700px]:mt-0 max-[700px]:max-w-[92%]`}>
+          <figure data-reveal className={`${SBF_CARD} min-w-0 md:col-span-2 max-w-[420px]`}>
             <StudioImg src={nytview} alt="White panelled podcast set with two boom microphones" className={SBF_IMG} />
             <figcaption className={SBF_CAPTION}>White panelled set</figcaption>
           </figure>
@@ -470,6 +474,7 @@ export default function PodcastStudio({ platforms, h1 }: { platforms?: ReactNode
         </div>
       </section>
 
+      <LocalServiceCoverage service="podcast" />
       {platforms}
 
       <StudioReviews heading="WHAT OUR CREATORS SAY" orbAnimation="animate-podcast-drift-20" />

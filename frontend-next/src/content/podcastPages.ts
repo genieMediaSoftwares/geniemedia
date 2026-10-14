@@ -3,6 +3,7 @@
 // The physical studio is only in Visakhapatnam. India-wide wording is used only for services
 // the owner confirmed can be delivered remotely (production, editing, repurposing).
 import type { ServiceSubPage } from "@/content/serviceSubPage";
+import { localiseServicePages } from "@/content/localServicePages";
 import { STUDIO, STUDIO_PACKAGES, formatInr } from "@/content/podcastStudio";
 
 const [STUDIO_ONLY, TWO_CAM, THREE_CAM] = STUDIO_PACKAGES;
@@ -12,7 +13,7 @@ const LINK_BACK_CORE = ["/podcast_studio", "/services"];
 const LOCAL_SCHEMA = ["WebPage", "Service", "LocalBusiness", "BreadcrumbList", "FAQPage", "Organization"];
 const REMOTE_SCHEMA = ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"];
 
-export const PODCAST_PAGES: ServiceSubPage[] = [
+const PODCAST_CONTENT: ServiceSubPage[] = [
   {
     slug: "rental",
     name: "Podcast Studio Rental",
@@ -719,4 +720,5 @@ export const PODCAST_PAGES: ServiceSubPage[] = [
   },
 ];
 
+export const PODCAST_PAGES = localiseServicePages(PODCAST_CONTENT);
 export const podcastPath = (slug: string): string => `/podcast_studio/${slug}`;

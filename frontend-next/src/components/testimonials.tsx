@@ -58,8 +58,8 @@ const CAROUSEL_NAV =
 
 const CAROUSEL_ITEM = "shrink-0 transition-all duration-[600ms] ease-in-out motion-reduce:transition-none";
 const CAROUSEL_POSITION: Record<string, string> = {
-  side: "w-[320px] [transform:scale(0.75)_translateZ(-100px)] opacity-50 blur-[0.5px] max-[768px]:hidden",
-  center: "w-[430px] [transform:scale(1)_translateZ(0)] opacity-100 blur-0 z-10 max-[768px]:!w-full max-[768px]:max-w-[480px]",
+  side: "w-64 [transform:scale(0.75)_translateZ(-100px)] opacity-50 blur-[0.5px] max-[1279px]:hidden",
+  center: "w-[430px] [transform:scale(1)_translateZ(0)] opacity-100 blur-0 z-10 max-[1279px]:!w-full max-[1279px]:max-w-[480px]",
   hidden: "hidden",
 };
 const ITEM_DELAY = ["![animation-delay:0s]", "![animation-delay:0.1s]", "![animation-delay:0.2s]", "![animation-delay:0.3s]", "![animation-delay:0.4s]", "![animation-delay:0.5s]"];
@@ -159,7 +159,7 @@ const VideoTestimonials = () => {
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-300 rounded-full blur-3xl opacity-20"></div>
         </div>
 
-        <div className="relative max-w-8xl mx-auto">
+        <div className="relative max-w-7xl mx-auto">
           <div className={`text-center mb-8 ${isVisible ? 'animate-fade-in-up-slow motion-reduce:animate-none' : 'opacity-0'}`}>
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 rounded-full mb-4">
               <Star className="text-orange-500" size={16} fill="currentColor" />
@@ -176,10 +176,10 @@ const VideoTestimonials = () => {
           </div>
 
           <div className="relative">
-            <div className="relative flex items-center justify-center gap-8 [perspective:1000px] min-h-[580px] max-[768px]:gap-0 max-[768px]:min-h-0">
-              {arrow("prev", "max-[768px]:absolute max-[768px]:top-[calc(min(100vw-2rem,480px)*0.28125)] max-[768px]:-translate-y-1/2 max-[768px]:left-2 max-[768px]:shadow-[0_6px_18px_rgba(0,0,0,0.25)]")}
+            <div className="relative flex items-center justify-center gap-6 [perspective:1000px] min-h-[580px] max-[1279px]:gap-0 max-[1279px]:min-h-0">
+              {arrow("prev", "max-[1279px]:absolute max-[1279px]:top-[calc(min(100vw-2rem,480px)*0.28125)] max-[1279px]:-translate-y-1/2 max-[1279px]:left-2 max-[768px]:shadow-[0_6px_18px_rgba(0,0,0,0.25)]")}
 
-              <div className="flex-1 flex items-center justify-center gap-8 overflow-hidden max-w-8xl touch-pan-y" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+              <div className="min-w-0 flex-1 flex items-center justify-center gap-6 overflow-hidden max-w-7xl touch-pan-y" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                 {testimonials.map((testimonial, index) => {
                   let position = 'hidden';
                   const prevIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
@@ -192,7 +192,7 @@ const VideoTestimonials = () => {
                   return (
                     <div
                       key={testimonial.id}
-                      className={`${CAROUSEL_ITEM} ${CAROUSEL_POSITION[position]} ${
+                      className={`${CAROUSEL_ITEM} ${CAROUSEL_POSITION[position]} ${position === 'center' ? 'order-2' : index === prevIndex ? 'order-1' : 'order-3'} ${
                         isVisible ? `animate-scale-in motion-reduce:animate-none ${ITEM_DELAY[index] ?? ""}` : ''
                       }`}
                       onClick={() => position !== 'center' && goToSlide(index)}
@@ -248,7 +248,7 @@ const VideoTestimonials = () => {
                 })}
               </div>
 
-              {arrow("next", "max-[768px]:absolute max-[768px]:top-[calc(min(100vw-2rem,480px)*0.28125)] max-[768px]:-translate-y-1/2 max-[768px]:right-2 max-[768px]:shadow-[0_6px_18px_rgba(0,0,0,0.25)]")}
+              {arrow("next", "max-[1279px]:absolute max-[1279px]:top-[calc(min(100vw-2rem,480px)*0.28125)] max-[1279px]:-translate-y-1/2 max-[1279px]:right-2 max-[768px]:shadow-[0_6px_18px_rgba(0,0,0,0.25)]")}
             </div>
 
             <div className="flex items-center justify-center gap-2 mt-8 max-[768px]:mt-5 max-[768px]:gap-3">

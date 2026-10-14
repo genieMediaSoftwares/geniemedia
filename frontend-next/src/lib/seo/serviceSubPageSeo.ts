@@ -6,6 +6,7 @@ import { type ServiceSection, subPagePath } from "@/content/serviceSubPages";
 import { SITE, canonicalFor } from "@/lib/site";
 import { breadcrumbNode, organizationNode, ORG_ID } from "@/lib/seo/schema";
 import { STUDIO, STUDIO_PACKAGES } from "@/content/podcastStudio";
+import { INDIA_SERVICE_AREAS, LOCAL_SERVICE_AREAS } from "@/content/serviceAreas";
 
 export function buildSubPageMetadata(section: ServiceSection, page: ServiceSubPage): Metadata {
   const canonical = canonicalFor(subPagePath(section, page.slug));
@@ -28,14 +29,6 @@ export function buildSubPageMetadata(section: ServiceSection, page: ServiceSubPa
   };
 }
 
-const INDIA = { "@type": "Country", name: "India" };
-const VIZAG = {
-  "@type": "City",
-  name: "Visakhapatnam",
-  alternateName: "Vizag",
-  containedInPlace: { "@type": "State", name: "Andhra Pradesh", containedInPlace: INDIA },
-};
-
 const STUDIO_ID = `${SITE.url}/podcast_studio#studio`;
 
 // The physical podcast studio, used on pages about recording at the Visakhapatnam studio.
@@ -48,6 +41,7 @@ const studioNode = () => ({
   telephone: SITE.contact.telephone,
   email: STUDIO.email,
   address: { "@type": "PostalAddress", ...SITE.address },
+  areaServed: LOCAL_SERVICE_AREAS,
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
@@ -95,7 +89,7 @@ export function subPageGraph(section: ServiceSection, page: ServiceSubPage): Jso
         url,
         description: page.description,
         provider: { "@id": atStudio ? STUDIO_ID : ORG_ID },
-        areaServed: atStudio ? VIZAG : [INDIA, VIZAG],
+        areaServed: atStudio ? LOCAL_SERVICE_AREAS : INDIA_SERVICE_AREAS,
         ...(showsPrices ? { offers: packageOffers() } : {}),
         hasOfferCatalog: {
           "@type": "OfferCatalog",

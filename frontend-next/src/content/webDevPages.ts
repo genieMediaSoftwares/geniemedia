@@ -1,12 +1,13 @@
 // Content for the /web_development/<slug> service pages. Shape and rules: serviceSubPage.ts.
 import type { ServiceSubPage } from "@/content/serviceSubPage";
+import { localiseServicePages } from "@/content/localServicePages";
 
 const LINK_BACK_CORE = ["/web_development", "/services"];
 const WEB_SCHEMA = ["WebPage", "Service", "BreadcrumbList", "FAQPage", "Organization"];
 
 export const WEB_GROUPS = ["Website Services", "Platforms", "Custom & App Development", "Care & Performance"] as const;
 
-export const WEB_DEV_PAGES: ServiceSubPage[] = [
+const WEB_DEV_CONTENT: ServiceSubPage[] = [
   {
     slug: "website-development",
     group: "Website Services",
@@ -18,7 +19,7 @@ export const WEB_DEV_PAGES: ServiceSubPage[] = [
     h1: "Website Development Services for Growing Businesses",
     eyebrow: "Website Development",
     intro: [
-      "Genie Media & Studio builds websites for businesses across India that need more than an online brochure. We plan, design, develop and launch sites that load fast, work well on mobile and make it easy for visitors to contact you or buy.",
+      "Genie Media & Studio provides website development for businesses in Vizag and across India. First, we plan the pages around your customers. Then we design, build and launch a site that works well on mobile and makes it easy to contact you or buy.",
       "Our designers and developers work together from our office in Visakhapatnam, and we work remotely with clients nationwide. We choose the platform that fits your goals and budget, whether that is WordPress, Shopify or custom React and Next.js.",
     ],
     hero: { image: "web1", alt: "Website development concept with code, devices and responsive web pages" },
@@ -260,7 +261,7 @@ export const WEB_DEV_PAGES: ServiceSubPage[] = [
     h1: "Business Website Development for Indian Companies",
     eyebrow: "Business Websites",
     intro: [
-      "For most small and medium businesses, the website has one main job: turn people who are checking you out into enquiries. We build business websites for Indian companies that explain what you do clearly and make it easy to get in touch.",
+      "A business website should explain what you do and make it easy to get in touch. We build company websites for businesses in Vizag and across India. First, we agree the pages and contact options. Then we organise the content around the questions your customers ask.",
       "From clinics and colleges to manufacturers and consultants, we build sites that your team can update and that are ready for SEO and advertising from day one. We are based in Visakhapatnam and work with businesses across India.",
     ],
     hero: { image: "web2", alt: "Business website with service pages and an enquiry form on laptop and mobile" },
@@ -381,7 +382,7 @@ export const WEB_DEV_PAGES: ServiceSubPage[] = [
     h1: "E-commerce Website Development for Indian Brands",
     eyebrow: "E-commerce Websites",
     intro: [
-      "Selling only through marketplaces means sharing your margin and your customers. We build e-commerce websites for Indian brands that want their own store, with smooth checkout, local payment options and a back end your team can manage.",
+      "An e-commerce website gives your brand a store of its own. We build online stores for businesses in Vizag and across India, with clear products, local payment options and a checkout that works on mobile. First, we review your catalogue. Then we plan how customers will browse and buy.",
       "We build on Shopify, WooCommerce or custom React and Next.js, depending on your catalogue and plans. Our team in Visakhapatnam works with D2C brands and retailers across India.",
     ],
     hero: { image: "avantta", alt: "Avantta Gems online store built on Shopify by Genie Media & Studio" },
@@ -1703,4 +1704,5 @@ export const WEB_DEV_PAGES: ServiceSubPage[] = [
   },
 ];
 
+export const WEB_DEV_PAGES = localiseServicePages(WEB_DEV_CONTENT);
 export const webDevPath = (slug: string): string => `/web_development/${slug}`;

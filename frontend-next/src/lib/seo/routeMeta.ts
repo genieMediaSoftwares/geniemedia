@@ -1,7 +1,8 @@
 import type { JsonLdGraph, JsonLdObject, PublishedServiceSeo, RouteMeta, RouteMetaEntry } from "@/types";
 import { SITE_ORIGIN, canonicalFor } from "@/lib/site";
 import { DIGITAL_MARKETING_FAQS } from "@/content/digitalMarketingFaqs";
-import { HOME_FAQS, PRODUCTION_HOUSE_FAQS, WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
+import { HOME_FAQS, PODCAST_LOCAL_FAQS, PRODUCTION_HOUSE_FAQS, SERVICE_DIRECTORY_FAQS, WEB_DEVELOPMENT_FAQS } from "@/content/serviceFaqs";
+import { INDIA_SERVICE_AREAS, LOCAL_SERVICE_AREAS } from "@/content/serviceAreas";
 import { DM_SERVICE_PAGES } from "@/content/dmServicePages";
 import { WEB_DEV_PAGES } from "@/content/webDevPages";
 
@@ -39,16 +40,16 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/": {
-    title: "Genie Media & Studio | Digital Marketing, Web & Media in Vizag",
+    title: "Genie Media & Studio | Marketing & Production in Vizag",
     description:
-      "Genie Media & Studio helps businesses in Vizag and across India with digital marketing, websites, video production and podcast services.",
+      "Meet Genie Media & Studio in Vizag: digital marketing, website development, video production and a podcast studio in Yendada, Visakhapatnam. Explore our work.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/services": {
     breadcrumb: "Services",
-    title: "Our Services in Vizag | Marketing, Web & Video | Genie Media",
+    title: "Digital Marketing, Web & Podcast in Vizag | Genie Media",
     description:
-      "Explore Genie Media & Studio's services in Visakhapatnam: digital marketing, website development, video production and podcast studio rental.",
+      "Genie Media services in Vizag: digital marketing, SEO, AEO, GEO, website development and podcasts. Serving Visakhapatnam and remote clients across India.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/about": {
@@ -83,7 +84,7 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
     breadcrumb: "Web Development",
     title: "Website Development Company in Vizag & India | Genie Media",
     description:
-      "Build a fast, responsive and SEO-friendly website with Genie Media's WordPress, Shopify, React and Next.js development services in Vizag.",
+      "Website development in Vizag and India from Genie Media. Responsive WordPress, Shopify and custom websites for businesses in Visakhapatnam, Andhra Pradesh.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/production_house": {
@@ -108,16 +109,16 @@ export const ROUTE_META: Record<PublicRoute, RouteMetaEntry> = {
   },
   "/digital_marketing": {
     breadcrumb: "Digital Marketing",
-    title: "Digital Marketing Agency in Vizag | SEO, Ads & Content",
+    title: "Digital Marketing Agency in Vizag | Genie Media",
     description:
-      "Grow your business with SEO, Google Ads, local SEO, content marketing and social media services from Genie Media in Vizag and across India.",
+      "Digital marketing agency in Vizag for SEO, Google Ads and social media. Based in Yendada, serving Visakhapatnam businesses and remote clients across India.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
   "/podcast_studio": {
     breadcrumb: "Podcast Studio",
-    title: "Podcast Studio Rental in Vizag | Genie Media & Studio",
+    title: "Podcast Recording Studio in Vizag | Genie Media",
     description:
-      "Book a professional podcast studio in Vizag for audio and video recording, production, editing and content repurposing.",
+      "Explore Genie Media's podcast recording studio in Yendada, Vizag. Compare sets, audio and video recording options, hourly rental packages and editing services.",
     image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   },
 };
@@ -138,6 +139,7 @@ const ORGANIZATION: JsonLdObject & { "@id": string } = {
   image: `${SITE_ORIGIN}/GenieMedia-Logo.png`,
   email: "admin@geniemedia.in",
   telephone: "+91-9032845433",
+  areaServed: INDIA_SERVICE_AREAS,
   address: {
     "@type": "PostalAddress",
     streetAddress: "5A-2, 4th Floor, KP Icon, near MK Gold Coast",
@@ -152,13 +154,6 @@ const ORGANIZATION: JsonLdObject & { "@id": string } = {
     "https://www.youtube.com/@itsgeniemedia_official",
     "https://www.linkedin.com/company/itsgeniemediaofficial",
   ],
-};
-
-const VIZAG_AREA: JsonLdObject = {
-  "@type": "City",
-  name: "Visakhapatnam",
-  alternateName: "Vizag",
-  containedInPlace: { "@type": "State", name: "Andhra Pradesh", containedInPlace: { "@type": "Country", name: "India" } },
 };
 
 interface PageGraphOptions {
@@ -188,7 +183,7 @@ const pageGraph = (meta: RouteMeta, { type = "WebPage", service, extraNodes = []
             url: meta.canonical,
             description: meta.description,
             provider: { "@id": ORGANIZATION["@id"] },
-            areaServed: VIZAG_AREA,
+            areaServed: LOCAL_SERVICE_AREAS,
             ...service,
           },
         ]
@@ -271,7 +266,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
         name: "Digital Marketing Services",
         serviceType: "Digital marketing",
         description: "SEO, local SEO, technical and on-page SEO, ecommerce SEO, SEO audits, answer engine optimization (AEO), generative engine optimization (GEO), Google Ads, social media marketing and Meta Ads, content marketing, lead generation and conversion optimization for businesses across India, from Visakhapatnam (Vizag), Andhra Pradesh.",
-        areaServed: [{ "@type": "Country", name: "India" }, VIZAG_AREA, { "@type": "State", name: "Andhra Pradesh", containedInPlace: { "@type": "Country", name: "India" } }],
+        areaServed: INDIA_SERVICE_AREAS,
         hasOfferCatalog: catalog("Digital marketing services", [
           ...DM_SERVICE_PAGES.map((p) => p.name),
           "Social Media Marketing & Meta Ads",
@@ -322,12 +317,14 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
           },
         })),
       },
+      extraNodes: [faqPage(meta, PODCAST_LOCAL_FAQS)],
     }),
   "/web_development": (meta) =>
     pageGraph(meta, {
       service: {
         name: "Website Development",
         serviceType: "Website design and development",
+        areaServed: INDIA_SERVICE_AREAS,
         hasOfferCatalog: catalog("Website development services", [
           ...WEB_DEV_PAGES.map((p) => p.name),
           "Hosting & Deployment Solutions",
@@ -355,7 +352,7 @@ const ROUTE_SCHEMA: Partial<Record<PublicRoute, (meta: RouteMeta) => JsonLdGraph
   "/contact": (meta) => pageGraph(meta, { type: "ContactPage" }),
   "/projects": (meta) => pageGraph(meta, { type: "CollectionPage" }),
   "/case-studies": (meta) => pageGraph(meta, { type: "CollectionPage" }),
-  "/services": (meta) => pageGraph(meta, { type: "CollectionPage" }),
+  "/services": (meta) => pageGraph(meta, { type: "CollectionPage", extraNodes: [faqPage(meta, SERVICE_DIRECTORY_FAQS)] }),
   "/blogs": (meta) => pageGraph(meta, { type: "CollectionPage" }),
   "/reviews": (meta) => pageGraph(meta),
   "/privacy-policy": (meta) => pageGraph(meta),
