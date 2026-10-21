@@ -12,7 +12,7 @@
  */
 
 const SITE_URL = (process.env.SITE_URL || "https://geniemedia.in").replace(/\/+$/, "");
-const API_URL = (process.env.PUBLIC_API_URL || "https://geniemedia-81qf.onrender.com").replace(/\/+$/, "");
+const API_URL = (process.env.PUBLIC_API_URL || "https://geniemedia-6pd8.onrender.com").replace(/\/+$/, "");
 
 const SITE = {
   url: SITE_URL,

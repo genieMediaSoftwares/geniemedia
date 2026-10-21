@@ -254,7 +254,7 @@ Optional environment variables:
 | Variable | Default | Purpose |
 |---|---|---|
 | `SITE_URL` | `https://geniemedia.in` | Canonical origin for every generated URL |
-| `PUBLIC_API_URL` | `https://geniemedia.onrender.com` | Used for the preconnect hint |
+| `PUBLIC_API_URL` | `https://geniemedia-6pd8.onrender.com` | Used for the preconnect hint |
 | `FRONTEND_DIST` | auto-detected | Path to the Vite build, if not adjacent |
 
 ### Frontend
